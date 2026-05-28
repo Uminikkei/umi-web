@@ -934,12 +934,16 @@ async function fetchAddrSuggestions(q){
     addrSugIndex = -1;
 
     box.innerHTML = addrSuggestions.map((item, i) => {
-      const main = buildAddrMain(item);
+      // Mostrar el número que el usuario escribió junto al nombre de la calle
+      const road = (item.address || {}).road || item.display_name.split(',')[0].trim();
+      const displayMain = addrHouseNumber ? road + ' ' + addrHouseNumber : road;
       const sub  = buildAddrSub(item);
       return `<div class="addr-sug-item" data-idx="${i}"
-        onmousedown="selectAddrSug(${i})" onmouseover="addrSugHover(${i})">
+        onmousedown="event.preventDefault();selectAddrSug(${i})"
+        ontouchstart="selectAddrSug(${i})"
+        onmouseover="addrSugHover(${i})">
         <span class="addr-sug-icon">${addrIcon(item)}</span>
-        <div><div class="addr-sug-main">${esc(main)}</div>${sub?`<div class="addr-sug-sub">${esc(sub)}</div>`:''}</div>
+        <div><div class="addr-sug-main">${esc(displayMain)}</div>${sub?`<div class="addr-sug-sub">${esc(sub)}</div>`:''}</div>
       </div>`;
     }).join('');
     box.style.display = '';
@@ -993,17 +997,14 @@ function selectAddrSug(idx){
   const item = addrSuggestions[idx];
   if(!item) return;
   const a = item.address || {};
-  let main = buildAddrMain(item);
-  // Leer el número desde el input en ESTE momento (más confiable que addrHouseNumber)
-  const currentVal = document.getElementById('cAddr').value.trim();
-  const { num } = splitAddrNum(currentVal);
-  const houseNum = num || addrHouseNumber;
-  // Si Nominatim no trajo número pero el usuario escribió uno, reponerlo
-  if(!a.house_number && houseNum){
-    const firstComma = main.indexOf(',');
-    if(firstComma > -1) main = main.slice(0, firstComma) + ' ' + houseNum + main.slice(firstComma);
-    else main = main + ' ' + houseNum;
-  }
+  // Obtener nombre de calle directamente de Nominatim
+  const road = a.road || item.display_name.split(',')[0].trim();
+  // Número: primero del input actual, si no del guardado
+  const houseNum = splitAddrNum(document.getElementById('cAddr').value.trim()).num || addrHouseNumber;
+  // Armar dirección: "Calle 6271, Sector"
+  let main = road + (houseNum ? ' ' + houseNum : '');
+  const sub = buildAddrSub(item);
+  if(sub) main += ', ' + sub.split(',')[0].trim(); // solo el barrio, no la ciudad
   document.getElementById('cAddr').value = main;
   hideAddrSug();
   // Usar lat/lon directo — sin segunda llamada a la API
