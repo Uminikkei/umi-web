@@ -1284,30 +1284,30 @@ async function sendOrder(){
   const spleatOk = await sendToSpleat(name, phone, addr, notes);
 
   // ── Siempre también avisar por WhatsApp ──
-  let lines = `*NUEVO PEDIDO - Umi* 🍣\n\n`;
+  let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n`;
   lines += `*Detalle:*\n`;
   cart.forEach(r => {
-    lines += `  ${r.e} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`;
+    lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`;
   });
   const sub = cartSubtotal();
   if(entregaMode === 'delivery' && deliveryFee > 0){
     lines += `\nSubtotal: ${fmt(sub)}\n`;
-    lines += `🚚 Envio (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
+    lines += `Envio (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
     lines += `*Total: ${fmt(cartTotal())}*\n\n`;
   } else {
     lines += `\n*Total: ${fmt(cartTotal())}*\n\n`;
   }
-  lines += `👤 *Cliente:* ${name}\n`;
-  lines += `📞 *Tel:* ${phone}\n`;
-  lines += `📦 *Entrega:* ${entregaLabel}\n`;
+  lines += `*Cliente:* ${name}\n`;
+  lines += `*Tel:* ${phone}\n`;
+  lines += `*Entrega:* ${entregaLabel}\n`;
   if(entregaMode === 'delivery'){
     const mapsUrl = 'https://maps.google.com/?q=' + encodeURIComponent(addr + ', Coquimbo, Chile');
-    lines += `📍 *Direccion:* ${addr}\n`;
-    lines += `📍 *Maps:* ${mapsUrl}\n`;
+    lines += `*Direccion:* ${addr}\n`;
+    lines += `*Maps:* ${mapsUrl}\n`;
   }
-  lines += `💳 *Pago:* ${pagoLabel}\n`;
-  if(notes) lines += `📝 *Notas:* ${notes}\n`;
-  lines += `\n⏰ Pedido a las ${now}`;
+  lines += `*Pago:* ${pagoLabel}\n`;
+  if(notes) lines += `*Notas:* ${notes}\n`;
+  lines += `\nPedido a las ${now}`;
 
   window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(lines), '_blank');
 
