@@ -577,7 +577,7 @@ footer strong{color:var(--teal)}
     <div class="checkout-summary" id="checkoutSummary"></div>
 
     <div class="field">
-      <label>Tu nombre</label>
+      <label>Nombre y apellido</label>
       <input type="text" id="cName" placeholder="Ej: María González"/>
     </div>
     <div class="field">
@@ -903,10 +903,11 @@ function splitAddrNum(q){
 
 function onAddrInput(val){
   clearTimeout(geocodeTimer);
+  // Actualizar número INMEDIATAMENTE (no esperar debounce)
+  const { text, num } = splitAddrNum(val);
+  addrHouseNumber = num;
   if(val.length < 3){ hideAddrSug(); deliveryFee=0; deliveryKm=0; updateDeliveryTotal(); return; }
   geocodeTimer = setTimeout(() => {
-    const { text, num } = splitAddrNum(val);
-    addrHouseNumber = num;
     fetchAddrSuggestions(text);
   }, 350);
 }
@@ -1275,37 +1276,37 @@ async function sendOrder(){
   if(entregaMode === 'delivery' && deliveryKm > DELIVERY_MAX_KM){ alert(`Lo sentimos, tu dirección está fuera de nuestra zona de delivery (${deliveryKm} km). Máximo ${DELIVERY_MAX_KM} km.`); return; }
 
   const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
-  const pagoLabel = {efectivo:'💵 Efectivo', transferencia:'📲 Transferencia', tarjeta:'💳 Tarjeta'}[pagoMode];
-  const entregaLabel = entregaMode === 'retiro' ? '🏪 Retiro en local' : '🛵 Delivery';
+  const pagoLabel = {efectivo:'Efectivo', transferencia:'Transferencia', tarjeta:'Tarjeta'}[pagoMode];
+  const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
 
   // ── Intentar enviar directo a SPLEAT via bridge local ──
   const spleatOk = await sendToSpleat(name, phone, addr, notes);
 
   // ── Siempre también avisar por WhatsApp ──
-  let lines = `🛒 *NUEVO PEDIDO WEB — Umi*\n\n`;
-  lines += `📋 *Detalle:*\n`;
+  let lines = `*NUEVO PEDIDO - Umi* 🍣\n\n`;
+  lines += `*Detalle:*\n`;
   cart.forEach(r => {
-    lines += `  • ${r.e} ${r.n} ×${r.qty} = ${fmt(r.p*r.qty)}\n`;
+    lines += `  ${r.e} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`;
   });
   const sub = cartSubtotal();
   if(entregaMode === 'delivery' && deliveryFee > 0){
-    lines += `\n💰 *Subtotal:* ${fmt(sub)}\n`;
-    lines += `🛵 *Envío (${deliveryKm} km):* ${fmt(deliveryFee)}\n`;
-    lines += `💰 *Total: ${fmt(cartTotal())}*\n\n`;
+    lines += `\nSubtotal: ${fmt(sub)}\n`;
+    lines += `🚚 Envio (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
+    lines += `*Total: ${fmt(cartTotal())}*\n\n`;
   } else {
-    lines += `\n💰 *Total: ${fmt(cartTotal())}*\n\n`;
+    lines += `\n*Total: ${fmt(cartTotal())}*\n\n`;
   }
   lines += `👤 *Cliente:* ${name}\n`;
-  lines += `📞 *Teléfono:* ${phone}\n`;
+  lines += `📞 *Tel:* ${phone}\n`;
   lines += `📦 *Entrega:* ${entregaLabel}\n`;
   if(entregaMode === 'delivery'){
     const mapsUrl = 'https://maps.google.com/?q=' + encodeURIComponent(addr + ', Coquimbo, Chile');
-    lines += `📍 *Dirección:* ${addr}\n`;
-    lines += `🗺️ *Ver en Maps:* ${mapsUrl}\n`;
+    lines += `📍 *Direccion:* ${addr}\n`;
+    lines += `📍 *Maps:* ${mapsUrl}\n`;
   }
   lines += `💳 *Pago:* ${pagoLabel}\n`;
   if(notes) lines += `📝 *Notas:* ${notes}\n`;
-  lines += spleatOk ? `\n✅ *Ingresado automáticamente en SPLEAT*` : `\n⏰ Pedido a las ${now}`;
+  lines += `\n⏰ Pedido a las ${now}`;
 
   window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(lines), '_blank');
 
