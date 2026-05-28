@@ -889,13 +889,25 @@ let deliveryKm  = 0;
 let geocodeTimer = null;
 let addrSugIndex = -1;
 let addrSuggestions = [];
+let addrHouseNumber = '';  // número de casa que el usuario escribió
 
 // ── ADDRESS AUTOCOMPLETE ───────────────────────────────────────────────────────
+
+// Separa "miramar 6271" → { text: "miramar", num: "6271" }
+// Soporta número al final (lo más común en Chile)
+function splitAddrNum(q){
+  const m = q.trim().match(/^(.*?)\s+(\d{1,6})\s*$/);
+  if(m && m[1].trim().length >= 3) return { text: m[1].trim(), num: m[2] };
+  return { text: q.trim(), num: '' };
+}
+
 function onAddrInput(val){
   clearTimeout(geocodeTimer);
   if(val.length < 3){ hideAddrSug(); deliveryFee=0; deliveryKm=0; updateDeliveryTotal(); return; }
   geocodeTimer = setTimeout(() => {
-    fetchAddrSuggestions(val);
+    const { text, num } = splitAddrNum(val);
+    addrHouseNumber = num;
+    fetchAddrSuggestions(text);
   }, 350);
 }
 
@@ -979,7 +991,15 @@ function addrIcon(item){
 function selectAddrSug(idx){
   const item = addrSuggestions[idx];
   if(!item) return;
-  const main = buildAddrMain(item);
+  const a = item.address || {};
+  let main = buildAddrMain(item);
+  // Si Nominatim no trajo número de casa pero el usuario escribió uno, reponerlo
+  if(!a.house_number && addrHouseNumber){
+    // Insertar número después de la primera parte (la calle)
+    const firstComma = main.indexOf(',');
+    if(firstComma > -1) main = main.slice(0, firstComma) + ' ' + addrHouseNumber + main.slice(firstComma);
+    else main = main + ' ' + addrHouseNumber;
+  }
   document.getElementById('cAddr').value = main;
   hideAddrSug();
   // Usar lat/lon directo — sin segunda llamada a la API
