@@ -337,6 +337,24 @@ footer strong{color:var(--teal)}
 }
 .cart-row-emoji{font-size:1.6rem;flex-shrink:0;width:2.6rem;text-align:center}
 .cart-row-thumb{width:2.6rem;height:2.6rem;border-radius:.5rem;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+
+/* ── Address autocomplete dropdown ── */
+.addr-wrap{position:relative}
+.addr-suggestions{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:999;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:.6rem;
+  overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.5);max-height:220px;overflow-y:auto;
+}
+.addr-sug-item{
+  padding:.65rem .9rem;font-size:.84rem;color:var(--text);cursor:pointer;
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;
+  transition:background .15s;
+}
+.addr-sug-item:last-child{border-bottom:none}
+.addr-sug-item:hover,.addr-sug-item.active{background:var(--bg4)}
+.addr-sug-icon{font-size:1rem;flex-shrink:0}
+.addr-sug-main{font-weight:500}
+.addr-sug-sub{font-size:.76rem;color:var(--muted);margin-top:.1rem}
 .cart-row-info{flex:1;min-width:0}
 .cart-row-name{font-size:.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cart-row-price{font-size:.78rem;color:var(--teal);margin-top:.15rem}
@@ -577,7 +595,15 @@ footer strong{color:var(--teal)}
 
     <div class="field" id="fieldAddr" style="display:none">
       <label>Dirección de entrega</label>
-      <input type="text" id="cAddr" placeholder="Calle, número, sector, Coquimbo"/>
+      <div class="addr-wrap">
+        <input type="text" id="cAddr" placeholder="Escribe calle, sector o lugar (ej: Mall Plaza)"
+          autocomplete="off"
+          oninput="onAddrInput(this.value)"
+          onkeydown="onAddrKey(event)"
+          onblur="onAddrBlur()"/>
+        <div id="addrSuggestions" class="addr-suggestions" style="display:none"></div>
+      </div>
+      <div id="deliveryFeeBox" style="display:none;margin-top:.5rem;font-size:.88rem;padding:.45rem .7rem;background:var(--bg3);border-radius:.5rem;border:1px solid var(--border2)"></div>
     </div>
 
     <div class="field">
@@ -612,6 +638,29 @@ footer strong{color:var(--teal)}
 <script>
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';
+
+// ── DELIVERY FEE CONFIG ── Tarifas PanaDelivery (Locales NO Afiliados)
+const RESTO_LAT = -29.9641;   // Av. Costanera 5633, Coquimbo
+const RESTO_LNG = -71.3387;
+const DELIVERY_TIERS = [
+  { maxKm:  3.4, price:  2500 },
+  { maxKm:  4.4, price:  3000 },
+  { maxKm:  5.4, price:  3500 },
+  { maxKm:  6.4, price:  4000 },
+  { maxKm:  7.4, price:  4500 },
+  { maxKm:  8.4, price:  5000 },
+  { maxKm:  9.4, price:  5500 },
+  { maxKm: 10.4, price:  6000 },
+  { maxKm: 11.4, price:  6500 },
+  { maxKm: 12.4, price:  7000 },
+  { maxKm: 13.4, price:  7500 },
+  { maxKm: 14.4, price:  8000 },
+  { maxKm: 15.4, price:  8500 },
+  { maxKm: 16.4, price:  9000 },
+  { maxKm: 17.4, price:  9500 },
+  { maxKm: 18.4, price: 10000 },
+];
+const DELIVERY_MAX_KM = 18.4;  // más lejos = no disponible
 
 // Menu data with Firebase image base paths (no auth tokens needed for public storage)
 const MENU = {
@@ -829,12 +878,227 @@ function buildMenu(){
   });
 }
 
-buildMenu();
+// buildMenu() is called after SPLEAT_PHOTOS is defined (see end of script)
 
 // ── CART STATE ────────────────────────────────────────────────────────────────
 let cart = [];
 let entregaMode = 'retiro';
 let pagoMode = 'efectivo';
+let deliveryFee = 0;
+let deliveryKm  = 0;
+let geocodeTimer = null;
+let addrSugIndex = -1;
+let addrSuggestions = [];
+
+// ── ADDRESS AUTOCOMPLETE ───────────────────────────────────────────────────────
+function onAddrInput(val){
+  clearTimeout(geocodeTimer);
+  if(val.length < 3){ hideAddrSug(); deliveryFee=0; deliveryKm=0; updateDeliveryTotal(); return; }
+  geocodeTimer = setTimeout(() => {
+    fetchAddrSuggestions(val);
+  }, 350);
+}
+
+function onAddrBlur(){
+  setTimeout(() => {
+    hideAddrSug();
+    // Si el usuario escribió la dirección sin seleccionar sugerencia, calcular de todos modos
+    const val = document.getElementById('cAddr').value.trim();
+    if(val.length >= 5 && deliveryKm === 0) calcDeliveryFee(val);
+  }, 200);
+}
+
+async function fetchAddrSuggestions(q){
+  const box = document.getElementById('addrSuggestions');
+  try {
+    // Nominatim (OpenStreetMap) — más confiable para Coquimbo
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ', Coquimbo, Chile')}&format=json&limit=6&addressdetails=1&countrycodes=cl&accept-language=es`;
+    const resp = await fetch(url, { headers: { 'User-Agent': 'uminikkeibar.cl/1.0' } });
+    const data = await resp.json();
+    if(!data.length){ hideAddrSug(); return; }
+
+    addrSuggestions = data.slice(0, 5);
+    addrSugIndex = -1;
+
+    box.innerHTML = addrSuggestions.map((item, i) => {
+      const main = buildAddrMain(item);
+      const sub  = buildAddrSub(item);
+      return `<div class="addr-sug-item" data-idx="${i}"
+        onmousedown="selectAddrSug(${i})" onmouseover="addrSugHover(${i})">
+        <span class="addr-sug-icon">${addrIcon(item)}</span>
+        <div><div class="addr-sug-main">${esc(main)}</div>${sub?`<div class="addr-sug-sub">${esc(sub)}</div>`:''}</div>
+      </div>`;
+    }).join('');
+    box.style.display = '';
+  } catch(e){ hideAddrSug(); }
+}
+
+function buildAddrMain(item){
+  const a = item.address || {};
+  const parts = [];
+  // Lugar con nombre propio (mall, farmacia, colegio, etc.)
+  const place = a.mall || a.shop || a.amenity || a.leisure || a.building ||
+                a.tourism || a.historic || a.office || a.industrial || a.commercial;
+  if(place) parts.push(place);
+  // Calle + número
+  if(a.road){
+    parts.push(a.house_number ? a.road + ' ' + a.house_number : a.road);
+  }
+  if(!parts.length){
+    // Fallback: primeras 2 partes del display_name
+    return item.display_name.split(',').slice(0, 2).join(',').trim();
+  }
+  return parts.join(', ');
+}
+
+function buildAddrSub(item){
+  const a = item.address || {};
+  const parts = [];
+  if(a.suburb)       parts.push(a.suburb);
+  else if(a.neighbourhood) parts.push(a.neighbourhood);
+  const city = a.city || a.town || a.village || a.municipality;
+  if(city) parts.push(city);
+  return parts.join(', ');
+}
+
+function addrIcon(item){
+  const cls  = (item.class || '').toLowerCase();
+  const type = (item.type  || '').toLowerCase();
+  const name = (item.display_name || '').toLowerCase();
+  if(/mall|shopping|comercial/.test(type) || /mall|shopping/.test(name)) return '🏬';
+  if(/hospital|clinic/.test(type) || /hospital|clínica/.test(name)) return '🏥';
+  if(/school|college|university/.test(type) || /colegio|liceo|universidad|escuela/.test(name)) return '🎓';
+  if(/hotel|hostel/.test(type) || /hotel/.test(name)) return '🏨';
+  if(cls === 'amenity' && /restaurant|cafe|fast_food/.test(type)) return '🍽️';
+  if(/fuel/.test(type)) return '⛽';
+  if(/park|garden/.test(type)) return '🌳';
+  if(/residential|house|flat|apartment/.test(type) || cls === 'building') return '🏠';
+  return '📍';
+}
+
+function selectAddrSug(idx){
+  const item = addrSuggestions[idx];
+  if(!item) return;
+  const main = buildAddrMain(item);
+  document.getElementById('cAddr').value = main;
+  hideAddrSug();
+  // Usar lat/lon directo — sin segunda llamada a la API
+  const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+  const km  = haversineKm(RESTO_LAT, RESTO_LNG, lat, lng);
+  deliveryKm = Math.round(km * 10) / 10;
+  const fee = feeForKm(km);
+  const feeBox = document.getElementById('deliveryFeeBox');
+  if(fee === null){
+    deliveryFee = 0; feeBox.style.color = '#e74c3c';
+    feeBox.innerHTML = `❌ Fuera de zona (${deliveryKm} km) — máximo ${DELIVERY_MAX_KM} km`;
+  } else {
+    deliveryFee = fee; feeBox.style.color = 'var(--teal)';
+    feeBox.innerHTML = `🛵 Envío: <strong>${fmt(fee)}</strong> · ${deliveryKm} km`;
+  }
+  feeBox.style.display = '';
+  updateDeliveryTotal();
+}
+
+function addrSugHover(idx){
+  addrSugIndex = idx;
+  document.querySelectorAll('.addr-sug-item').forEach((el,i)=>{
+    el.classList.toggle('active', i===idx);
+  });
+}
+
+function onAddrKey(e){
+  const items = document.querySelectorAll('.addr-sug-item');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){ e.preventDefault(); addrSugIndex=Math.min(addrSugIndex+1,items.length-1); addrSugHover(addrSugIndex); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); addrSugIndex=Math.max(addrSugIndex-1,0); addrSugHover(addrSugIndex); }
+  else if(e.key==='Enter' && addrSugIndex>=0){ e.preventDefault(); selectAddrSug(addrSugIndex); }
+  else if(e.key==='Escape'){ hideAddrSug(); }
+}
+
+function hideAddrSug(){
+  const box = document.getElementById('addrSuggestions');
+  if(box){ box.style.display='none'; box.innerHTML=''; }
+}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
+
+// ── DELIVERY HELPERS ──────────────────────────────────────────────────────────
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2
+    + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180)
+    * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function feeForKm(km) {
+  for (const t of DELIVERY_TIERS) {
+    if (km <= t.maxKm) return t.price;
+  }
+  return null; // fuera de rango
+}
+
+async function calcDeliveryFee(address) {
+  const box = document.getElementById('deliveryFeeBox');
+  if (!address || address.length < 5) {
+    box.style.display = 'none';
+    deliveryFee = 0; deliveryKm = 0;
+    updateDeliveryTotal(); return;
+  }
+  box.innerHTML = '⏳ Calculando distancia...';
+  box.style.display = '';
+  box.style.color = 'var(--muted)';
+  try {
+    const q = encodeURIComponent(address + ', Coquimbo, Chile');
+    const resp = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,
+      { headers: { 'User-Agent': 'uminikkeibar.cl/1.0' } }
+    );
+    const data = await resp.json();
+    if (!data.length) throw new Error('Dirección no encontrada');
+    const lat = parseFloat(data[0].lat);
+    const lng = parseFloat(data[0].lon);
+    const km = haversineKm(RESTO_LAT, RESTO_LNG, lat, lng);
+    deliveryKm = Math.round(km * 10) / 10;
+    const fee = feeForKm(km);
+    if (fee === null) {
+      deliveryFee = 0;
+      box.style.color = '#e74c3c';
+      box.innerHTML = `❌ Fuera de zona (${deliveryKm} km) — máximo ${DELIVERY_MAX_KM} km`;
+      updateDeliveryTotal(); return;
+    }
+    deliveryFee = fee;
+    box.style.color = 'var(--teal)';
+    box.innerHTML = `🛵 Envío: <strong>${fmt(fee)}</strong> · ${deliveryKm} km`;
+    updateDeliveryTotal();
+  } catch(e) {
+    box.style.color = 'var(--muted)';
+    box.innerHTML = '⚠️ No se pudo calcular — revisa la dirección';
+    deliveryFee = 0; deliveryKm = 0;
+    updateDeliveryTotal();
+  }
+}
+
+function updateDeliveryTotal() {
+  // Actualiza el total en el carrito si está abierto
+  const totalEl = document.getElementById('cartTotal');
+  if (totalEl) totalEl.textContent = fmt(cartTotal());
+  // Actualiza línea de envío en checkout si está abierto
+  const feeLineEl = document.getElementById('checkoutDeliveryFee');
+  if (feeLineEl) {
+    if (entregaMode === 'delivery' && deliveryFee > 0) {
+      feeLineEl.style.display = '';
+      feeLineEl.querySelector('.fee-val').textContent = fmt(deliveryFee);
+    } else {
+      feeLineEl.style.display = 'none';
+    }
+  }
+  const checkTotalEl = document.getElementById('checkoutTotalVal');
+  if (checkTotalEl) checkTotalEl.textContent = fmt(cartTotal());
+}
 
 function addToCart(name, price, emoji, category){
   const existing = cart.find(r => r.n === name);
@@ -863,6 +1127,10 @@ function changeQty(name, delta){
 }
 
 function cartTotal(){
+  const sub = cart.reduce((s,r) => s + r.p * r.qty, 0);
+  return sub + (entregaMode === 'delivery' ? deliveryFee : 0);
+}
+function cartSubtotal(){
   return cart.reduce((s,r) => s + r.p * r.qty, 0);
 }
 
@@ -934,7 +1202,12 @@ function openCheckout(){
   cart.forEach(r => {
     html += `<div class="checkout-summary-item"><span>${r.e} ${r.n} ×${r.qty}</span><span>${fmt(r.p*r.qty)}</span></div>`;
   });
-  html += `<div class="checkout-summary-total"><span>Total</span><span>${fmt(cartTotal())}</span></div>`;
+  if(entregaMode === 'delivery' && deliveryFee > 0){
+    html += `<div class="checkout-summary-item" id="checkoutDeliveryFee"><span>🛵 Envío (${deliveryKm} km)</span><span class="fee-val">${fmt(deliveryFee)}</span></div>`;
+  } else {
+    html += `<div class="checkout-summary-item" id="checkoutDeliveryFee" style="display:none"><span>🛵 Envío</span><span class="fee-val"></span></div>`;
+  }
+  html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
   sumEl.innerHTML = html;
   document.getElementById('checkoutModal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -950,6 +1223,15 @@ function selectEntrega(mode){
   document.querySelectorAll('[id^="opt-"]').forEach(el => el.classList.remove('selected'));
   document.getElementById('opt-'+mode).classList.add('selected');
   document.getElementById('fieldAddr').style.display = mode === 'delivery' ? '' : 'none';
+  if(mode !== 'delivery'){
+    deliveryFee = 0; deliveryKm = 0;
+    document.getElementById('deliveryFeeBox').style.display = 'none';
+  } else {
+    // Si ya hay dirección escrita, recalcular
+    const addr = document.getElementById('cAddr').value.trim();
+    if(addr) calcDeliveryFee(addr);
+  }
+  updateDeliveryTotal();
 }
 
 function selectPago(mode){
@@ -967,6 +1249,7 @@ async function sendOrder(){
   if(!name){ alert('Por favor ingresa tu nombre.'); return; }
   if(!phone){ alert('Por favor ingresa tu teléfono.'); return; }
   if(entregaMode === 'delivery' && !addr){ alert('Por favor ingresa tu dirección de entrega.'); return; }
+  if(entregaMode === 'delivery' && deliveryKm > DELIVERY_MAX_KM){ alert(`Lo sentimos, tu dirección está fuera de nuestra zona de delivery (${deliveryKm} km). Máximo ${DELIVERY_MAX_KM} km.`); return; }
 
   const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
   const pagoLabel = {efectivo:'💵 Efectivo', transferencia:'📲 Transferencia', tarjeta:'💳 Tarjeta'}[pagoMode];
@@ -981,7 +1264,14 @@ async function sendOrder(){
   cart.forEach(r => {
     lines += `  • ${r.e} ${r.n} ×${r.qty} = ${fmt(r.p*r.qty)}\n`;
   });
-  lines += `\n💰 *Total: ${fmt(cartTotal())}*\n\n`;
+  const sub = cartSubtotal();
+  if(entregaMode === 'delivery' && deliveryFee > 0){
+    lines += `\n💰 *Subtotal:* ${fmt(sub)}\n`;
+    lines += `🛵 *Envío (${deliveryKm} km):* ${fmt(deliveryFee)}\n`;
+    lines += `💰 *Total: ${fmt(cartTotal())}*\n\n`;
+  } else {
+    lines += `\n💰 *Total: ${fmt(cartTotal())}*\n\n`;
+  }
   lines += `👤 *Cliente:* ${name}\n`;
   lines += `📞 *Teléfono:* ${phone}\n`;
   lines += `📦 *Entrega:* ${entregaLabel}\n`;
@@ -1038,15 +1328,19 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const rndId = (n=20) => Array.from({length:n}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
 
-    const nowStr = new Date().toISOString();
+    const nowDate = new Date();
+    const nowStr = nowDate.toISOString();
     const isDelivery = entregaMode === 'delivery';
     const reservationId = rndId();
     const total = cart.reduce((s,i) => s + i.p * i.qty, 0);
 
     // ── 1. Reservación (formato delivery/pickup de SPLEAT) ──
+    // IMPORTANT: 'restaurant' (not 'restaurantId') matches real SPLEAT schema
+    // createdAt must be a Date (→ timestampValue), not a string
     const reservation = {
+      restaurant: RID,
       restaurantId: RID,
-      createdAt: nowStr,
+      createdAt: nowDate,
       status: 'active',
       type: isDelivery ? 'delivery' : 'pickup',
       clientName: nombre,
@@ -1079,8 +1373,8 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
         orderId,
         source: 'web',
         category: 'Web',
-        addedAt: nowStr,
-        createdAt: nowStr,
+        addedAt: nowDate,
+        createdAt: nowDate,
         step: 'pending'
       };
       const r2 = await fetch(
@@ -1098,7 +1392,10 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
   }
 }
 
+// SPLEAT_PHOTOS must be defined before buildMenu() to avoid TDZ error
 const SPLEAT_PHOTOS = {"Kaisen Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKaisen%20Roll%2Fphotos%2FDSC09825.jpg.jpeg?alt=media","Don Julio Reposado Botella":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FDon%20Julio%20Reposado%20Botella%2Fphotos%2FScreenshot2023-02-28at11.07.56AM.jpg.jpeg?alt=media","St germain Spritz":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSt%20germain%20Spritz%2Fphotos%2F42238050c852-botella-face-ok.jpg.webp.jpeg?alt=media","Ushio Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUshio%20Roll%2Fphotos%2FDSC09816%20(1).jpg.jpeg?alt=media","Frangelico":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FFrangelico%2Fphotos%2Ffrangelico.jpg.jpeg?alt=media","Kalua":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKalua%2Fphotos%2Fingredient_kahlua_1x1_5199efa65cf3c02e71294f7ad49be9aa.jpg.jpeg?alt=media","Ovalle 40 +bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOvalle%2040%20%2Bbebida%2Fphotos%2FDSC09834.jpg.jpeg?alt=media","Norterra transparente 40 + bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNorterra%20transparente%2040%20%2B%20bebida%2Fphotos%2F8646881.jpg.jpeg?alt=media","Nori tacos (4 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNori%20tacos%20(4%20pzs)%2Fphotos%2FDSC01659%20(1).jpg.jpeg?alt=media","Sashimi Pulpo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Pulpo%2Fphotos%2FIMG_0246%20(1).JPG.jpeg?alt=media","Wiluf + bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FWiluf%20%2B%20bebida%2Fphotos%2FPisco-Wiluf.jpg.jpeg?alt=media","Sashimi Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Locos%2Fphotos%2FIMG_0240%20(1).JPG.jpeg?alt=media","Tiraditos Umi":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Umi%2Fphotos%2FTIRADITO%20UMI%20(3).jpg.jpeg?alt=media","Teri roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTeri%20roll%2Fphotos%2FTERI%20ROLL.jpg.jpeg?alt=media","Espumante Umi Blanc":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FEspumante%20Umi%20Blanc%2Fphotos%2FIMG_6280.jpeg.jpeg?alt=media","No-rice Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNo-rice%20Roll%2Fphotos%2FNO%20RICE%20(2).JPG.jpeg?alt=media","TNT Atun":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Atun%2Fphotos%2FTNT%20ATUN.jpg.jpeg?alt=media","Acevichado Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAcevichado%20Roll%2Fphotos%2FDSC03723.jpg.jpeg?alt=media","Chirashi ceviche":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChirashi%20ceviche%2Fphotos%2FIMG_7671.jpeg.jpeg?alt=media","Tololo blue+ bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTololo%20blue%2B%20bebida%2Fphotos%2Ftbls.png.jpeg?alt=media","Cremoso de mariscos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCremoso%20de%20mariscos%2Fphotos%2F1779828916634-ec9a3e6b-5407-4033-8f1f-3e9cd1470df9.mp4?alt=media","Edamame al wok":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FEdamame%20al%20wok%2Fphotos%2FDSC01655.jpg.jpeg?alt=media","Ceviroll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviroll%2Fphotos%2FCevi%20roll.jpg.jpeg?alt=media","Tequila margarita":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTequila%20margarita%2Fphotos%2Ftequila%20margarita.jpg.jpeg?alt=media","Tartare Tuna Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Tuna%20Roll%2Fphotos%2FTartar%20tuna.jpg.jpeg?alt=media","Machas  parmesanas":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMachas%20%20parmesanas%2Fphotos%2FMACHAS%20PARMESANAS%20(1).jpg.jpeg?alt=media","Mojito mango":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20mango%2Fphotos%2FChatGPT%20Image%2016%20dic%202025%2C%2004_02_15%20p.m..png.jpeg?alt=media","Caipiriña":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCaipiri%C3%B1a%2Fphotos%2Fcaipirin%CC%83a.jpg.jpeg?alt=media","TNT Kani":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Kani%2Fphotos%2FTNT%20KANI.jpg.jpeg?alt=media","Udon Saltado":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20Saltado%2Fphotos%2FDSC01280.jpg.jpeg?alt=media","TNT Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Locos%2Fphotos%2FTNT%20DE%20TAKO%20(1).jpg.jpeg?alt=media","Ramazzotti spritz":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FRamazzotti%20spritz%2Fphotos%2Faperol.jpg.jpeg?alt=media","Tartare Sake Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Sake%20Roll%2Fphotos%2FTartare%20sake.jpg.jpeg?alt=media","Nori Tacos (2 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNori%20Tacos%20(2%20pzs)%2Fphotos%2FDSC01662.jpg.jpeg?alt=media","Nigiris Nissei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Nissei%2Fphotos%2FDSC02454.tif.jpeg?alt=media","Umi Coctel":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUmi%2Fphotos%2FIMG_7841.jpg.jpeg?alt=media","Udon huancaina":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20huancaina%2Fphotos%2FDSC01772%20(1).jpg.jpeg?alt=media","Mojito coco":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20coco%2Fphotos%2FChatGPT%20Image%2016%20dic%202025%2C%2004_53_05%20p.m..png.jpeg?alt=media","Hacienda la torre 43 + bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FHacienda%20la%20torre%2043%20%2B%20bebida%2Fphotos%2FD_NQ_NP_953238-MLC46536617734_062021-O.webp.jpeg?alt=media","Negroni":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNegroni%2Fphotos%2Fnegroni.jpg.jpeg?alt=media","Waqar +bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FWaqar%20%2Bbebida%2Fphotos%2Fimages-20.jpeg.jpeg?alt=media","Tiramisú":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiramis%C3%BA%2Fphotos%2F142666b7-d636-432a-a689-98f979bd3ed5.jpeg.jpeg?alt=media","Alto del carmen 40 azul+ bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAlto%20del%20carmen%2040%20azul%2B%20bebida%2Fphotos%2Fg2C5EK5dEoqu7xnYv-2400-x.webp.jpeg?alt=media","Scallops Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FScallops%20Roll%2Fphotos%2FDSC02524%20(1).jpg.jpeg?alt=media","Nigiris Criollo Ponja":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Criollo%20Ponja%2Fphotos%2FDSC01219.jpg.jpeg?alt=media","Mojito clasico":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20clasico%2Fphotos%2FChatGPT%20Image%2016%20dic%202025%2C%2004_52_57%20p.m..png.jpeg?alt=media","Tom collins":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTom%20collins%2Fphotos%2Ftom%20colins.jpg.jpeg?alt=media","Pisco Sour Nacional (Norterra)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPisco%20Sour%20Nacional%20(Norterra)%2Fphotos%2FDSC09836.jpg.jpeg?alt=media","Matsuri Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMatsuri%20Roll%2Fphotos%2FIMG_0230.JPG.jpeg?alt=media","Odett Mocktail":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOdett%20Mocktail%2Fphotos%2FWhatsApp%20Image%202026-05-26%20at%2016.08.07.jpeg.jpeg?alt=media","Nigiris Grilled Ostion":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Parmesano%2Fphotos%2FDSC02581.jpg.jpeg?alt=media","Atun al sesamo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAtun%20al%20sesamo%2Fphotos%2F1000398740.jpg.jpeg?alt=media","Lomo saltado":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLomo%20saltado%2Fphotos%2FLOMO%20SALTADO%20(1).jpg.jpeg?alt=media","Caldo Clasico dumplings":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCaldo%20Clasico%20dumplings%2Fphotos%2FDSC01798.jpg.jpeg?alt=media","Tartare Nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Nikkei%2Fphotos%2FTARTARE%20(3).jpg.jpeg?alt=media","Pacific Doré Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPacific%20Dor%C3%A9%20Roll%2Fphotos%2FDSC09819.jpg.jpeg?alt=media","Asado de tira":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAsado%20de%20tira%2Fphotos%2FDSC02461.jpg.jpeg?alt=media","Gyozas camaron":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20camaron%2Fphotos%2FGYOZAS%20CAMARON%20.jpg.jpeg?alt=media","Nigiris Crispy Rice":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Crispy%20Rice%2Fphotos%2FDSC02615%20(1).jpg.jpeg?alt=media","Creamy Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCreamy%20Roll%2Fphotos%2FCreamy%20Roll1.JPG.jpeg?alt=media","Ceviche Clásico nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20Cl%C3%A1sico%20nikkei%2Fphotos%2FCEVICHE%20CLASICO.jpg.jpeg?alt=media","Chalaquito Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChalaquito%20Roll%2Fphotos%2FDSC01421.jpg.jpeg?alt=media","Torta Opera":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOpera%2Fphotos%2FDSC00148.jpg.jpeg?alt=media","Kimon mule":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKimon%20mule%2Fphotos%2FDSC00932.jpg.jpeg?alt=media","Pulpo nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPulpo%20nikkei%2Fphotos%2FPULPO%20NIKKEI%20(2).jpg.jpeg?alt=media","Sashimi 12 cortes":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%2012%20cortes%2Fphotos%2FIMG_2885.jpeg.jpeg?alt=media","Torta de Brownie":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTorta%20de%20Brownie%2Fphotos%2F00e184ec-a7af-4aab-bba0-4f3bb6c0f283.jpeg.jpeg?alt=media","Asian Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAsian%20Salad%2Fphotos%2FENSALADA%20ASIAN.jpg.jpeg?alt=media","Mojito maracuya":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20maracuya%2Fphotos%2Fmojito%20maracuya.jpg.jpeg?alt=media","Ceviche Ishi Nikkei ":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FIshi%20Nikkei%2Fphotos%2F1000398741.png.jpeg?alt=media","Mar de Mariscos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMar%20de%20Mariscos%2Fphotos%2F881cbe13-d258-4bfc-8d46-a6af1f8d2e5a.jpeg.jpeg?alt=media","Saito Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSaito%20Roll%2Fphotos%2FSAITO%20ROLL%20(2).jpg.jpeg?alt=media","Chicken Katsu":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChicken%20Katsu%2Fphotos%2FDSC01276.jpg.jpeg?alt=media","Sakana bao (2 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSakana%20bao%2Fphotos%2FDSC02007.jpg.jpeg?alt=media","Tataki Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTataki%20Salad%2Fphotos%2F1000398828.jpg.jpeg?alt=media","Margarita nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMargarita%20nikkei%2Fphotos%2FDSC00152.jpg.jpeg?alt=media","Yugüen":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FYug%C3%BCen%2Fphotos%2FDSC00156.jpg.jpeg?alt=media","Salmón Garden (6 Pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSalm%C3%B3n%20Garden%2Fphotos%2F6e0d0224-17c7-46bc-8c20-6af6fbfbec3f.jpeg.jpeg?alt=media","Camaron pasionarios":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCamaron%20pasionarios%2Fphotos%2FCAMARONES%20APASIONARIOS.jpg.jpeg?alt=media","Nigiris Salmon Anticuchero":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Salmon%20anticuchero%2Fphotos%2FDSC02618%20(1).jpg.jpeg?alt=media","Smoke Cheese Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSmoke%20Cheese%20Roll%2Fphotos%2FSMOKE%20CHEESE%20(2).jpg.jpeg?alt=media","Tempura Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTempura%20Roll%2Fphotos%2FDSC01646.jpg.jpeg?alt=media","Nigiri Tako":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiri%20Tako%2Fphotos%2FIMG_3429.jpeg.jpeg?alt=media","Salmon Andino":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSalmon%20Andino%2Fphotos%2FScreenshot_2026-03-09-14-24-54-699_com.miui.gallery.jpg.jpeg?alt=media","Pesca al ajillo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPesca%20al%20ajillo%2Fphotos%2FDSC07353%20(1).jpg.jpeg?alt=media","Tiraditos Nissei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Nissei%2Fphotos%2FDSC02440.jpg.jpeg?alt=media","Furai Roll ":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FFurai%20Roll%20%2Fphotos%2F1000398829.jpg.jpeg?alt=media","Nigiris Extravaganza":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Extravaganza%2Fphotos%2FDSC01274.jpg.jpeg?alt=media","Sashimi Salmon":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Salmon%2Fphotos%2FIMG_0243.JPG.jpeg?alt=media","Rose collins":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FRose%20collins%2Fphotos%2FIMG_7828.jpg.jpeg?alt=media","Aperol spritz":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAperol%20spritz%2Fphotos%2Framazotti.jpg.jpeg?alt=media","Sashimi Atun":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Atun%2Fphotos%2FIMG_0237.JPG.jpeg?alt=media","Karai Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKarai%20Roll%2Fphotos%2Fkarai%20(5).jpg.jpeg?alt=media","Mojito frambuesa":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20frambuesa%2Fphotos%2Fmojito%20frambuesa.jpg.jpeg?alt=media","TNT Salmon":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTnt%20salmon%2Fphotos%2FTNT%20SALMON.jpg.jpeg?alt=media","Tiraditos Olivo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Olivo%2Fphotos%2FIMG_0238.JPG.jpeg?alt=media","Sake Koi Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSake%20Koi%20Roll%2Fphotos%2FSake%20koi%20(2).jpg.jpeg?alt=media","Ostiones Parmesanas":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOstiones%20Parmesanas%2Fphotos%2FIMG_4241.jpeg.jpeg?alt=media","Udon de camarones":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20de%20camarones%2Fphotos%2FUDON%20DE%20CAMARONES%20(1).jpg.jpeg?alt=media","Tiraditos Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Locos%2Fphotos%2FTIRADITO%20DE%20LOCOS%20(1).jpg.jpeg?alt=media","Tnt pulpo karami":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTnt%20pulpo%20karami%2Fphotos%2FTNT%20DE%20TAKO%20(1).jpeg.jpeg?alt=media","Gyozas tori":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20tori%2Fphotos%2FGYOZAS%20TORI%20(1).jpg.jpeg?alt=media","PALOMA ":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPALOMA%20%2Fphotos%2FWhatsApp%20Image%202026-05-26%20at%204.18.46%20PM.jpeg.jpeg?alt=media","Gyozas trufadas":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20trufadas%2Fphotos%2FGYOZAS%20TRUFADAS%20(1).jpg.jpeg?alt=media","Ceviche carretillero":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20carretillero%2Fphotos%2FCEVICHE%20CARRETILLERO%20(2).jpg.jpeg?alt=media","Uminari Roll ":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKinjo%20Umi%20Roll%2Fphotos%2FWhatsApp%20Image%202025-12-23%20at%2000.28.18.JPG.jpeg?alt=media","Cheesecake de Frutos Rojos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCheesecake%20de%20Frutos%20Rojos%2Fphotos%2FIMG_4032.jpeg.jpeg?alt=media","Avocado Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAvocado%20Roll%2Fphotos%2FAVOCADO.jpg.jpeg?alt=media","Ceviche Mixto criollo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20Mixto%20criollo%2Fphotos%2FDSC01690.jpg.jpeg?alt=media","Niku ramen":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNiku%20ramen%2Fphotos%2FNIKU%20RAMEN.jpg.jpeg?alt=media","Mariscos al fuego":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMariscos%20al%20fuego%2Fphotos%2FMARISCOS%20AL%20FUEGO.jpg.jpeg?alt=media","Mojito Jack Apple":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20Jack%20Apple%2Fphotos%2FDSC09831.jpg.jpeg?alt=media","Saltado Marino":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSaltado%20Marino%2Fphotos%2FIMG_4795.jpeg.jpeg?alt=media","Kabayaki Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKabayaki%20Salad%2Fphotos%2F1000398839.png.jpeg?alt=media","Mojito Jagger":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMojito%20Jagger%2Fphotos%2FChatGPT%20Image%2016%20dic%202025%2C%2004_52_53%20p.m..png.jpeg?alt=media","Conchas al pacifico":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FConchas%20al%20pacifico%2Fphotos%2FConchas%20del%20pacifico%20al%20rocoto%20(1).jpg.jpeg?alt=media"};
+
+buildMenu();
 </script>
 </body>
 </html>
