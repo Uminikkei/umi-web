@@ -993,12 +993,15 @@ function selectAddrSug(idx){
   if(!item) return;
   const a = item.address || {};
   let main = buildAddrMain(item);
-  // Si Nominatim no trajo número de casa pero el usuario escribió uno, reponerlo
-  if(!a.house_number && addrHouseNumber){
-    // Insertar número después de la primera parte (la calle)
+  // Leer el número desde el input en ESTE momento (más confiable que addrHouseNumber)
+  const currentVal = document.getElementById('cAddr').value.trim();
+  const { num } = splitAddrNum(currentVal);
+  const houseNum = num || addrHouseNumber;
+  // Si Nominatim no trajo número pero el usuario escribió uno, reponerlo
+  if(!a.house_number && houseNum){
     const firstComma = main.indexOf(',');
-    if(firstComma > -1) main = main.slice(0, firstComma) + ' ' + addrHouseNumber + main.slice(firstComma);
-    else main = main + ' ' + addrHouseNumber;
+    if(firstComma > -1) main = main.slice(0, firstComma) + ' ' + houseNum + main.slice(firstComma);
+    else main = main + ' ' + houseNum;
   }
   document.getElementById('cAddr').value = main;
   hideAddrSug();
