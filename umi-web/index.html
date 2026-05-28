@@ -1034,42 +1034,30 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
     const BASE = 'https://firestore.googleapis.com/v1/projects/rest-app-chile/databases/(default)/documents';
     const KEY  = 'AIzaSyCTEgmBUftRPXnfYl9yNbh3Js7fR0nySws';
     const RID  = 'lFwud0mMFsVrrHJlslCrRpEwPsc2';
-    const BAR_CATS = new Set(['Cerveza botellin','Cocteleria clasica','Vinos','Vodka','Licores',
-      'Piscos','Bebidas','Espumantes','Ron','Tequilas','Gin','Vermut','Mundo mojito',
-      'Whisky','Café y Bebidas Calientes','Tequila','Cocteleria de autor',
-      'Cerveza','Bar','Tragos','Jugos','Aguas']);
 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const rndId = (n=20) => Array.from({length:n}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
 
-    const now = new Date();
-    const endOfDay = new Date(now); endOfDay.setHours(23,59,59,999);
+    const nowStr = new Date().toISOString();
     const isDelivery = entregaMode === 'delivery';
     const reservationId = rndId();
-    const adminUser = { displayName:'Pedido Web', email:'pedidos@umi.cl', photoURL:'' };
+    const total = cart.reduce((s,i) => s + i.p * i.qty, 0);
 
-    // ── 1. Reservación ──
+    // ── 1. Reservación (formato delivery/pickup de SPLEAT) ──
     const reservation = {
-      restaurant: RID,
-      createdAt: now,
-      time: { start: now, end: endOfDay },
-      createdBy: adminUser,
-      table: {
-        tableId: 'weborders',
-        roomId:  'aa4b42',
-        roomName: 'Principal',
-        number: 99,
-        table: { chairsRight:1, chairsLeft:0, chairsBotom:0, chairsTop:0 }
-      },
-      quantity: cart.reduce((s,i) => s+i.qty, 0),
-      users: [], bill_requested: false, durationTimeInMinutes: 0,
-      notes: [
-        `📱 Cliente: ${nombre}`,
-        `📞 Tel: ${telefono}`,
-        isDelivery ? `📍 Dirección: ${direccion}` : '🏪 Retiro en local',
-        `💳 Pago: ${pagoMode}`,
-        notas ? `📝 Notas: ${notas}` : ''
-      ].filter(Boolean).join(' | ')
+      restaurantId: RID,
+      createdAt: nowStr,
+      status: 'active',
+      type: isDelivery ? 'delivery' : 'pickup',
+      clientName: nombre,
+      clientPhone: telefono,
+      address: isDelivery ? (direccion || '') : '',
+      paymentType: pagoMode,
+      notes: notas || '',
+      source: 'web',
+      total: total,
+      tableNumber: 'WEB',
+      box: 'web'
     };
 
     const r1 = await fetch(
@@ -1082,16 +1070,18 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
     for (const item of cart) {
       const orderId = rndId();
       const order = {
-        reservationId, productName: item.n,
-        price: String(item.p), quantity: item.qty, totalPrice: item.p * item.qty,
-        category: item.cat || 'Fuertes',
-        target: BAR_CATS.has(item.cat) ? 'bar' : 'kitchen',
-        productId: orderId, orderId, step: 0,
-        createdAt: now, addedAt: now, addedBy: adminUser, user: adminUser, userId: RID,
-        comments:'', preferences:[], packagingPrice:0, taxe:0,
-        discountWhen:null, color:null, productImg:'',
-        delivered_by:null, delivered_time:null,
-        acceptedPayments:['cash','card','transfer']
+        restaurantId: RID,
+        reservationId,
+        productName: item.n,
+        price: item.p,
+        quantity: item.qty,
+        totalPrice: item.p * item.qty,
+        orderId,
+        source: 'web',
+        category: 'Web',
+        addedAt: nowStr,
+        createdAt: nowStr,
+        step: 'pending'
       };
       const r2 = await fetch(
         `${BASE}/restaurants/${RID}/reservations/${reservationId}/orders?documentId=${orderId}&key=${KEY}`,
@@ -1100,7 +1090,7 @@ async function sendToSpleat(nombre, telefono, direccion, notas){
       if (!r2.ok) throw new Error('orden ' + r2.status);
     }
 
-    console.log('✅ Pedido creado en SPLEAT:', reservationId);
+    console.log('✅ Pedido creado en SPLEAT:', reservationId, 'tipo:', reservation.type);
     return true;
   } catch(e) {
     console.warn('⚠️ SPLEAT:', e.message);
