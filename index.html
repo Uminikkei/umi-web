@@ -287,6 +287,68 @@ nav{
 .cc-val a{color:var(--teal)}
 .cc-val a:hover{text-decoration:underline}
 
+/* ── REVIEWS MARQUEE ── */
+.reviews-sec{
+  padding:4rem 0 3.5rem;
+  overflow:hidden;
+  background:rgba(4,7,9,.50);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(0,212,240,.13);
+  border-bottom:1px solid rgba(0,212,240,.13);
+}
+.reviews-head{text-align:center;padding:0 2rem 2.8rem}
+.reviews-head .sec-label{display:inline-block;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+.reviews-head h2{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:var(--text);line-height:1.2}
+.reviews-head p{margin-top:.5rem;color:var(--muted);font-size:.88rem}
+.reviews-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:.35rem 1rem .35rem .6rem;margin-top:1rem}
+.reviews-badge svg{width:18px;height:18px}
+.reviews-badge span{font-size:.8rem;font-weight:600;color:var(--gold);letter-spacing:.5px}
+
+.reviews-track-wrap{overflow:hidden;position:relative;padding:.5rem 0}
+.reviews-track-wrap::before,.reviews-track-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none;
+}
+.reviews-track-wrap::before{left:0;background:linear-gradient(to right,rgba(4,7,9,.92) 0%,transparent 100%)}
+.reviews-track-wrap::after{right:0;background:linear-gradient(to left,rgba(4,7,9,.92) 0%,transparent 100%)}
+
+.reviews-track{
+  display:flex;gap:1.4rem;
+  animation:scroll-rev 50s linear infinite;
+  width:max-content;
+}
+.reviews-track:hover{animation-play-state:paused}
+@keyframes scroll-rev{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+.rev-card{
+  background:rgba(8,15,24,.82);
+  border:1px solid rgba(0,212,240,.13);
+  border-radius:16px;
+  padding:1.6rem 1.8rem;
+  width:290px;
+  flex-shrink:0;
+  backdrop-filter:blur(10px);
+  transition:border-color .3s;
+}
+.rev-card:hover{border-color:rgba(0,212,240,.35)}
+.rev-stars{display:flex;gap:.18rem;margin-bottom:.9rem}
+.rev-stars svg{width:.95rem;height:.95rem;fill:#c9a84c;flex-shrink:0}
+.rev-text{font-size:.86rem;color:var(--text);line-height:1.65;margin-bottom:1.1rem;font-style:italic;opacity:.92}
+.rev-text::before{content:'\201C';color:var(--teal);font-size:1.3rem;line-height:0;vertical-align:-.3em;margin-right:.15rem;opacity:.7}
+.rev-author{display:flex;align-items:center;gap:.7rem}
+.rev-av{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:700;color:#fff;flex-shrink:0;
+  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+}
+.rev-info{}
+.rev-name{font-size:.8rem;font-weight:600;color:var(--teal);line-height:1.2}
+.rev-src{font-size:.7rem;color:var(--muted);margin-top:.1rem;display:flex;align-items:center;gap:.3rem}
+.rev-src svg{width:10px;height:10px;fill:var(--muted)}
+
 /* ── FOOTER ── */
 footer{
   border-top:1px solid var(--border);
@@ -603,6 +665,174 @@ footer strong{color:var(--teal)}
     <div class="contact-card"><span class="cc-icon">📸</span><span class="cc-label">Instagram</span><span class="cc-val"><a href="https://www.instagram.com/uminikkeibar" target="_blank">@uminikkeibar</a></span></div>
     <div class="contact-card"><span class="cc-icon">🕐</span><span class="cc-label">Horario</span><span class="cc-val">Todos los días<br/>12:00 pm – 00:00 am</span></div>
   </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-sec">
+  <div class="reviews-head">
+    <span class="sec-label">Lo que dicen</span>
+    <h2>Reseñas de nuestros clientes</h2>
+    <p>Experiencias reales de quienes nos han visitado</p>
+    <div class="reviews-badge">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      <span>4.8 · Google Reviews</span>
+    </div>
+  </div>
+  <div class="reviews-track-wrap">
+    <div class="reviews-track" id="revTrack">
+
+      <!-- SET 1 (duplicado en JS para bucle infinito) -->
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">El sushi más fresco de Coquimbo, sin duda. Los rolls de autor son una obra de arte. Una experiencia que supera todas las expectativas.</div>
+        <div class="rev-author">
+          <div class="rev-av">MG</div>
+          <div class="rev-info">
+            <div class="rev-name">María G.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">Fusión nikkei increíble. El tiradito de salmón y el ceviche de atún estuvieron perfectos. El ambiente es espectacular, muy recomendado.</div>
+        <div class="rev-author">
+          <div class="rev-av">CR</div>
+          <div class="rev-info">
+            <div class="rev-name">Carlos R.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">Lugar de altísima categoría. Se nota la calidad en cada detalle, desde la presentación hasta el sabor. 100% recomendado para una ocasión especial.</div>
+        <div class="rev-author">
+          <div class="rev-av">VM</div>
+          <div class="rev-info">
+            <div class="rev-name">Valentina M.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">El mejor restaurante de sushi que he visitado en la IV Región. La atención es impecable y los precios muy justos para la calidad que ofrecen.</div>
+        <div class="rev-author">
+          <div class="rev-av">DF</div>
+          <div class="rev-info">
+            <div class="rev-name">Diego F.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">Los rolls Umi son una experiencia única. Ingredientes fresquísimos y combinaciones que no encontrarás en otro lugar de Coquimbo. Impresionante.</div>
+        <div class="rev-author">
+          <div class="rev-av">JL</div>
+          <div class="rev-info">
+            <div class="rev-name">Javiera L.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">Cena romántica perfecta. El local es hermoso, la música ambiental ideal y la comida simplemente exquisita. Volveremos para nuestra próxima ocasión especial.</div>
+        <div class="rev-author">
+          <div class="rev-av">PA</div>
+          <div class="rev-info">
+            <div class="rev-name">Pedro & Ana</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">La palta especiada con el salmón sellado es simplemente extraordinaria. Umi eleva la cocina nikkei a otro nivel. El mejor de la región norte de Chile.</div>
+        <div class="rev-author">
+          <div class="rev-av">RH</div>
+          <div class="rev-info">
+            <div class="rev-name">Roberto H.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="rev-text">Desde que abrieron no he parado de recomendar Umi a todos mis amigos y familiares. Definitivamente el lugar para comer en Coquimbo.</div>
+        <div class="rev-author">
+          <div class="rev-av">DS</div>
+          <div class="rev-info">
+            <div class="rev-name">Daniela S.</div>
+            <div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.reviews-track -->
+  </div><!-- /.reviews-track-wrap -->
 </section>
 
 <footer>
@@ -1406,6 +1636,15 @@ const SPLEAT_PHOTOS = {"Kaisen Roll":"https://firebasestorage.googleapis.com/v0/
 const SPLEAT_DESC = {"Kaisen Roll":"Base de plátano maduro y pimiento salteado con queso crema, coronado con pulpo a la parrilla y crujiente de wantán.","St germain Spritz":"Spritz floral y delicado con toques de flor de saúco, ideal para quienes prefieren sabores suaves y elegantes.","Ushio Roll":"Mix fresco de lechuga, pepinillo y palta.\nTopping de locos acevichados, chalaquita cítrica y crujiente de camote dorado.","Nori Tacos (4 pzs)":"4 Crujientes láminas de alga nori base de shari, crema de palta, lechuga chiffonade rellenas de atún y salmón con toque de acevichada, furikake y un toque de ciboulette.","Sashimi Pulpo":"Sashimi de tres cortes de pulpo, finamente laminado y presentado con elegancia al estilo tradicional japonés.","Sashimi Locos":"Sashimi de tres cortes de locos frescos, laminados finamente y presentados con elegancia al estilo japonés.","Tiraditos Umi":"Pesca del día con pulpo a la parrilla, crema de ají amarillo ahumado, palta cremosa, chalaquita y encurtido de perla.","Teri roll":"Roll con camarón tempura, queso crema, cubierto con salmon y láminas de limón con salsa Tare y semillas de sésamo.","Nigiris Yuki":"Pesca del día con gel de ponzu y perlas de caviar vegetal.","Botella de vino Casa Marín RIESLING":"Vino blanco ","No-rice Roll":"Roll relleno con atún, queso crema, palta y camaron tempura cubierto con salmon y toque de spicy y quinoa.","TNT Atun":"Atún aderezado con salsa dragón cubierto de Nori, con un toque de ají peruano y ciboulette.","Acevichado Roll":"Roll relleno con camarón empanizado y palta cubierto con alga nori y shari, coronado con laminas de atun, salsa acevichada y toques de furikake.","Chirashi ceviche":"Sashimi mixtos de salmón, atún, pulpo en Shari (arroz) con leche de tigre ahumada de ají peruano, palta, un toque de furikake, chalaquita peruana.","Cremoso de mariscos":"Arroz cremoso al estilo “arroz con mariscos” peruano, con tope de Katsuobushi japonés.","Edamame al wok":"Vainas de soya salteadas al wok en aceite de sesamo con toque de sal marina.","Ceviroll":"Roll con camarón empanizado, palta y tartar de pescado fresco, cubierto con leche de tigre al estilo Nikkei.","Tequila margarita":"La versión tradicional del icónico cóctel, con equilibrio perfecto entre tequila, cítricos y dulzor.","Tartare Tuna Roll":"Roll empanizado relleno de palta y camaron, cubierto con tartar de atún spicy, toque de acevichado y furikake.","Machas  parmesanas":"Machas gratinadas con queso parmesano fundido.","Mojito mango":"El clásico mojito con un toque tropical y jugoso de mango, más dulce, vibrante y veraniego.","Caipiriña":"El clásico brasileño lima triturada con azúcar y cachaça, intenso, refrescante y lleno de carácter tropical.","TNT Kani":"Jaiba acevichada con toque de spicy y furikake, cubierta en Nori.","Udon Saltado":"Fideos gruesos japoneses con atún y vegetales al wok, salteados en salsa de lomo saltado y parmesano.","TNT Locos":"Locos en salsa con chalaquita de palta, pasta de ají amarillo, un toque acevichado cubierto en Nori.","Ramazzotti spritz":"Una variante más aromática y herbal del spritz, con un sabor equilibrado y refrescante.","Tartare Sake Roll":"Roll con camarón y palta, cubierto nori, shari, tartar de salmón con toque spicy y sala taré.","Nori Tacos (2 pzs)":"2 Crujientes láminas de alga nori base de shari, crema de palta, lechuga chiffonade rellenas de atún y salmón con toque de acevichada, furikake y un toque de ciboulette.","Nigiris Nissei":"Nigiri de pesca del día en shari con emulsión de ají amarillo, chalaquita y furikake.","Umi Coctel":"Gin Tanqueray Ten, vermut blanco, maracuyá y limón, equilibrados con syrup de té Earl Grey y sutiles notas de chocolate blanco. Final floral de viola. 🍸","Udon huancaína":"Fideos gruesos japoneses al estilo Nikkei en salsa huancaína y parmesano, con lomo saltado con cilantro y tomates cherry.","Mojito coco":"Una versión cremosa y suave del mojito, con notas caribeñas que aportan dulzor y textura.","Negroni":"Clásico italiano equilibrado entre amargor, dulzor y notas botánicas. Intenso y sofisticado.","Scallops Roll":"Roll con camarón crocante y palta, cubierto con ostiones al estilo batayaki y gratinado con queso parmesano fundido.","Nigiris Criollo Ponja":"Pesca del día con ají criollo y chimichurri nikkei.","Mojito clasico":"Refrescante mezcla de hierbabuena, lima y ron, perfecto equilibrio entre dulzor y acidez, ideal para cualquier ocasión.","Tom collins":"Cóctel fresco y burbujeante con limón y gin, ligero y fácil de beber, ideal para tardes calurosas.","Dry Martini":"Elegante y seco, mezcla pura y directa de gin y vermut. Un cóctel icónico y atemporal.","Matsuri Roll":"Roll relleno de camarón tempura, palta y kiuri japones, cubierto con tartar de camarón y salsa dragon y un toque de ciboulette.","Odett Mocktail":"Sirope de Té de ceilán, jugo fresco de limón sutil, puré casero de lychee recién hecho y decorado elegantemente con caviares de lychee. ","Nigiris Grilled Ostion":"Ostiones gratinados con mantequilla japonesa y ciboulette.","Atun al sesamo":"Atún sellado con costra de sésamo, puré de papa, miel pasionaria y mix de verdes.\n(Puede elegir la terminación del atún)","Lomo saltado":"Filete de res con cebolla morada y tomate, en salsa de lomo saltado. Acompañado con papas cuñas y arroz shari y ajonjoli.","Caldo Clásico dumplings":"Caldo ligero de pollo, col blanca, huevo onsen, dumplings de pollo, perfumado en sesamo, con ajonjoliy cebollin.","Sashimi Pesca del Día":"Sashimi de tres cortes de pesca del día, seleccionada por su frescura y sabor, presentado al estilo tradicional japonés.","Tartare Nikkei":"Tartar de atún y salmón aderezado, con base de palta cubierto con un crocante japonés con toques de acevichada y spicy, acompañadas con tostadas den tinta de sepia.","Nigiris Trufado":"Atún con aceite de trufa, salsa spicy, miel de morrones y tenkatsu black.","Pacific Doré Roll":"Relleno de queso crema, espárragos y pimientos salteados, con lomo fino en tempura, cubierto con filete de lomo y flameado con salsa parrillera de la casa.","Asado de tira":"Res cocida a baja temperatura por 6 horas, acompañado de puré de papa y salsa nitsuke, choclo crocante, zanahorias y zetas.","Bramble":"Combinación de gin con frutos del bosque, dulce y ácido, con un color profundo y un sabor sofisticado.","Gyozas Camarón":"Gyosas de camarón aderezado fritas y bañadas en salsa acevichada y una decorado con brotes.","Nigiris Crispy Rice":"Shari crocante con tartar de salmón, toque de gochujang y ciboulette.","Creamy Roll":"Roll con camarón tempura, palta y queso crema, cubierto con crema de pizza flameado, salsa tare y aceite de orégano.","Ceviche Clásico nikkei":"Pesca del día marinada en leche de tigre, cebolla morada y puré de camote glaseado acompañado con cancha peruana y choclo.","Rusty Nail":"Cóctel robusto y cálido a base de whisky, con notas dulces y profundas aportadas por el Drambuie.","Yakimeshi umi":"Arroz estilo japonés con pollo al wok y tortilla de camarones.","Chalaquito Roll":"Roll relleno de palta y chicharrón de pescado, coronado con leche de tigre de rocoto ahumada y chalaquita fresca.","Torta Opera":"Capas de bizcocho de almendra con café espresso, crema al café y ganache de chocolate negro. ","Kimon mule":"Reinterpretación del clásico mule, shrub de ají amarillo, zumo de limon, syrup simple, ginger beer, espuma de jengibre y ralladura de limon sutil.","Pulpo nikkei":"Pulpo al grill, bañado en salsa anticuchera y acompañado de papas cuñas crocantes.","Sashimi 12 cortes":"Selección de doce cortes de sashimi mixto, con variedades de pescado fresco del día, presentados al estilo tradicional japonés con equilibrio y elegancia. IMAGEN REFERENCIAL.","Copa de vino Casa Marín RIESLING":"Vino blanco ","Nigiris Sweet salmon":"Salmón glaseado con miel pasionaria y phillo strips crujientes.","Asian Salad":"Mix de lechugas con camarones al panko, dressing oriental, crujiente de nori cracker, tomates cherry y parmesano.","Mojito maracuya":"Refrescante y aromático, con la acidez característica del maracuyá que aporta energía y frescura al trago.","Mar de Mariscos":"Selección de camarón, calamar y pulpo salteados y grillados, bañados en salsa de mariscos elaborada con la pesca del día, acompañado de arroz nikkei.","Saito Roll":"Roll relleno con camaron empanizado, palta, flameado con crema de jaibas (cangrejo) y mantequilla parmesana con un toque spicy.","Chicken Katsu":"Pechuga de pollo marinada, empanizada en panko japonés y frita hasta quedar dorada y crujiente. Servidas con papas fritas ","Sakana bao (2 pzs)":"Dos Bao de chicharrón de pescado con salsa tártara y criolla, cebolla morada y mix de lechuga.","Tataki Salad":"Mix de lechugas, palta, tomate cherry y palmito, acompañados de tataki de atún y dressing ponja.","Margarita nikkei":"Refrescante mezcla de Tequila con Cointreau y frutas tropicales de mango y maracuyá, equilibrado con limón y servido bien frío con espuma de sal de mar y wasabi.","Botella de vino Casa Marín GEWURZTRAMINER":"Vino blanco ","Cosmopolitan":"Elegante mezcla de vodka, arándanos y cítricos; moderno, vibrante y con un final refrescante.","Sakana Furai":"Pesca del dia, sazonado y empanizado en panko japonés, frito con una textura dorada y crujiente. Acompañado con arroz o papas fritas.","Yugüen":"Pisco Tololo Blue, Frangelico, limón y pomelo, con syrup de betarraga. Un cóctel floral y profundo, equilibrado entre lo cítrico y lo dulce, con un final sorprendente.","Salmón Garden (6 Pzs)":"Espiral de salmón fresco envolviendo shari, con topping de puré cremoso de palta, terminado con chalaquita peruana.","Camaron pasionarios":"Camarones bañados en miel de maracuyá con toque de ajo y ajonjoli, picante, en una base de fideos de arroz crujientes.","Nigiris Salmon Anticuchero":"Nigiri de salmón en shari con salsa anticuchera, chimichurri y palta.","Negroni Premium 47":"Gin Monkey 47 con Campari, vermut roso, cinzano 1757.","Smoke Cheese Roll":"Roll con langostinos tempura, palta, cubierto con queso crema gratinado y chimichurri japonés.","Tempura Roll":"Roll Clasico con camarón tempura crocante, queso crema suave y palta fresca.","Negroni Premium":"Gin Mare con Campari y Cinzano 1757","Nigiri Tako":"Nigiri de pulpo en shari con mousse de palta, puré de camote, chalaquita y togarashi.","Salmon Andino":"Salmon grillado con pesto criollo andino y quinoa, tope arroz crocante, salsa de ají peruano y chalaquita de la casa.","Ceviche Veggie Nikkei":"Champiñones, palta y palmito en leche de tigre vegetal (amarilla o ponzu).","Pesca al ajillo":"Pesca al grill con mixtura de mariscos, bañada en salsa de ajo, acompañado de arroz nikkei.","Tiraditos Nissei":"Pesca del día con chicharrón de pescado, salsa acevichada y leche de tigre de ají amarillo ahumada.","Boulevardier":"Campari, vermut y Woodford","Furai Roll":"Roll Clasico Tempura relleno con salmon ,queso crema, palta.","Nigiris Extravaganza":"Salmón fresco flameado con mantequilla japonesa, oroshi de limón, furikake y ciboulette.","Sashimi Salmon":"Sashimi de tres cortes de salmón fresco, delicadamente laminado y presentado al estilo tradicional japonés.","Rose collins":"Una versión floral del clásico Collins, combinando notas cítricas con delicadas esencias de rosa para un final suave y aromático.","Aperol spritz":"Clásico italiano, ligero, burbujeante y amargor suave, perfecto como aperitivo.","Lychee Martini ( Clásico )":"Gin japonés matsui the hakuto, zumo fresco de lychee, dash de limón. Syrup simple ","Sashimi Atun":"Sashimi de tres cortes de atún fresco, finamente laminado y presentado con la pureza y delicadeza del estilo japonés.","Karai Roll":"Roll con camarón tempura, palta y cubos de salmón en salsa dragón flambeados con Tare.","White lady germain":"St. Germain con cointreau, gin beefeater, jugo de limón, simple syrup y albumina","Mojito frambuesa":"Frutal y ligeramente ácido, combina frambuesas frescas con menta y ron para un cóctel colorido y refrescante.","TNT Salmon":"Salmón en Nori aderezado con salsa spicy al estilo TNT y un toque de ciboulette y furikake.","Tiraditos Olivo":"Pulpo al olivo con emulsión de palta y chalaquita fresca ","Saito Mocktail":"Frambuesa con zumo de limon, jarabe de goma y albumina.","Sake Koi Roll":"Roll con camarón empanizado, queso crema  y salmón flameado, finalizado con ralladura de limón.","Ostiones Parmesanas":"Ostiones gratinados con queso parmesano fundido y mantequilla parmesana.","Udon de camarones":"Fideos gruesos japoneses bañados en reducción de mariscos con ajíes peruanos, y croquetas de arroz.","Tiraditos Locos":"Locos en salsa de leche de tigre amarilla ahumada, chalaquita y palta cremosa.","Tnt pulpo karami":"Pulpo al olivo con chalaquita y emulsión de palta sobre shari crocante.","Gyozas tori":"Rellenas de pollo y col con aromas asiáticos, acompañadas de salsa huancaína.","PALOMA":"Tequila Don Julio Blanco, soda de pomelo, jugo de limón fresco y jarabe syrup. Un cóctel balanceado, cítrico y sumamente refrescante.  ","Gyozas trufadas":"Rellenas de champiñón, perfumadas con aceite de trufa y un toque de sesamo.","Ceviche carretillero":"Pesca del día con mariscos de temporada, bañados en leche de tigre al rocoto y coronados con chicharrón de pescado, con cancha peruana y choclo.","Uminari Roll":"Relleno de palta, salmón y pulpa de jaiba acevichada.\nCubierto con salmón y corvina flameada, bañado en salsa anticuchera de la casa, con toque de ají ahumado y chalaquita fresca.","Avocado Roll":"Roll con queso crema y camarón tempura, cubierto con palta, semillas de sesamo y salsa taré.","Ceviche Mixto criollo":"Pesca del día, atún, salmón y camarón en leche de tigre clásica acompañado con puré de camote glaseado, choclo tostado y cancha peruana.","Niku ramen":"Carne salteada, caldo concentrado de asado de tira con sabor peruano, fideos ramen, huevo onsen, choclo, cebollin y Nori.","Mariscos al fuego":"Mix de mariscos en mantequilla japonesa y salsa karai.","Saltado Marino":"Camarón, pulpo, ostiones, champiñones, maíz, brócoli, tomates cherry y cebolla morada saltados, sobre una cama de papas cuña y shari para acompañar.","Kabayaki Salad":"Mix de lechugas con cebolla crocante, pollo teriyaki, tomate y pepino encurtido.","Copa de vino  Casa Marín GEWURZTRAMINER":"Vino blanco ","Conchas al Pacífico":"Conchas grilladas en leche de tigre de rocoto, con quinoa pop y palta fresca."};
 
 buildMenu();
+
+// ── Infinite reviews marquee ───────────────────────────────────────────────
+(function(){
+  const track = document.getElementById('revTrack');
+  if(!track) return;
+  // Duplicate cards so the -50% animation loops seamlessly
+  const clone = track.innerHTML;
+  track.innerHTML = clone + clone;
+})();
 </script>
 </body>
 </html>
