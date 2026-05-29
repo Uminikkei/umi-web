@@ -193,24 +193,24 @@ nav{
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .cat-circ:hover{transform:translateY(-8px) scale(1.06)}
-.cat-circ-wrap{position:relative;width:160px;height:160px}
-/* El SVG del anillo rotatorio */
+.cat-circ-wrap{position:relative;width:180px;height:180px}
+/* SVG del anillo rotatorio — encima del círculo interior (z-index mayor por orden DOM) */
 .cat-circ-ring{
   position:absolute;inset:0;width:100%;height:100%;
   transform-origin:50% 50%;
-  transition:opacity .3s;
+  pointer-events:none;
 }
 /* Gira al hover y más rápido cuando está activo */
 .cat-circ:hover .cat-circ-ring{animation:spin-text 7s linear infinite}
 .cat-circ.on .cat-circ-ring{animation:spin-text 4s linear infinite}
 @keyframes spin-text{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-/* Círculo interior (fijo, no gira) */
+/* Círculo interior — debajo del SVG (z-index menor por orden DOM) */
 .cat-circ-inner{
-  position:absolute;inset:20px;border-radius:50%;
+  position:absolute;inset:26px;border-radius:50%;
   background:rgba(8,15,24,.88);
   border:2px solid rgba(0,212,240,.22);
   display:flex;align-items:center;justify-content:center;
-  font-size:2.8rem;
+  font-size:3rem;
   transition:border-color .3s,box-shadow .3s,background .3s;
   backdrop-filter:blur(14px);
   pointer-events:none;
@@ -1187,31 +1187,34 @@ function buildMenu(){
     const uid = 'rp' + idx;
     // Texto del anillo = nombres de subcategorías concatenados
     const subText = cats.map(c => c.toUpperCase()).join(' · ') + ' · ';
-    // Calcular cuántas repeticiones llenan el perímetro (~415 unidades, ~11 por carácter)
-    const repsNeeded = Math.max(1, Math.ceil(500 / (subText.length * 11)));
+    // Circunferencia r=73 ≈ 458px; font-size 12 + letter-spacing 1.5 ≈ 13.5 por carácter
+    const repsNeeded = Math.max(1, Math.ceil(500 / (subText.length * 13.5)));
     const textStr = subText.repeat(repsNeeded + 1);
 
     circ.innerHTML = `
       <div class="cat-circ-wrap">
-        <svg class="cat-circ-ring" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Círculo interior PRIMERO → queda debajo del SVG -->
+        <div class="cat-circ-inner">${e}</div>
+        <!-- SVG DESPUÉS → se pinta encima del círculo interior -->
+        <!-- Las letras se muerden levemente el borde interior → efecto profundidad -->
+        <svg class="cat-circ-ring" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <!-- Anillo decorativo exterior -->
-          <circle cx="80" cy="80" r="76" fill="none" stroke="rgba(0,212,240,.18)" stroke-width="1"/>
-          <!-- Puntos decorativos en el anillo -->
-          <circle cx="80" cy="4"   r="2" fill="rgba(0,212,240,.35)"/>
-          <circle cx="156" cy="80" r="2" fill="rgba(0,212,240,.35)"/>
-          <circle cx="80" cy="156" r="2" fill="rgba(0,212,240,.35)"/>
-          <circle cx="4"   cy="80" r="2" fill="rgba(0,212,240,.35)"/>
-          <!-- Path circular para el texto -->
+          <circle cx="90" cy="90" r="85" fill="none" stroke="rgba(0,212,240,.2)" stroke-width="1.2"/>
+          <!-- 4 puntos cardinales -->
+          <circle cx="90"  cy="5"   r="2.5" fill="rgba(0,212,240,.45)"/>
+          <circle cx="175" cy="90"  r="2.5" fill="rgba(0,212,240,.45)"/>
+          <circle cx="90"  cy="175" r="2.5" fill="rgba(0,212,240,.45)"/>
+          <circle cx="5"   cy="90"  r="2.5" fill="rgba(0,212,240,.45)"/>
+          <!-- Path circular r=73: baseline letra cae en el anillo,
+               cap-height penetra ~3px en el círculo interior → profundidad -->
           <defs>
-            <path id="${uid}" d="M 80 80 m -66 0 a 66 66 0 1 1 132 0 a 66 66 0 1 1 -132 0"/>
+            <path id="${uid}" d="M 90 90 m -73 0 a 73 73 0 1 1 146 0 a 73 73 0 1 1 -146 0"/>
           </defs>
-          <text fill="rgba(0,212,240,.78)" font-size="8.5"
-                font-family="Inter,sans-serif" font-weight="600" letter-spacing="2.5">
+          <text fill="rgba(0,212,240,.88)" font-size="12"
+                font-family="Inter,sans-serif" font-weight="700" letter-spacing="1.5">
             <textPath href="#${uid}">${textStr}</textPath>
           </text>
         </svg>
-        <!-- Círculo interior estático (emoji) -->
-        <div class="cat-circ-inner">${e}</div>
       </div>
       <div class="cat-circ-label">${mainName}</div>`;
 
