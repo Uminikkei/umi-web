@@ -32,52 +32,49 @@ body{background:#060e1c;color:var(--text);font-family:var(--sans);line-height:1.
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
-/* ── NAVBAR — fija, transparente, caligrafía grande sobre ola ── */
+/* ── NAVBAR TRANSPARENTE — logotipo grande centrado, olas desde extremos ── */
 body{padding-top:0}
 nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  background:rgba(4,7,9,.85);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:transparent;
 }
 
-/* ── ZONA TOP: ola + caligrafía superpuesta ── */
+/* Zona ola + logotipo: tres columnas flex en una sola fila */
 .nav-top{
-  position:relative;
-  height:56px;
+  display:flex;
+  align-items:center;
+  height:68px;
   overflow:visible;
 }
-/* Caligrafía UMI — centrada, flota SOBRE la ola y desborda hacia el strip */
+
+/* Ola izquierda y derecha — flex:1 para ocupar el espacio disponible */
+.nav-wave-left,.nav-wave-right{
+  flex:1;min-width:0;
+  display:flex;align-items:center;
+  height:32px;
+}
+.nav-wave-left svg,.nav-wave-right svg{
+  display:block;width:100%;height:32px;overflow:visible;
+}
+
+/* Logotipo centrado entre las dos olas */
 .nav-wordmark{
-  position:absolute;
-  left:50%;top:50%;
-  transform:translate(-50%,-46%);
-  z-index:6;pointer-events:none;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  z-index:5;pointer-events:none;
 }
 .nav-wordmark img{
-  height:74px;width:auto;display:block;
+  height:200px;width:auto;display:block;
   filter:brightness(0) invert(1) sepia(6%) saturate(0.3) brightness(1.06);
 }
-/* Ola — trazo blanco fino, pegada al fondo de nav-top */
-.nav-curve-line{
-  position:absolute;bottom:0;left:0;right:0;
-  height:28px;line-height:0;z-index:3;overflow:visible;
-}
-.nav-curve-line svg{display:block;width:100%;height:100%}
 
-/* Fila inferior: isotipo + links + controles */
+/* Franja inferior: links + controles */
 .nav-strip{
   display:flex;align-items:center;justify-content:space-between;
-  padding:.18rem 1.8rem .42rem;gap:1rem;
-  position:relative;z-index:4;
+  padding:.2rem 2rem .45rem;gap:1rem;
 }
 .nav-strip-left{display:flex;align-items:center;gap:1.8rem}
 .nav-strip-right{display:flex;align-items:center;gap:.8rem}
-
-/* Espacio isotipo — reservado para archivo oficial pendiente */
-.nav-isotipo-slot{
-  width:34px;height:34px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-}
 
 /* Links de navegación */
 .nav-links{display:flex;gap:1.8rem;align-items:center}
@@ -119,8 +116,8 @@ nav{
 @media(max-width:900px){
   .nav-links{display:none}
   .nav-strip{padding:.15rem 1.2rem .38rem}
-  .nav-wordmark img{height:58px}
-  .nav-top{height:46px}
+  .nav-wordmark img{height:120px}
+  .nav-top{height:52px}
 }
 
 /* ── SEARCH ── */
@@ -958,31 +955,39 @@ footer strong{color:var(--teal)}
 <!-- ═══ NAVBAR ═══ -->
 <nav>
 
-  <!-- ZONA TOP: ola + caligrafía superpuesta -->
+  <!-- ZONA TOP: ola izquierda | logotipo | ola derecha -->
   <div class="nav-top">
 
-    <!-- Caligrafía oficial UMI flota SOBRE la ola -->
+    <!-- OLA IZQUIERDA — desde extremo izquierdo hasta el inicio de la "u" -->
+    <div class="nav-wave-left" aria-hidden="true">
+      <svg viewBox="0 0 720 30" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="matrix(1,0,0,0.4,0,-14.6)">
+          <path fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M0.0,82.6 L7.2,84.9 L14.4,86.7 L21.6,88.2 L28.8,89.3 L36.0,90.2 L43.2,95.6 L50.4,97.8 L57.6,98.6 L64.8,99.0 L72.0,99.2 L79.2,99.3 L86.4,99.3 L93.6,99.3 L100.8,99.3 L108.0,99.3 L115.2,99.3 L122.4,99.3 L129.6,99.3 L136.8,99.3 L144.0,99.3 L151.2,99.3 L158.4,99.3 L165.6,99.3 L172.8,99.3 L180.0,99.3 L187.2,99.3 L194.4,99.3 L201.6,99.3 L208.8,99.2 L216.0,99.1 L223.2,98.8 L230.4,98.5 L237.6,97.9 L244.8,96.9 L252.0,92.3 L259.2,87.8 L266.4,83.3 L273.6,78.9 L280.8,74.4 L288.0,70.0 L295.2,65.6 L302.4,61.4 L309.6,57.3 L316.8,53.3 L324.0,49.8 L331.2,51.8 L338.4,53.9 L345.6,56.0 L352.8,58.3 L360.0,60.6 L367.2,62.8 L374.4,65.1 L381.6,67.3 L388.8,69.5 L396.0,71.7 L403.2,73.8 L410.4,74.1 L417.6,74.0 L424.8,73.7 L432.0,73.2 L439.2,72.6 L446.4,71.9 L453.6,71.2 L460.8,70.3 L468.0,69.4 L475.2,68.6 L482.4,67.8 L489.6,67.2 L496.8,66.9 L504.0,67.0 L511.2,67.4 L518.4,68.0 L525.6,68.7 L532.8,69.5 L540.0,70.5 L547.2,71.6 L554.4,72.6 L561.6,73.6 L568.8,74.4 L576.0,75.0 L583.2,75.3 L590.4,75.3 L597.6,75.2 L604.8,74.9 L612.0,74.5 L619.2,74.0 L626.4,73.4 L633.6,72.7 L640.8,71.9 L648.0,71.0 L655.2,70.0 L662.4,68.9 L669.6,67.7 L676.8,66.4 L684.0,65.0 L691.2,63.5 L698.4,63.7 L705.6,64.2 L712.8,64.7 L720.0,65.4 L727.2,66.1 L734.4,67.0 L741.6,68.0 L748.8,69.0 L756.0,70.1 L763.2,71.4 L770.4,72.8 L777.6,72.4 L784.8,71.8 L792.0,71.1 L799.2,70.3 L806.4,69.5 L813.6,68.6 L820.8,67.7 L828.0,66.8 L835.2,65.8 L842.4,64.8 L849.6,63.9 L856.8,62.9 L864.0,62.0 L871.2,61.2 L878.4,60.6 L885.6,61.0 L892.8,61.8 L900.0,62.7 L907.2,63.8 L914.4,65.0 L921.6,66.2 L928.8,67.4 L936.0,68.7 L943.2,69.9 L950.4,71.1 L957.6,72.2 L964.8,72.3 L972.0,71.9 L979.2,71.4 L986.4,70.8 L993.6,70.2 L1000.8,69.4 L1008.0,68.7 L1015.2,67.9 L1022.4,67.1 L1029.6,66.3 L1036.8,65.5 L1044.0,64.6 L1051.2,63.9 L1058.4,63.3 L1065.6,63.1 L1072.8,63.4 L1080.0,64.0 L1087.2,64.8 L1094.4,65.7 L1101.6,66.8 L1108.8,67.8 L1116.0,69.0 L1123.2,70.1 L1130.4,71.2 L1137.6,72.2 L1144.8,72.7 L1152.0,72.8 L1159.2,72.6 L1166.4,72.1 L1173.6,71.5 L1180.8,70.7 L1188.0,69.8 L1195.2,68.8 L1202.4,67.7 L1209.6,66.5 L1216.8,65.4 L1224.0,64.3 L1231.2,63.4 L1238.4,62.9 L1245.6,62.6 L1252.8,62.8 L1260.0,63.2 L1267.2,63.9 L1274.4,64.9 L1281.6,66.0 L1288.8,67.4 L1296.0,68.7 L1303.2,70.1 L1310.4,71.4 L1317.6,72.5 L1324.8,73.4 L1332.0,74.0 L1339.2,74.3 L1346.4,74.4 L1353.6,74.4 L1360.8,74.3 L1368.0,74.0 L1375.2,73.6 L1382.4,73.1 L1389.6,72.4 L1396.8,71.7 L1404.0,69.4 L1411.2,68.9 L1418.4,68.3 L1425.6,67.6 L1432.8,66.8 L1440.0,65.9"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- LOGOTIPO UMI — centrado, grande, sin isotipo -->
     <div class="nav-wordmark">
       <img src="logo-umi.png" alt="UMI">
     </div>
 
-    <!-- Ola — contorno real del logo UMI, trazo blanco -->
-    <div class="nav-curve-line" aria-hidden="true">
-    <svg viewBox="0 0 1440 30" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <g transform="matrix(1,0,0,0.4,0,-14.6)">
-        <path fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"
-              d="M0.0,82.6 L7.2,84.9 L14.4,86.7 L21.6,88.2 L28.8,89.3 L36.0,90.2 L43.2,95.6 L50.4,97.8 L57.6,98.6 L64.8,99.0 L72.0,99.2 L79.2,99.3 L86.4,99.3 L93.6,99.3 L100.8,99.3 L108.0,99.3 L115.2,99.3 L122.4,99.3 L129.6,99.3 L136.8,99.3 L144.0,99.3 L151.2,99.3 L158.4,99.3 L165.6,99.3 L172.8,99.3 L180.0,99.3 L187.2,99.3 L194.4,99.3 L201.6,99.3 L208.8,99.2 L216.0,99.1 L223.2,98.8 L230.4,98.5 L237.6,97.9 L244.8,96.9 L252.0,92.3 L259.2,87.8 L266.4,83.3 L273.6,78.9 L280.8,74.4 L288.0,70.0 L295.2,65.6 L302.4,61.4 L309.6,57.3 L316.8,53.3 L324.0,49.8 L331.2,51.8 L338.4,53.9 L345.6,56.0 L352.8,58.3 L360.0,60.6 L367.2,62.8 L374.4,65.1 L381.6,67.3 L388.8,69.5 L396.0,71.7 L403.2,73.8 L410.4,74.1 L417.6,74.0 L424.8,73.7 L432.0,73.2 L439.2,72.6 L446.4,71.9 L453.6,71.2 L460.8,70.3 L468.0,69.4 L475.2,68.6 L482.4,67.8 L489.6,67.2 L496.8,66.9 L504.0,67.0 L511.2,67.4 L518.4,68.0 L525.6,68.7 L532.8,69.5 L540.0,70.5 L547.2,71.6 L554.4,72.6 L561.6,73.6 L568.8,74.4 L576.0,75.0 L583.2,75.3 L590.4,75.3 L597.6,75.2 L604.8,74.9 L612.0,74.5 L619.2,74.0 L626.4,73.4 L633.6,72.7 L640.8,71.9 L648.0,71.0 L655.2,70.0 L662.4,68.9 L669.6,67.7 L676.8,66.4 L684.0,65.0 L691.2,63.5 L698.4,63.7 L705.6,64.2 L712.8,64.7 L720.0,65.4 L727.2,66.1 L734.4,67.0 L741.6,68.0 L748.8,69.0 L756.0,70.1 L763.2,71.4 L770.4,72.8 L777.6,72.4 L784.8,71.8 L792.0,71.1 L799.2,70.3 L806.4,69.5 L813.6,68.6 L820.8,67.7 L828.0,66.8 L835.2,65.8 L842.4,64.8 L849.6,63.9 L856.8,62.9 L864.0,62.0 L871.2,61.2 L878.4,60.6 L885.6,61.0 L892.8,61.8 L900.0,62.7 L907.2,63.8 L914.4,65.0 L921.6,66.2 L928.8,67.4 L936.0,68.7 L943.2,69.9 L950.4,71.1 L957.6,72.2 L964.8,72.3 L972.0,71.9 L979.2,71.4 L986.4,70.8 L993.6,70.2 L1000.8,69.4 L1008.0,68.7 L1015.2,67.9 L1022.4,67.1 L1029.6,66.3 L1036.8,65.5 L1044.0,64.6 L1051.2,63.9 L1058.4,63.3 L1065.6,63.1 L1072.8,63.4 L1080.0,64.0 L1087.2,64.8 L1094.4,65.7 L1101.6,66.8 L1108.8,67.8 L1116.0,69.0 L1123.2,70.1 L1130.4,71.2 L1137.6,72.2 L1144.8,72.7 L1152.0,72.8 L1159.2,72.6 L1166.4,72.1 L1173.6,71.5 L1180.8,70.7 L1188.0,69.8 L1195.2,68.8 L1202.4,67.7 L1209.6,66.5 L1216.8,65.4 L1224.0,64.3 L1231.2,63.4 L1238.4,62.9 L1245.6,62.6 L1252.8,62.8 L1260.0,63.2 L1267.2,63.9 L1274.4,64.9 L1281.6,66.0 L1288.8,67.4 L1296.0,68.7 L1303.2,70.1 L1310.4,71.4 L1317.6,72.5 L1324.8,73.4 L1332.0,74.0 L1339.2,74.3 L1346.4,74.4 L1353.6,74.4 L1360.8,74.3 L1368.0,74.0 L1375.2,73.6 L1382.4,73.1 L1389.6,72.4 L1396.8,71.7 L1404.0,69.4 L1411.2,68.9 L1418.4,68.3 L1425.6,67.6 L1432.8,66.8 L1440.0,65.9"/>
-      </g>
-    </svg>
+    <!-- OLA DERECHA — desde el final de la "i" hasta el extremo derecho -->
+    <div class="nav-wave-right" aria-hidden="true">
+      <svg viewBox="720 0 720 30" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="matrix(1,0,0,0.4,0,-14.6)">
+          <path fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M0.0,82.6 L7.2,84.9 L14.4,86.7 L21.6,88.2 L28.8,89.3 L36.0,90.2 L43.2,95.6 L50.4,97.8 L57.6,98.6 L64.8,99.0 L72.0,99.2 L79.2,99.3 L86.4,99.3 L93.6,99.3 L100.8,99.3 L108.0,99.3 L115.2,99.3 L122.4,99.3 L129.6,99.3 L136.8,99.3 L144.0,99.3 L151.2,99.3 L158.4,99.3 L165.6,99.3 L172.8,99.3 L180.0,99.3 L187.2,99.3 L194.4,99.3 L201.6,99.3 L208.8,99.2 L216.0,99.1 L223.2,98.8 L230.4,98.5 L237.6,97.9 L244.8,96.9 L252.0,92.3 L259.2,87.8 L266.4,83.3 L273.6,78.9 L280.8,74.4 L288.0,70.0 L295.2,65.6 L302.4,61.4 L309.6,57.3 L316.8,53.3 L324.0,49.8 L331.2,51.8 L338.4,53.9 L345.6,56.0 L352.8,58.3 L360.0,60.6 L367.2,62.8 L374.4,65.1 L381.6,67.3 L388.8,69.5 L396.0,71.7 L403.2,73.8 L410.4,74.1 L417.6,74.0 L424.8,73.7 L432.0,73.2 L439.2,72.6 L446.4,71.9 L453.6,71.2 L460.8,70.3 L468.0,69.4 L475.2,68.6 L482.4,67.8 L489.6,67.2 L496.8,66.9 L504.0,67.0 L511.2,67.4 L518.4,68.0 L525.6,68.7 L532.8,69.5 L540.0,70.5 L547.2,71.6 L554.4,72.6 L561.6,73.6 L568.8,74.4 L576.0,75.0 L583.2,75.3 L590.4,75.3 L597.6,75.2 L604.8,74.9 L612.0,74.5 L619.2,74.0 L626.4,73.4 L633.6,72.7 L640.8,71.9 L648.0,71.0 L655.2,70.0 L662.4,68.9 L669.6,67.7 L676.8,66.4 L684.0,65.0 L691.2,63.5 L698.4,63.7 L705.6,64.2 L712.8,64.7 L720.0,65.4 L727.2,66.1 L734.4,67.0 L741.6,68.0 L748.8,69.0 L756.0,70.1 L763.2,71.4 L770.4,72.8 L777.6,72.4 L784.8,71.8 L792.0,71.1 L799.2,70.3 L806.4,69.5 L813.6,68.6 L820.8,67.7 L828.0,66.8 L835.2,65.8 L842.4,64.8 L849.6,63.9 L856.8,62.9 L864.0,62.0 L871.2,61.2 L878.4,60.6 L885.6,61.0 L892.8,61.8 L900.0,62.7 L907.2,63.8 L914.4,65.0 L921.6,66.2 L928.8,67.4 L936.0,68.7 L943.2,69.9 L950.4,71.1 L957.6,72.2 L964.8,72.3 L972.0,71.9 L979.2,71.4 L986.4,70.8 L993.6,70.2 L1000.8,69.4 L1008.0,68.7 L1015.2,67.9 L1022.4,67.1 L1029.6,66.3 L1036.8,65.5 L1044.0,64.6 L1051.2,63.9 L1058.4,63.3 L1065.6,63.1 L1072.8,63.4 L1080.0,64.0 L1087.2,64.8 L1094.4,65.7 L1101.6,66.8 L1108.8,67.8 L1116.0,69.0 L1123.2,70.1 L1130.4,71.2 L1137.6,72.2 L1144.8,72.7 L1152.0,72.8 L1159.2,72.6 L1166.4,72.1 L1173.6,71.5 L1180.8,70.7 L1188.0,69.8 L1195.2,68.8 L1202.4,67.7 L1209.6,66.5 L1216.8,65.4 L1224.0,64.3 L1231.2,63.4 L1238.4,62.9 L1245.6,62.6 L1252.8,62.8 L1260.0,63.2 L1267.2,63.9 L1274.4,64.9 L1281.6,66.0 L1288.8,67.4 L1296.0,68.7 L1303.2,70.1 L1310.4,71.4 L1317.6,72.5 L1324.8,73.4 L1332.0,74.0 L1339.2,74.3 L1346.4,74.4 L1353.6,74.4 L1360.8,74.3 L1368.0,74.0 L1375.2,73.6 L1382.4,73.1 L1389.6,72.4 L1396.8,71.7 L1404.0,69.4 L1411.2,68.9 L1418.4,68.3 L1425.6,67.6 L1432.8,66.8 L1440.0,65.9"/>
+        </g>
+      </svg>
     </div>
 
   </div><!-- /.nav-top -->
 
-  <!-- NAV STRIP: isotipo + links + botones -->
+  <!-- NAV STRIP: links + botones -->
   <div class="nav-strip">
     <div class="nav-strip-left">
-      <!-- Slot isotipo — pendiente archivo oficial. NO se inventa ningún símbolo. -->
-      <a href="#inicio" class="nav-isotipo-slot" aria-label="Inicio"></a>
       <div class="nav-links">
         <a href="#nosotros">Nosotros</a>
         <a href="#menu">Menú</a>
