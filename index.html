@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon-umi.svg"/>
 <link rel="shortcut icon" href="favicon-umi.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -23,6 +23,8 @@
   --r:14px;
   --sans:'Inter',sans-serif;
   --serif:'Cormorant Garamond',serif;
+  --script:'Dancing Script',cursive;
+  --cream:#f0e8d8;--cream2:#e6ddd0;
 }
 html{scroll-behavior:smooth}
 body{background:#060e1c;color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
@@ -82,6 +84,14 @@ nav{
   background:rgba(255,255,255,.05);transition:all .2s;white-space:nowrap;
 }
 .nav-wa:hover{background:rgba(255,255,255,.12);border-color:var(--white-1);color:var(--white-1)}
+.nav-reserva{
+  display:flex;align-items:center;gap:.45rem;
+  border:1.5px solid rgba(240,235,224,.45);color:rgba(240,235,224,.85);
+  font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:.38rem 1.1rem;border-radius:999px;
+  background:transparent;transition:all .2s;white-space:nowrap;
+}
+.nav-reserva:hover{background:rgba(255,255,255,.12);border-color:var(--white-1);color:var(--white-1)}
 
 /* Hamburger */
 .nav-hamburger{
@@ -120,49 +130,92 @@ nav{
 .search-no-results{padding:1.2rem;text-align:center;color:var(--muted);font-size:.85rem}
 @media(max-width:700px){.search-box input{width:130px}}
 
-/* ── WAVE SEPARATOR ── */
+/* ── WAVE SEPARATOR — contorno real UMI + línea blanca ── */
 .wave-sep{position:absolute;bottom:-2px;left:0;right:0;line-height:0;pointer-events:none;z-index:2}
 .wave-sep svg{display:block;width:100%;height:120px}
 .wave-sep-top{position:absolute;top:-2px;left:0;right:0;line-height:0;pointer-events:none;z-index:2}
 .wave-sep-top svg{display:block;width:100%;height:90px}
+/* Divisor de sección full-width (no absolute) */
+.sec-divider{position:relative;line-height:0;margin:0;padding:0;display:block}
+.sec-divider svg{display:block;width:100%;height:120px}
 
-/* ── HERO SECTION ── */
+/* ── HERO SECTION — alineado a la izquierda como en la referencia ── */
 .hero-sec{
   min-height:100vh;
-  background:url('fondo-umi.jpg') center 5%/cover no-repeat;
-  display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:190px 2rem 10rem;
+  background:url('fondo-umi.jpg') center 30%/cover no-repeat;
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  text-align:left;padding:190px 5vw 12rem;
   position:relative;overflow:hidden;
 }
 .hero-sec::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,
-    rgba(4,7,9,.60) 0%,
-    rgba(4,7,9,.18) 30%,
-    rgba(4,7,9,.22) 65%,
-    rgba(4,7,9,.80) 100%);
+  background:linear-gradient(105deg,
+    rgba(4,7,9,.82) 0%,
+    rgba(4,7,9,.55) 45%,
+    rgba(4,7,9,.12) 100%);
   pointer-events:none;
 }
-.hero-content{position:relative;z-index:1}
-.hero-kicker{
-  display:inline-flex;align-items:center;gap:.5rem;
-  border:1px solid rgba(0,212,240,.35);
-  background:rgba(0,212,240,.08);
-  color:var(--teal);font-size:.72rem;font-weight:600;
-  letter-spacing:3px;text-transform:uppercase;
-  padding:.4rem 1.1rem;border-radius:999px;margin-bottom:1.8rem;
+.hero-content{position:relative;z-index:1;max-width:560px}
+.hero-eyebrow{
+  display:block;font-size:.72rem;letter-spacing:5px;text-transform:uppercase;
+  color:rgba(240,235,224,.75);font-weight:400;margin-bottom:.5rem;
 }
 .hero-title{
-  font-family:var(--serif);
-  font-size:clamp(3.5rem,12vw,9rem);
-  font-weight:700;line-height:.9;letter-spacing:-2px;
-  color:var(--white-1);margin-bottom:1.2rem;
+  font-family:var(--sans);
+  font-size:clamp(4rem,9vw,7rem);
+  font-weight:900;line-height:.88;letter-spacing:-3px;
+  color:var(--white-1);margin-bottom:.3rem;text-transform:uppercase;
 }
-.hero-title em{font-style:normal;color:var(--teal)}
+.hero-script{
+  display:block;
+  font-family:var(--script);
+  font-size:clamp(2.8rem,6vw,4.5rem);
+  color:var(--teal);font-style:italic;font-weight:700;
+  line-height:1.1;margin-bottom:1.6rem;letter-spacing:0;
+}
 .hero-sub{
-  font-size:1.05rem;color:rgba(240,235,224,.65);
-  max-width:420px;margin:0 auto 2.5rem;font-weight:300;
+  font-size:.95rem;color:rgba(240,235,224,.70);
+  max-width:400px;margin:0 0 2.2rem;font-weight:300;line-height:1.65;
 }
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-hero-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--teal);color:#000;font-weight:700;
+  font-size:.8rem;letter-spacing:2px;text-transform:uppercase;
+  padding:.85rem 2.2rem;border-radius:999px;
+  transition:transform .25s,box-shadow .25s;
+  box-shadow:0 0 24px rgba(0,212,240,.35);white-space:nowrap;
+}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,240,.5)}
+.btn-hero-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:transparent;color:var(--white-1);font-weight:700;
+  font-size:.8rem;letter-spacing:2px;text-transform:uppercase;
+  padding:.85rem 2.2rem;border-radius:999px;
+  border:1.5px solid rgba(240,235,224,.55);
+  transition:all .25s;white-space:nowrap;
+}
+.btn-hero-secondary:hover{background:rgba(255,255,255,.1);border-color:var(--white-1)}
+/* Badge circular / sello en el hero */
+.hero-badge{
+  position:absolute;bottom:10rem;right:4vw;z-index:2;
+  width:110px;height:110px;
+  border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:.2rem;
+  background:rgba(4,7,9,.4);backdrop-filter:blur(8px);
+}
+.hero-badge-top{
+  font-size:.52rem;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,235,224,.75);font-weight:600;
+}
+.hero-badge-icon{font-size:1.5rem;line-height:1}
+.hero-badge-bot{
+  font-size:.5rem;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(240,235,224,.6);font-weight:500;
+}
+/* Alias viejo — no romper nada existente */
 .btn-hero{
   display:inline-block;
   background:var(--teal);color:#000;font-weight:700;
@@ -172,6 +225,141 @@ nav{
   box-shadow:0 0 30px rgba(0,212,240,.3);
 }
 .btn-hero:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,212,240,.5)}
+
+/* ── SECCIÓN CREAM — Nuestra Historia + Más Pedidos ── */
+.cream-sec{
+  background:var(--cream);
+  padding:0 0 0;
+  position:relative;
+  overflow:hidden;
+}
+.cream-inner{
+  max-width:1240px;margin:0 auto;
+  padding:5rem 2rem 5rem;
+  display:grid;
+  grid-template-columns:1fr 380px 1fr;
+  gap:3.5rem;
+  align-items:start;
+}
+/* Historia — columna izquierda */
+.cream-historia{}
+.cream-label{
+  display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
+  color:var(--teal);font-weight:700;margin-bottom:.8rem;
+}
+.cream-title{
+  font-family:var(--serif);
+  font-size:clamp(2.2rem,4vw,3rem);
+  font-weight:700;color:#0a0a0a;
+  line-height:1.05;letter-spacing:-1px;margin-bottom:.4rem;
+}
+.cream-title em{
+  font-family:var(--script);font-style:italic;
+  font-size:clamp(2rem,3.5vw,2.6rem);color:#222;font-weight:400;
+}
+.cream-desc{
+  font-size:.88rem;color:#444;line-height:1.75;
+  margin-bottom:1.5rem;max-width:340px;
+}
+.cream-link{
+  font-size:.75rem;letter-spacing:2px;text-transform:uppercase;
+  color:#0a0a0a;font-weight:700;
+  border-bottom:1.5px solid #0a0a0a;
+  padding-bottom:.15rem;transition:color .2s;
+}
+.cream-link:hover{color:var(--teal);border-color:var(--teal)}
+/* Foto central */
+.cream-photo{border-radius:18px;overflow:hidden}
+.cream-photo img{width:100%;height:360px;object-fit:cover;display:block}
+/* Más Pedidos — columna derecha */
+.cream-pedidos{}
+.cream-pedidos-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1.2rem;margin-top:1.5rem;
+}
+.pedido-item{display:flex;flex-direction:column;align-items:center;gap:.5rem;cursor:pointer}
+.pedido-circle{
+  width:120px;height:120px;border-radius:50%;overflow:hidden;
+  border:3px solid var(--cream2);transition:border-color .2s,transform .2s;
+}
+.pedido-circle:hover{border-color:var(--teal);transform:scale(1.05)}
+.pedido-circle img{width:100%;height:100%;object-fit:cover}
+.pedido-name{
+  font-size:.72rem;letter-spacing:1px;text-transform:uppercase;
+  color:#111;font-weight:700;text-align:center;
+}
+.pedido-price{font-size:.8rem;color:var(--teal);font-weight:700}
+.cream-menu-link{
+  display:block;margin-top:1.5rem;
+  font-size:.75rem;letter-spacing:2px;text-transform:uppercase;
+  color:#0a0a0a;font-weight:700;
+  border-bottom:1.5px solid #0a0a0a;
+  padding-bottom:.15rem;width:fit-content;transition:color .2s;
+}
+.cream-menu-link:hover{color:var(--teal);border-color:var(--teal)}
+/* Transición cream → oscuro */
+.cream-wave-bottom{position:relative;line-height:0;background:var(--cream)}
+.cream-wave-bottom svg{display:block;width:100%;height:120px}
+@media(max-width:1000px){
+  .cream-inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .cream-photo{display:none}
+}
+@media(max-width:640px){
+  .cream-inner{grid-template-columns:1fr;gap:2.5rem}
+  .hero-badge{display:none}
+  .hero-sec{padding:190px 1.5rem 10rem}
+  .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── FOOTER REDISEÑADO ── */
+footer{
+  background:#0a0a0a;
+  padding:0;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-inner{
+  max-width:1240px;margin:0 auto;
+  display:grid;
+  grid-template-columns:260px 1fr 1fr 1fr 1fr;
+  gap:3rem;padding:4rem 2rem;
+  align-items:start;
+}
+.footer-brand{}
+.footer-brand-logos{display:flex;align-items:center;gap:.8rem;margin-bottom:.6rem}
+.footer-brand-iso svg{opacity:.85}
+.footer-brand-name{
+  font-size:.6rem;letter-spacing:3.5px;text-transform:uppercase;
+  color:rgba(240,235,224,.45);font-weight:500;margin-top:.25rem;
+}
+.footer-col-title{
+  font-size:.62rem;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(240,235,224,.45);font-weight:600;margin-bottom:1rem;display:block;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-links li a{
+  font-size:.82rem;color:rgba(240,235,224,.6);transition:color .2s;
+}
+.footer-links li a:hover{color:var(--white-1)}
+.footer-info{font-size:.82rem;color:rgba(240,235,224,.6);line-height:1.8}
+.footer-info strong{color:rgba(240,235,224,.85)}
+.footer-social{display:flex;gap:.8rem;margin-top:.5rem;flex-wrap:wrap}
+.footer-social a{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(240,235,224,.2);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(240,235,224,.5);font-size:.8rem;transition:all .2s;
+}
+.footer-social a:hover{border-color:var(--teal);color:var(--teal)}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:1.2rem 2rem;max-width:1240px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.footer-copy{font-size:.72rem;color:rgba(240,235,224,.3);letter-spacing:.5px}
+@media(max-width:900px){
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .footer-brand{grid-column:1/-1}
+}
 
 /* ── MENU SECTION ── */
 .menu-sec{
@@ -785,8 +973,11 @@ footer strong{color:var(--teal)}
         </svg>
       </a>
       <div class="nav-links">
-        <a href="#menu">Menú</a>
         <a href="#nosotros">Nosotros</a>
+        <a href="#menu">Menú</a>
+        <a href="#experiencia">Experiencia</a>
+        <a href="#contacto">Delivery</a>
+        <a href="#galeria">Galería</a>
         <a href="#contacto">Contacto</a>
       </div>
     </div>
@@ -802,9 +993,8 @@ footer strong{color:var(--teal)}
         </div>
         <div class="search-results" id="searchResults"></div>
       </div>
-      <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
-        Pedir ahora
-      </a>
+      <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">Pedir ahora</a>
+      <a class="nav-reserva" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">Reservar mesa</a>
       <button class="nav-hamburger" aria-label="Menú">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
           <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -815,20 +1005,109 @@ footer strong{color:var(--teal)}
 
 </nav>
 
-<!-- ═══ SECCIÓN 1: HERO — tercio superior de fondo-umi.jpg ═══ -->
+<!-- ═══ SECCIÓN 1: HERO — alineado a la izquierda, referencia exacta ═══ -->
 <section class="hero-sec" id="inicio">
+
+  <!-- Texto hero — izquierda -->
   <div class="hero-content">
-    <div class="hero-kicker">🎌 Coquimbo, Chile</div>
-    <h1 class="hero-title">¡SUSHI, MAR<br/>Y <em>SABOR!</em></h1>
-    <p class="hero-sub">Fusión japonesa-peruana · Sabores que cruzan el Pacífico</p>
-    <a class="btn-hero" href="#menu">Ver el Menú</a>
+    <span class="hero-eyebrow">Experiencia</span>
+    <h1 class="hero-title">NIKKEI</h1>
+    <span class="hero-script">frente al mar</span>
+    <p class="hero-sub">Fusión perfecta entre lo mejor de Japón y Perú, en un lugar único en Coquimbo.</p>
+    <div class="hero-btns">
+      <a class="btn-hero-primary" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
+        PEDIR AHORA
+      </a>
+      <a class="btn-hero-secondary" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">
+        RESERVAR MESA
+      </a>
+    </div>
   </div>
-  <!-- Contorno INFERIOR real de la caligrafía UMI — teal rellena por debajo de la firma -->
+
+  <!-- Sello / badge circular derecho -->
+  <div class="hero-badge" aria-hidden="true">
+    <span class="hero-badge-top">COCINA NIKKEI</span>
+    <span class="hero-badge-icon">
+      <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 72,24 C 87,34 92,54 84,68 C 76,82 59,89 43,86 C 26,83 15,68 17,51 C 19,33 34,21 51,21 C 69,21 80,35 79,53 C 78,71 64,80 47,77 C 29,74 20,58 24,43 C 29,28 44,22 57,27 C 71,32 75,48 71,59 C 67,69 54,73 43,69"
+              fill="none" stroke="rgba(240,235,224,0.75)" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="43" cy="69" r="5" fill="rgba(240,235,224,0.75)"/>
+      </svg>
+    </span>
+    <span class="hero-badge-bot">FRENTE AL MAR</span>
+  </div>
+
+  <!-- Separador inferior: contorno INFERIOR UMI — relleno cream + línea blanca encima -->
   <div class="wave-sep">
     <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#00d4f0"
+      <!-- Color cream rellena por debajo del contorno inferior UMI -->
+      <path fill="var(--cream)"
             d="M0.0,82.6 L7.2,84.9 L14.4,86.7 L21.6,88.2 L28.8,89.3 L36.0,90.2 L43.2,95.6 L50.4,97.8 L57.6,98.6 L64.8,99.0 L72.0,99.2 L79.2,99.3 L86.4,99.3 L93.6,99.3 L100.8,99.3 L108.0,99.3 L115.2,99.3 L122.4,99.3 L129.6,99.3 L136.8,99.3 L144.0,99.3 L151.2,99.3 L158.4,99.3 L165.6,99.3 L172.8,99.3 L180.0,99.3 L187.2,99.3 L194.4,99.3 L201.6,99.3 L208.8,99.2 L216.0,99.1 L223.2,98.8 L230.4,98.5 L237.6,97.9 L244.8,96.9 L252.0,92.3 L259.2,87.8 L266.4,83.3 L273.6,78.9 L280.8,74.4 L288.0,70.0 L295.2,65.6 L302.4,61.4 L309.6,57.3 L316.8,53.3 L324.0,49.8 L331.2,51.8 L338.4,53.9 L345.6,56.0 L352.8,58.3 L360.0,60.6 L367.2,62.8 L374.4,65.1 L381.6,67.3 L388.8,69.5 L396.0,71.7 L403.2,73.8 L410.4,74.1 L417.6,74.0 L424.8,73.7 L432.0,73.2 L439.2,72.6 L446.4,71.9 L453.6,71.2 L460.8,70.3 L468.0,69.4 L475.2,68.6 L482.4,67.8 L489.6,67.2 L496.8,66.9 L504.0,67.0 L511.2,67.4 L518.4,68.0 L525.6,68.7 L532.8,69.5 L540.0,70.5 L547.2,71.6 L554.4,72.6 L561.6,73.6 L568.8,74.4 L576.0,75.0 L583.2,75.3 L590.4,75.3 L597.6,75.2 L604.8,74.9 L612.0,74.5 L619.2,74.0 L626.4,73.4 L633.6,72.7 L640.8,71.9 L648.0,71.0 L655.2,70.0 L662.4,68.9 L669.6,67.7 L676.8,66.4 L684.0,65.0 L691.2,63.5 L698.4,63.7 L705.6,64.2 L712.8,64.7 L720.0,65.4 L727.2,66.1 L734.4,67.0 L741.6,68.0 L748.8,69.0 L756.0,70.1 L763.2,71.4 L770.4,72.8 L777.6,72.4 L784.8,71.8 L792.0,71.1 L799.2,70.3 L806.4,69.5 L813.6,68.6 L820.8,67.7 L828.0,66.8 L835.2,65.8 L842.4,64.8 L849.6,63.9 L856.8,62.9 L864.0,62.0 L871.2,61.2 L878.4,60.6 L885.6,61.0 L892.8,61.8 L900.0,62.7 L907.2,63.8 L914.4,65.0 L921.6,66.2 L928.8,67.4 L936.0,68.7 L943.2,69.9 L950.4,71.1 L957.6,72.2 L964.8,72.3 L972.0,71.9 L979.2,71.4 L986.4,70.8 L993.6,70.2 L1000.8,69.4 L1008.0,68.7 L1015.2,67.9 L1022.4,67.1 L1029.6,66.3 L1036.8,65.5 L1044.0,64.6 L1051.2,63.9 L1058.4,63.3 L1065.6,63.1 L1072.8,63.4 L1080.0,64.0 L1087.2,64.8 L1094.4,65.7 L1101.6,66.8 L1108.8,67.8 L1116.0,69.0 L1123.2,70.1 L1130.4,71.2 L1137.6,72.2 L1144.8,72.7 L1152.0,72.8 L1159.2,72.6 L1166.4,72.1 L1173.6,71.5 L1180.8,70.7 L1188.0,69.8 L1195.2,68.8 L1202.4,67.7 L1209.6,66.5 L1216.8,65.4 L1224.0,64.3 L1231.2,63.4 L1238.4,62.9 L1245.6,62.6 L1252.8,62.8 L1260.0,63.2 L1267.2,63.9 L1274.4,64.9 L1281.6,66.0 L1288.8,67.4 L1296.0,68.7 L1303.2,70.1 L1310.4,71.4 L1317.6,72.5 L1324.8,73.4 L1332.0,74.0 L1339.2,74.3 L1346.4,74.4 L1353.6,74.4 L1360.8,74.3 L1368.0,74.0 L1375.2,73.6 L1382.4,73.1 L1389.6,72.4 L1396.8,71.7 L1404.0,69.4 L1411.2,68.9 L1418.4,68.3 L1425.6,67.6 L1432.8,66.8 L1440.0,65.9
             L1440,100 L0,100 Z"/>
+      <!-- Línea blanca encima de la curva — visible contra el oscuro del hero -->
+      <path fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.8" stroke-linecap="round"
+            d="M0.0,82.6 L7.2,84.9 L14.4,86.7 L21.6,88.2 L28.8,89.3 L36.0,90.2 L43.2,95.6 L50.4,97.8 L57.6,98.6 L64.8,99.0 L72.0,99.2 L79.2,99.3 L86.4,99.3 L93.6,99.3 L100.8,99.3 L108.0,99.3 L115.2,99.3 L122.4,99.3 L129.6,99.3 L136.8,99.3 L144.0,99.3 L151.2,99.3 L158.4,99.3 L165.6,99.3 L172.8,99.3 L180.0,99.3 L187.2,99.3 L194.4,99.3 L201.6,99.3 L208.8,99.2 L216.0,99.1 L223.2,98.8 L230.4,98.5 L237.6,97.9 L244.8,96.9 L252.0,92.3 L259.2,87.8 L266.4,83.3 L273.6,78.9 L280.8,74.4 L288.0,70.0 L295.2,65.6 L302.4,61.4 L309.6,57.3 L316.8,53.3 L324.0,49.8 L331.2,51.8 L338.4,53.9 L345.6,56.0 L352.8,58.3 L360.0,60.6 L367.2,62.8 L374.4,65.1 L381.6,67.3 L388.8,69.5 L396.0,71.7 L403.2,73.8 L410.4,74.1 L417.6,74.0 L424.8,73.7 L432.0,73.2 L439.2,72.6 L446.4,71.9 L453.6,71.2 L460.8,70.3 L468.0,69.4 L475.2,68.6 L482.4,67.8 L489.6,67.2 L496.8,66.9 L504.0,67.0 L511.2,67.4 L518.4,68.0 L525.6,68.7 L532.8,69.5 L540.0,70.5 L547.2,71.6 L554.4,72.6 L561.6,73.6 L568.8,74.4 L576.0,75.0 L583.2,75.3 L590.4,75.3 L597.6,75.2 L604.8,74.9 L612.0,74.5 L619.2,74.0 L626.4,73.4 L633.6,72.7 L640.8,71.9 L648.0,71.0 L655.2,70.0 L662.4,68.9 L669.6,67.7 L676.8,66.4 L684.0,65.0 L691.2,63.5 L698.4,63.7 L705.6,64.2 L712.8,64.7 L720.0,65.4 L727.2,66.1 L734.4,67.0 L741.6,68.0 L748.8,69.0 L756.0,70.1 L763.2,71.4 L770.4,72.8 L777.6,72.4 L784.8,71.8 L792.0,71.1 L799.2,70.3 L806.4,69.5 L813.6,68.6 L820.8,67.7 L828.0,66.8 L835.2,65.8 L842.4,64.8 L849.6,63.9 L856.8,62.9 L864.0,62.0 L871.2,61.2 L878.4,60.6 L885.6,61.0 L892.8,61.8 L900.0,62.7 L907.2,63.8 L914.4,65.0 L921.6,66.2 L928.8,67.4 L936.0,68.7 L943.2,69.9 L950.4,71.1 L957.6,72.2 L964.8,72.3 L972.0,71.9 L979.2,71.4 L986.4,70.8 L993.6,70.2 L1000.8,69.4 L1008.0,68.7 L1015.2,67.9 L1022.4,67.1 L1029.6,66.3 L1036.8,65.5 L1044.0,64.6 L1051.2,63.9 L1058.4,63.3 L1065.6,63.1 L1072.8,63.4 L1080.0,64.0 L1087.2,64.8 L1094.4,65.7 L1101.6,66.8 L1108.8,67.8 L1116.0,69.0 L1123.2,70.1 L1130.4,71.2 L1137.6,72.2 L1144.8,72.7 L1152.0,72.8 L1159.2,72.6 L1166.4,72.1 L1173.6,71.5 L1180.8,70.7 L1188.0,69.8 L1195.2,68.8 L1202.4,67.7 L1209.6,66.5 L1216.8,65.4 L1224.0,64.3 L1231.2,63.4 L1238.4,62.9 L1245.6,62.6 L1252.8,62.8 L1260.0,63.2 L1267.2,63.9 L1274.4,64.9 L1281.6,66.0 L1288.8,67.4 L1296.0,68.7 L1303.2,70.1 L1310.4,71.4 L1317.6,72.5 L1324.8,73.4 L1332.0,74.0 L1339.2,74.3 L1346.4,74.4 L1353.6,74.4 L1360.8,74.3 L1368.0,74.0 L1375.2,73.6 L1382.4,73.1 L1389.6,72.4 L1396.8,71.7 L1404.0,69.4 L1411.2,68.9 L1418.4,68.3 L1425.6,67.6 L1432.8,66.8 L1440.0,65.9"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 2: CREAM — Historia + Más Pedidos ═══ -->
+<section class="cream-sec" id="nosotros">
+  <div class="cream-inner">
+
+    <!-- Columna izquierda: Nuestra Historia -->
+    <div class="cream-historia">
+      <span class="cream-label">Nuestra Historia</span>
+      <h2 class="cream-title">Un sueño<br/>hecho <em>realidad</em></h2>
+      <p class="cream-desc">UMI nace de la pasión por crear experiencias únicas. Cada detalle, cada ingrediente y cada plato cuentan nuestra historia. Cocina nikkei frente al mar, en Coquimbo.</p>
+      <a class="cream-link" href="#contacto">Conoce más →</a>
+    </div>
+
+    <!-- Columna central: foto del restaurante -->
+    <div class="cream-photo">
+      <img src="fondo-umi.jpg" alt="Interior Restaurante UMI" loading="lazy"/>
+    </div>
+
+    <!-- Columna derecha: Los más pedidos -->
+    <div class="cream-pedidos">
+      <span class="cream-label">Los más pedidos</span>
+      <div class="cream-pedidos-grid" id="topDishesGrid">
+        <!-- Relleno dinámico por JS o estático -->
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="fondo-umi.jpg" alt="Acevichado Roll" loading="lazy"/></div>
+          <span class="pedido-name">Acevichado Roll</span>
+          <span class="pedido-price">$16.900</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="fondo-umi.jpg" alt="Saito Roll" loading="lazy"/></div>
+          <span class="pedido-name">Saito Roll</span>
+          <span class="pedido-price">$15.900</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="fondo-umi.jpg" alt="Lomo Saltado" loading="lazy"/></div>
+          <span class="pedido-name">Lomo Saltado</span>
+          <span class="pedido-price">$18.900</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="fondo-umi.jpg" alt="Tartare Nikkei" loading="lazy"/></div>
+          <span class="pedido-name">Tartare Nikkei</span>
+          <span class="pedido-price">$16.500</span>
+        </div>
+      </div>
+      <a class="cream-menu-link" href="#menu">Ver menú completo →</a>
+    </div>
+
+  </div>
+
+  <!-- Separador inferior cream → oscuro (contorno superior UMI) + línea oscura -->
+  <div class="cream-wave-bottom">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#0a0a0a"
+            d="M0.0,13.0 L7.2,12.3 L14.4,11.7 L21.6,11.2 L28.8,10.8 L36.0,10.5 L43.2,8.9 L50.4,8.2 L57.6,7.7 L64.8,7.4 L72.0,7.2 L79.2,7.0 L86.4,6.9 L93.6,6.8 L100.8,6.7 L108.0,6.7 L115.2,6.6 L122.4,6.5 L129.6,6.4 L136.8,6.4 L144.0,6.4 L151.2,6.4 L158.4,6.4 L165.6,6.4 L172.8,6.4 L180.0,6.5 L187.2,6.5 L194.4,6.6 L201.6,6.8 L208.8,6.9 L216.0,7.0 L223.2,7.2 L230.4,7.5 L237.6,7.9 L244.8,8.5 L252.0,9.4 L259.2,13.3 L266.4,17.2 L273.6,21.1 L280.8,24.9 L288.0,28.8 L295.2,32.6 L302.4,36.3 L309.6,40.0 L316.8,43.6 L324.0,46.9 L331.2,51.2 L338.4,51.9 L345.6,52.4 L352.8,52.6 L360.0,52.5 L367.2,52.2 L374.4,51.7 L381.6,51.0 L388.8,50.1 L396.0,49.0 L403.2,47.7 L410.4,45.2 L417.6,42.9 L424.8,40.9 L432.0,39.1 L439.2,37.6 L446.4,38.6 L453.6,39.8 L460.8,41.1 L468.0,42.4 L475.2,43.9 L482.4,45.4 L489.6,46.9 L496.8,48.3 L504.0,49.8 L511.2,51.1 L518.4,52.3 L525.6,51.0 L532.8,49.7 L540.0,48.3 L547.2,47.0 L554.4,45.8 L561.6,44.7 L568.8,46.0 L576.0,47.4 L583.2,48.8 L590.4,50.4 L597.6,52.0 L604.8,53.7 L612.0,55.5 L619.2,57.2 L626.4,58.9 L633.6,60.5 L640.8,61.9 L648.0,60.9 L655.2,59.8 L662.4,58.6 L669.6,57.2 L676.8,55.7 L684.0,54.2 L691.2,52.5 L698.4,50.7 L705.6,49.0 L712.8,47.2 L720.0,45.4 L727.2,43.7 L734.4,41.9 L741.6,40.3 L748.8,38.7 L756.0,37.1 L763.2,35.7 L770.4,34.4 L777.6,33.2 L784.8,32.2 L792.0,31.3 L799.2,30.7 L806.4,30.3 L813.6,30.4 L820.8,32.2 L828.0,34.1 L835.2,35.9 L842.4,37.7 L849.6,39.4 L856.8,41.2 L864.0,42.8 L871.2,44.4 L878.4,45.8 L885.6,47.0 L892.8,47.9 L900.0,47.0 L907.2,46.3 L914.4,45.8 L921.6,45.4 L928.8,45.3 L936.0,45.6 L943.2,46.3 L950.4,47.2 L957.6,48.4 L964.8,49.7 L972.0,50.9 L979.2,52.2 L986.4,53.3 L993.6,54.4 L1000.8,55.2 L1008.0,55.7 L1015.2,55.9 L1022.4,55.7 L1029.6,55.2 L1036.8,54.4 L1044.0,53.5 L1051.2,52.6 L1058.4,51.7 L1065.6,50.7 L1072.8,49.9 L1080.0,49.1 L1087.2,48.4 L1094.4,47.9 L1101.6,47.6 L1108.8,47.6 L1116.0,48.1 L1123.2,49.4 L1130.4,50.7 L1137.6,52.1 L1144.8,53.6 L1152.0,54.9 L1159.2,56.2 L1166.4,57.4 L1173.6,58.4 L1180.8,59.2 L1188.0,59.5 L1195.2,59.2 L1202.4,58.2 L1209.6,56.9 L1216.8,55.4 L1224.0,53.8 L1231.2,52.1 L1238.4,50.3 L1245.6,48.5 L1252.8,46.6 L1260.0,44.7 L1267.2,42.9 L1274.4,38.8 L1281.6,34.6 L1288.8,30.4 L1296.0,26.3 L1303.2,22.2 L1310.4,18.4 L1317.6,14.8 L1324.8,11.5 L1332.0,8.7 L1339.2,11.3 L1346.4,14.0 L1353.6,19.1 L1360.8,24.4 L1368.0,29.9 L1375.2,35.4 L1382.4,41.0 L1389.6,46.6 L1396.8,52.1 L1404.0,56.5 L1411.2,61.5 L1418.4,61.2 L1425.6,60.9 L1432.8,60.6 L1440.0,60.1
+            L1440,100 L0,100 Z"/>
+      <!-- Línea oscura/sombra sutil en el borde inferior de la sección cream -->
+      <path fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="1.8" stroke-linecap="round"
+            d="M0.0,13.0 L7.2,12.3 L14.4,11.7 L21.6,11.2 L28.8,10.8 L36.0,10.5 L43.2,8.9 L50.4,8.2 L57.6,7.7 L64.8,7.4 L72.0,7.2 L79.2,7.0 L86.4,6.9 L93.6,6.8 L100.8,6.7 L108.0,6.7 L115.2,6.6 L122.4,6.5 L129.6,6.4 L136.8,6.4 L144.0,6.4 L151.2,6.4 L158.4,6.4 L165.6,6.4 L172.8,6.4 L180.0,6.5 L187.2,6.5 L194.4,6.6 L201.6,6.8 L208.8,6.9 L216.0,7.0 L223.2,7.2 L230.4,7.5 L237.6,7.9 L244.8,8.5 L252.0,9.4 L259.2,13.3 L266.4,17.2 L273.6,21.1 L280.8,24.9 L288.0,28.8 L295.2,32.6 L302.4,36.3 L309.6,40.0 L316.8,43.6 L324.0,46.9 L331.2,51.2 L338.4,51.9 L345.6,52.4 L352.8,52.6 L360.0,52.5 L367.2,52.2 L374.4,51.7 L381.6,51.0 L388.8,50.1 L396.0,49.0 L403.2,47.7 L410.4,45.2 L417.6,42.9 L424.8,40.9 L432.0,39.1 L439.2,37.6 L446.4,38.6 L453.6,39.8 L460.8,41.1 L468.0,42.4 L475.2,43.9 L482.4,45.4 L489.6,46.9 L496.8,48.3 L504.0,49.8 L511.2,51.1 L518.4,52.3 L525.6,51.0 L532.8,49.7 L540.0,48.3 L547.2,47.0 L554.4,45.8 L561.6,44.7 L568.8,46.0 L576.0,47.4 L583.2,48.8 L590.4,50.4 L597.6,52.0 L604.8,53.7 L612.0,55.5 L619.2,57.2 L626.4,58.9 L633.6,60.5 L640.8,61.9 L648.0,60.9 L655.2,59.8 L662.4,58.6 L669.6,57.2 L676.8,55.7 L684.0,54.2 L691.2,52.5 L698.4,50.7 L705.6,49.0 L712.8,47.2 L720.0,45.4 L727.2,43.7 L734.4,41.9 L741.6,40.3 L748.8,38.7 L756.0,37.1 L763.2,35.7 L770.4,34.4 L777.6,33.2 L784.8,32.2 L792.0,31.3 L799.2,30.7 L806.4,30.3 L813.6,30.4 L820.8,32.2 L828.0,34.1 L835.2,35.9 L842.4,37.7 L849.6,39.4 L856.8,41.2 L864.0,42.8 L871.2,44.4 L878.4,45.8 L885.6,47.0 L892.8,47.9 L900.0,47.0 L907.2,46.3 L914.4,45.8 L921.6,45.4 L928.8,45.3 L936.0,45.6 L943.2,46.3 L950.4,47.2 L957.6,48.4 L964.8,49.7 L972.0,50.9 L979.2,52.2 L986.4,53.3 L993.6,54.4 L1000.8,55.2 L1008.0,55.7 L1015.2,55.9 L1022.4,55.7 L1029.6,55.2 L1036.8,54.4 L1044.0,53.5 L1051.2,52.6 L1058.4,51.7 L1065.6,50.7 L1072.8,49.9 L1080.0,49.1 L1087.2,48.4 L1094.4,47.9 L1101.6,47.6 L1108.8,47.6 L1116.0,48.1 L1123.2,49.4 L1130.4,50.7 L1137.6,52.1 L1144.8,53.6 L1152.0,54.9 L1159.2,56.2 L1166.4,57.4 L1173.6,58.4 L1180.8,59.2 L1188.0,59.5 L1195.2,59.2 L1202.4,58.2 L1209.6,56.9 L1216.8,55.4 L1224.0,53.8 L1231.2,52.1 L1238.4,50.3 L1245.6,48.5 L1252.8,46.6 L1260.0,44.7 L1267.2,42.9 L1274.4,38.8 L1281.6,34.6 L1288.8,30.4 L1296.0,26.3 L1303.2,22.2 L1310.4,18.4 L1317.6,14.8 L1324.8,11.5 L1332.0,8.7 L1339.2,11.3 L1346.4,14.0 L1353.6,19.1 L1360.8,24.4 L1368.0,29.9 L1375.2,35.4 L1382.4,41.0 L1389.6,46.6 L1396.8,52.1 L1404.0,56.5 L1411.2,61.5 L1418.4,61.2 L1425.6,60.9 L1432.8,60.6 L1440.0,60.1"/>
     </svg>
   </div>
 </section>
@@ -1099,7 +1378,76 @@ footer strong{color:var(--teal)}
 </section>
 
 <footer>
-  <p>© 2026 <strong>UMI</strong> · La Real Cocina Nikkei · Coquimbo, Chile</p>
+  <div class="footer-inner">
+
+    <!-- Marca -->
+    <div class="footer-brand">
+      <div class="footer-brand-logos">
+        <div class="footer-brand-iso">
+          <svg width="38" height="38" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 72,24 C 87,34 92,54 84,68 C 76,82 59,89 43,86 C 26,83 15,68 17,51 C 19,33 34,21 51,21 C 69,21 80,35 79,53 C 78,71 64,80 47,77 C 29,74 20,58 24,43 C 29,28 44,22 57,27 C 71,32 75,48 71,59 C 67,69 54,73 43,69"
+                  fill="none" stroke="rgba(240,235,224,0.75)" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="43" cy="69" r="5" fill="rgba(240,235,224,0.75)"/>
+          </svg>
+        </div>
+        <img src="logo-umi.png" alt="umi" height="36" style="filter:brightness(0) invert(1) opacity(.75)"/>
+      </div>
+      <div class="footer-brand-name">Nikkei Bar · Coquimbo</div>
+    </div>
+
+    <!-- Enlaces rápidos -->
+    <div>
+      <span class="footer-col-title">Enlaces rápidos</span>
+      <ul class="footer-links">
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">Reservas</a></li>
+        <li><a href="#contacto">Delivery</a></li>
+        <li><a href="#nosotros">Galería</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+
+    <!-- Horarios -->
+    <div>
+      <span class="footer-col-title">Horarios</span>
+      <div class="footer-info">
+        <strong>Lunes a Domingo</strong><br/>
+        13:00 – 00:00 hrs
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div>
+      <span class="footer-col-title">Ubicación</span>
+      <div class="footer-info">
+        Av. Costanera 5633<br/>Coquimbo, Chile<br/>
+        <a href="https://maps.app.goo.gl/Coquimbo" target="_blank" style="color:var(--teal);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;font-weight:700">Ver en mapa →</a>
+      </div>
+    </div>
+
+    <!-- Síguenos -->
+    <div>
+      <span class="footer-col-title">Síguenos</span>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/uminikkeibar" target="_blank" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@uminikkeibar" target="_blank" title="TikTok">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.23 8.23 0 004.83 1.55V6.79a4.84 4.84 0 01-1.06-.1z"/></svg>
+        </a>
+        <a href="https://wa.me/56961551728" target="_blank" title="WhatsApp">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="https://maps.app.goo.gl/Coquimbo" target="_blank" title="Google Maps">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom" style="max-width:1240px;margin:0 auto">
+    <span class="footer-copy">© 2026 UMI Nikkei Bar · Todos los derechos reservados</span>
+  </div>
 </footer>
 
 <!-- CART FAB -->
