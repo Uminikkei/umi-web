@@ -1,15 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- Fondo oscuro UMI -->
-  <rect width="32" height="32" rx="7" fill="#040709"/>
-  <!-- Espiral distintiva UMI en teal -->
-  <path d="M16,17
-    C16.1,15.1 17.3,13.4 19.2,13
-    C21.3,12.5 23.4,13.9 23.9,16.2
-    C24.6,19.2 22.7,22.2 18.8,23.1
-    C14.2,24.2 9.5,21.4 8.5,16.4
-    C7.3,10.7 10.6,5.5 16.8,4.4
-    C23.8,3.2 29.2,8.2 29.5,15.8
-    C29.8,23.5 24.3,28.5 16.5,28.5
-    C8.2,28.5 2.5,22.6 2.5,14.8"
-    fill="none" stroke="#00d4f0" stroke-width="2.8" stroke-linecap="round"/>
+  <rect width="32" height="32" rx="6" fill="#040709"/>
+  <!-- Espiral UMI trazada del isotipo del neón de la fachada -->
+  <!-- Vuelta exterior de la espiral -->
+  <path d="M 4,20
+    C 3,12 7,4 15,3
+    C 24,2 30,8 30,16
+    C 30,23 24,29 16,28
+    C 8,27 3,21 4,14
+    C 5,8 10,4 16,5
+    C 22,6 26,11 25,17
+    C 24,22 20,25 15,24
+    C 10,23 8,19 9,15
+    C 10,12 13,10 16,11
+    C 19,12 20,15 19,17"
+    fill="none" stroke="#00d4f0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Punto central de la espiral -->
+  <circle cx="17" cy="18" r="1.4" fill="#00d4f0"/>
 </svg>
