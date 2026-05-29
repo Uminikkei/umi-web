@@ -1208,10 +1208,10 @@ function buildMenu(){
           <circle cx="175" cy="90"  r="2.5" fill="rgba(0,212,240,.5)"/>
           <circle cx="90"  cy="175" r="2.5" fill="rgba(0,212,240,.5)"/>
           <circle cx="5"   cy="90"  r="2.5" fill="rgba(0,212,240,.5)"/>
-          <!-- Path CCW r=58: baseline 2px DENTRO del borde oscuro (r=60) →
-               letras crecen HACIA AFUERA dando efecto de profundidad en borde -->
+          <!-- Path CW r=58: baseline 2px DENTRO del borde oscuro (r=60) →
+               letras crecen HACIA AFUERA; círculo interior (encima en DOM) tapa la base → profundidad -->
           <defs>
-            <path id="${uid}" d="M 90 90 m -58 0 a 58 58 0 1 0 116 0 a 58 58 0 1 0 -116 0"/>
+            <path id="${uid}" d="M 90 90 m -58 0 a 58 58 0 1 1 116 0 a 58 58 0 1 1 -116 0"/>
           </defs>
           <text fill="rgba(0,212,240,.95)" font-size="20"
                 font-family="Inter,sans-serif" font-weight="800" letter-spacing="1.5">
