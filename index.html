@@ -157,37 +157,53 @@ nav{overflow:visible}
 /* ── MENU SECTION ── */
 .menu-sec{
   background:var(--teal);
-  padding:5rem 2rem 6rem;
+  padding:5rem 2rem 0;   /* sin padding inferior — termina en la ola */
   position:relative;
 }
 .menu-sec-inner{max-width:1200px;margin:0 auto;text-align:center}
 
-/* ── MENU oscuro sobre fondo teal UMI ── */
+/* ── ZONA TEAL: texto oscuro sobre fondo teal ── */
 .menu-sec .sec-label{color:rgba(4,7,9,.78)}
 .menu-sec .menu-big-title{color:#040709}
 .menu-sec .menu-sec-sub{color:rgba(4,7,9,.58)}
 .menu-sec .cat-circ-label{color:rgba(4,7,9,.65)}
 .menu-sec .cat-circ.on .cat-circ-label{color:#040709;font-weight:700}
-/* Texto SVG circular → oscuro sobre teal */
 .menu-sec .cat-circ-ring text{fill:rgba(4,7,9,.82)}
-/* Anillo decorativo y puntos cardinales → oscuro */
 .menu-sec .cat-circ-ring circle:first-child{stroke:rgba(4,7,9,.18) !important}
 .menu-sec .cat-circ-ring circle:not(:first-child){fill:rgba(4,7,9,.38) !important}
-/* Círculo interior activo → sombra oscura */
 .menu-sec .cat-circ.on .cat-circ-inner{
-  border-color:rgba(4,7,9,.45);
-  background:rgba(4,7,9,.2);
+  border-color:rgba(4,7,9,.45);background:rgba(4,7,9,.2);
   box-shadow:0 0 40px rgba(4,7,9,.22),inset 0 0 20px rgba(4,7,9,.06);
 }
-/* Subcategorías → estilo oscuro */
-.menu-sec .subcat-pill{
-  background:rgba(4,7,9,.1);border-color:rgba(4,7,9,.22);color:#040709;
+.menu-sec .subcat-pill{background:rgba(4,7,9,.1);border-color:rgba(4,7,9,.22);color:#040709}
+.menu-sec .subcat-pill:hover,.menu-sec .subcat-pill.on{background:#040709;border-color:#040709;color:var(--teal)}
+
+/* ── OLA INTERNA: curva inferior UMI — teal → oscuro ── */
+.menu-wave-cut{
+  position:relative;height:90px;line-height:0;
+  margin-top:2rem;
 }
-.menu-sec .subcat-pill:hover,.menu-sec .subcat-pill.on{
-  background:#040709;border-color:#040709;color:var(--teal);
+.menu-wave-cut svg{display:block;width:100%;height:100%}
+
+/* ── ZONA OSCURA: items del menú ── */
+.menu-dark-area{
+  background:#060e1c;
+  padding:3rem 2rem 5rem;
+  position:relative;
 }
-/* Encabezados de categoría */
-.menu-sec .cat-heading{color:#040709;border-bottom-color:rgba(4,7,9,.12)}
+.menu-dark-area .cat-heading{
+  font-family:var(--serif);font-size:1.8rem;color:var(--white-1);
+  margin-bottom:1.8rem;padding-bottom:.9rem;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.6rem;
+}
+
+/* ── OLA INFERIOR DEL MENÚ: oscuro → siguiente sección ── */
+.menu-bottom-wave{
+  background:#060e1c;position:relative;
+  height:90px;line-height:0;
+}
+.menu-bottom-wave svg{display:block;width:100%;height:100%}
 
 /* ── FEATURED SECTION (Más Pedido) ── */
 .featured-sec{
@@ -770,22 +786,39 @@ footer strong{color:var(--teal)}
   </div>
 </section>
 
-<!-- ═══ SECCIÓN 2: MENÚ — fondo azul oscuro + círculos ═══ -->
+<!-- ═══ SECCIÓN 2: MENÚ ═══ -->
 <section class="menu-sec" id="menu">
+
+  <!-- ZONA TEAL: título + círculos + pills -->
   <div class="menu-sec-inner">
     <span class="sec-label" style="display:block;text-align:center">Carta completa</span>
     <h2 class="menu-big-title">MENÚ</h2>
     <p class="menu-sec-sub">Selecciona una categoría · Precios en CLP</p>
     <div class="cat-circles" id="mainCats"></div>
     <div class="subcat-row" id="subcatRow"></div>
-    <div id="menuContent"></div>
   </div>
-  <!-- Curvatura INFERIOR de la silueta UMI → relleno oscuro desde la curva hacia abajo -->
-  <div class="wave-sep">
-    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#040709" d="M0,34 C200,8 360,64 540,30 C700,4 840,64 1020,30 C1160,4 1300,56 1440,32 L1440,70 L0,70 Z"/>
+
+  <!-- CURVA INFERIOR UMI — corta el teal justo aquí → oscuro abajo -->
+  <div class="menu-wave-cut" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#060e1c" d="M0,48 C200,18 360,82 540,40 C700,10 860,82 1020,40 C1160,10 1320,74 1440,36 L1440,90 L0,90 Z"/>
     </svg>
   </div>
+
+  <!-- ZONA OSCURA: items del menú -->
+  <div class="menu-dark-area">
+    <div style="max-width:1200px;margin:0 auto">
+      <div id="menuContent"></div>
+    </div>
+  </div>
+
+  <!-- CURVA INFERIOR — oscuro → sección siguiente -->
+  <div class="menu-bottom-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#040709" d="M0,48 C200,18 360,82 540,40 C700,10 860,82 1020,40 C1160,10 1320,74 1440,36 L1440,90 L0,90 Z"/>
+    </svg>
+  </div>
+
 </section>
 
 <!-- ═══ SECCIÓN 3: MÁS PEDIDO — tercio medio de fondo-umi.jpg ═══ -->
