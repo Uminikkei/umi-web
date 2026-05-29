@@ -1184,12 +1184,12 @@ function buildMenu(){
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
 
-    // Texto circular: repetir suficientes veces para llenar el perímetro (~415 unidades)
     const uid = 'rp' + idx;
-    const label = mainName.toUpperCase();
-    const seg   = label + ' · '; // "SUSHI & MAR · "
-    // Repetir ~5 veces garantiza que llene el círculo independiente del largo
-    const textStr = seg.repeat(5);
+    // Texto del anillo = nombres de subcategorías concatenados
+    const subText = cats.map(c => c.toUpperCase()).join(' · ') + ' · ';
+    // Calcular cuántas repeticiones llenan el perímetro (~415 unidades, ~11 por carácter)
+    const repsNeeded = Math.max(1, Math.ceil(500 / (subText.length * 11)));
+    const textStr = subText.repeat(repsNeeded + 1);
 
     circ.innerHTML = `
       <div class="cat-circ-wrap">
