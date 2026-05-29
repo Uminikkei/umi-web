@@ -143,7 +143,8 @@ nav{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2rem;text-align:center;
 }
 .stat-n{font-family:var(--serif);font-size:2.8rem;color:var(--teal);line-height:1}
-.stars-row{font-size:2rem;letter-spacing:.1rem;filter:none}
+.stars-row{font-size:2.8rem;line-height:1;display:flex;justify-content:center;align-items:center;gap:.18rem}
+.stars-row svg{width:1.7rem;height:1.7rem;fill:#c9a84c;flex-shrink:0}
 .stat-l{font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.4rem}
 
 /* ── SECTION WRAPPER ── */
@@ -504,7 +505,13 @@ footer strong{color:var(--teal)}
   <div class="stats-inner">
     <div><div class="stat-n">100+</div><div class="stat-l">Platos con foto</div></div>
     <div><div class="stat-n">Nikkei</div><div class="stat-l">Fusión JP · PE</div></div>
-    <div><div class="stat-n stars-row">⭐⭐⭐⭐⭐</div><div class="stat-l">Experiencia única</div></div>
+    <div><div class="stat-n stars-row">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    </div><div class="stat-l">Experiencia única</div></div>
     <div><div class="stat-n">Umi</div><div class="stat-l">Coquimbo</div></div>
   </div>
 </div>
