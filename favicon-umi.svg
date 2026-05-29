@@ -20,11 +20,11 @@
        C 71,32 75,48 71,59
        C 67,69 54,73 43,69"
     fill="none"
-    stroke="#00d4f0"
+    stroke="#1dc8a4"
     stroke-width="7.5"
     stroke-linecap="round"
     stroke-linejoin="round"/>
 
   <!-- Punto central -->
-  <circle cx="43" cy="69" r="4.5" fill="#00d4f0"/>
+  <circle cx="43" cy="69" r="4.5" fill="#1dc8a4"/>
 </svg>
