@@ -45,8 +45,9 @@ nav{
 .logo{display:flex;align-items:center}
 .logo img{
   height:54px;width:auto;
-  /* Blanco hueso sobre fondo teal */
-  filter:brightness(0) invert(1) sepia(12%) saturate(0.6) brightness(1.08);
+  /* PNG fondo blanco o transparente → blanco hueso sobre teal */
+  filter:brightness(0) invert(1) sepia(10%) saturate(0.5) brightness(1.05);
+  mix-blend-mode:screen;
 }
 .nav-links{display:flex;gap:2.2rem;align-items:center}
 .nav-links a{font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(4,7,9,.75);transition:color .2s;font-weight:600}
