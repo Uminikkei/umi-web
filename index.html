@@ -60,6 +60,19 @@ nav{
 /* Botón buscar en modo oscuro sobre navbar teal */
 .search-btn{color:rgba(4,7,9,.7)}
 .search-btn:hover{color:#040709}
+/* ── OLA INFERIOR DEL NAVBAR — curva del logo UMI ── */
+nav{overflow:visible}
+.nav-wave{
+  position:absolute;bottom:-46px;left:0;right:0;
+  height:48px;pointer-events:none;z-index:1;
+}
+.nav-wave svg{display:block;width:100%;height:100%}
+/* La misma ola como separador de secciones */
+.umi-wave-sep{
+  position:absolute;bottom:-46px;left:0;right:0;
+  height:48px;pointer-events:none;z-index:2;line-height:0;
+}
+.umi-wave-sep svg{display:block;width:100%;height:100%}
 @media(max-width:900px){
   nav{grid-template-columns:1fr auto}
   .nav-left{display:none}
@@ -97,7 +110,7 @@ nav{
   min-height:92vh;
   background:url('fondo-umi.jpg') center 5%/cover no-repeat;
   display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:4rem 2rem 9rem;
+  text-align:center;padding:6rem 2rem 9rem;
   position:relative;overflow:hidden;
 }
 .hero-sec::before{
@@ -704,6 +717,12 @@ footer strong{color:var(--teal)}
       Pedir ahora
     </a>
   </div>
+  <!-- Borde inferior del navbar con la curva del logo UMI -->
+  <div class="nav-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#00d4f0" d="M0,22 C160,50 320,4 480,28 C640,52 800,4 960,26 C1120,50 1280,6 1440,28 L1440,48 L0,48 Z"/>
+    </svg>
+  </div>
 </nav>
 
 <!-- ═══ SECCIÓN 1: HERO — tercio superior de fondo-umi.jpg ═══ -->
@@ -714,10 +733,10 @@ footer strong{color:var(--teal)}
     <p class="hero-sub">Fusión japonesa-peruana · Sabores que cruzan el Pacífico</p>
     <a class="btn-hero" href="#menu">Ver el Menú</a>
   </div>
-  <!-- Ola que transiciona al color de la sección de menú -->
+  <!-- Curva logo UMI → transición a sección menú -->
   <div class="wave-sep">
-    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#060e1c" d="M0,42 C120,72 280,18 440,50 C600,80 760,20 920,48 C1080,76 1220,22 1320,52 C1375,65 1415,38 1440,45 L1440,85 L0,85 Z"/>
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#060e1c" d="M0,22 C160,50 320,4 480,28 C640,52 800,4 960,26 C1120,50 1280,6 1440,28 L1440,48 L0,48 Z"/>
     </svg>
   </div>
 </section>
@@ -732,10 +751,10 @@ footer strong{color:var(--teal)}
     <div class="subcat-row" id="subcatRow"></div>
     <div id="menuContent"></div>
   </div>
-  <!-- Ola hacia sección featured -->
+  <!-- Curva logo UMI → transición a sección featured -->
   <div class="wave-sep">
-    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#040709" d="M0,55 C200,18 380,78 560,42 C740,10 900,70 1080,38 C1200,18 1340,62 1440,40 L1440,85 L0,85 Z"/>
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#040709" d="M1440,22 C1280,50 1120,4 960,28 C800,52 640,4 480,26 C320,50 160,6 0,28 L0,48 L1440,48 Z"/>
     </svg>
   </div>
 </section>
@@ -748,10 +767,10 @@ footer strong{color:var(--teal)}
     <p class="featured-sub">Los platos que eligen nuestros clientes una y otra vez</p>
     <a class="btn-featured" href="#menu">Ver todo el menú</a>
   </div>
-  <!-- Ola hacia sección videos -->
+  <!-- Curva logo UMI → transición a sección videos -->
   <div class="wave-sep">
-    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#060e1c" d="M0,38 C180,75 360,15 540,52 C720,85 880,25 1060,58 C1200,80 1340,30 1440,50 L1440,85 L0,85 Z"/>
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#060e1c" d="M0,22 C160,50 320,4 480,28 C640,52 800,4 960,26 C1120,50 1280,6 1440,28 L1440,48 L0,48 Z"/>
     </svg>
   </div>
 </section>
