@@ -21,47 +21,29 @@
   --serif:'Cormorant Garamond',serif;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+body{background:#060e1c;color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
 
-/* ── FONDO CON BLUR LATERAL ── */
-.page-bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
-/* Capa 1: misma imagen estirada y borrosa (rellena bordes laterales) */
-.page-bg-blur{
-  position:absolute;inset:-60px;
-  background:url('fondo-umi.jpg') center / cover no-repeat;
-  filter:blur(40px) brightness(.65) saturate(1.4);
-  transform:scale(1.1);
-}
-/* Capa 2: imagen 120% — más grande, sacrifica base negra, mantiene neón y fuego */
-.page-bg-img{
-  position:absolute;inset:0;
-  background:url('fondo-umi.jpg') center 0% / auto 120% no-repeat;
-}
-/* Capa 3: overlay más suave para que la imagen destaque más */
-.page-bg-overlay{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(to bottom,rgba(4,7,9,.30) 0%,rgba(4,7,9,.08) 25%,rgba(4,7,9,.08) 70%,rgba(4,7,9,.55) 100%),
-    radial-gradient(ellipse 60% 40% at 42% 15%,rgba(0,212,240,.12) 0%,transparent 65%),
-    radial-gradient(ellipse 50% 40% at 78% 85%,rgba(224,120,32,.14) 0%,transparent 60%);
-}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
-/* ── NAVBAR ── */
+/* ── NAVBAR — fija, logo centrado ── */
+body{padding-top:68px}
 nav{
-  position:sticky;top:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;height:68px;
-  background:rgba(8,12,16,.88);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;padding:0 2rem;height:68px;
+  background:rgba(4,7,9,.97);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,212,240,.18);
 }
+.nav-left{display:flex;align-items:center}
+.nav-center{display:flex;justify-content:center;align-items:center}
+.nav-right{display:flex;align-items:center;justify-content:flex-end;gap:1rem}
 .logo{display:flex;align-items:center}
 .logo img{
-  height:58px;width:auto;
+  height:54px;width:auto;
   filter:brightness(0) saturate(100%) invert(75%) sepia(70%) saturate(527%) hue-rotate(154deg) brightness(110%);
 }
-.nav-links{display:flex;gap:2.2rem}
+.nav-links{display:flex;gap:2.2rem;align-items:center}
 .nav-links a{font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .2s}
 .nav-links a:hover{color:var(--teal)}
 .nav-wa{
@@ -69,8 +51,14 @@ nav{
   background:var(--pink);color:#fff;font-size:.78rem;font-weight:700;
   letter-spacing:1px;text-transform:uppercase;
   padding:.55rem 1.3rem;border-radius:999px;transition:opacity .2s;
+  white-space:nowrap;
 }
 .nav-wa:hover{opacity:.85}
+@media(max-width:900px){
+  nav{grid-template-columns:1fr auto}
+  .nav-left{display:none}
+  .nav-center{justify-content:flex-start}
+}
 
 /* ── SEARCH ── */
 .search-wrap{position:relative;display:flex;align-items:center}
@@ -90,85 +78,162 @@ nav{
 .search-result-cat{font-size:.73rem;color:var(--muted);margin-top:.15rem}
 .search-result-price{font-size:.88rem;color:var(--teal);font-weight:600;white-space:nowrap}
 .search-no-results{padding:1.2rem;text-align:center;color:var(--muted);font-size:.85rem}
-@media(max-width:700px){.nav-links{display:none}.search-box input{width:130px}}
+@media(max-width:700px){.search-box input{width:130px}}
 
-/* ── HERO ── */
-.hero{
-  min-height:96vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:6rem 2rem 4rem;
+/* ── WAVE SEPARATOR ── */
+.wave-sep{position:absolute;bottom:-2px;left:0;right:0;line-height:0;pointer-events:none;z-index:2}
+.wave-sep svg{display:block;width:100%;height:85px}
+.wave-sep-top{position:absolute;top:-2px;left:0;right:0;line-height:0;pointer-events:none;z-index:2}
+.wave-sep-top svg{display:block;width:100%;height:85px}
+
+/* ── HERO SECTION ── */
+.hero-sec{
+  min-height:92vh;
+  background:url('fondo-umi.jpg') center 5%/cover no-repeat;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:4rem 2rem 9rem;
   position:relative;overflow:hidden;
-  background:transparent;
 }
-.hero::before{
+.hero-sec::before{
   content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 65% 45% at 42% 18%,rgba(0,212,240,.18) 0%,transparent 65%),
-    radial-gradient(ellipse 55% 45% at 80% 88%,rgba(224,120,32,.20) 0%,transparent 60%);
+  background:linear-gradient(to bottom,
+    rgba(4,7,9,.60) 0%,
+    rgba(4,7,9,.18) 30%,
+    rgba(4,7,9,.22) 65%,
+    rgba(4,7,9,.80) 100%);
   pointer-events:none;
 }
+.hero-content{position:relative;z-index:1}
 .hero-kicker{
   display:inline-flex;align-items:center;gap:.5rem;
-  border:1px solid rgba(0,212,240,.3);
-  background:rgba(0,212,240,.07);
+  border:1px solid rgba(0,212,240,.35);
+  background:rgba(0,212,240,.08);
   color:var(--teal);font-size:.72rem;font-weight:600;
   letter-spacing:3px;text-transform:uppercase;
-  padding:.4rem 1.1rem;border-radius:999px;margin-bottom:2rem;
+  padding:.4rem 1.1rem;border-radius:999px;margin-bottom:1.8rem;
 }
-.hero h1{
+.hero-title{
   font-family:var(--serif);
-  font-size:clamp(4rem,11vw,8.5rem);
-  font-weight:700;line-height:.95;letter-spacing:-1px;
-  color:#fff;margin-bottom:1.5rem;
+  font-size:clamp(3.5rem,12vw,9rem);
+  font-weight:700;line-height:.9;letter-spacing:-2px;
+  color:#fff;margin-bottom:1.2rem;
 }
-.hero h1 em{
-  font-style:normal;
-  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+.hero-title em{font-style:normal;color:var(--teal)}
 .hero-sub{
-  font-size:1.1rem;color:var(--muted);
-  max-width:440px;margin:0 auto 3rem;font-weight:300;
-  letter-spacing:.3px;
+  font-size:1.05rem;color:rgba(255,255,255,.65);
+  max-width:420px;margin:0 auto 2.5rem;font-weight:300;
 }
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-.btn-main{
+.btn-hero{
+  display:inline-block;
   background:var(--teal);color:#000;font-weight:700;
-  font-size:.9rem;letter-spacing:1px;text-transform:uppercase;
-  padding:.9rem 2.2rem;border-radius:999px;
+  font-size:.9rem;letter-spacing:1.5px;text-transform:uppercase;
+  padding:1rem 2.6rem;border-radius:999px;
   transition:transform .25s,box-shadow .25s;
-  box-shadow:0 0 30px rgba(0,212,240,.25);
+  box-shadow:0 0 30px rgba(0,212,240,.3);
 }
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,212,240,.4)}
-.btn-ghost{
-  border:1px solid var(--border2);color:var(--muted);
-  font-size:.9rem;letter-spacing:1px;text-transform:uppercase;
-  padding:.9rem 2.2rem;border-radius:999px;
-  transition:border-color .2s,color .2s;
-}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
-.hero-scroll{
-  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
-  color:var(--subtle);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
-  display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  animation:fadeup 3s ease infinite;
-}
-.hero-scroll::after{content:'';width:1px;height:40px;background:linear-gradient(var(--teal),transparent)}
-@keyframes fadeup{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:1;transform:translateX(-50%) translateY(-6px)}}
+.btn-hero:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,212,240,.5)}
 
-/* ── STATS ── */
-.stats{
-  background:rgba(4,7,9,.72);backdrop-filter:blur(12px);border-top:1px solid rgba(0,212,240,.15);border-bottom:1px solid rgba(0,212,240,.15);
-  padding:2.5rem 2rem;
+/* ── MENU SECTION ── */
+.menu-sec{
+  background:#060e1c;
+  padding:5rem 2rem 6rem;
+  position:relative;
 }
-.stats-inner{
-  max-width:1100px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2rem;text-align:center;
+.menu-sec-inner{max-width:1200px;margin:0 auto;text-align:center}
+
+/* ── FEATURED SECTION (Más Pedido) ── */
+.featured-sec{
+  min-height:58vh;
+  background:url('fondo-umi.jpg') center 52%/cover no-repeat;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:7rem 2rem 10rem;
+  overflow:hidden;
 }
-.stat-n{font-family:var(--serif);font-size:2.8rem;color:var(--teal);line-height:1}
-.stars-row{height:2.8rem;display:flex;justify-content:center;align-items:center;gap:.18rem}
-.stars-row svg{width:1.6rem;height:1.6rem;fill:#c9a84c;flex-shrink:0}
-.stat-l{font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.4rem}
+.featured-sec::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,
+    rgba(6,14,28,.80) 0%,
+    rgba(4,7,9,.20) 40%,
+    rgba(4,7,9,.30) 70%,
+    rgba(6,14,28,.88) 100%);
+}
+.featured-content{position:relative;z-index:1}
+.featured-label{
+  display:inline-block;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:.9rem;font-weight:600;
+}
+.featured-title{
+  font-family:var(--serif);
+  font-size:clamp(3.5rem,10vw,7.5rem);
+  font-weight:700;color:#fff;
+  line-height:.9;letter-spacing:-2px;margin-bottom:1.2rem;
+}
+.featured-sub{color:rgba(255,255,255,.55);font-weight:300;font-size:1rem;margin-bottom:2rem}
+.btn-featured{
+  display:inline-block;border:1.5px solid var(--teal);color:var(--teal);
+  font-size:.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:.8rem 2rem;border-radius:999px;
+  transition:background .2s,color .2s;
+}
+.btn-featured:hover{background:var(--teal);color:#000}
+
+/* ── VIDEOS SECTION ── */
+.videos-sec{
+  background:#060e1c;
+  padding:5rem 2rem 6rem;
+  position:relative;
+}
+.videos-inner{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:260px 1fr;
+  gap:4rem;align-items:start;
+}
+.videos-left{padding-top:1.5rem}
+.videos-left-label{
+  font-size:.68rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);font-weight:600;margin-bottom:.9rem;display:block;
+}
+.videos-title{
+  font-family:var(--serif);
+  font-size:clamp(2.2rem,5vw,3.5rem);
+  font-weight:700;color:#fff;
+  line-height:.95;letter-spacing:-1px;margin-bottom:1rem;
+}
+.videos-left p{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem;font-weight:300;line-height:1.7}
+.btn-reels{
+  display:inline-block;
+  background:var(--teal);color:#000;font-weight:700;
+  font-size:.78rem;letter-spacing:1px;text-transform:uppercase;
+  padding:.75rem 1.8rem;border-radius:999px;
+  transition:opacity .2s;
+}
+.btn-reels:hover{opacity:.85}
+.reels-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+}
+.reel-card{
+  border-radius:20px;overflow:hidden;
+  background:rgba(0,212,240,.03);
+  border:1px solid rgba(0,212,240,.15);
+  aspect-ratio:9/16;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .3s,transform .3s;
+  position:relative;
+}
+.reel-card:hover{border-color:rgba(0,212,240,.5);transform:translateY(-6px)}
+.reel-icon{font-size:2rem;color:rgba(0,212,240,.3);margin-bottom:.7rem}
+.reel-coming{
+  font-size:.62rem;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(0,212,240,.25);font-weight:600;text-align:center;padding:0 .6rem;
+}
+@media(max-width:900px){
+  .videos-inner{grid-template-columns:1fr;gap:2.5rem}
+  .reels-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .reels-grid{grid-template-columns:repeat(2,1fr)}
+}
 
 /* ── SECTION WRAPPER ── */
 .section{padding:6rem 2rem;max-width:1200px;margin:0 auto}
@@ -177,7 +242,6 @@ nav{
 .sec-sub{color:var(--muted);font-weight:300;max-width:500px}
 
 /* ── MENU ── */
-/* Título grande estilo display */
 .menu-big-title{
   font-family:var(--serif);
   font-size:clamp(5rem,14vw,9rem);
@@ -185,6 +249,7 @@ nav{
   line-height:.88;letter-spacing:-3px;
   text-align:center;margin-bottom:.6rem;
 }
+.menu-sec-sub{color:var(--muted);font-size:1rem;text-align:center;margin:0 auto .5rem;display:block}
 /* Círculos principales con texto SVG rotatorio */
 .cat-circles{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;margin:3rem 0 0;padding:0}
 .cat-circ{
@@ -606,116 +671,119 @@ footer strong{color:var(--teal)}
 </head>
 <body>
 
-<!-- NAV -->
-<!-- FONDO -->
-<div class="page-bg">
-  <div class="page-bg-blur"></div>
-  <div class="page-bg-img"></div>
-  <div class="page-bg-overlay"></div>
-</div>
-
+<!-- ═══ NAVBAR — fija, logo centrado ═══ -->
 <nav>
-  <div class="logo"><img src="logo-umi.png" alt="UMI"></div>
-  <div class="nav-links">
-    <a href="#menu">Menú</a>
-    <a href="#nosotros">Nosotros</a>
-    <a href="#contacto">Contacto</a>
-  </div>
-  <div class="search-wrap">
-    <button class="search-btn" onclick="toggleSearch()" aria-label="Buscar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
-    <div class="search-box" id="searchBox">
-      <input id="searchInput" type="text" placeholder="Buscar plato o bebida..." oninput="doSearch(this.value)" onkeydown="onSearchKey(event)" autocomplete="off">
-      <button class="search-close" onclick="closeSearch()">×</button>
+  <div class="nav-left">
+    <div class="nav-links">
+      <a href="#menu">Menú</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
     </div>
-    <div class="search-results" id="searchResults"></div>
   </div>
-  <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
-    Pedir ahora
-  </a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-kicker">🎌 Coquimbo, Chile</div>
-  <h1>La Real<br/><em>Cocina Nikkei</em></h1>
-  <p class="hero-sub">Fusión japonesa-peruana. Sabores que cruzan el Pacífico.</p>
-  <div class="hero-btns">
-    <a class="btn-main" href="#menu">Explorar el Menú</a>
-    <a class="btn-ghost" href="#contacto">Cómo llegar</a>
+  <div class="nav-center">
+    <div class="logo"><img src="logo-umi.png" alt="UMI"></div>
   </div>
-  <div class="hero-scroll">Descubre</div>
-</section>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stats-inner">
-    <div><div class="stat-n">100+</div><div class="stat-l">Platos con foto</div></div>
-    <div><div class="stat-n">Nikkei</div><div class="stat-l">Fusión JP · PE</div></div>
-    <div><div class="stat-n stars-row">
-      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-    </div><div class="stat-l">Experiencia única</div></div>
-    <div><div class="stat-n">Umi</div><div class="stat-l">Coquimbo</div></div>
-  </div>
-</div>
-
-<!-- MENU -->
-<section class="section" id="menu">
-  <span class="sec-label" style="text-align:center;display:block">Carta completa</span>
-  <h2 class="menu-big-title">MENÚ</h2>
-  <p class="sec-sub" style="text-align:center;margin:0 auto">Selecciona una categoría · Precios en CLP</p>
-  <div class="cat-circles" id="mainCats"></div>
-  <div class="subcat-row" id="subcatRow"></div>
-  <div id="menuContent"></div>
-</section>
-
-<!-- ABOUT -->
-<section class="section" id="nosotros">
-  <span class="sec-label">Quiénes somos</span>
-  <h2 class="sec-title">La historia de Umi</h2>
-  <div class="about-grid">
-    <div class="about-copy">
-      <p>Umi nace de la pasión por la cocina Nikkei, esa fusión extraordinaria entre la tradición culinaria japonesa y los sabores intensos del Perú. En Coquimbo, llevamos a tu mesa una experiencia que cruza océanos.</p>
-      <p>Nuestros rolls de autor, ceviches frescos, tiraditos y nigiris se preparan con ingredientes seleccionados, combinando técnicas japonesas con la sazón peruana que nos caracteriza.</p>
-      <p>Desde las entradas hasta los postres, cada plato es una invitación a explorar una cocina que ya es patrimonio del Pacífico.</p>
-      <div class="about-tags">
-        <span class="tag">🍣 Sushi</span>
-        <span class="tag">🐟 Ceviche</span>
-        <span class="tag">🥢 Nikkei</span>
-        <span class="tag">🍹 Cocteles</span>
-        <span class="tag">🎌 Japonés-Peruano</span>
+  <div class="nav-right">
+    <div class="search-wrap">
+      <button class="search-btn" onclick="toggleSearch()" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="search-box" id="searchBox">
+        <input id="searchInput" type="text" placeholder="Buscar plato o bebida..." oninput="doSearch(this.value)" onkeydown="onSearchKey(event)" autocomplete="off">
+        <button class="search-close" onclick="closeSearch()">×</button>
       </div>
+      <div class="search-results" id="searchResults"></div>
     </div>
-    <div class="about-visual">
-      <span class="av-symbol">🍣</span>
-      <div class="av-name">UMI</div>
-      <div class="av-tagline">La real cocina Nikkei 🎌</div>
-      <div class="av-addr">Av. Costanera 5633<br/>Coquimbo, Chile<br/>+56 9 6155 1728</div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta-box">
-    <h2>¿Listo para pedir? 🍜</h2>
-    <p>Escríbenos por WhatsApp y te atendemos de inmediato.</p>
-    <a class="btn-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Pedir por WhatsApp
+    <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
+      Pedir ahora
     </a>
   </div>
-</div>
+</nav>
 
-<!-- CONTACT -->
-<section class="section" id="contacto">
-  <span class="sec-label">Encuéntranos</span>
-  <h2 class="sec-title">Contacto</h2>
+<!-- ═══ SECCIÓN 1: HERO — tercio superior de fondo-umi.jpg ═══ -->
+<section class="hero-sec" id="inicio">
+  <div class="hero-content">
+    <div class="hero-kicker">🎌 Coquimbo, Chile</div>
+    <h1 class="hero-title">¡SUSHI, MAR<br/>Y <em>SABOR!</em></h1>
+    <p class="hero-sub">Fusión japonesa-peruana · Sabores que cruzan el Pacífico</p>
+    <a class="btn-hero" href="#menu">Ver el Menú</a>
+  </div>
+  <!-- Ola que transiciona al color de la sección de menú -->
+  <div class="wave-sep">
+    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#060e1c" d="M0,42 C120,72 280,18 440,50 C600,80 760,20 920,48 C1080,76 1220,22 1320,52 C1375,65 1415,38 1440,45 L1440,85 L0,85 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 2: MENÚ — fondo azul oscuro + círculos ═══ -->
+<section class="menu-sec" id="menu">
+  <div class="menu-sec-inner">
+    <span class="sec-label" style="display:block;text-align:center">Carta completa</span>
+    <h2 class="menu-big-title">MENÚ</h2>
+    <p class="menu-sec-sub">Selecciona una categoría · Precios en CLP</p>
+    <div class="cat-circles" id="mainCats"></div>
+    <div class="subcat-row" id="subcatRow"></div>
+    <div id="menuContent"></div>
+  </div>
+  <!-- Ola hacia sección featured -->
+  <div class="wave-sep">
+    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#040709" d="M0,55 C200,18 380,78 560,42 C740,10 900,70 1080,38 C1200,18 1340,62 1440,40 L1440,85 L0,85 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 3: MÁS PEDIDO — tercio medio de fondo-umi.jpg ═══ -->
+<section class="featured-sec" id="top">
+  <div class="featured-content">
+    <span class="featured-label">Los favoritos</span>
+    <h2 class="featured-title">LO MÁS<br/>PEDIDO</h2>
+    <p class="featured-sub">Los platos que eligen nuestros clientes una y otra vez</p>
+    <a class="btn-featured" href="#menu">Ver todo el menú</a>
+  </div>
+  <!-- Ola hacia sección videos -->
+  <div class="wave-sep">
+    <svg viewBox="0 0 1440 85" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#060e1c" d="M0,38 C180,75 360,15 540,52 C720,85 880,25 1060,58 C1200,80 1340,30 1440,50 L1440,85 L0,85 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 4: VIDEOS / REELS ═══ -->
+<section class="videos-sec" id="nosotros">
+  <div class="videos-inner">
+    <div class="videos-left">
+      <span class="videos-left-label">Instagram · @uminikkeibar</span>
+      <h2 class="videos-title">¿CÓMO<br/>LO<br/>HACEMOS?</h2>
+      <p>Mira nuestros reels y descubre los secretos detrás de cada plato.</p>
+      <a class="btn-reels" href="https://www.instagram.com/uminikkeibar" target="_blank">Ver en Instagram</a>
+    </div>
+    <div class="reels-grid">
+      <div class="reel-card">
+        <div class="reel-icon">▶</div>
+        <div class="reel-coming">Próximamente</div>
+      </div>
+      <div class="reel-card">
+        <div class="reel-icon">▶</div>
+        <div class="reel-coming">Próximamente</div>
+      </div>
+      <div class="reel-card">
+        <div class="reel-icon">▶</div>
+        <div class="reel-coming">Próximamente</div>
+      </div>
+      <div class="reel-card">
+        <div class="reel-icon">▶</div>
+        <div class="reel-coming">Próximamente</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO + INFO ── integrado antes del footer -->
+<section class="section" id="contacto" style="max-width:1200px;margin:0 auto;padding:4rem 2rem 3rem">
+  <span class="sec-label" style="display:block;text-align:center">Encuéntranos</span>
+  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Contacto</h2>
   <div class="contact-grid">
     <div class="contact-card"><span class="cc-icon">📍</span><span class="cc-label">Dirección</span><span class="cc-val">Av. Costanera 5633<br/>Coquimbo, Chile</span></div>
     <div class="contact-card"><span class="cc-icon">📱</span><span class="cc-label">WhatsApp</span><span class="cc-val"><a href="https://wa.me/56961551728" target="_blank">+56 9 6155 1728</a></span></div>
