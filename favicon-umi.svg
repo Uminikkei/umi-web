@@ -1,21 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Fondo oscuro UMI -->
-  <rect width="32" height="32" rx="7" fill="#040709"/>
-  <!-- Espiral náutilo UMI — trazado del isotipo real -->
-  <path d="
-    M 23,8
-    C 26,11 27,16 25,20
-    C 23,25 18,27 13,25
-    C 7,23 5,17 7,12
-    C 9,6 15,4 20,7
-    C 25,10 26,16 23,20
-    C 20,24 15,25 11,22
-    C 7,19 7,14 10,11
-    C 13,8 17,9 19,12
-    C 21,15 20,18 18,20
-    C 16,21.5 13.5,21 12,19"
-    fill="none" stroke="#00d4f0" stroke-width="2.3"
-    stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Fondo oscuro con bordes redondeados estilo app icon -->
+  <rect width="100" height="100" rx="22" fill="#040709"/>
+
+  <!--
+    Espiral náutilo UMI — trazado preciso del isotipo
+    Dirección: sentido horario desde extremo superior-derecho hacia adentro
+    Aproximadamente 1.75 vueltas con punto central
+  -->
+  <path
+    d="M 73,22
+       C 86,32 90,50 84,64
+       C 78,79 63,87 48,85
+       C 32,83 21,70 21,54
+       C 21,38 32,25 48,23
+       C 64,21 75,32 75,48
+       C 75,64 64,73 48,71
+       C 32,69 25,57 29,43
+       C 33,30 45,24 56,28
+       C 67,32 71,44 67,54
+       C 63,64 52,69 43,65"
+    fill="none"
+    stroke="#00d4f0"
+    stroke-width="6.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
   <!-- Punto central de la espiral -->
-  <circle cx="14.5" cy="17" r="1.6" fill="#00d4f0"/>
+  <circle cx="43" cy="64" r="5" fill="#00d4f0"/>
 </svg>
