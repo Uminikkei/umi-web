@@ -33,11 +33,10 @@ nav{
   background:rgba(8,12,16,.88);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
-.logo{
-  font-family:var(--serif);font-size:1.9rem;font-weight:700;
-  letter-spacing:6px;color:#fff;text-transform:uppercase;
-  background:linear-gradient(135deg,#fff 30%,var(--teal));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.logo{display:flex;align-items:center}
+.logo img{
+  height:44px;width:auto;
+  filter:brightness(0) saturate(100%) invert(75%) sepia(70%) saturate(527%) hue-rotate(154deg) brightness(110%);
 }
 .nav-links{display:flex;gap:2.2rem}
 .nav-links a{font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .2s}
@@ -447,7 +446,7 @@ footer strong{color:var(--teal)}
 
 <!-- NAV -->
 <nav>
-  <div class="logo">UMI</div>
+  <div class="logo"><img src="logo-umi.png" alt="UMI"></div>
   <div class="nav-links">
     <a href="#menu">Menú</a>
     <a href="#nosotros">Nosotros</a>
