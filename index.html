@@ -48,7 +48,26 @@ nav{
   padding:.55rem 1.3rem;border-radius:999px;transition:opacity .2s;
 }
 .nav-wa:hover{opacity:.85}
-@media(max-width:700px){.nav-links{display:none}}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:.4rem;display:flex;align-items:center;transition:color .2s}
+.search-btn:hover{color:var(--teal)}
+.search-box{display:none;align-items:center;gap:.4rem;background:var(--bg3);border:1px solid var(--border2);border-radius:999px;padding:.3rem .4rem .3rem .9rem}
+.search-box.open{display:flex}
+.search-box input{background:none;border:none;color:var(--text);font-size:.88rem;outline:none;width:180px}
+.search-box input::placeholder{color:var(--muted)}
+.search-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.3rem;line-height:1;padding:0 .3rem}
+.search-results{position:absolute;top:calc(100% + .6rem);right:0;width:320px;background:var(--bg3);border:1px solid var(--border2);border-radius:14px;display:none;z-index:400;max-height:380px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.search-results.open{display:block}
+.search-result-item{padding:.7rem 1rem;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.5rem;transition:background .15s}
+.search-result-item:hover{background:var(--bg4)}
+.search-result-item:last-child{border-bottom:none}
+.search-result-name{font-size:.88rem;color:var(--text)}
+.search-result-cat{font-size:.73rem;color:var(--muted);margin-top:.15rem}
+.search-result-price{font-size:.88rem;color:var(--teal);font-weight:600;white-space:nowrap}
+.search-no-results{padding:1.2rem;text-align:center;color:var(--muted);font-size:.85rem}
+@media(max-width:700px){.nav-links{display:none}.search-box input{width:130px}}
 
 /* ── HERO ── */
 .hero{
@@ -452,6 +471,16 @@ footer strong{color:var(--teal)}
     <a href="#nosotros">Nosotros</a>
     <a href="#contacto">Contacto</a>
   </div>
+  <div class="search-wrap">
+    <button class="search-btn" onclick="toggleSearch()" aria-label="Buscar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <div class="search-box" id="searchBox">
+      <input id="searchInput" type="text" placeholder="Buscar plato o bebida..." oninput="doSearch(this.value)" onkeydown="onSearchKey(event)" autocomplete="off">
+      <button class="search-close" onclick="closeSearch()">×</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
   <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
     Pedir ahora
   </a>
@@ -673,6 +702,48 @@ function imgUrl(path){
   // If it's a path fragment
   return BASE + path + '?alt=media';
 }
+
+// ── SEARCH ──────────────────────────────────────────────────────────────────
+function toggleSearch(){
+  const box = document.getElementById('searchBox');
+  if(box.classList.contains('open')){closeSearch();}
+  else{box.classList.add('open');document.getElementById('searchInput').focus();}
+}
+function closeSearch(){
+  document.getElementById('searchBox').classList.remove('open');
+  document.getElementById('searchResults').classList.remove('open');
+  document.getElementById('searchInput').value='';
+}
+function onSearchKey(e){if(e.key==='Escape')closeSearch();}
+function doSearch(q){
+  const el=document.getElementById('searchResults');
+  q=q.trim().toLowerCase();
+  if(q.length<2){el.classList.remove('open');return;}
+  const matches=[];
+  for(const[cat,items] of Object.entries(MENU)){
+    for(const item of items){
+      if(item.n.toLowerCase().includes(q)) matches.push({...item,cat});
+    }
+  }
+  if(matches.length===0){
+    el.innerHTML='<div class="search-no-results">Sin resultados para "'+q+'"</div>';
+  } else {
+    el.innerHTML=matches.map(m=>`
+      <div class="search-result-item" onclick="addToCart('${m.n.replace(/'/g,"\\'")}',${m.p},'${m.e||'🍣'}','${m.cat.replace(/'/g,"\\'")}');closeSearch()">
+        <div>
+          <div class="search-result-name">${m.e} ${m.n}</div>
+          <div class="search-result-cat">${m.cat}</div>
+        </div>
+        <div class="search-result-price">${fmt(m.p)}</div>
+      </div>`).join('');
+  }
+  el.classList.add('open');
+}
+// Cerrar búsqueda al hacer click fuera
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.search-wrap');
+  if(wrap && !wrap.contains(e.target)) closeSearch();
+});
 
 function buildMenu(){
   const pills = document.getElementById('pills');
