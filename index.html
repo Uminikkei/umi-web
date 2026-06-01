@@ -416,7 +416,7 @@ footer{
   padding:5rem 0 0;   /* sin padding inferior — termina en la ola */
   position:relative;
 }
-.menu-sec-inner{max-width:1200px;margin:0 auto;text-align:center;padding:0 2rem}
+.menu-sec-inner{max-width:1440px;margin:0 auto;text-align:center;padding:0 1rem}
 
 /* ── ZONA TEAL: texto oscuro sobre fondo teal ── */
 .menu-sec .sec-label{color:rgba(4,7,9,.78)}
@@ -428,8 +428,7 @@ footer{
 .menu-sec .cat-circ-ring circle:first-child{stroke:rgba(4,7,9,.18) !important}
 .menu-sec .cat-circ-ring circle:not(:first-child){fill:rgba(4,7,9,.38) !important}
 .menu-sec .cat-circ.on .cat-circ-inner{
-  border-color:rgba(4,7,9,.45);background:rgba(4,7,9,.2);
-  box-shadow:0 0 40px rgba(4,7,9,.22),inset 0 0 20px rgba(4,7,9,.06);
+  border:none;background:transparent;box-shadow:none;
 }
 .menu-sec .subcat-pill{background:rgba(4,7,9,.1);border-color:rgba(4,7,9,.22);color:#0d1e40}
 .menu-sec .subcat-pill:hover,.menu-sec .subcat-pill.on{background:#0d1e40;border-color:#0d1e40;color:var(--teal)}
@@ -602,14 +601,14 @@ footer{
 }
 .menu-sec-sub{color:var(--muted);font-size:1rem;text-align:center;margin:0 auto .5rem;display:block}
 /* Círculos principales con texto SVG rotatorio */
-.cat-circles{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:3rem 0 0;padding:0;overflow:visible}
+.cat-circles{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:3rem 0 0;padding:0 1rem;overflow:visible}
 .cat-circ{
   display:flex;flex-direction:column;align-items:center;gap:.55rem;
   cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1);
   -webkit-tap-highlight-color:transparent;user-select:none;
 }
 .cat-circ:hover{transform:translateY(-8px) scale(1.06)}
-.cat-circ-wrap{position:relative;width:200px;height:200px;margin:0 -18px}
+.cat-circ-wrap{position:relative;width:200px;height:200px;margin:0 -18px;flex-shrink:0}
 /* SVG del anillo rotatorio — encima del círculo interior (z-index mayor por orden DOM) */
 .cat-circ-ring{
   position:absolute;inset:0;width:100%;height:100%;
@@ -620,14 +619,14 @@ footer{
 .cat-circ-ring > circle{ display:none; }
 /* Gira lento */
 .cat-circ .cat-circ-ring{animation:spin-text 18s linear infinite}
-.cat-circ:hover .cat-circ-ring{animation:spin-text 12s linear infinite}
-.cat-circ.on .cat-circ-ring{animation:spin-text 10s linear infinite}
+.cat-circ:hover .cat-circ-ring{animation:spin-text 14s linear infinite}
+.cat-circ.on .cat-circ-ring{animation:spin-text 18s linear infinite}
 @keyframes spin-text{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 /* Círculo interior — debajo del SVG (z-index menor por orden DOM) */
 .cat-circ-inner{
   position:absolute;inset:32px;border-radius:50%;
-  background:rgba(8,15,24,.92);
-  border:2px solid rgba(98,202,227,.25);
+  background:transparent;
+  border:none;
   display:flex;align-items:center;justify-content:center;
   font-size:3rem;
   transition:border-color .3s,box-shadow .3s,background .3s;
@@ -635,9 +634,9 @@ footer{
   pointer-events:none;
 }
 .cat-circ.on .cat-circ-inner{
-  border-color:var(--teal);
-  background:rgba(98,202,227,.1);
-  box-shadow:0 0 45px rgba(98,202,227,.35),inset 0 0 20px rgba(98,202,227,.08);
+  background:transparent;
+  border:none;
+  box-shadow:none;
 }
 .cat-circ-label{
   font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;
@@ -811,6 +810,12 @@ footer{
 .rev-stars{display:flex;gap:.18rem;margin-bottom:.9rem}
 .rev-stars svg{width:.95rem;height:.95rem;fill:#c9a84c;flex-shrink:0}
 .rev-text{font-size:.86rem;color:var(--text);line-height:1.65;margin-bottom:1.1rem;font-style:italic;opacity:.92}
+#longRev{max-height:5.4em;overflow:hidden;transition:max-height .4s ease;margin-bottom:.4rem;}
+#longRev.expanded{max-height:600px;}
+.rev-more{font-size:.72rem;font-weight:700;color:var(--teal);cursor:pointer;
+  background:none;border:none;padding:0;margin-bottom:1rem;display:none;letter-spacing:.5px;}
+.rev-more.visible{display:inline-block;}
+.rev-more:hover{opacity:.7;}
 .rev-text::before{content:'\201C';color:var(--teal);font-size:1.3rem;line-height:0;vertical-align:-.3em;margin-right:.15rem;opacity:.7}
 .rev-author{display:flex;align-items:center;gap:.7rem}
 .rev-av{
@@ -1322,7 +1327,8 @@ footer strong{color:var(--teal)}
 
       <div class="rev-card">
         <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
-        <div class="rev-text">Este local se destaca por ofrecer una fusión de la cocina peruana - japonesa. Las instalaciones son realmente hermosas, modernas, creativas e impecables. El ambiente es sumamente agradable, todo el concepto está muy bien pensado. La atención de todo el personal es buena, se esmeran para que los clientes se lleven una gran experiencia. Elegimos éste lugar para la cena de cumpleaños de mi esposo, nos recibieron con un par de shots de pisco maracuyá-mango, 🥭 estaban exquisitos, con el punto licor exacto. Como platos principales pedimos udon huancaína, riquísimo y lo recomiendo 100%. El restaurante obsequió una caipiriña al cumpleañero y yo pedí una limonada mango-maracuyá, ambos cócteles estaban ricos y muy bien presentados. La pasamos genial y sin duda volveremos. Es una parada obligada para todos los que visiten la Av. Costanera de Coquimbo!!! 🦞</div>
+        <div class="rev-text" id="longRev">Este local se destaca por ofrecer una fusión de la cocina peruana - japonesa. Las instalaciones son realmente hermosas, modernas, creativas e impecables. El ambiente es sumamente agradable, todo el concepto está muy bien pensado. La atención de todo el personal es buena, se esmeran para que los clientes se lleven una gran experiencia. Elegimos éste lugar para la cena de cumpleaños de mi esposo, nos recibieron con un par de shots de pisco maracuyá-mango, 🥭 estaban exquisitos, con el punto licor exacto. Como platos principales pedimos udon huancaína, riquísimo y lo recomiendo 100%. El restaurante obsequió una caipiriña al cumpleañero y yo pedí una limonada mango-maracuyá, ambos cócteles estaban ricos y muy bien presentados. La pasamos genial y sin duda volveremos. Es una parada obligada para todos los que visiten la Av. Costanera de Coquimbo!!! 🦞</div>
+        <button class="rev-more visible" id="longRevBtn" onclick="toggleLongRev()">Ver más ↓</button>
         <div class="rev-author"><div class="rev-av">MR</div><div class="rev-info"><div class="rev-name">marillerondon01 Rondon</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
       </div>
 
@@ -1669,6 +1675,13 @@ document.addEventListener('click',e=>{
   if(wrap && !wrap.contains(e.target)) closeSearch();
 });
 
+function toggleLongRev(){
+  const txt = document.getElementById('longRev');
+  const btn = document.getElementById('longRevBtn');
+  const expanded = txt.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más ↓';
+}
+
 function buildMenu(){
   // ── Categorías principales con sus subcategorías ──
   const MAIN = {
@@ -1786,16 +1799,9 @@ function buildMenu(){
 
     const uid = 'rp' + idx;
     const R = 68;
-    const circumference = 2 * Math.PI * R;
     const fontSize = 19;
     const letterSpacing = 1;
-    const charWidth = fontSize * 0.62 + letterSpacing;
     const word = (ring || mainName).toUpperCase();
-    const wordWidth = word.length * charWidth;
-    const gapPx = (circumference - 2 * wordWidth) / 2;
-    const gapSpaces = Math.max(2, Math.round(gapPx / charWidth));
-    const gap = ' '.repeat(gapSpaces);
-    const textStr = word + gap + word + gap;
 
     circ.innerHTML = `
       <div class="cat-circ-wrap">
@@ -1805,7 +1811,11 @@ function buildMenu(){
           </defs>
           <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
                 font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
-            <textPath href="#${uid}">${textStr}</textPath>
+            <textPath href="#${uid}" startOffset="25%" text-anchor="middle">${word}</textPath>
+          </text>
+          <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
+                font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
+            <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
         </svg>
         <div class="cat-circ-inner">${e}</div>

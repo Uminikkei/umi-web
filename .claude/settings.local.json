@@ -7,7 +7,9 @@
       "mcp__Claude_Preview__preview_start",
       "PowerShell(Get-Command php, ruby, java -ErrorAction SilentlyContinue)",
       "PowerShell(Start-Process \"C:\\\\Users\\\\hejei\\\\OneDrive\\\\Escritorio\\\\umi-web-main\\\\index.html\")",
-      "WebFetch(domain:www.fontspace.com)"
+      "WebFetch(domain:www.fontspace.com)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
