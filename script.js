@@ -122,16 +122,16 @@ function toggleLongRev(){
 }
 
 function buildMenu(){
-  // Geoglifos desde sprite SVG vectorial — viewBox recorta el ícono correcto
-  const IC = (vb) => `<svg width="64" height="64" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><image href="geoglifos.svg" width="3386" height="1858" x="0" y="0"/></svg>`;
+  // Geoglifos dorados — sprite SVG oficial, viewBox por ícono (sin textos)
+  const IC = (vb) => `<svg width="64" height="64" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><image href="geoglifos.svg" width="3344" height="1882" x="0" y="0"/></svg>`;
   const MAIN = {
-    'Sushi':     { e: IC("100 100 750 820"),  cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    'Ceviches':  { e: IC("860 80 830 840"),   cats:['Ceviches'], ring:'Ceviches' },
-    'Tiraditos': { e: IC("1720 80 840 840"),  cats:['Tiraditos'], ring:'Tiraditos' },
-    'Ensaladas': { e: IC("2580 80 810 840"),  cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC("100 930 1080 870"), cats:['Fuertes'], ring:'Del Fuego' },
-    'Postres':   { e: IC("1250 930 950 870"), cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC("2220 930 1100 870"),cats:['Bebidas'], ring:'Bebidas' }
+    'Sushi':     { e: IC("110 220 620 680"),  cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Ceviches':  { e: IC("880 200 860 700"),  cats:['Ceviches'], ring:'Ceviches' },
+    'Tiraditos': { e: IC("1580 200 960 700"), cats:['Tiraditos'], ring:'Tiraditos' },
+    'Ensaladas': { e: IC("2540 180 820 720"), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    'Del Fuego': { e: IC("380 930 810 760"),  cats:['Fuertes'], ring:'Del Fuego' },
+    'Postres':   { e: IC("1160 930 1100 760"),cats:['Postres'], ring:'Postres' },
+    'Bebidas':   { e: IC("2290 930 1080 760"),cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
