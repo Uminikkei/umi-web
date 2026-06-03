@@ -263,22 +263,42 @@ nav{
 .btn-hero:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(98,202,227,.5)}
 
 /* ── SECCIÓN CREAM — Nuestra Historia + Más Pedidos ── */
-/* ── SIGNIFICADO UMI (dentro de cream-sec) ── */
+/* ── SECCIÓN SIGNIFICADO UMI ── */
+.significado-sec{
+  background:#e2be94;
+  position:relative;
+  padding:0;
+}
+.sig-wave-top,.sig-wave-bottom{
+  display:block;line-height:0;
+  background:var(--cream);
+}
+.sig-wave-top svg,.sig-wave-bottom svg{
+  display:block;width:100%;
+}
+.sig-wave-bottom{ background:var(--teal); }
 .significado-inner{
-  max-width:1100px;margin:3rem auto 1rem;
-  text-align:center;padding:0 1.5rem;
+  max-width:1100px;margin:0 auto;
+  text-align:center;
+  padding:3rem 1.5rem 2.5rem;
+}
+.significado-label{
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(13,30,64,.6);display:block;margin-bottom:.6rem;
 }
 .significado-title{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.8rem,4vw,2.8rem);
+  font-size:clamp(2rem,4.5vw,3rem);
   color:#0d1e40;
-  margin:.3rem 0 .8rem;
+  margin:.3rem 0 1rem;
   font-weight:600;
 }
-.significado-title em{color:var(--teal);font-style:italic;}
+.significado-title em{color:#fff;font-style:italic;}
 .significado-desc{
-  color:rgba(13,30,64,.6);
-  font-size:.95rem;
+  color:rgba(13,30,64,.7);
+  font-size:1rem;
   max-width:520px;
   margin:0 auto 2rem;
   line-height:1.7;
