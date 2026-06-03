@@ -123,7 +123,7 @@ function toggleLongRev(){
 
 function buildMenu(){
   // Geoglifos dorados individuales — fondo transparente, SVG inline
-  const IC = (f) => `<img src="${f}" style="width:260px;height:260px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
+  const IC = (f) => `<img src="${f}" style="width:130px;height:130px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
   const MAIN = {
     'Sushi':     { e: IC('icon_sushi.svg'),     cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
     'Ceviches':  { e: IC('icon_ceviches.svg'),  cats:['Ceviches'], ring:'Ceviches' },
