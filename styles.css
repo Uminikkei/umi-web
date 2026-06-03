@@ -269,14 +269,11 @@ nav{
   position:relative;
   padding:0;
 }
-.sig-wave-top,.sig-wave-bottom{
+.sig-wave-bottom{
   display:block;line-height:0;
-  background:var(--cream);
+  background:#e2be94;
 }
-.sig-wave-top svg,.sig-wave-bottom svg{
-  display:block;width:100%;
-}
-.sig-wave-bottom{ background:var(--teal); }
+.sig-wave-bottom svg{ display:block;width:100%; }
 .significado-inner{
   max-width:1100px;margin:0 auto;
   text-align:center;
