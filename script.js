@@ -122,36 +122,86 @@ function toggleLongRev(){
 }
 
 function buildMenu(){
-  // Estilo geoglifo peruano: líneas angulares, pasos rectos, sin curvas
-  const IC = (d) => `<svg width="64" height="64" viewBox="0 0 48 48" fill="none" stroke="rgba(13,30,64,0.9)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
+  // Geoglifos vectorizados — stroke orgánico, laberíntico, fiel a imagen de referencia
+  const IC = (d) => `<svg width="64" height="64" viewBox="0 0 100 100" fill="none" stroke="rgba(13,30,64,0.9)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
   const MAIN = {
-    // SUSHI — pez geométrico Nazca visto de lado
-    'Sushi':     { e: IC(`<path d="M6,24 L6,16 L10,12 L38,12 L42,16 L42,24 L38,32 L10,32 Z"/>
-      <path d="M6,20 L2,16 L2,20 M6,28 L2,28 L2,32"/>
-      <rect x="30" y="16" width="5" height="5"/>
-      <path d="M14,18 L18,18 L18,22 L14,22 M20,16 L24,16 L24,20 L20,20"/>
-      <path d="M14,26 L22,26 L22,30 L14,30"/>`), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    // CEVICHES — limón/cítrico estilo geoglifo
-    'Ceviches':  { e: IC(`<rect x="8" y="8" width="32" height="32"/>
-      <path d="M8,8 L24,24 L40,8 M8,40 L24,24 L40,40"/>
-      <rect x="18" y="18" width="12" height="12"/>
-      <path d="M24,8 L24,4 M8,24 L4,24 M40,24 L44,24 M24,40 L24,44"/>`), cats:['Ceviches'], ring:'Ceviches' },
-    // TIRADITOS — cuchillo/corte escalonado
-    'Tiraditos': { e: IC(`<path d="M10,38 L10,34 L14,34 L14,30 L18,30 L18,26 L22,26 L22,22 L26,22 L26,18 L30,18 L30,14 L34,14 L34,10 L38,10"/>
-      <path d="M10,42 L42,42 M10,38 L10,42 M38,10 L42,10 L42,42"/>`), cats:['Tiraditos'], ring:'Tiraditos' },
-    // ENSALADAS — espiral escalonada (caracol Nazca)
-    'Ensaladas': { e: IC(`<path d="M24,4 L44,4 L44,44 L4,44 L4,14 L34,14 L34,34 L14,34 L14,24 L24,24 L24,34"/>`), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    // DEL FUEGO — llama escalonada / sol Nazca
-    'Del Fuego': { e: IC(`<path d="M24,44 L16,36 L16,28 L12,28 L12,20 L16,20 L16,16 L20,16 L20,12 L24,8 L28,12 L28,16 L32,16 L32,20 L36,20 L36,28 L32,28 L32,36 Z"/>
-      <path d="M20,44 L20,40 L24,40 L24,44 M28,44 L28,40"/>`), cats:['Fuertes'], ring:'Del Fuego' },
-    // POSTRES — vasija Nazca escalonada
-    'Postres':   { e: IC(`<path d="M16,44 L12,44 L12,36 L8,36 L8,20 L12,20 L12,16 L16,16 L16,12 L32,12 L32,16 L36,16 L36,20 L40,20 L40,36 L36,36 L36,44 L32,44"/>
-      <path d="M20,12 L20,8 L28,8 L28,12"/>
-      <path d="M16,28 L32,28 M16,36 L32,36"/>`), cats:['Postres'], ring:'Postres' },
-    // BEBIDAS — copa escalonada estilo Tiwanaku
-    'Bebidas':   { e: IC(`<path d="M14,44 L14,40 L10,40 L10,36 L18,36 L18,32 L22,32 L22,28 L26,28 L26,32 L30,32 L30,36 L38,36 L38,40 L34,40 L34,44"/>
-      <path d="M18,28 L18,16 L14,16 L14,8 L34,8 L34,16 L30,16 L30,28"/>
-      <path d="M14,44 L34,44"/>`), cats:['Bebidas'], ring:'Bebidas' }
+
+    // SUSHI — cilindro maki con espiral rectangular en cara superior + arcos de esterilla
+    'Sushi': { e: IC(`
+      <ellipse cx="50" cy="27" rx="30" ry="12"/>
+      <path d="M20,27 L20,70"/>
+      <path d="M80,27 L80,70"/>
+      <path d="M20,70 Q20,80 50,80 Q80,80 80,70"/>
+      <path d="M28,27 Q28,14 50,14 Q72,14 72,27 Q72,37 50,37 Q37,37 37,27 Q37,20 50,20 Q62,20 62,27 Q62,31 50,31 Q44,31 44,27"/>
+      <path d="M22,68 Q22,76 29,76 Q36,76 36,68"/>
+      <path d="M38,68 Q38,76 45,76 Q52,76 52,68"/>
+      <path d="M54,68 Q54,76 61,76 Q68,76 68,68"/>
+      <path d="M70,68 Q70,76 77,76 Q80,74 80,70"/>
+    `), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+
+    // CEVICHES — pez con líneas eco internas
+    'Ceviches': { e: IC(`
+      <path d="M14,50 Q14,32 34,22 Q52,13 68,22 Q84,32 82,50 Q80,66 62,74 Q44,82 28,70 Q14,60 14,50 Z"/>
+      <circle cx="66" cy="34" r="4" fill="rgba(13,30,64,0.9)" stroke="none"/>
+      <path d="M14,46 Q7,37 10,27"/>
+      <path d="M14,54 Q7,63 10,73"/>
+      <path d="M50,14 Q58,6 66,12"/>
+      <path d="M36,77 Q40,85 50,83"/>
+      <path d="M24,50 Q24,37 38,30 Q52,22 64,32 Q74,42 70,56 Q65,66 52,70 Q38,74 30,64 Q22,58 24,50"/>
+      <path d="M36,50 Q36,42 46,37 Q56,31 62,40 Q68,49 64,58 Q60,65 50,67 Q40,67 36,58 Q34,54 36,50"/>
+    `), cats:['Ceviches'], ring:'Ceviches' },
+
+    // TIRADITOS — dos rebanadas diagonales con líneas de textura
+    'Tiraditos': { e: IC(`
+      <path d="M46,80 Q34,76 24,57 Q16,42 22,27 Q27,17 38,19 Q50,21 60,42 Q70,62 64,77 Q60,84 54,82 Q50,81 46,80 Z"/>
+      <path d="M30,36 Q39,53 48,68"/>
+      <path d="M37,27 Q48,46 54,63"/>
+      <path d="M44,23 Q56,42 60,59"/>
+      <path d="M66,69 Q54,65 44,46 Q36,31 42,17 Q47,7 58,9 Q70,11 80,32 Q89,51 84,66 Q79,74 73,72 Q69,71 66,69 Z"/>
+      <path d="M52,23 Q63,41 68,57"/>
+      <path d="M58,16 Q70,35 74,52"/>
+      <path d="M64,13 Q76,32 79,49"/>
+    `), cats:['Tiraditos'], ring:'Tiraditos' },
+
+    // ENSALADAS — cuenco con laberinto interior y tres hojas con espiral
+    'Ensaladas': { e: IC(`
+      <path d="M17,90 Q14,72 14,57 Q14,42 26,37 Q38,31 50,31 Q62,31 74,37 Q86,42 86,57 Q86,72 83,90 Z"/>
+      <path d="M17,90 Q34,96 50,96 Q66,96 83,90"/>
+      <path d="M27,72 L27,59 L40,59 L40,69 L53,69 L53,57 L67,57 L67,69 L76,69"/>
+      <path d="M31,83 L31,75 L50,75 L50,83 L69,83 L69,75"/>
+      <path d="M32,31 Q22,19 26,9 Q30,3 34,9 Q38,17 35,29"/>
+      <path d="M50,31 Q50,17 50,7 Q54,1 58,7 Q58,19 52,29"/>
+      <path d="M68,31 Q78,19 74,9 Q70,3 66,9 Q62,17 65,29"/>
+      <path d="M26,9 Q20,3 27,5"/>
+      <path d="M50,7 Q46,1 54,3"/>
+      <path d="M74,9 Q80,3 73,5"/>
+    `), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+
+    // DEL FUEGO — 3 algas/llamas orgánicas con líneas internas
+    'Del Fuego': { e: IC(`
+      <path d="M24,88 Q13,74 15,57 Q17,43 24,32 Q28,24 26,14 Q24,6 28,3 Q33,1 35,10 Q37,21 31,33 Q27,44 29,58 Q31,73 24,88 Z"/>
+      <path d="M19,74 Q13,60 15,43 Q17,30 24,20"/>
+      <path d="M46,91 Q37,76 39,58 Q41,43 46,31 Q50,20 48,10 Q46,2 50,0 Q54,0 54,10 Q54,22 50,33 Q46,45 48,60 Q50,76 46,91 Z"/>
+      <path d="M42,78 Q35,62 38,44 Q41,29 47,17"/>
+      <path d="M68,87 Q59,72 61,55 Q63,42 68,31 Q72,22 70,13 Q68,7 72,5 Q76,5 76,14 Q76,26 72,36 Q68,48 70,63 Q72,76 68,87 Z"/>
+      <path d="M63,74 Q57,59 60,42 Q63,29 68,19"/>
+    `), cats:['Fuertes'], ring:'Del Fuego' },
+
+    // POSTRES — 4 espirales simétricas en flor
+    'Postres': { e: IC(`
+      <path d="M50,47 Q44,32 50,24 Q56,16 64,22 Q72,28 70,40 Q68,52 57,55 Q47,57 41,50 Q35,42 40,34 Q44,26 52,27 Q59,27 61,34 Q63,40 58,44 Q54,47 50,46"/>
+      <path d="M53,50 Q68,44 76,50 Q84,56 80,65 Q76,74 64,74 Q52,73 49,63 Q46,53 54,49 Q61,44 66,49 Q70,54 67,60 Q63,65 58,62"/>
+      <path d="M50,53 Q56,68 50,76 Q44,84 36,78 Q28,72 30,60 Q32,48 43,45 Q53,43 57,51 Q59,58 54,62 Q49,65 46,60"/>
+      <path d="M47,50 Q32,56 24,50 Q16,44 20,35 Q24,26 36,26 Q48,27 51,37 Q54,47 46,51 Q39,56 34,51 Q30,45 34,40"/>
+      <circle cx="50" cy="50" r="4" fill="rgba(13,30,64,0.9)" stroke="none"/>
+    `), cats:['Postres'], ring:'Postres' },
+
+    // BEBIDAS — vaso rectangular con pajita y laberinto interior
+    'Bebidas': { e: IC(`
+      <path d="M21,90 L25,22 Q25,16 50,16 Q75,16 75,22 L79,90 Z"/>
+      <path d="M62,16 Q68,4 72,0"/>
+      <path d="M32,82 L32,34 L68,34 L68,82 L38,82 L38,40 L62,40 L62,76 L44,76 L44,46 L56,46 L56,70 L50,70"/>
+    `), cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
