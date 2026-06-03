@@ -263,6 +263,39 @@ nav{
 .btn-hero:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(98,202,227,.5)}
 
 /* ── SECCIÓN CREAM — Nuestra Historia + Más Pedidos ── */
+/* ── SIGNIFICADO UMI ── */
+.significado-sec{
+  background:var(--bg);
+  padding:4rem 1.5rem 5rem;
+  text-align:center;
+}
+.significado-inner{max-width:1100px;margin:0 auto;}
+.significado-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.2rem);
+  color:var(--white-1);
+  margin:.4rem 0 1rem;
+  font-weight:600;
+}
+.significado-title em{color:var(--teal);font-style:italic;}
+.significado-desc{
+  color:rgba(240,235,224,.65);
+  font-size:1rem;
+  max-width:560px;
+  margin:0 auto 2.5rem;
+  line-height:1.7;
+}
+.significado-svg-wrap{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+}
+.significado-svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
 .cream-sec{
   background:var(--cream);
   padding:0 0 0;
