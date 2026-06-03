@@ -1,0 +1,667 @@
+// UMI Nikkei Bar - script v2
+// ── NAV WAVES ────────────────────────────────────────────────────────────────
+function connectNavWaves() {
+  const logo     = document.getElementById('navLogo');
+  const navTop   = document.querySelector('.nav-top');
+  const leftSvg  = document.getElementById('waveLeftSvg');
+  const rightSvg = document.getElementById('waveRightSvg');
+  const leftPath = document.getElementById('waveLeftPath');
+  const rightPath= document.getElementById('waveRightPath');
+  if (!logo.complete || !logo.naturalWidth) return;
+  const logoR  = logo.getBoundingClientRect();
+  const navR   = navTop.getBoundingClientRect();
+  const leftR  = leftSvg.getBoundingClientRect();
+  const rightR = rightSvg.getBoundingClientRect();
+  const connYabs = logoR.top + logoR.height * 0.51;
+  const connYL = ((connYabs - leftR.top)  / leftR.height)  * 380;
+  const connYR = ((connYabs - rightR.top) / rightR.height) * 380;
+  const amp = 380 * 0.22;
+  leftPath.setAttribute('d',
+    `M 0,${connYL} C 160,${connYL - amp} 380,${connYL + amp} 600,${connYL}`);
+  rightPath.setAttribute('d',
+    `M 0,${connYR} C 180,${connYR - amp} 420,${connYR + amp} 600,${connYR}`);
+}
+document.getElementById('navLogo').addEventListener('load', connectNavWaves);
+window.addEventListener('resize', connectNavWaves);
+window.addEventListener('load', connectNavWaves);
+
+// ── MOBILE MENU ───────────────────────────────────────────────────────────────
+function closeMobileMenu() {
+  document.getElementById('mobileOverlay').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
+const WA = '56961551728';
+const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';
+
+const RESTO_LAT = -29.9641;
+const RESTO_LNG = -71.3387;
+const DELIVERY_TIERS = [
+  { maxKm:  3.4, price:  2500 },
+  { maxKm:  4.4, price:  3000 },
+  { maxKm:  5.4, price:  3500 },
+  { maxKm:  6.4, price:  4000 },
+  { maxKm:  7.4, price:  4500 },
+  { maxKm:  8.4, price:  5000 },
+  { maxKm:  9.4, price:  5500 },
+  { maxKm: 10.4, price:  6000 },
+  { maxKm: 11.4, price:  6500 },
+  { maxKm: 12.4, price:  7000 },
+  { maxKm: 13.4, price:  7500 },
+  { maxKm: 14.4, price:  8000 },
+  { maxKm: 15.4, price:  8500 },
+  { maxKm: 16.4, price:  9000 },
+  { maxKm: 17.4, price:  9500 },
+  { maxKm: 18.4, price: 10000 },
+];
+const DELIVERY_MAX_KM = 18.4;
+
+const MENU = {"Sushi Rolls":[{"n":"Teri roll","p":12990,"e":"🍣"},{"n":"Acevichado Roll","p":13990,"e":"🍣"},{"n":"Ceviroll","p":13990,"e":"🍣"},{"n":"Tartare Sake Roll","p":13990,"e":"🍣"},{"n":"Scallops Roll","p":12990,"e":"🍣"},{"n":"Matsuri Roll","p":12990,"e":"🍣"},{"n":"Creamy Roll","p":12990,"e":"🍣"},{"n":"Chalaquito Roll","p":13990,"e":"🍣"},{"n":"Smoke Cheese Roll","p":12990,"e":"🍣"},{"n":"Tempura Roll","p":8990,"e":"🍣"},{"n":"Furai Roll","p":8990,"e":"🍣"},{"n":"Sake Koi Roll","p":12990,"e":"🍣"},{"n":"Avocado Roll","p":12990,"e":"🍣"}],"Rolls de Autor":[{"n":"Ushio Roll","p":14990,"e":"🍱"},{"n":"No-rice Roll","p":13990,"e":"🍱"},{"n":"Tartare Tuna Roll","p":13990,"e":"🍱"},{"n":"Pacific Doré Roll","p":14990,"e":"🍱"},{"n":"Saito Roll","p":14990,"e":"🍱"},{"n":"Karai Roll","p":14990,"e":"🍱"},{"n":"Uminari Roll","p":14990,"e":"🍱"}],"Nigiris & Gunkans":[{"n":"TNT Atun","p":6500,"e":"🍙"},{"n":"TNT Kani","p":6500,"e":"🍙"},{"n":"TNT Locos","p":9590,"e":"🍙"},{"n":"Nigiris Nissei","p":5990,"e":"🍙"},{"n":"Nigiris Criollo Ponja","p":5990,"e":"🍙"},{"n":"Nigiris Grilled Ostion","p":6500,"e":"🍙"},{"n":"Nigiris Crispy Rice","p":6500,"e":"🍙"},{"n":"Nigiris Salmon Anticuchero","p":5990,"e":"🍙"},{"n":"Nigiri Tako","p":5990,"e":"🍙"},{"n":"Nigiris Extravaganza","p":6000,"e":"🍙"},{"n":"TNT Salmon","p":6500,"e":"🍙"},{"n":"Tnt pulpo karami","p":7500,"e":"🍙"}],"Sashimi 3 Cortes":[{"n":"Sashimi Pulpo","p":8490,"e":"🐟"},{"n":"Sashimi Locos","p":9490,"e":"🐟"},{"n":"Sashimi Pesca del Día","p":5990,"e":"🐟"},{"n":"Sashimi 12 cortes","p":22990,"e":"🐟"},{"n":"Sashimi Salmon","p":5990,"e":"🐟"},{"n":"Sashimi Atun","p":5990,"e":"🐟"}],"Tiraditos":[{"n":"Tiraditos Umi","p":13990,"e":"🐠"},{"n":"Tiraditos Nissei","p":13990,"e":"🐠"},{"n":"Tiraditos Olivo","p":16990,"e":"🐠"},{"n":"Tiraditos Locos","p":19490,"e":"🐠"}],"Ceviches":[{"n":"Chirashi ceviche","p":13990,"e":"🍋"},{"n":"Ceviche Clásico nikkei","p":13290,"e":"🍋"},{"n":"Ceviche Ishi Nikkei","p":14990,"e":"🍋"},{"n":"Ceviche Veggie Nikkei","p":12990,"e":"🍋"},{"n":"Ceviche carretillero","p":13990,"e":"🍋"},{"n":"Ceviche Mixto criollo","p":13990,"e":"🍋"}],"Entradas":[{"n":"Nori Tacos (4 pzs)","p":17240,"e":"🥟"},{"n":"Edamame al wok","p":6990,"e":"🥟"},{"n":"Nori Tacos (2 pzs)","p":8990,"e":"🥟"},{"n":"Tartare Nikkei","p":13990,"e":"🥟"},{"n":"Gyozas Camarón","p":12990,"e":"🥟"},{"n":"Sakana bao (2 pzs)","p":15990,"e":"🥟"},{"n":"Salmón Garden (6 Pzs)","p":11990,"e":"🥟"},{"n":"Camaron pasionarios","p":13990,"e":"🥟"},{"n":"Gyozas tori","p":12990,"e":"🥟"},{"n":"Gyozas trufadas","p":11990,"e":"🥟"}],"Ensaladas":[{"n":"Asian Salad","p":13990,"e":"🥗"},{"n":"Tataki Salad","p":13990,"e":"🥗"},{"n":"Kabayaki Salad","p":13990,"e":"🥗"}],"Fuertes":[{"n":"Cremoso de mariscos","p":16990,"e":"🍽️"},{"n":"Udon Saltado","p":18990,"e":"🍽️"},{"n":"Udon huancaína","p":18990,"e":"🍽️"},{"n":"Atun al sesamo","p":14990,"e":"🍽️"},{"n":"Lomo saltado","p":18990,"e":"🍽️"},{"n":"Asado de tira","p":22990,"e":"🍽️"},{"n":"Yakimeshi umi","p":14490,"e":"🍽️"},{"n":"Pulpo nikkei","p":23990,"e":"🍽️"},{"n":"Mar de Mariscos","p":18990,"e":"🍽️"},{"n":"Chicken Katsu","p":13990,"e":"🍽️"},{"n":"Sakana Furai","p":13990,"e":"🍽️"},{"n":"Salmon Andino","p":18990,"e":"🍽️"},{"n":"Pesca al ajillo","p":18990,"e":"🍽️"},{"n":"Udon de camarones","p":19990,"e":"🍽️"},{"n":"Niku ramen","p":15990,"e":"🍽️"},{"n":"Saltado Marino","p":21990,"e":"🍽️"}],"Postres":[{"n":"Postre del Amor","p":8000,"e":"🍮"},{"n":"Tiramisú","p":7000,"e":"🍮"},{"n":"Torta Opera","p":6500,"e":"🍮"},{"n":"Torta de Brownie","p":7000,"e":"🍮"},{"n":"Mousse Blanco","p":8000,"e":"🍮"},{"n":"Cheesecake de Frutos Rojos","p":6500,"e":"🍮"}],"Coctelería Clásica":[{"n":"St germain Spritz","p":14000,"e":"🍹"},{"n":"Tropical Gin","p":9000,"e":"🍹"},{"n":"Manhattan","p":10000,"e":"🍹"},{"n":"Tequila margarita","p":8500,"e":"🍹"},{"n":"Caipiriña","p":6500,"e":"🍹"},{"n":"Ramazzotti spritz","p":7900,"e":"🍹"},{"n":"Negroni","p":6900,"e":"🍹"},{"n":"Tom collins","p":6900,"e":"🍹"},{"n":"Dry Martini","p":6900,"e":"🍹"},{"n":"Odett Mocktail","p":5500,"e":"🍹"},{"n":"Bramble","p":9000,"e":"🍹"},{"n":"Rusty Nail","p":6900,"e":"🍹"},{"n":"Moscow Mule","p":8500,"e":"🍹"},{"n":"Espresso Martini","p":9000,"e":"🍹"},{"n":"Daikiri Sabores","p":5900,"e":"🍹"},{"n":"Cosmopolitan","p":8500,"e":"🍹"},{"n":"Negroni Premium 47","p":16000,"e":"🍹"},{"n":"Negroni Premium","p":13500,"e":"🍹"},{"n":"Boulevardier","p":9500,"e":"🍹"},{"n":"Vermouth 1757","p":7000,"e":"🍹"},{"n":"Aperol spritz","p":7900,"e":"🍹"},{"n":"Lychee Martini ( Clásico )","p":10000,"e":"🍹"},{"n":"Long Island Ice Tea","p":9500,"e":"🍹"},{"n":"White lady germain","p":9500,"e":"🍹"},{"n":"Old Fashion","p":9000,"e":"🍹"},{"n":"Saito Mocktail","p":5000,"e":"🍹"},{"n":"Saito Dirty","p":7500,"e":"🍹"},{"n":"Chambord Spritz","p":12000,"e":"🍹"},{"n":"Ruso Blanco","p":8500,"e":"🍹"},{"n":"PALOMA","p":10000,"e":"🍹"}],"Coctelería de Autor":[{"n":"Umi Coctel","p":10490,"e":"🌺"},{"n":"Kimon mule","p":10900,"e":"🌺"},{"n":"Margarita nikkei","p":9000,"e":"🌺"},{"n":"Rose collins","p":9900,"e":"🌺"}],"Mundo Mojito":[{"n":"Mojito Jack Blackberry","p":9500,"e":"🌿"},{"n":"Mojito mango","p":7500,"e":"🌿"},{"n":"Mojito coco","p":7500,"e":"🌿"},{"n":"Mojito clasico","p":6500,"e":"🌿"},{"n":"Mojito Jack Honey","p":9500,"e":"🌿"},{"n":"Mojito maracuya","p":7500,"e":"🌿"},{"n":"Mojito frambuesa","p":7500,"e":"🌿"},{"n":"Mojito Jack Apple","p":9500,"e":"🌿"},{"n":"Mojito Jagger","p":9000,"e":"🌿"}],"Piscos":[{"n":"Ovalle 40 +bebida","p":10000,"e":"🥃"},{"n":"Norterra transparente 40 + bebida","p":6500,"e":"🥃"},{"n":"Wiluf + bebida","p":9000,"e":"🥃"},{"n":"Tololo blue+ bebida","p":10000,"e":"🥃"},{"n":"Pisco Lapostolle XO","p":8000,"e":"🥃"},{"n":"Hacienda la torre 43 + bebida","p":8000,"e":"🥃"},{"n":"Pisco sour peruano catedral ( Viñas de oro acholado)","p":18500,"e":"🥃"},{"n":"Waqar +bebida","p":12000,"e":"🥃"},{"n":"Alto del carmen 40 azul+ bebida","p":6000,"e":"🥃"},{"n":"Pisco Sour Nacional (Norterra)","p":8000,"e":"🥃"},{"n":"Pisco Sour Premium (Tololo)","p":9000,"e":"🥃"},{"n":"Pisco Sour peruano ( Viñas de oro acholado)","p":14000,"e":"🥃"},{"n":"Pisco Sour Peruano Vaticano ( Viñas de oro acholado)","p":24990,"e":"🥃"},{"n":"El gobernador+ bebida","p":6000,"e":"🥃"},{"n":"Black heron + bebida","p":9000,"e":"🥃"},{"n":"Mistral nobel  + bebida","p":8000,"e":"🥃"},{"n":"Alto del carmen 40 negro + bebida","p":7000,"e":"🥃"},{"n":"Mistral apple+ bebida","p":8000,"e":"🥃"},{"n":"Tololo black+ bebida","p":10000,"e":"🥃"},{"n":"Pisco Mistral Gran Nobel","p":11900,"e":"🥃"},{"n":"Bou legado 40 +bebida","p":12000,"e":"🥃"},{"n":"Pisco Caur","p":10000,"e":"🥃"},{"n":"Juliá+ bebida","p":7000,"e":"🥃"},{"n":"Alto del carmen 40 transparente + bebida","p":6000,"e":"🥃"},{"n":"Pisco El Gobernador Platino","p":8000,"e":"🥃"}],"Whisky":[{"n":"Monkey Shoulder","p":13500,"e":"🥃"},{"n":"Woodford Reserve","p":14500,"e":"🥃"},{"n":"Jack daniels honey + bebida","p":8000,"e":"🥃"},{"n":"Buchanan's 12","p":10500,"e":"🥃"},{"n":"Jack daniels 7 +bebida","p":8000,"e":"🥃"},{"n":"Jameson + bebida","p":9000,"e":"🥃"},{"n":"Whisky Akashi Black","p":18000,"e":"🥃"},{"n":"Chivas regal 12 años + bebida","p":10000,"e":"🥃"},{"n":"Macalla 12 años","p":49990,"e":"🥃"},{"n":"Jw green + bebida","p":18000,"e":"🥃"},{"n":"Jack daniels apple +bebida","p":8000,"e":"🥃"},{"n":"Jack daniels gentleman + bebida","p":15000,"e":"🥃"},{"n":"Jw red +bebida","p":6000,"e":"🥃"},{"n":"Jw black +bebida","p":9000,"e":"🥃"},{"n":"Glenfiddich 12 años + bebida","p":12000,"e":"🥃"},{"n":"Jack Daniels Blackberry","p":8000,"e":"🥃"},{"n":"Jack daniels fire + bebida","p":8000,"e":"🥃"}],"Gin":[{"n":"Beeffeater + bebida","p":7500,"e":"🍸"},{"n":"Beeffeater pink  + bebida","p":7500,"e":"🍸"},{"n":"Hendricks + bebida","p":11000,"e":"🍸"},{"n":"Gin Bulldog","p":9900,"e":"🍸"},{"n":"Gin Monkey","p":17990,"e":"🍸"},{"n":"Tanqueray ten + bebida","p":12000,"e":"🍸"},{"n":"Tanqueray + bebida","p":8000,"e":"🍸"},{"n":"Bombay+ bebida","p":8000,"e":"🍸"},{"n":"Gin Mare","p":10900,"e":"🍸"}],"Ron":[{"n":"Havana 3 años + bebida","p":6900,"e":"🍹"},{"n":"Havana club especial + bebida","p":6900,"e":"🍹"},{"n":"Diplomático+ Bebida","p":9500,"e":"🍹"},{"n":"Havana 7 años + bebida","p":8500,"e":"🍹"}],"Vodka":[{"n":"Stoli + bebida","p":7000,"e":"🍸"},{"n":"Grey Goose + bebida","p":10000,"e":"🍸"},{"n":"Absolut pera+ bebida","p":8000,"e":"🍸"},{"n":"Absolut + bebida","p":8000,"e":"🍸"},{"n":"Absolut frabuesa + bebida","p":8000,"e":"🍸"}],"Tequila":[{"n":"Don julio reposado","p":15000,"e":"🌵"},{"n":"El merendero","p":4000,"e":"🌵"},{"n":"Don julio silver","p":14000,"e":"🌵"},{"n":"Olmeca","p":5000,"e":"🌵"},{"n":"Herradura ultra","p":14000,"e":"🌵"},{"n":"Don Julio Reposado Botella","p":100000,"e":"🌵"}],"Licores":[{"n":"Frangelico","p":7000,"e":"🍶"},{"n":"Kalua","p":6000,"e":"🍶"},{"n":"Fernet branca + bebida","p":6000,"e":"🍶"},{"n":"Ramazzotti violeto spritz","p":7900,"e":"🍶"},{"n":"Chelada","p":1000,"e":"🍶"},{"n":"St germain","p":9900,"e":"🍶"},{"n":"Licor de menta","p":2000,"e":"🍶"},{"n":"Malibu+ bebida","p":8000,"e":"🍶"},{"n":"Jagermeister","p":7000,"e":"🍶"},{"n":"Contreau","p":7000,"e":"🍶"},{"n":"Baileys","p":6000,"e":"🍶"},{"n":"Disarono","p":8000,"e":"🍶"},{"n":"Cachaza","p":3000,"e":"🍶"},{"n":"Drambuie","p":8000,"e":"🍶"},{"n":"Jagermeister Manifest","p":8000,"e":"🍶"},{"n":"Curazao","p":3000,"e":"🍶"},{"n":"Campari + bebida","p":7000,"e":"🍶"},{"n":"Chambord","p":10000,"e":"🍶"}],"Vinos":[{"n":"TH Chardonnay Copa","p":7000,"e":"🍷"},{"n":"Botella de vino Casa Marín RIESLING","p":29990,"e":"🍷"},{"n":"Tololo rose","p":4500,"e":"🍷"},{"n":"TH Chardonnay Botella","p":24990,"e":"🍷"},{"n":"TH Pinot Noir Copa","p":7000,"e":"🍷"},{"n":"TH Carmenere Botella","p":24990,"e":"🍷"},{"n":"TH Cabernet Sauvignon Botella","p":24990,"e":"🍷"},{"n":"Botella Vino Arboleda Brisa","p":69990,"e":"🍷"},{"n":"TH Cabernet Sauvignon Copa","p":7000,"e":"🍷"},{"n":"TH Pinot Noir Botella","p":24990,"e":"🍷"},{"n":"Tololo Pedro Jimenez Copa","p":6000,"e":"🍷"},{"n":"Botella Vino Undurraga Altazor","p":129990,"e":"🍷"},{"n":"TH Syrah Botella","p":24990,"e":"🍷"},{"n":"Copa de vino Casa Marín RIESLING","p":9000,"e":"🍷"},{"n":"TH Syrah Copa","p":7000,"e":"🍷"},{"n":"Tololo Pedro Jimenez Botella","p":24990,"e":"🍷"},{"n":"TH Sauvignon Blanc Copa","p":7000,"e":"🍷"},{"n":"TH Carmenere Copa","p":7000,"e":"🍷"},{"n":"Botella de vino Casa Marín GEWURZTRAMINER","p":29990,"e":"🍷"},{"n":"TH Sauvignon Blanc Botella","p":24990,"e":"🍷"},{"n":"Copa de vino  Casa Marín GEWURZTRAMINER","p":9000,"e":"🍷"}],"Vermut":[{"n":"Martini bianco","p":4500,"e":"🍸"},{"n":"Martini dry","p":4500,"e":"🍸"},{"n":"Martini rosso","p":4500,"e":"🍸"}],"Espumantes":[{"n":"Ricadonna asti botella","p":29990,"e":"🥂"},{"n":"Ricadonna ruby botella","p":29990,"e":"🥂"},{"n":"Undurraga brut copa","p":4500,"e":"🥂"},{"n":"Ricadonna chardonay botella","p":29990,"e":"🥂"},{"n":"Ricadonna moscato botella","p":29990,"e":"🥂"},{"n":"Botella champagne PIPER HEIDSIECK","p":119000,"e":"🥂"}],"Cervezas":[{"n":"Kustman torobayo","p":5500,"e":"🍺"},{"n":"Cerveza Asahi","p":7000,"e":"🍺"},{"n":"Kunstmann Lager","p":5500,"e":"🍺"},{"n":"Austral Lagger","p":5000,"e":"🍺"},{"n":"Peroni","p":5500,"e":"🍺"},{"n":"Austral calafate","p":5500,"e":"🍺"},{"n":"Peroni sin alcohol","p":4500,"e":"🍺"}],"Bebidas":[{"n":"Agua sin gas","p":3000,"e":"🥤"},{"n":"Redbull original","p":3500,"e":"🥤"},{"n":"Limon soda","p":3000,"e":"🥤"},{"n":"Jugo de Maracuya","p":4500,"e":"🥤"},{"n":"Agua con gas","p":3500,"e":"🥤"},{"n":"Fentimans rose lemonade","p":4000,"e":"🥤"},{"n":"Jugo de Frambuesa","p":4500,"e":"🥤"},{"n":"Limonada Menta y Jengibre","p":4000,"e":"🥤"},{"n":"Fentimans indian water tonic","p":4000,"e":"🥤"},{"n":"Redbull yellow","p":4000,"e":"🥤"},{"n":"Canada dry tonica zero","p":3000,"e":"🥤"},{"n":"Canada dry tonica","p":3500,"e":"🥤"},{"n":"Crush","p":3500,"e":"🥤"},{"n":"Jugo de Mango","p":4500,"e":"🥤"},{"n":"Limonada Clasica","p":4000,"e":"🥤"},{"n":"Fentimans ginger beer","p":4000,"e":"🥤"},{"n":"Limonada Sabores","p":4500,"e":"🥤"},{"n":"Tonica Fentimas Variedades","p":4000,"e":"🥤"},{"n":"Fentimans water tonic ligth","p":4000,"e":"🥤"},{"n":"Ginger ale zero","p":3000,"e":"🥤"},{"n":"Ginger ale","p":3500,"e":"🥤"},{"n":"Fanta","p":3500,"e":"🥤"},{"n":"Pepsi zero","p":3500,"e":"🥤"},{"n":"Coca Cola 350cc","p":3500,"e":"🥤"},{"n":"Pepsi","p":3500,"e":"🥤"},{"n":"Sprite","p":3500,"e":"🥤"},{"n":"Kem piña","p":3500,"e":"🥤"}],"Café & Calientes":[{"n":"Infusión Té","p":2500,"e":"☕"},{"n":"Cortado","p":4000,"e":"☕"},{"n":"Americano","p":4000,"e":"☕"},{"n":"Cappuccino","p":4000,"e":"☕"},{"n":"Espresso Doble","p":4500,"e":"☕"},{"n":"Espresso","p":3000,"e":"☕"}],"Adicionales":[{"n":"Extra Pulpa","p":500,"e":"➕"},{"n":"Michelada","p":1000,"e":"➕"},{"n":"Adicional Proteina","p":2000,"e":"➕"},{"n":"Extra Wantan","p":500,"e":"➕"},{"n":"Salsa Adicional","p":2000,"e":"➕"},{"n":"Porción de arroz","p":3000,"e":"➕"},{"n":"Porción palta","p":3000,"e":"➕"},{"n":"Papas Cuña Fritas","p":5000,"e":"➕"},{"n":"Ayuda para palillo","p":500,"e":"➕"},{"n":"Shot Jugo","p":500,"e":"➕"}]};
+
+['Coctelería Clásica','Coctelería de Autor','Mundo Mojito',
+ 'Piscos','Whisky','Gin','Ron','Vodka','Tequila',
+ 'Licores','Vinos','Vermut','Espumantes','Cervezas'
+].forEach(k => delete MENU[k]);
+if(MENU['Fuertes']) MENU['Fuertes'] = MENU['Fuertes'].filter(item => item.n !== 'Niku ramen');
+
+function fmt(p){return '$'+p.toLocaleString('es-CL')}
+
+function imgUrl(path){
+  if(!path) return null;
+  if(path.startsWith('http')) return path + '?alt=media';
+  return BASE + path + '?alt=media';
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function toggleSearch(){
+  const box = document.getElementById('searchBox');
+  if(box.classList.contains('open')){closeSearch();}
+  else{box.classList.add('open');document.getElementById('searchInput').focus();}
+}
+function closeSearch(){
+  document.getElementById('searchBox').classList.remove('open');
+  document.getElementById('searchResults').classList.remove('open');
+  document.getElementById('searchInput').value='';
+}
+function onSearchKey(e){if(e.key==='Escape')closeSearch();}
+function doSearch(q){
+  const el=document.getElementById('searchResults');
+  q=q.trim().toLowerCase();
+  if(q.length<2){el.classList.remove('open');return;}
+  const matches=[];
+  for(const[cat,items] of Object.entries(MENU)){
+    for(const item of items){
+      if(item.n.toLowerCase().includes(q)) matches.push({...item,cat});
+    }
+  }
+  if(matches.length===0){
+    el.innerHTML='<div class="search-no-results">Sin resultados para "'+q+'"</div>';
+  } else {
+    el.innerHTML=matches.map(m=>`
+      <div class="search-result-item" onclick="addToCart('${m.n.replace(/'/g,"\\'")}',${m.p},'${m.e||'🍣'}','${m.cat.replace(/'/g,"\\'")}');closeSearch()">
+        <div>
+          <div class="search-result-name">${m.e} ${m.n}</div>
+          <div class="search-result-cat">${m.cat}</div>
+        </div>
+        <div class="search-result-price">${fmt(m.p)}</div>
+      </div>`).join('');
+  }
+  el.classList.add('open');
+}
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.search-wrap');
+  if(wrap && !wrap.contains(e.target)) closeSearch();
+});
+
+function toggleLongRev(){
+  const txt = document.getElementById('longRev');
+  const btn = document.getElementById('longRevBtn');
+  const expanded = txt.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más ↓';
+}
+
+function buildMenu(){
+  const IC = (d) => `<svg width="64" height="64" viewBox="0 0 48 48" fill="none" stroke="rgba(13,30,64,0.85)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
+  const MAIN = {
+    'Sushi':     { e: IC(`<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="3" fill="rgba(13,30,64,0.85)" stroke="none"/><path d="M8 21 Q16 13 24 15 Q32 13 40 21" stroke-width="2"/>`), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Ceviches':  { e: IC(`<path d="M7 24 Q11 12 24 10 Q37 12 41 24 Q37 36 24 38 Q11 36 7 24Z"/><circle cx="34" cy="20" r="2.5" fill="rgba(13,30,64,0.85)" stroke="none"/><path d="M5 20 L9 24 L5 28"/><path d="M16 24 Q18 20 22 22 Q24 18 28 20 Q30 24 28 27"/>`), cats:['Ceviches'], ring:'Ceviches' },
+    'Tiraditos': { e: IC(`<path d="M10 38 Q14 28 24 24 Q34 28 38 38"/><path d="M12 34 Q16 22 24 18 Q32 22 36 34"/><path d="M14 30 Q18 16 24 12 Q30 16 34 30"/><path d="M6 42 L42 42" stroke-width="1.5"/>`), cats:['Tiraditos'], ring:'Tiraditos' },
+    'Ensaladas': { e: IC(`<path d="M10 38 Q10 26 24 20 Q38 26 38 38 L10 38Z"/><path d="M14 20 Q16 12 22 10 Q28 8 30 14"/><path d="M24 20 L24 10"/><path d="M18 16 Q22 10 28 12 Q30 16 26 20"/><path d="M7 42 L41 42" stroke-width="1.5"/>`), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    'Del Fuego': { e: IC(`<path d="M24 42 Q10 36 12 22 Q13 14 20 18 Q17 8 24 6 Q28 12 25 19 Q32 12 34 21 Q38 32 24 42Z"/><path d="M20 34 Q18 28 22 26 Q21 30 24 32 Q27 28 26 24 Q30 28 28 34" stroke-width="1.5" stroke="rgba(13,30,64,0.5)"/>`), cats:['Fuertes'], ring:'Del Fuego' },
+    'Postres':   { e: IC(`<path d="M10 38 Q10 28 24 24 Q38 28 38 38 L10 38Z"/><path d="M16 24 Q18 14 24 12 Q30 14 32 24"/><path d="M24 12 L24 8"/><path d="M20 10 Q24 6 28 10"/><path d="M7 42 L41 42" stroke-width="1.5"/>`), cats:['Postres'], ring:'Postres' },
+    'Bebidas':   { e: IC(`<path d="M15 10 L11 42 L37 42 L33 10Z"/><path d="M13 22 L35 22"/><path d="M27 10 L27 5 Q33 5 33 8 Q33 10 27 10" stroke-width="1.8"/><circle cx="22" cy="32" r="2" fill="rgba(13,30,64,0.3)" stroke="none"/>`), cats:['Bebidas'], ring:'Bebidas' }
+  };
+
+  const mainWrap  = document.getElementById('mainCats');
+  const subcatRow = document.getElementById('subcatRow');
+  const content   = document.getElementById('menuContent');
+
+  function catId(cat){ return 'cb_' + cat.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+  Object.keys(MENU).forEach(cat => {
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    block.id = catId(cat);
+    const h = document.createElement('div');
+    h.className = 'cat-heading';
+    h.textContent = cat;
+    block.appendChild(h);
+    const grid = document.createElement('div');
+    grid.className = 'items-grid';
+    MENU[cat].forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'item';
+      const url = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[item.n])
+        ? SPLEAT_PHOTOS[item.n]
+        : imgUrl(item.i || null);
+      if(url){
+        const img = document.createElement('img');
+        img.className = 'item-img'; img.alt = item.n; img.loading = 'lazy';
+        img.onerror = function(){
+          this.style.display='none';
+          const ph = document.createElement('div');
+          ph.className='item-img-placeholder'; ph.textContent = item.e||'🍣';
+          card.insertBefore(ph, card.firstChild);
+        };
+        img.src = url; card.appendChild(img);
+      } else {
+        const ph = document.createElement('div');
+        ph.className = 'item-img-placeholder'; ph.textContent = item.e||'🍣';
+        card.appendChild(ph);
+      }
+      const body = document.createElement('div');
+      body.className = 'item-body';
+      const _desc = item.d || (typeof SPLEAT_DESC !== 'undefined' && SPLEAT_DESC[item.n]) || '';
+      body.innerHTML = `
+        <div class="item-name">${item.n}</div>
+        ${_desc ? `<div class="item-desc">${_desc}</div>` : ''}
+        <div class="item-footer">
+          <div class="item-price">${fmt(item.p)}</div>
+          <button class="item-wa" onclick="event.stopPropagation();addToCart('${item.n.replace(/'/g,"\\'")}',${item.p},'${item.e||'🍣'}','${cat.replace(/'/g,"\\'")}')">+ Agregar</button>
+        </div>`;
+      card.onclick = () => addToCart(item.n, item.p, item.e||'🍣', cat);
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+    block.appendChild(grid);
+    content.appendChild(block);
+  });
+
+  function showMain(mainName, cats, circEl){
+    document.querySelectorAll('.cat-circ').forEach(c => c.classList.remove('on'));
+    circEl.classList.add('on');
+    document.querySelectorAll('.cat-block').forEach(b => b.classList.remove('show'));
+    subcatRow.innerHTML = '';
+    subcatRow.className = 'subcat-row open';
+    const valid = cats.filter(c => MENU[c]);
+    valid.forEach((cat, si) => {
+      const pill = document.createElement('button');
+      pill.className = 'subcat-pill' + (si === 0 ? ' on' : '');
+      pill.textContent = cat;
+      pill.onclick = ev => {
+        ev.stopPropagation();
+        document.querySelectorAll('.subcat-pill').forEach(p => p.classList.remove('on'));
+        document.querySelectorAll('.cat-block').forEach(b => b.classList.remove('show'));
+        pill.classList.add('on');
+        const bl = document.getElementById(catId(cat));
+        if(bl){ bl.classList.add('show'); bl.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+      };
+      subcatRow.appendChild(pill);
+    });
+    if(valid.length){
+      const bl = document.getElementById(catId(valid[0]));
+      if(bl) bl.classList.add('show');
+    }
+  }
+
+  Object.entries(MAIN).forEach(([mainName, {e, cats, ring}], idx) => {
+    const circ = document.createElement('div');
+    circ.className = 'cat-circ';
+    const uid = 'rp' + idx;
+    const R = 68, fontSize = 19, letterSpacing = 1;
+    const word = (ring || mainName).toUpperCase();
+    circ.innerHTML = `
+      <div class="cat-circ-wrap">
+        <svg class="cat-circ-ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <path id="${uid}" d="M 100 100 m -68 0 a 68 68 0 1 1 136 0 a 68 68 0 1 1 -136 0"/>
+          </defs>
+          <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
+                font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
+            <textPath href="#${uid}" startOffset="25%" text-anchor="middle">${word}</textPath>
+          </text>
+          <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
+                font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
+            <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
+          </text>
+        </svg>
+        <div class="cat-circ-inner">${e}</div>
+      </div>
+      <div class="cat-circ-label">${mainName}</div>`;
+    circ.onclick = () => showMain(mainName, cats, circ);
+    mainWrap.appendChild(circ);
+    if(idx === 0) showMain(mainName, cats, circ);
+  });
+}
+
+// ── CART STATE ────────────────────────────────────────────────────────────────
+let cart = [];
+let entregaMode = 'retiro';
+let pagoMode = 'efectivo';
+let deliveryFee = 0;
+let deliveryKm  = 0;
+let geocodeTimer = null;
+let addrSugIndex = -1;
+let addrSuggestions = [];
+let addrHouseNumber = '';
+
+// ── ADDRESS AUTOCOMPLETE ──────────────────────────────────────────────────────
+function splitAddrNum(q){
+  const m = q.trim().match(/^(.*?)\s+(\d{1,6})\s*$/);
+  if(m && m[1].trim().length >= 3) return { text: m[1].trim(), num: m[2] };
+  return { text: q.trim(), num: '' };
+}
+
+function onAddrInput(val){
+  clearTimeout(geocodeTimer);
+  const { text, num } = splitAddrNum(val);
+  addrHouseNumber = num;
+  if(val.length < 3){ hideAddrSug(); deliveryFee=0; deliveryKm=0; updateDeliveryTotal(); return; }
+  geocodeTimer = setTimeout(() => { fetchAddrSuggestions(text); }, 350);
+}
+
+function onAddrBlur(){
+  setTimeout(() => {
+    hideAddrSug();
+    const val = document.getElementById('cAddr').value.trim();
+    if(val.length >= 5 && deliveryKm === 0) calcDeliveryFee(val);
+  }, 200);
+}
+
+async function fetchAddrSuggestions(q){
+  const box = document.getElementById('addrSuggestions');
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ', Coquimbo, Chile')}&format=json&limit=6&addressdetails=1&countrycodes=cl&accept-language=es`;
+    const resp = await fetch(url, { headers: { 'User-Agent': 'uminikkeibar.cl/1.0' } });
+    const data = await resp.json();
+    if(!data.length){ hideAddrSug(); return; }
+    addrSuggestions = data.slice(0, 5);
+    addrSugIndex = -1;
+    box.innerHTML = addrSuggestions.map((item, i) => {
+      const road = (item.address || {}).road || item.display_name.split(',')[0].trim();
+      const displayMain = addrHouseNumber ? road + ' ' + addrHouseNumber : road;
+      const sub  = buildAddrSub(item);
+      return `<div class="addr-sug-item" data-idx="${i}"
+        onmousedown="event.preventDefault();selectAddrSug(${i})"
+        ontouchstart="selectAddrSug(${i})"
+        onmouseover="addrSugHover(${i})">
+        <span class="addr-sug-icon">${addrIcon(item)}</span>
+        <div><div class="addr-sug-main">${esc(displayMain)}</div>${sub?`<div class="addr-sug-sub">${esc(sub)}</div>`:''}</div>
+      </div>`;
+    }).join('');
+    box.style.display = '';
+  } catch(e){ hideAddrSug(); }
+}
+
+function buildAddrMain(item){
+  const a = item.address || {};
+  const parts = [];
+  const place = a.mall || a.shop || a.amenity || a.leisure || a.building ||
+                a.tourism || a.historic || a.office || a.industrial || a.commercial;
+  if(place) parts.push(place);
+  if(a.road){ parts.push(a.house_number ? a.road + ' ' + a.house_number : a.road); }
+  if(!parts.length){ return item.display_name.split(',').slice(0, 2).join(',').trim(); }
+  return parts.join(', ');
+}
+
+function buildAddrSub(item){
+  const a = item.address || {};
+  const parts = [];
+  if(a.suburb) parts.push(a.suburb);
+  else if(a.neighbourhood) parts.push(a.neighbourhood);
+  const city = a.city || a.town || a.village || a.municipality;
+  if(city) parts.push(city);
+  return parts.join(', ');
+}
+
+function addrIcon(item){
+  const cls  = (item.class || '').toLowerCase();
+  const type = (item.type  || '').toLowerCase();
+  const name = (item.display_name || '').toLowerCase();
+  if(/mall|shopping|comercial/.test(type) || /mall|shopping/.test(name)) return '🏬';
+  if(/hospital|clinic/.test(type) || /hospital|clínica/.test(name)) return '🏥';
+  if(/school|college|university/.test(type) || /colegio|liceo|universidad|escuela/.test(name)) return '🎓';
+  if(/hotel|hostel/.test(type) || /hotel/.test(name)) return '🏨';
+  if(cls === 'amenity' && /restaurant|cafe|fast_food/.test(type)) return '🍽️';
+  if(/fuel/.test(type)) return '⛽';
+  if(/park|garden/.test(type)) return '🌳';
+  if(/residential|house|flat|apartment/.test(type) || cls === 'building') return '🏠';
+  return '📍';
+}
+
+function selectAddrSug(idx){
+  const item = addrSuggestions[idx];
+  if(!item) return;
+  const a = item.address || {};
+  const road = a.road || item.display_name.split(',')[0].trim();
+  const houseNum = splitAddrNum(document.getElementById('cAddr').value.trim()).num || addrHouseNumber;
+  let main = road + (houseNum ? ' ' + houseNum : '');
+  const sub = buildAddrSub(item);
+  if(sub) main += ', ' + sub.split(',')[0].trim();
+  document.getElementById('cAddr').value = main;
+  hideAddrSug();
+  const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+  const km  = haversineKm(RESTO_LAT, RESTO_LNG, lat, lng);
+  deliveryKm = Math.round(km * 10) / 10;
+  const fee = feeForKm(km);
+  const feeBox = document.getElementById('deliveryFeeBox');
+  if(fee === null){
+    deliveryFee = 0; feeBox.style.color = '#e74c3c';
+    feeBox.innerHTML = `❌ Fuera de zona (${deliveryKm} km) — máximo ${DELIVERY_MAX_KM} km`;
+  } else {
+    deliveryFee = fee; feeBox.style.color = 'var(--teal)';
+    feeBox.innerHTML = `🛵 Envío: <strong>${fmt(fee)}</strong> · ${deliveryKm} km`;
+  }
+  feeBox.style.display = '';
+  updateDeliveryTotal();
+}
+
+function addrSugHover(idx){
+  addrSugIndex = idx;
+  document.querySelectorAll('.addr-sug-item').forEach((el,i)=>{
+    el.classList.toggle('active', i===idx);
+  });
+}
+
+function onAddrKey(e){
+  const items = document.querySelectorAll('.addr-sug-item');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){ e.preventDefault(); addrSugIndex=Math.min(addrSugIndex+1,items.length-1); addrSugHover(addrSugIndex); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); addrSugIndex=Math.max(addrSugIndex-1,0); addrSugHover(addrSugIndex); }
+  else if(e.key==='Enter' && addrSugIndex>=0){ e.preventDefault(); selectAddrSug(addrSugIndex); }
+  else if(e.key==='Escape'){ hideAddrSug(); }
+}
+
+function hideAddrSug(){
+  const box = document.getElementById('addrSuggestions');
+  if(box){ box.style.display='none'; box.innerHTML=''; }
+}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
+
+// ── DELIVERY HELPERS ──────────────────────────────────────────────────────────
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2
+    + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180)
+    * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function feeForKm(km) {
+  for (const t of DELIVERY_TIERS) { if (km <= t.maxKm) return t.price; }
+  return null;
+}
+
+async function calcDeliveryFee(address) {
+  const box = document.getElementById('deliveryFeeBox');
+  if (!address || address.length < 5) { box.style.display='none'; deliveryFee=0; deliveryKm=0; updateDeliveryTotal(); return; }
+  box.innerHTML = '⏳ Calculando distancia...';
+  box.style.display = '';
+  box.style.color = 'var(--muted)';
+  try {
+    const q = encodeURIComponent(address + ', Coquimbo, Chile');
+    const resp = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`, { headers: { 'User-Agent': 'uminikkeibar.cl/1.0' } });
+    const data = await resp.json();
+    if (!data.length) throw new Error('Dirección no encontrada');
+    const lat = parseFloat(data[0].lat);
+    const lng = parseFloat(data[0].lon);
+    const km = haversineKm(RESTO_LAT, RESTO_LNG, lat, lng);
+    deliveryKm = Math.round(km * 10) / 10;
+    const fee = feeForKm(km);
+    if (fee === null) { deliveryFee=0; box.style.color='#e74c3c'; box.innerHTML=`❌ Fuera de zona (${deliveryKm} km) — máximo ${DELIVERY_MAX_KM} km`; updateDeliveryTotal(); return; }
+    deliveryFee = fee; box.style.color='var(--teal)';
+    box.innerHTML = `🛵 Envío: <strong>${fmt(fee)}</strong> · ${deliveryKm} km`;
+    updateDeliveryTotal();
+  } catch(e) {
+    box.style.color='var(--muted)'; box.innerHTML='⚠️ No se pudo calcular — revisa la dirección';
+    deliveryFee=0; deliveryKm=0; updateDeliveryTotal();
+  }
+}
+
+function updateDeliveryTotal() {
+  const totalEl = document.getElementById('cartTotal');
+  if (totalEl) totalEl.textContent = fmt(cartTotal());
+  const feeLineEl = document.getElementById('checkoutDeliveryFee');
+  if (feeLineEl) {
+    if (entregaMode === 'delivery' && deliveryFee > 0) {
+      feeLineEl.style.display = '';
+      feeLineEl.querySelector('.fee-val').textContent = fmt(deliveryFee);
+    } else { feeLineEl.style.display = 'none'; }
+  }
+  const checkTotalEl = document.getElementById('checkoutTotalVal');
+  if (checkTotalEl) checkTotalEl.textContent = fmt(cartTotal());
+}
+
+function addToCart(name, price, emoji, category){
+  const existing = cart.find(r => r.n === name);
+  if(existing){ existing.qty++; }
+  else { cart.push({n:name, p:price, e:emoji, qty:1, cat:category||'Fuertes'}); }
+  renderCart(); updateBadge();
+  const fab = document.querySelector('.cart-fab');
+  fab.style.transform = 'scale(1.25)';
+  setTimeout(()=>{ fab.style.transform = ''; }, 200);
+}
+
+function removeFromCart(name){ cart = cart.filter(r => r.n !== name); renderCart(); updateBadge(); }
+
+function changeQty(name, delta){
+  const item = cart.find(r => r.n === name);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) removeFromCart(name);
+  else { renderCart(); updateBadge(); }
+}
+
+function cartTotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0); }
+function cartSubtotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0); }
+
+function updateBadge(){
+  const total = cart.reduce((s,r) => s + r.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = total;
+  badge.classList.toggle('hidden', total === 0);
+}
+
+function renderCart(){
+  const el = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  const totalEl = document.getElementById('cartTotal');
+  if(cart.length === 0){
+    el.innerHTML = `<div class="cart-empty"><span>🍽️</span><p>Tu pedido está vacío.<br/>Agrega platos desde el menú.</p></div>`;
+    footer.style.display = 'none'; return;
+  }
+  footer.style.display = '';
+  totalEl.textContent = fmt(cartTotal());
+  el.innerHTML = '';
+  cart.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'cart-row';
+    const thumbUrl = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[item.n]) ? SPLEAT_PHOTOS[item.n] : null;
+    const thumbHtml = thumbUrl
+      ? `<img class="cart-row-thumb" src="${thumbUrl}" alt="${item.n}" onerror="this.outerHTML='<span class=\\'cart-row-emoji\\'>${item.e}</span>'">`
+      : `<span class="cart-row-emoji">${item.e}</span>`;
+    row.innerHTML = `
+      ${thumbHtml}
+      <div class="cart-row-info">
+        <div class="cart-row-name">${item.n}</div>
+        <div class="cart-row-price">${fmt(item.p * item.qty)}</div>
+      </div>
+      <div class="cart-qty">
+        <button class="qty-btn" onclick="changeQty('${item.n.replace(/'/g,"\\'")}', -1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${item.n.replace(/'/g,"\\'")}', 1)">+</button>
+      </div>
+      <button class="cart-row-del" onclick="removeFromCart('${item.n.replace(/'/g,"\\'")}')">🗑</button>`;
+    el.appendChild(row);
+  });
+}
+
+function openCart(){ renderCart(); document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); document.body.style.overflow=''; }
+
+function openCheckout(){
+  if(cart.length === 0) return;
+  closeCart();
+  const sumEl = document.getElementById('checkoutSummary');
+  let html = '<div class="checkout-summary-title">Resumen de tu pedido</div>';
+  cart.forEach(r => { html += `<div class="checkout-summary-item"><span>${r.e} ${r.n} ×${r.qty}</span><span>${fmt(r.p*r.qty)}</span></div>`; });
+  if(entregaMode === 'delivery' && deliveryFee > 0){
+    html += `<div class="checkout-summary-item" id="checkoutDeliveryFee"><span>🛵 Envío (${deliveryKm} km)</span><span class="fee-val">${fmt(deliveryFee)}</span></div>`;
+  } else {
+    html += `<div class="checkout-summary-item" id="checkoutDeliveryFee" style="display:none"><span>🛵 Envío</span><span class="fee-val"></span></div>`;
+  }
+  html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
+  sumEl.innerHTML = html;
+  document.getElementById('checkoutModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout(){ document.getElementById('checkoutModal').classList.remove('open'); document.body.style.overflow=''; }
+
+function selectEntrega(mode){
+  entregaMode = mode;
+  document.querySelectorAll('[id^="opt-"]').forEach(el => el.classList.remove('selected'));
+  document.getElementById('opt-'+mode).classList.add('selected');
+  document.getElementById('fieldAddr').style.display = mode === 'delivery' ? '' : 'none';
+  if(mode !== 'delivery'){ deliveryFee=0; deliveryKm=0; document.getElementById('deliveryFeeBox').style.display='none'; }
+  else { const addr = document.getElementById('cAddr').value.trim(); if(addr) calcDeliveryFee(addr); }
+  updateDeliveryTotal();
+}
+
+function selectPago(mode){
+  pagoMode = mode;
+  document.querySelectorAll('[id^="pay-"]').forEach(el => el.classList.remove('selected'));
+  document.getElementById('pay-'+mode).classList.add('selected');
+}
+
+async function sendOrder(){
+  const name  = document.getElementById('cName').value.trim();
+  const phone = document.getElementById('cPhone').value.trim();
+  const addr  = document.getElementById('cAddr').value.trim();
+  const notes = document.getElementById('cNotes').value.trim();
+  if(!name){ alert('Por favor ingresa tu nombre.'); return; }
+  if(!phone){ alert('Por favor ingresa tu teléfono.'); return; }
+  if(entregaMode === 'delivery' && !addr){ alert('Por favor ingresa tu dirección de entrega.'); return; }
+  if(entregaMode === 'delivery' && deliveryKm > DELIVERY_MAX_KM){ alert(`Lo sentimos, tu dirección está fuera de nuestra zona de delivery (${deliveryKm} km). Máximo ${DELIVERY_MAX_KM} km.`); return; }
+  const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
+  const pagoLabel = {efectivo:'Efectivo', transferencia:'Transferencia', tarjeta:'Tarjeta'}[pagoMode];
+  const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
+  await sendToSpleat(name, phone, addr, notes);
+  let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n*Detalle:*\n`;
+  cart.forEach(r => { lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`; });
+  const sub = cartSubtotal();
+  if(entregaMode === 'delivery' && deliveryFee > 0){ lines += `\nSubtotal: ${fmt(sub)}\nEnvío (${deliveryKm} km): ${fmt(deliveryFee)}\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  lines += `*Cliente:* ${name}\n*Tel:* ${phone}\n*Entrega:* ${entregaLabel}\n`;
+  if(entregaMode === 'delivery'){ lines += `*Dirección:* ${addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(addr+', Coquimbo, Chile')}\n`; }
+  lines += `*Pago:* ${pagoLabel}\n`;
+  if(notes) lines += `*Notas:* ${notes}\n`;
+  lines += `\nPedido a las ${now}`;
+  window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(lines), '_blank');
+  cart=[]; renderCart(); updateBadge(); closeCheckout();
+}
+
+// ── Firestore REST ────────────────────────────────────────────────────────────
+function _fsVal(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === 'boolean')  return { booleanValue: v };
+  if (typeof v === 'string')   return { stringValue: v };
+  if (v instanceof Date)       return { timestampValue: v.toISOString() };
+  if (typeof v === 'number') { return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v }; }
+  if (Array.isArray(v))  return { arrayValue: { values: v.map(_fsVal) } };
+  if (typeof v === 'object') { const fields={}; for(const[k,val] of Object.entries(v)){ if(val!==undefined) fields[k]=_fsVal(val); } return { mapValue: { fields } }; }
+  return { stringValue: String(v) };
+}
+function _fsDoc(obj) { const fields={}; for(const[k,v] of Object.entries(obj)){ if(v!==undefined) fields[k]=_fsVal(v); } return { fields }; }
+
+async function sendToSpleat(nombre, telefono, direccion, notas){
+  try {
+    const BASE_FS = 'https://firestore.googleapis.com/v1/projects/rest-app-chile/databases/(default)/documents';
+    const KEY  = 'AIzaSyCTEgmBUftRPXnfYl9yNbh3Js7fR0nySws';
+    const RID  = 'lFwud0mMFsVrrHJlslCrRpEwPsc2';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const rndId = (n=20) => Array.from({length:n}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+    const nowDate = new Date();
+    const isDelivery = entregaMode === 'delivery';
+    const reservationId = rndId();
+    const total = cart.reduce((s,i) => s + i.p * i.qty, 0);
+    const reservation = { restaurant:RID, restaurantId:RID, createdAt:nowDate, status:'active', type:isDelivery?'delivery':'pickup', clientName:nombre, clientPhone:telefono, address:isDelivery?(direccion||''):'', paymentType:pagoMode, notes:notas||'', source:'web', total, tableNumber:'WEB', box:'web' };
+    const r1 = await fetch(`${BASE_FS}/restaurants/${RID}/reservations?documentId=${reservationId}&key=${KEY}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(_fsDoc(reservation)) });
+    if (!r1.ok) throw new Error('reserva '+r1.status);
+    for (const item of cart) {
+      const orderId = rndId();
+      const order = { restaurantId:RID, reservationId, productName:item.n, price:item.p, quantity:item.qty, totalPrice:item.p*item.qty, orderId, source:'web', category:'Web', addedAt:nowDate, createdAt:nowDate, step:'pending' };
+      const r2 = await fetch(`${BASE_FS}/restaurants/${RID}/reservations/${reservationId}/orders?documentId=${orderId}&key=${KEY}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(_fsDoc(order)) });
+      if (!r2.ok) throw new Error('orden '+r2.status);
+    }
+    return true;
+  } catch(e) { console.warn('⚠️ SPLEAT:', e.message); return false; }
+}
+
+// ── SPLEAT DATA ───────────────────────────────────────────────────────────────
+const SPLEAT_PHOTOS = {"Kaisen Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKaisen%20Roll%2Fphotos%2FDSC09825.jpg.jpeg?alt=media","Don Julio Reposado Botella":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FDon%20Julio%20Reposado%20Botella%2Fphotos%2FScreenshot2023-02-28at11.07.56AM.jpg.jpeg?alt=media","St germain Spritz":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSt%20germain%20Spritz%2Fphotos%2F42238050c852-botella-face-ok.jpg.webp.jpeg?alt=media","Ushio Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUshio%20Roll%2Fphotos%2FDSC09816%20(1).jpg.jpeg?alt=media","Frangelico":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FFrangelico%2Fphotos%2Ffrangelico.jpg.jpeg?alt=media","Kalua":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKalua%2Fphotos%2Fingredient_kahlua_1x1_5199efa65cf3c02e71294f7ad49be9aa.jpg.jpeg?alt=media","Ovalle 40 +bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOvalle%2040%20%2Bbebida%2Fphotos%2FDSC09834.jpg.jpeg?alt=media","Norterra transparente 40 + bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNorterra%20transparente%2040%20%2B%20bebida%2Fphotos%2F8646881.jpg.jpeg?alt=media","Nori Tacos (4 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNori%20tacos%20(4%20pzs)%2Fphotos%2FDSC01659%20(1).jpg.jpeg?alt=media","Sashimi Pulpo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Pulpo%2Fphotos%2FIMG_0246%20(1).JPG.jpeg?alt=media","Wiluf + bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FWiluf%20%2B%20bebida%2Fphotos%2FPisco-Wiluf.jpg.jpeg?alt=media","Sashimi Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Locos%2Fphotos%2FIMG_0240%20(1).JPG.jpeg?alt=media","Tiraditos Umi":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Umi%2Fphotos%2FTIRADITO%20UMI%20(3).jpg.jpeg?alt=media","Teri roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTeri%20roll%2Fphotos%2FTERI%20ROLL.jpg.jpeg?alt=media","No-rice Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNo-rice%20Roll%2Fphotos%2FNO%20RICE%20(2).JPG.jpeg?alt=media","TNT Atun":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Atun%2Fphotos%2FTNT%20ATUN.jpg.jpeg?alt=media","Acevichado Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAcevichado%20Roll%2Fphotos%2FDSC03723.jpg.jpeg?alt=media","Chirashi ceviche":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChirashi%20ceviche%2Fphotos%2FIMG_7671.jpeg.jpeg?alt=media","Tololo blue+ bebida":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTololo%20blue%2B%20bebida%2Fphotos%2Ftbls.png.jpeg?alt=media","Cremoso de mariscos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCremoso%20de%20mariscos%2Fphotos%2F1779828916634-ec9a3e6b-5407-4033-8f1f-3e9cd1470df9.mp4?alt=media","Edamame al wok":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FEdamame%20al%20wok%2Fphotos%2FDSC01655.jpg.jpeg?alt=media","Ceviroll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviroll%2Fphotos%2FCevi%20roll.jpg.jpeg?alt=media","Tartare Tuna Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Tuna%20Roll%2Fphotos%2FTartar%20tuna.jpg.jpeg?alt=media","TNT Kani":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Kani%2Fphotos%2FTNT%20KANI.jpg.jpeg?alt=media","Udon Saltado":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20Saltado%2Fphotos%2FDSC01280.jpg.jpeg?alt=media","TNT Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTNT%20Locos%2Fphotos%2FTNT%20DE%20TAKO%20(1).jpg.jpeg?alt=media","Tartare Sake Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Sake%20Roll%2Fphotos%2FTartare%20sake.jpg.jpeg?alt=media","Nori Tacos (2 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNori%20Tacos%20(2%20pzs)%2Fphotos%2FDSC01662.jpg.jpeg?alt=media","Nigiris Nissei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Nissei%2Fphotos%2FDSC02454.tif.jpeg?alt=media","Umi Coctel":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUmi%2Fphotos%2FIMG_7841.jpg.jpeg?alt=media","Udon huancaína":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20huancaina%2Fphotos%2FDSC01772%20(1).jpg.jpeg?alt=media","Scallops Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FScallops%20Roll%2Fphotos%2FDSC02524%20(1).jpg.jpeg?alt=media","Nigiris Criollo Ponja":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Criollo%20Ponja%2Fphotos%2FDSC01219.jpg.jpeg?alt=media","Matsuri Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMatsuri%20Roll%2Fphotos%2FIMG_0230.JPG.jpeg?alt=media","Odett Mocktail":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOdett%20Mocktail%2Fphotos%2FWhatsApp%20Image%202026-05-26%20at%2016.08.07.jpeg.jpeg?alt=media","Nigiris Grilled Ostion":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Parmesano%2Fphotos%2FDSC02581.jpg.jpeg?alt=media","Atun al sesamo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAtun%20al%20sesamo%2Fphotos%2F1000398740.jpg.jpeg?alt=media","Lomo saltado":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLomo%20saltado%2Fphotos%2FLOMO%20SALTADO%20(1).jpg.jpeg?alt=media","Tartare Nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Nikkei%2Fphotos%2FTARTARE%20(3).jpg.jpeg?alt=media","Pacific Doré Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPacific%20Dor%C3%A9%20Roll%2Fphotos%2FDSC09819.jpg.jpeg?alt=media","Asado de tira":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAsado%20de%20tira%2Fphotos%2FDSC02461.jpg.jpeg?alt=media","Gyozas Camarón":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20camaron%2Fphotos%2FGYOZAS%20CAMARON%20.jpg.jpeg?alt=media","Nigiris Crispy Rice":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Crispy%20Rice%2Fphotos%2FDSC02615%20(1).jpg.jpeg?alt=media","Creamy Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCreamy%20Roll%2Fphotos%2FCreamy%20Roll1.JPG.jpeg?alt=media","Ceviche Clásico nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20Cl%C3%A1sico%20nikkei%2Fphotos%2FCEVICHE%20CLASICO.jpg.jpeg?alt=media","Chalaquito Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChalaquito%20Roll%2Fphotos%2FDSC01421.jpg.jpeg?alt=media","Torta Opera":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FOpera%2Fphotos%2FDSC00148.jpg.jpeg?alt=media","Kimon mule":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKimon%20mule%2Fphotos%2FDSC00932.jpg.jpeg?alt=media","Pulpo nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPulpo%20nikkei%2Fphotos%2FPULPO%20NIKKEI%20(2).jpg.jpeg?alt=media","Sashimi 12 cortes":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%2012%20cortes%2Fphotos%2FIMG_2885.jpeg.jpeg?alt=media","Torta de Brownie":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTorta%20de%20Brownie%2Fphotos%2F00e184ec-a7af-4aab-bba0-4f3bb6c0f283.jpeg.jpeg?alt=media","Asian Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAsian%20Salad%2Fphotos%2FENSALADA%20ASIAN.jpg.jpeg?alt=media","Ceviche Ishi Nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FIshi%20Nikkei%2Fphotos%2F1000398741.png.jpeg?alt=media","Mar de Mariscos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMar%20de%20Mariscos%2Fphotos%2F881cbe13-d258-4bfc-8d46-a6af1f8d2e5a.jpeg.jpeg?alt=media","Saito Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSaito%20Roll%2Fphotos%2FSAITO%20ROLL%20(2).jpg.jpeg?alt=media","Chicken Katsu":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FChicken%20Katsu%2Fphotos%2FDSC01276.jpg.jpeg?alt=media","Sakana bao (2 pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSakana%20bao%2Fphotos%2FDSC02007.jpg.jpeg?alt=media","Tataki Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTataki%20Salad%2Fphotos%2F1000398828.jpg.jpeg?alt=media","Margarita nikkei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FMargarita%20nikkei%2Fphotos%2FDSC00152.jpg.jpeg?alt=media","Sakana Furai":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSakana%20Furai%2Fphotos%2F1000123138.jpg.jpeg?alt=media","Salmón Garden (6 Pzs)":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSalm%C3%B3n%20Garden%2Fphotos%2F6e0d0224-17c7-46bc-8c20-6af6fbfbec3f.jpeg.jpeg?alt=media","Camaron pasionarios":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCamaron%20pasionarios%2Fphotos%2FCAMARONES%20APASIONARIOS.jpg.jpeg?alt=media","Nigiris Salmon Anticuchero":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Salmon%20anticuchero%2Fphotos%2FDSC02618%20(1).jpg.jpeg?alt=media","Smoke Cheese Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSmoke%20Cheese%20Roll%2Fphotos%2FSMOKE%20CHEESE%20(2).jpg.jpeg?alt=media","Tempura Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTempura%20Roll%2Fphotos%2FDSC01646.jpg.jpeg?alt=media","Nigiri Tako":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiri%20Tako%2Fphotos%2FIMG_3429.jpeg.jpeg?alt=media","Salmon Andino":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSalmon%20Andino%2Fphotos%2FScreenshot_2026-03-09-14-24-54-699_com.miui.gallery.jpg.jpeg?alt=media","Pesca al ajillo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPesca%20al%20ajillo%2Fphotos%2FDSC07353%20(1).jpg.jpeg?alt=media","Tiraditos Nissei":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Nissei%2Fphotos%2FDSC02440.jpg.jpeg?alt=media","Furai Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FFurai%20Roll%20%2Fphotos%2F1000398829.jpg.jpeg?alt=media","Nigiris Extravaganza":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNigiris%20Extravaganza%2Fphotos%2FDSC01274.jpg.jpeg?alt=media","Sashimi Salmon":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Salmon%2Fphotos%2FIMG_0243.JPG.jpeg?alt=media","Rose collins":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FRose%20collins%2Fphotos%2FIMG_7828.jpg.jpeg?alt=media","Lychee Martini ( Clásico )":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLychee%20Maritini%20(%20Cl%C3%A1sico%20)%2Fphotos%2F1000123142.jpg.jpeg?alt=media","Sashimi Atun":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSashimi%20Atun%2Fphotos%2FIMG_0237.JPG.jpeg?alt=media","Karai Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKarai%20Roll%2Fphotos%2Fkarai%20(5).jpg.jpeg?alt=media","TNT Salmon":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTnt%20salmon%2Fphotos%2FTNT%20SALMON.jpg.jpeg?alt=media","Tiraditos Olivo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Olivo%2Fphotos%2FIMG_0238.JPG.jpeg?alt=media","Sake Koi Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSake%20Koi%20Roll%2Fphotos%2FSake%20koi%20(2).jpg.jpeg?alt=media","Udon de camarones":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FUdon%20de%20camarones%2Fphotos%2FUDON%20DE%20CAMARONES%20(1).jpg.jpeg?alt=media","Tiraditos Locos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiraditos%20Locos%2Fphotos%2FTIRADITO%20DE%20LOCOS%20(1).jpg.jpeg?alt=media","Tnt pulpo karami":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTnt%20pulpo%20karami%2Fphotos%2FTNT%20DE%20TAKO%20(1).jpeg.jpeg?alt=media","Gyozas tori":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20tori%2Fphotos%2FGYOZAS%20TORI%20(1).jpg.jpeg?alt=media","PALOMA":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FPALOMA%20%2Fphotos%2FWhatsApp%20Image%202026-05-26%20at%204.18.46%20PM.jpeg.jpeg?alt=media","Gyozas trufadas":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FGyozas%20trufadas%2Fphotos%2FGYOZAS%20TRUFADAS%20(1).jpg.jpeg?alt=media","Ceviche carretillero":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20carretillero%2Fphotos%2FCEVICHE%20CARRETILLERO%20(2).jpg.jpeg?alt=media","Uminari Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKinjo%20Umi%20Roll%2Fphotos%2FWhatsApp%20Image%202025-12-23%20at%2000.28.18.JPG.jpeg?alt=media","Cheesecake de Frutos Rojos":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCheesecake%20de%20Frutos%20Rojos%2Fphotos%2FIMG_4032.jpeg.jpeg?alt=media","Avocado Roll":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAvocado%20Roll%2Fphotos%2FAVOCADO.jpg.jpeg?alt=media","Ceviche Mixto criollo":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FCeviche%20Mixto%20criollo%2Fphotos%2FDSC01690.jpg.jpeg?alt=media","Niku ramen":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FNiku%20ramen%2Fphotos%2FNIKU%20RAMEN.jpg.jpeg?alt=media","Saltado Marino":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FSaltado%20Marino%2Fphotos%2FIMG_4795.jpeg.jpeg?alt=media","Kabayaki Salad":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FKabayaki%20Salad%2Fphotos%2F1000398839.png.jpeg?alt=media","Tiramisú":"https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTiramis%C3%BA%2Fphotos%2F142666b7-d636-432a-a689-98f979bd3ed5.jpeg.jpeg?alt=media"};
+
+const SPLEAT_DESC = {"Ushio Roll":"Mix fresco de lechuga, pepinillo y palta.\nTopping de locos acevichados, chalaquita cítrica y crujiente de camote dorado.","Nori Tacos (4 pzs)":"4 Crujientes láminas de alga nori base de shari, crema de palta, lechuga chiffonade rellenas de atún y salmón con toque de acevichada, furikake y un toque de ciboulette.","Sashimi Pulpo":"Sashimi de tres cortes de pulpo, finamente laminado y presentado con elegancia al estilo tradicional japonés.","Sashimi Locos":"Sashimi de tres cortes de locos frescos, laminados finamente y presentados con elegancia al estilo japonés.","Tiraditos Umi":"Pesca del día con pulpo a la parrilla, crema de ají amarillo ahumado, palta cremosa, chalaquita y encurtido de perla.","Teri roll":"Roll con camarón tempura, queso crema, cubierto con salmon y láminas de limón con salsa Tare y semillas de sésamo.","No-rice Roll":"Roll relleno con atún, queso crema, palta y camaron tempura cubierto con salmon y toque de spicy y quinoa.","TNT Atun":"Atún aderezado con salsa dragón cubierto de Nori, con un toque de ají peruano y ciboulette.","Acevichado Roll":"Roll relleno con camarón empanizado y palta cubierto con alga nori y shari, coronado con laminas de atun, salsa acevichada y toques de furikake.","Chirashi ceviche":"Sashimi mixtos de salmón, atún, pulpo en Shari (arroz) con leche de tigre ahumada de ají peruano, palta, un toque de furikake, chalaquita peruana.","Cremoso de mariscos":"Arroz cremoso al estilo 'arroz con mariscos' peruano, con tope de Katsuobushi japonés.","Edamame al wok":"Vainas de soya salteadas al wok en aceite de sesamo con toque de sal marina.","Ceviroll":"Roll con camarón empanizado, palta y tartar de pescado fresco, cubierto con leche de tigre al estilo Nikkei.","Tartare Tuna Roll":"Roll empanizado relleno de palta y camaron, cubierto con tartar de atún spicy, toque de acevichado y furikake.","TNT Kani":"Jaiba acevichada con toque de spicy y furikake, cubierta en Nori.","Udon Saltado":"Fideos gruesos japoneses con atún y vegetales al wok, salteados en salsa de lomo saltado y parmesano.","TNT Locos":"Locos en salsa con chalaquita de palta, pasta de ají amarillo, un toque acevichado cubierto en Nori.","Tartare Sake Roll":"Roll con camarón y palta, cubierto nori, shari, tartar de salmón con toque spicy y sala taré.","Nori Tacos (2 pzs)":"2 Crujientes láminas de alga nori base de shari, crema de palta, lechuga chiffonade rellenas de atún y salmón con toque de acevichada, furikake y un toque de ciboulette.","Nigiris Nissei":"Nigiri de pesca del día en shari con emulsión de ají amarillo, chalaquita y furikake.","Umi Coctel":"Gin Tanqueray Ten, vermut blanco, maracuyá y limón, equilibrados con syrup de té Earl Grey y sutiles notas de chocolate blanco. Final floral de viola. 🍸","Udon huancaína":"Fideos gruesos japoneses al estilo Nikkei en salsa huancaína y parmesano, con lomo saltado con cilantro y tomates cherry.","Scallops Roll":"Roll con camarón crocante y palta, cubierto con ostiones al estilo batayaki y gratinado con queso parmesano fundido.","Nigiris Criollo Ponja":"Pesca del día con ají criollo y chimichurri nikkei.","Matsuri Roll":"Roll relleno de camarón tempura, palta y kiuri japones, cubierto con tartar de camarón y salsa dragon y un toque de ciboulette.","Odett Mocktail":"Sirope de Té de ceilán, jugo fresco de limón sutil, puré casero de lychee recién hecho y decorado elegantemente con caviares de lychee.","Nigiris Grilled Ostion":"Ostiones gratinados con mantequilla japonesa y ciboulette.","Atun al sesamo":"Atún sellado con costra de sésamo, puré de papa, miel pasionaria y mix de verdes.","Lomo saltado":"Filete de res con cebolla morada y tomate, en salsa de lomo saltado. Acompañado con papas cuñas y arroz shari y ajonjoli.","Tartare Nikkei":"Tartar de atún y salmón aderezado, con base de palta cubierto con un crocante japonés con toques de acevichada y spicy, acompañadas con tostadas den tinta de sepia.","Pacific Doré Roll":"Relleno de queso crema, espárragos y pimientos salteados, con lomo fino en tempura, cubierto con filete de lomo y flameado con salsa parrillera de la casa.","Asado de tira":"Res cocida a baja temperatura por 6 horas, acompañado de puré de papa y salsa nitsuke, choclo crocante, zanahorias y zetas.","Gyozas Camarón":"Gyosas de camarón aderezado fritas y bañadas en salsa acevichada y una decorado con brotes.","Nigiris Crispy Rice":"Shari crocante con tartar de salmón, toque de gochujang y ciboulette.","Creamy Roll":"Roll con camarón tempura, palta y queso crema, cubierto con crema de pizza flameado, salsa tare y aceite de orégano.","Ceviche Clásico nikkei":"Pesca del día marinada en leche de tigre, cebolla morada y puré de camote glaseado acompañado con cancha peruana y choclo.","Chalaquito Roll":"Roll relleno de palta y chicharrón de pescado, coronado con leche de tigre de rocoto ahumada y chalaquita fresca.","Torta Opera":"Capas de bizcocho de almendra con café espresso, crema al café y ganache de chocolate negro.","Kimon mule":"Reinterpretación del clásico mule, shrub de ají amarillo, zumo de limon, syrup simple, ginger beer, espuma de jengibre y ralladura de limon sutil.","Pulpo nikkei":"Pulpo al grill, bañado en salsa anticuchera y acompañado de papas cuñas crocantes.","Asian Salad":"Mix de lechugas con camarones al panko, dressing oriental, crujiente de nori cracker, tomates cherry y parmesano.","Ceviche Ishi Nikkei":"Pesca del día con chicharrón de pescado, salsa acevichada y leche de tigre de ají amarillo ahumada.","Mar de Mariscos":"Selección de camarón, calamar y pulpo salteados y grillados, bañados en salsa de mariscos elaborada con la pesca del día, acompañado de arroz nikkei.","Saito Roll":"Roll relleno con camaron empanizado, palta, flameado con crema de jaibas (cangrejo) y mantequilla parmesana con un toque spicy.","Chicken Katsu":"Pechuga de pollo marinada, empanizada en panko japonés y frita hasta quedar dorada y crujiente. Servidas con papas fritas.","Sakana bao (2 pzs)":"Dos Bao de chicharrón de pescado con salsa tártara y criolla, cebolla morada y mix de lechuga.","Tataki Salad":"Mix de lechugas, palta, tomate cherry y palmito, acompañados de tataki de atún y dressing ponja.","Margarita nikkei":"Refrescante mezcla de Tequila con Cointreau y frutas tropicales de mango y maracuyá, equilibrado con limón y servido bien frío con espuma de sal de mar y wasabi.","Sakana Furai":"Pesca del dia, sazonado y empanizado en panko japonés, frito con una textura dorada y crujiente. Acompañado con arroz o papas fritas.","Salmón Garden (6 Pzs)":"Espiral de salmón fresco envolviendo shari, con topping de puré cremoso de palta, terminado con chalaquita peruana.","Camaron pasionarios":"Camarones bañados en miel de maracuyá con toque de ajo y ajonjoli, picante, en una base de fideos de arroz crujientes.","Nigiris Salmon Anticuchero":"Nigiri de salmón en shari con salsa anticuchera, chimichurri y palta.","Smoke Cheese Roll":"Roll con langostinos tempura, palta, cubierto con queso crema gratinado y chimichurri japonés.","Tempura Roll":"Roll Clasico con camarón tempura crocante, queso crema suave y palta fresca.","Nigiri Tako":"Nigiri de pulpo en shari con mousse de palta, puré de camote, chalaquita y togarashi.","Salmon Andino":"Salmon grillado con pesto criollo andino y quinoa, tope arroz crocante, salsa de ají peruano y chalaquita de la casa.","Ceviche Veggie Nikkei":"Champiñones, palta y palmito en leche de tigre vegetal (amarilla o ponzu).","Pesca al ajillo":"Pesca al grill con mixtura de mariscos, bañada en salsa de ajo, acompañado de arroz nikkei.","Tiraditos Nissei":"Pesca del día con chicharrón de pescado, salsa acevichada y leche de tigre de ají amarillo ahumada.","Furai Roll":"Roll Clasico Tempura relleno con salmon, queso crema, palta.","Nigiris Extravaganza":"Salmón fresco flameado con mantequilla japonesa, oroshi de limón, furikake y ciboulette.","Sashimi Salmon":"Sashimi de tres cortes de salmón fresco, delicadamente laminado y presentado al estilo tradicional japonés.","Rose collins":"Una versión floral del clásico Collins, combinando notas cítricas con delicadas esencias de rosa para un final suave y aromático.","Sashimi Atun":"Sashimi de tres cortes de atún fresco, finamente laminado y presentado con la pureza y delicadeza del estilo japonés.","Karai Roll":"Roll con camarón tempura, palta y cubos de salmón en salsa dragón flambeados con Tare.","TNT Salmon":"Salmón en Nori aderezado con salsa spicy al estilo TNT y un toque de ciboulette y furikake.","Tiraditos Olivo":"Pulpo al olivo con emulsión de palta y chalaquita fresca.","Sake Koi Roll":"Roll con camarón empanizado, queso crema y salmón flameado, finalizado con ralladura de limón.","Udon de camarones":"Fideos gruesos japoneses bañados en reducción de mariscos con ajíes peruanos, y croquetas de arroz.","Tiraditos Locos":"Locos en salsa de leche de tigre amarilla ahumada, chalaquita y palta cremosa.","Tnt pulpo karami":"Pulpo al olivo con chalaquita y emulsión de palta sobre shari crocante.","Gyozas tori":"Rellenas de pollo y col con aromas asiáticos, acompañadas de salsa huancaína.","PALOMA":"Tequila Don Julio Blanco, soda de pomelo, jugo de limón fresco y jarabe syrup. Un cóctel balanceado, cítrico y sumamente refrescante.","Gyozas trufadas":"Rellenas de champiñón, perfumadas con aceite de trufa y un toque de sesamo.","Ceviche carretillero":"Pesca del día con mariscos de temporada, bañados en leche de tigre al rocoto y coronados con chicharrón de pescado, con cancha peruana y choclo.","Uminari Roll":"Relleno de palta, salmón y pulpa de jaiba acevichada.\nCubierto con salmón y corvina flameada, bañado en salsa anticuchera de la casa, con toque de ají ahumado y chalaquita fresca.","Avocado Roll":"Roll con queso crema y camarón tempura, cubierto con palta, semillas de sesamo y salsa taré.","Ceviche Mixto criollo":"Pesca del día, atún, salmón y camarón en leche de tigre clásica acompañado con puré de camote glaseado, choclo tostado y cancha peruana.","Saltado Marino":"Camarón, pulpo, ostiones, champiñones, maíz, brócoli, tomates cherry y cebolla morada saltados, sobre una cama de papas cuña y shari para acompañar.","Kabayaki Salad":"Mix de lechugas con cebolla crocante, pollo teriyaki, tomate y pepino encurtido."};
+
+buildMenu();
+
+// ── REEL FUNCTIONS ────────────────────────────────────────────────────────────
+function playReel(card) {
+  const video    = card.querySelector('.reel-video');
+  const playBtn  = card.querySelector('.reel-play-btn');
+  const soundBtn = card.querySelector('.reel-sound-btn');
+  document.querySelectorAll('.reel-embed-card').forEach(c => {
+    if (c === card) return;
+    const v = c.querySelector('.reel-video');
+    const s = c.querySelector('.reel-sound-btn');
+    const p = c.querySelector('.reel-play-btn');
+    v.muted = true;
+    if(s){ s.classList.remove('visible'); s.classList.add('muted'); s.querySelector('.icon-muted').style.display=''; s.querySelector('.icon-sound').style.display='none'; }
+    if(p) p.classList.remove('hidden');
+  });
+  video.muted = false;
+  playBtn.classList.add('hidden');
+  soundBtn.classList.add('visible');
+  soundBtn.classList.remove('muted');
+  soundBtn.querySelector('.icon-muted').style.display = 'none';
+  soundBtn.querySelector('.icon-sound').style.display = '';
+}
+
+function toggleReelSound(e, btn) {
+  e.stopPropagation();
+  const video = btn.closest('.reel-embed-card').querySelector('.reel-video');
+  const muted = btn.classList.contains('muted');
+  document.querySelectorAll('.reel-sound-btn').forEach(b => {
+    if (b === btn) return;
+    const v = b.closest('.reel-embed-card').querySelector('.reel-video');
+    v.muted = true; b.classList.add('muted');
+    b.querySelector('.icon-muted').style.display=''; b.querySelector('.icon-sound').style.display='none';
+  });
+  video.muted = !muted;
+  btn.classList.toggle('muted', !muted);
+  btn.querySelector('.icon-muted').style.display = muted ? 'none' : '';
+  btn.querySelector('.icon-sound').style.display  = muted ? '' : 'none';
+}
+
+// ── REVIEWS MARQUEE ───────────────────────────────────────────────────────────
+(function(){
+  const track = document.getElementById('revTrack');
+  if(!track) return;
+  const clone = track.innerHTML;
+  track.innerHTML = clone + clone;
+})();

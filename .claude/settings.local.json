@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-WmiObject Win32_VideoController)",
+      "PowerShell(Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Screen]::AllScreens | ForEach-Object { [PSCustomObject]@{ DeviceName = $_.DeviceName; Bounds = $_.Bounds; Primary = $_.Primary; BitsPerPixel = $_.BitsPerPixel; WorkingArea = $_.WorkingArea } } | Format-List)",
+      "PowerShell(Get-CimInstance Win32_StartupCommand)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(Get-Command php, ruby, java -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Process \"C:\\\\Users\\\\hejei\\\\OneDrive\\\\Escritorio\\\\umi-web-main\\\\index.html\")",
+      "WebFetch(domain:www.fontspace.com)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

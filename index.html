@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Umi – La Real Cocina Nikkei · Coquimbo</title>
+<meta name="description" content="Restaurante Umi en Coquimbo. Cocina Nikkei japonesa-peruana. Sushi, ceviches, rolls y más."/>
+<link rel="icon" type="image/png" href="favicon-umi-teal.png"/>
+<link rel="shortcut icon" type="image/png" href="favicon-umi-teal.png"/>
+<link rel="apple-touch-icon" href="favicon-umi-teal.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav>
+  <!-- BARRA SUPERIOR -->
+  <div class="nav-topbar" id="navTopbar">
+    <img class="ntb-iso" src="logo-umi-icon.png" alt="UMI">
+    <a class="ntb-link" href="#nosotros">Nosotros</a>
+    <a class="ntb-link" href="#menu">Menú</a>
+    <a class="ntb-link" href="#contacto">Contacto</a>
+    <a class="nav-wa" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">Pedir ahora</a>
+    <a class="nav-reserva" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">Reservar mesa</a>
+  </div>
+
+  <!-- OLA IZQUIERDA | LOGO CENTRADO | OLA DERECHA -->
+  <div class="nav-top">
+    <div class="nav-wave-left" aria-hidden="true">
+      <svg id="waveLeftSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="waveLeftPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="2.2" stroke-linecap="round" d=""/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">
+      <img id="navLogo" src="logo-umi-word.png" alt="UMI">
+    </div>
+    <div class="nav-wave-right" aria-hidden="true">
+      <svg id="waveRightSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="waveRightPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="2.2" stroke-linecap="round" d=""/>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- OVERLAY -->
+  <div class="mobile-menu-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#nosotros" onclick="closeMobileMenu()">Nosotros</a>
+    <a href="#menu" onclick="closeMobileMenu()">Menú</a>
+    <a href="#experiencia" onclick="closeMobileMenu()">Experiencia</a>
+    <a href="#contacto" onclick="closeMobileMenu()">Delivery</a>
+    <a href="#galeria" onclick="closeMobileMenu()">Galería</a>
+    <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+  </div>
+</nav>
+
+<!-- ═══ SECCIÓN 1: HERO — alineado a la izquierda, referencia exacta ═══ -->
+<section class="hero-sec" id="inicio">
+
+  <!-- Texto hero — izquierda -->
+  <div class="hero-content">
+    <span class="hero-eyebrow">La real cocina</span>
+    <h1 class="hero-title">NIKKEI!</h1>
+    <p class="hero-sub">Fusión Peruana y Japonesa, una experiencia</p>
+    <div class="hero-script-line" style="justify-content:flex-end;padding-right:0;margin-top:.5rem">
+      <span class="hero-script">frente al mar<span style="letter-spacing:-2px"> .</span></span>
+    </div>
+    <div class="hero-btns">
+      <a class="btn-hero-primary" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">
+        PEDIR AHORA
+      </a>
+      <a class="btn-hero-secondary" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">
+        RESERVAR MESA
+      </a>
+    </div>
+  </div>
+
+  <!-- Sello / badge circular derecho -->
+  <div class="hero-badge" aria-hidden="true">
+    <span class="hero-badge-top">COCINA NIKKEI</span>
+    <!-- isotipo pendiente archivo oficial -->
+    <span class="hero-badge-bot">FRENTE AL MAR</span>
+  </div>
+
+  <!-- Separador inferior: bezier suave -->
+  <div class="wave-sep">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--cream)" d="M0,0 L0,62 C180,20 360,90 540,50 C720,10 900,80 1080,45 C1260,12 1380,58 1440,50 L1440,0 L1440,100 L0,100 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 2: CREAM — Historia + Más Pedidos ═══ -->
+<section class="cream-sec" id="nosotros">
+  <div class="cream-inner">
+
+    <!-- Columna izquierda: Nuestra Historia -->
+    <div class="cream-historia">
+      <span class="cream-label">Nuestra Historia</span>
+      <h2 class="cream-title">Un sueño<br/>hecho <em>realidad</em></h2>
+      <p class="cream-desc">UMI nace de un sueño personal, vivir y ofrecer la mejor experiencia culinaria frente al mar de Coquimbo. ¿Porque Nikkei? La cocina japonesa junto con la cocina peruana son las favoritas y consentidas de cada rincón de Chile. Nikkei es la perfecta fusión de ambas, con una combinación de sabores que llegan al corazón. En UMI tenemos la convicción de que aunque la perfección no existe, cada día debemos ser un poco mejor que el anterior.</p>
+      <a class="cream-link" href="#contacto">Conoce más →</a>
+    </div>
+
+    <!-- Columna central: foto del restaurante -->
+    <div class="cream-photo">
+      <img src="fondo-umi.jpg" alt="Interior Restaurante UMI" loading="lazy"/>
+    </div>
+
+    <!-- Columna derecha: Los más pedidos -->
+    <div class="cream-pedidos">
+      <span class="cream-label">Los más pedidos</span>
+      <div class="cream-pedidos-grid" id="topDishesGrid">
+        <!-- Relleno dinámico por JS o estático -->
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="sake-roll.jpg" alt="Acevichado Roll" loading="lazy"/></div>
+          <span class="pedido-name">Acevichado Roll</span>
+          <span class="pedido-price">$13.990</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="saito-roll.jpg" alt="Saito Roll" loading="lazy"/></div>
+          <span class="pedido-name">Saito Roll</span>
+          <span class="pedido-price">$14.990</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="udon-saltado.jpg" alt="Lomo Saltado" loading="lazy"/></div>
+          <span class="pedido-name">Lomo Saltado</span>
+          <span class="pedido-price">$18.990</span>
+        </div>
+        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+          <div class="pedido-circle"><img src="tartare-sake.jpg" alt="Tartare Nikkei" loading="lazy"/></div>
+          <span class="pedido-name">Tartare Nikkei</span>
+          <span class="pedido-price">$13.990</span>
+        </div>
+      </div>
+      <a class="cream-menu-link" href="#menu">Ver menú completo →</a>
+    </div>
+
+  </div>
+
+  <!-- Separador inferior cream → teal bezier -->
+  <div class="cream-wave-bottom">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--teal)" d="M0,55 C200,95 400,20 600,60 C800,95 1000,25 1200,55 C1320,72 1400,45 1440,50 L1440,100 L0,100 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 2: MENÚ ═══ -->
+<section class="menu-sec" id="menu">
+
+  <!-- ZONA TEAL: título + círculos + pills -->
+  <div class="menu-sec-inner">
+    <span class="sec-label" style="display:block;text-align:center">Carta completa</span>
+    <h2 class="menu-big-title">
+      <span class="ml-front">M</span><span class="ml-behind">E</span><span class="ml-front">N</span><span class="ml-behind">Ú</span>
+    </h2>
+    <p class="menu-sec-sub">Selecciona una categoría · Precios en CLP</p>
+    <div class="cat-circles" id="mainCats"></div>
+    <div class="subcat-row" id="subcatRow"></div>
+  </div>
+
+  <!-- Wave cut bezier suave -->
+  <div class="menu-wave-cut" aria-hidden="true">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#142751" d="M0,0 L0,40 C200,85 400,10 600,50 C800,88 1000,15 1200,48 C1320,65 1400,38 1440,42 L1440,0 L1440,100 L0,100 Z"/>
+    </svg>
+  </div>
+
+  <!-- ZONA OSCURA: items del menú -->
+  <div class="menu-dark-area">
+    <div style="max-width:1200px;margin:0 auto">
+      <div id="menuContent"></div>
+    </div>
+  </div>
+
+  <!-- Contorno INFERIOR real de la caligrafía UMI — fondo oscuro asciende desde el suelo de las letras -->
+  <div class="menu-bottom-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#142751"
+            d="M0,0 L1440,0 L1440,55 C1420,50 1360,22 1260,40 C1040,75 820,10 600,45 C380,85 180,15 0,55 Z"/>
+    </svg>
+  </div>
+
+</section>
+
+<!-- ═══ SECCIÓN 3: MÁS PEDIDO — tercio medio de fondo-umi.jpg ═══ -->
+<section class="featured-sec" id="top">
+  <div class="featured-content">
+    <span class="featured-label">Los favoritos</span>
+    <h2 class="featured-title">
+      <span class="ml-front">L</span><span class="ml-behind">O</span> <span class="ml-front">M</span><span class="ml-behind">Á</span><span class="ml-front">S</span><br/>
+      <span class="ml-front">P</span><span class="ml-behind">E</span><span class="ml-front">D</span><span class="ml-behind">I</span><span class="ml-front">D</span><span class="ml-behind">O</span>
+    </h2>
+    <p class="featured-sub">Los platos que eligen nuestros clientes una y otra vez</p>
+    <a class="btn-featured" href="#menu">Ver todo el menú</a>
+  </div>
+  <!-- Curva bezier suave → sección videos -->
+  <div class="wave-sep">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#142751" d="M0,90 C160,120 320,75 480,95 C640,115 800,70 960,92 C1120,112 1280,78 1440,95 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ SECCIÓN 4: VIDEOS / REELS ═══ -->
+<section class="videos-sec" id="nosotros">
+  <div class="videos-inner">
+    <div class="videos-left">
+      <span class="videos-left-label">Instagram · @uminikkeibar</span>
+      <h2 class="videos-title">¿CÓMO<br/>LO<br/>HACEMOS?</h2>
+      <p>Mira nuestros reels y descubre los secretos detrás de cada plato.</p>
+      <a class="btn-reels" href="https://www.instagram.com/uminikkeibar" target="_blank">Ver en Instagram</a>
+    </div>
+    <div class="reels-grid">
+      <div class="reel-card reel-embed-card" onclick="playReel(this)">
+        <img class="reel-preview" src="previews/reel1.jpg" alt="Reel 1">
+        <video class="reel-video" src="videos/reel1.mp4" autoplay muted loop playsinline></video>
+        <div class="reel-play-btn"><svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.5)"/><polygon points="10,8 18,12 10,16" fill="white"/></svg></div>
+        <button class="reel-sound-btn muted" onclick="toggleReelSound(event,this)">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="icon-sound" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+      <div class="reel-card reel-embed-card" onclick="playReel(this)">
+        <img class="reel-preview" src="previews/reel2.jpg" alt="Reel 2">
+        <video class="reel-video" src="videos/reel2.mp4" autoplay muted loop playsinline></video>
+        <div class="reel-play-btn"><svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.5)"/><polygon points="10,8 18,12 10,16" fill="white"/></svg></div>
+        <button class="reel-sound-btn muted" onclick="toggleReelSound(event,this)">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="icon-sound" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+      <div class="reel-card reel-embed-card" onclick="playReel(this)">
+        <img class="reel-preview" src="previews/reel3.jpg" alt="Reel 3">
+        <video class="reel-video" src="videos/reel3.mp4" autoplay muted loop playsinline></video>
+        <div class="reel-play-btn"><svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.5)"/><polygon points="10,8 18,12 10,16" fill="white"/></svg></div>
+        <button class="reel-sound-btn muted" onclick="toggleReelSound(event,this)">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="icon-sound" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+      <div class="reel-card reel-embed-card" onclick="playReel(this)">
+        <img class="reel-preview" src="previews/reel4.jpg" alt="Reel 4">
+        <video class="reel-video" src="videos/reel4.mp4" autoplay muted loop playsinline></video>
+        <div class="reel-play-btn"><svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.5)"/><polygon points="10,8 18,12 10,16" fill="white"/></svg></div>
+        <button class="reel-sound-btn muted" onclick="toggleReelSound(event,this)">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="icon-sound" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO + INFO ── integrado antes del footer -->
+<section class="section" id="contacto" style="max-width:1200px;margin:0 auto;padding:4rem 2rem 3rem">
+  <span class="sec-label" style="display:block;text-align:center">Encuéntranos</span>
+  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Contacto</h2>
+  <div class="contact-grid">
+    <div class="contact-card"><span class="cc-icon">📍</span><span class="cc-label">Dirección</span><span class="cc-val">Av. Costanera 5633<br/>Coquimbo, Chile</span></div>
+    <div class="contact-card"><span class="cc-icon">📱</span><span class="cc-label">WhatsApp</span><span class="cc-val"><a href="https://wa.me/56961551728" target="_blank">+56 9 6155 1728</a></span></div>
+    <div class="contact-card"><span class="cc-icon">📸</span><span class="cc-label">Instagram</span><span class="cc-val"><a href="https://www.instagram.com/uminikkeibar" target="_blank">@uminikkeibar</a></span></div>
+    <div class="contact-card"><span class="cc-icon">🕐</span><span class="cc-label">Horario</span><span class="cc-val">Todos los días<br/>12:00 pm – 00:00 am</span></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-sec">
+  <div class="reviews-head">
+    <span class="sec-label">Lo que dicen</span>
+    <h2>Reseñas de nuestros clientes</h2>
+    <p>Experiencias reales de quienes nos han visitado</p>
+    <div class="reviews-badge">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      <span>4.8 · Google Reviews</span>
+    </div>
+  </div>
+  <div class="reviews-track-wrap">
+    <div class="reviews-track" id="revTrack">
+
+      <!-- 16 RESEÑAS REALES GOOGLE -->
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text" id="longRev">Este local se destaca por ofrecer una fusión de la cocina peruana - japonesa. Las instalaciones son realmente hermosas, modernas, creativas e impecables. El ambiente es sumamente agradable, todo el concepto está muy bien pensado. La atención de todo el personal es buena, se esmeran para que los clientes se lleven una gran experiencia. Elegimos éste lugar para la cena de cumpleaños de mi esposo, nos recibieron con un par de shots de pisco maracuyá-mango, 🥭 estaban exquisitos, con el punto licor exacto. Como platos principales pedimos udon huancaína, riquísimo y lo recomiendo 100%. El restaurante obsequió una caipiriña al cumpleañero y yo pedí una limonada mango-maracuyá, ambos cócteles estaban ricos y muy bien presentados. La pasamos genial y sin duda volveremos. Es una parada obligada para todos los que visiten la Av. Costanera de Coquimbo!!! 🦞</div>
+        <button class="rev-more visible" id="longRevBtn" onclick="toggleLongRev()">Ver más ↓</button>
+        <div class="rev-author"><div class="rev-av">MR</div><div class="rev-info"><div class="rev-name">marillerondon01 Rondon</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Comida de excelente calidad, la pesca del día los nigiris y tnt buenísimos. Solo falta agregar la carta de cocteles de autor y postres, atención excelente de juliet y del demás personal. Los felicito por tener todos los productos de calidad. Sin duda volveremos.</div>
+        <div class="rev-author"><div class="rev-av">MS</div><div class="rev-info"><div class="rev-name">Maite Sola pizarro</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Excelente servicio, excelente comida, el sushi de autor increíble. Las muchachas que atienden impecables, muy serviciales. La calidad del ambiente, la decoracion, la cristalería...saltan a la vista. Hermoso, muy recomendable</div>
+        <div class="rev-author"><div class="rev-av">PM</div><div class="rev-info"><div class="rev-name">Paula Martin</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">este restaurant se merece 5 estrellas considero que esta sumamente bien ubicado, la comida super rica y acorde al precio/calidad, el servicio a la mesa super bien la mesera todo el tiempo atenta y el ambiente super ameno y bonito. Volveria a venir sin duda</div>
+        <div class="rev-author"><div class="rev-av">FC</div><div class="rev-info"><div class="rev-name">Flo Castro</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Excelente atención , los platos con una perfecta fusion de japon/peru , algunos me recordaron mi viaje a japon . Sigan asi !</div>
+        <div class="rev-author"><div class="rev-av">JG</div><div class="rev-info"><div class="rev-name">Jose luis Gonzalez G</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Muy rico todo muy buena experiencia, buena atención , recomendado</div>
+        <div class="rev-author"><div class="rev-av">YJ</div><div class="rev-info"><div class="rev-name">Yaritza Jimenez</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Lindo sitio, al llegar nos dieron cortesías para degustar un par de productos, atención buena, la comida con buen sabor, recomendado totalmente, de momento faltan postres en el menú pero me comentaron que iban a ser incluidos pronto.</div>
+        <div class="rev-author"><div class="rev-av">AC</div><div class="rev-info"><div class="rev-name">Alexis Campillay</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Todo muy rico, se nota que hay muy buenos chefs en cocina y eso se refleja en cada plato. La barra no se queda atrás, todo exquisito. Excelente experiencia.</div>
+        <div class="rev-author"><div class="rev-av">CG</div><div class="rev-info"><div class="rev-name">Catalina Guerra</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Los platos te llenan bastante, los meseros son simpáticos y buena onda, la música está a buen nivel. La limonada con jengibre y menta muy rica, el ceviche de carretillero 10/10 al igual que la sopa ramen. Un lugar bastante elegante y que vale la pena ir al menos una vez.</div>
+        <div class="rev-author"><div class="rev-av">PA</div><div class="rev-info"><div class="rev-name">Prigione Angelina</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Comimos muy rico, la atención muy buena, nos recibieron con nuestra mascota sin ningún problema.</div>
+        <div class="rev-author"><div class="rev-av">RC</div><div class="rev-info"><div class="rev-name">rada castro</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">La comida estuvo deliciosa, y la atención maravillosa.</div>
+        <div class="rev-author"><div class="rev-av">BC</div><div class="rev-info"><div class="rev-name">Belén Carmona rojas</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Muy rica la comida, 10/10, recomendada 100 %</div>
+        <div class="rev-author"><div class="rev-av">GE</div><div class="rev-info"><div class="rev-name">Genesid Espinoza</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Muy rico todo, la atención súper rápida, lugar muy bonito. Felipe muy cordial y atento.</div>
+        <div class="rev-author"><div class="rev-av">EG</div><div class="rev-info"><div class="rev-name">Erika Gallardo</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Todo exquisito, sabores distintos, innovador y muy buena atención, volveremos sin duda.</div>
+        <div class="rev-author"><div class="rev-av">IJ</div><div class="rev-info"><div class="rev-name">Ivonne Jorquera</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Más que un restaurant toda una experiencia se nota la calidad en todo desde la comida la frescura de los tragos y la atencion de Felipe un 10 de principio a fin . En resumen un lugar excelente fondo un Pulpo Nikkei espectacular y un udon de camaron 🤌</div>
+        <div class="rev-author"><div class="rev-av">SR</div><div class="rev-info"><div class="rev-name">Sergio Rosque</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+      <div class="rev-card">
+        <div class="rev-stars"><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="rev-text">Me encantó Umi, la comida es exquisita (el sushi es de otro nivel) y los tragos son buenisimos! Volveré sin dudas.</div>
+        <div class="rev-author"><div class="rev-av">MM</div><div class="rev-info"><div class="rev-name">Marilyn Muñoz Opazo</div><div class="rev-src"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/></svg>Google</div></div></div>
+      </div>
+
+    </div><!-- /.reviews-track -->
+  </div><!-- /.reviews-track-wrap -->
+</section>
+
+<footer>
+  <div class="footer-inner">
+
+    <!-- Marca -->
+    <div class="footer-brand">
+      <div class="footer-brand-logos">
+        <!-- isotipo pendiente archivo oficial -->
+        <img src="logo-umi.png" alt="umi" height="36" style="filter:brightness(0) invert(1) opacity(.75)"/>
+      </div>
+      <div class="footer-brand-name">Nikkei Bar · Coquimbo</div>
+    </div>
+
+    <!-- Enlaces rápidos -->
+    <div>
+      <span class="footer-col-title">Enlaces rápidos</span>
+      <ul class="footer-links">
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank">Reservas</a></li>
+        <li><a href="#contacto">Delivery</a></li>
+        <li><a href="#nosotros">Galería</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+
+    <!-- Horarios -->
+    <div>
+      <span class="footer-col-title">Horarios</span>
+      <div class="footer-info">
+        <strong>Lunes a Domingo</strong><br/>
+        13:00 – 00:00 hrs
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div>
+      <span class="footer-col-title">Ubicación</span>
+      <div class="footer-info">
+        Av. Costanera 5633<br/>Coquimbo, Chile<br/>
+        <a href="https://maps.app.goo.gl/Coquimbo" target="_blank" style="color:var(--teal);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;font-weight:700">Ver en mapa →</a>
+      </div>
+    </div>
+
+    <!-- Síguenos -->
+    <div>
+      <span class="footer-col-title">Síguenos</span>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/uminikkeibar" target="_blank" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@uminikkeibar" target="_blank" title="TikTok">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.23 8.23 0 004.83 1.55V6.79a4.84 4.84 0 01-1.06-.1z"/></svg>
+        </a>
+        <a href="https://wa.me/56961551728" target="_blank" title="WhatsApp">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="https://maps.app.goo.gl/Coquimbo" target="_blank" title="Google Maps">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom" style="max-width:1240px;margin:0 auto">
+    <span class="footer-copy">© 2026 UMI Nikkei Bar · Todos los derechos reservados</span>
+  </div>
+</footer>
+
+<!-- CART FAB -->
+<button class="cart-fab" onclick="openCart()" title="Ver pedido">
+  🛒
+  <span class="cart-fab-badge hidden" id="cartBadge">0</span>
+</button>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>🛒 Tu Pedido</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cartTotal">$0</span>
+    </div>
+    <button class="btn-checkout" onclick="openCheckout()">Ir al Pago →</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-modal" id="checkoutModal">
+  <div class="checkout-modal-bg" onclick="closeCheckout()"></div>
+  <div class="checkout-box">
+    <h3>Confirmar Pedido</h3>
+
+    <div class="checkout-summary" id="checkoutSummary"></div>
+
+    <div class="field">
+      <label>Nombre y apellido</label>
+      <input type="text" id="cName" placeholder="Ej: María González"/>
+    </div>
+    <div class="field">
+      <label>Teléfono / WhatsApp</label>
+      <input type="tel" id="cPhone" placeholder="+56 9 XXXX XXXX"/>
+    </div>
+
+    <div class="field">
+      <label>Tipo de entrega</label>
+      <div class="radio-group">
+        <div class="radio-opt selected" id="opt-retiro" onclick="selectEntrega('retiro')">🏪 Retiro en local</div>
+        <div class="radio-opt" id="opt-delivery" onclick="selectEntrega('delivery')">🛵 Delivery</div>
+      </div>
+    </div>
+
+    <div class="field" id="fieldAddr" style="display:none">
+      <label>Dirección de entrega</label>
+      <div class="addr-wrap">
+        <input type="text" id="cAddr" placeholder="Escribe calle, sector o lugar (ej: Mall Plaza)"
+          autocomplete="off"
+          oninput="onAddrInput(this.value)"
+          onkeydown="onAddrKey(event)"
+          onblur="onAddrBlur()"/>
+        <div id="addrSuggestions" class="addr-suggestions" style="display:none"></div>
+      </div>
+      <div id="deliveryFeeBox" style="display:none;margin-top:.5rem;font-size:.88rem;padding:.45rem .7rem;background:var(--bg3);border-radius:.5rem;border:1px solid var(--border2)"></div>
+    </div>
+
+    <div class="field">
+      <label>Forma de pago</label>
+      <div class="radio-group">
+        <div class="radio-opt selected" id="pay-efectivo" onclick="selectPago('efectivo')">💵 Efectivo</div>
+        <div class="radio-opt" id="pay-transferencia" onclick="selectPago('transferencia')">📲 Transferencia</div>
+        <div class="radio-opt" id="pay-tarjeta" onclick="selectPago('tarjeta')">💳 Tarjeta</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>¿Algo más? (opcional)</label>
+      <textarea id="cNotes" placeholder="Alergias, instrucciones especiales..."></textarea>
+    </div>
+
+    <div class="checkout-actions">
+      <button class="btn-back" onclick="closeCheckout()">← Volver</button>
+      <button class="btn-send" onclick="sendOrder()">
+        <svg style="width:18px;height:18px;fill:#fff;vertical-align:middle;margin-right:6px" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar Pedido
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FAB -->
+<a class="fab" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20hacer%20un%20pedido%20🍣" target="_blank" aria-label="Pedir por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
