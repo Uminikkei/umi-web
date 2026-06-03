@@ -836,50 +836,56 @@ footer{
 footer strong{color:var(--teal)}
 
 /* ── FAB ── */
-/* ── SIDE TABS (estilo pestaña cuaderno) ── */
+/* ── SIDE TABS (pestañas cuaderno, solapadas) ── */
 .side-tabs{
   position:fixed;right:0;top:50%;transform:translateY(-50%);
-  z-index:999;display:flex;flex-direction:column;gap:5px;
+  z-index:999;display:flex;flex-direction:column;
 }
 .side-tab{
-  display:flex;align-items:center;gap:11px;
-  padding:0 20px 0 16px;height:56px;width:168px;
-  border-radius:14px 0 0 14px;
-  transition:transform .22s ease, box-shadow .22s;
+  display:flex;align-items:center;gap:12px;
+  padding:0 0 0 18px;height:92px;width:168px;
+  border-radius:16px 0 0 16px;
+  transform:translateX(152px); /* muestra solo 16px del borde */
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
   cursor:pointer;border:none;text-decoration:none;
   white-space:nowrap;position:relative;
-  box-shadow:-3px 3px 12px rgba(0,0,0,.22);
+  box-shadow:-4px 2px 16px rgba(0,0,0,.28);
   font-family:'Inter',sans-serif;
+  margin-top:-22px; /* solapamiento */
 }
-.side-tab:hover{
-  transform:translateX(-7px);
-  box-shadow:-5px 4px 18px rgba(0,0,0,.3);
-}
+.side-tab:first-child{ margin-top:0; }
+/* z-index por defecto: la de arriba tapa a la siguiente */
+.side-tab:nth-child(1){ z-index:4; }
+.side-tab:nth-child(2){ z-index:3; }
+.side-tab:nth-child(3){ z-index:2; }
+.side-tab:nth-child(4){ z-index:1; }
+.side-tab:hover{ transform:translateX(0); z-index:10; }
+
 .side-tab-icon{
   flex-shrink:0;display:flex;align-items:center;justify-content:center;
 }
 .side-tab-label{
-  font-size:.77rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  font-size:.74rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
 }
-/* colores pastel suaves */
-.side-tab--cart  { background:#a8d8d4; }
+
+.side-tab--cart  { background:#b2ddd9; }
 .side-tab--cart  .side-tab-icon svg{ width:20px;height:20px;fill:#1d4e4a; }
 .side-tab--cart  .side-tab-label{ color:#1d4e4a; }
 
-.side-tab--wa    { background:#aaddb8; }
+.side-tab--wa    { background:#b4e0c0; }
 .side-tab--wa    .side-tab-icon svg{ width:20px;height:20px;fill:#1a4a2c; }
 .side-tab--wa    .side-tab-label{ color:#1a4a2c; }
 
-.side-tab--google{ background:#a8c8e8; }
+.side-tab--google{ background:#b4cfe8; }
 .side-tab--google .side-tab-icon svg{ width:20px;height:20px; }
 .side-tab--google .side-tab-label{ color:#1a2e4a; }
 
-.side-tab--ta    { background:#a8d4c0; }
+.side-tab--ta    { background:#b2dcc8; }
 .side-tab--ta    .side-tab-icon svg{ width:20px;height:20px;fill:#1a3c2e; }
 .side-tab--ta    .side-tab-label{ color:#1a3c2e; }
 
 .cart-fab-badge{
-  position:absolute;top:6px;left:28px;
+  position:absolute;top:14px;left:28px;
   background:#e03050;color:#fff;font-size:.6rem;font-weight:700;
   width:18px;height:18px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
