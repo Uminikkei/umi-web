@@ -300,36 +300,25 @@ nav{
   margin:0 auto 2rem;
   line-height:1.7;
 }
-/* layout de símbolos */
-.sig-layout{
-  display:flex;align-items:center;justify-content:center;
-  gap:1.2rem;flex-wrap:wrap;margin-top:.5rem;
-}
-.sig-item{
-  display:flex;flex-direction:column;align-items:center;gap:.6rem;
-}
-/* crop del SVG sprite para cada símbolo
-   SVG 2788x460, escala 0.26 → 725px ancho total, 120px alto */
-.sig-icon{
-  width:130px;height:120px;
-  background:url('umi-significado.svg') no-repeat;
-  background-size:725px 120px;
-  overflow:hidden;
-}
-.sig-icon--1{ background-position:-26px 0; }   /* símbolo 1: viento  x=100-600  */
-.sig-icon--2{ background-position:-221px 0; }  /* símbolo 2: mar     x=850-1350 */
-.sig-icon--3{ background-position:-377px 0; }  /* símbolo 3: espíritu x=1450-1950*/
-.sig-icon--4{ background-position:-572px 0; }  /* símbolo 4: UMI     x=2200-2700*/
-.sig-op{
-  font-family:'Cormorant Garamond',serif;
-  font-size:2.5rem;font-weight:700;
-  color:#0d1e40;line-height:1;align-self:center;
-  margin-bottom:2rem; /* para alinearse con los íconos */
+/* layout significado */
+.sig-layout{ position:relative; max-width:960px; margin:0 auto; }
+.sig-svg{ width:100%; height:auto; display:block; }
+.sig-labels{
+  display:flex; justify-content:space-around;
+  padding:0 4% 0 2%;
+  margin-top:.3rem;
 }
 .sig-word{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;font-weight:600;font-style:italic;
-  color:#0d1e40;letter-spacing:.5px;
+  font-size:1.15rem; font-weight:600; font-style:italic;
+  color:#0d1e40; letter-spacing:.5px;
+  flex:1; text-align:center;
+}
+.sig-op{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem; font-weight:700;
+  color:#0d1e40; flex:0 0 auto;
+  align-self:center; padding:0 .3rem;
 }
 
 .cream-sec{
