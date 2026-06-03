@@ -122,15 +122,36 @@ function toggleLongRev(){
 }
 
 function buildMenu(){
-  const IC = (d) => `<svg width="64" height="64" viewBox="0 0 48 48" fill="none" stroke="rgba(13,30,64,0.85)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
+  // Estilo geoglifo peruano: líneas angulares, pasos rectos, sin curvas
+  const IC = (d) => `<svg width="64" height="64" viewBox="0 0 48 48" fill="none" stroke="rgba(13,30,64,0.9)" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
   const MAIN = {
-    'Sushi':     { e: IC(`<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="3" fill="rgba(13,30,64,0.85)" stroke="none"/><path d="M8 21 Q16 13 24 15 Q32 13 40 21" stroke-width="2"/>`), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    'Ceviches':  { e: IC(`<path d="M7 24 Q11 12 24 10 Q37 12 41 24 Q37 36 24 38 Q11 36 7 24Z"/><circle cx="34" cy="20" r="2.5" fill="rgba(13,30,64,0.85)" stroke="none"/><path d="M5 20 L9 24 L5 28"/><path d="M16 24 Q18 20 22 22 Q24 18 28 20 Q30 24 28 27"/>`), cats:['Ceviches'], ring:'Ceviches' },
-    'Tiraditos': { e: IC(`<path d="M10 38 Q14 28 24 24 Q34 28 38 38"/><path d="M12 34 Q16 22 24 18 Q32 22 36 34"/><path d="M14 30 Q18 16 24 12 Q30 16 34 30"/><path d="M6 42 L42 42" stroke-width="1.5"/>`), cats:['Tiraditos'], ring:'Tiraditos' },
-    'Ensaladas': { e: IC(`<path d="M10 38 Q10 26 24 20 Q38 26 38 38 L10 38Z"/><path d="M14 20 Q16 12 22 10 Q28 8 30 14"/><path d="M24 20 L24 10"/><path d="M18 16 Q22 10 28 12 Q30 16 26 20"/><path d="M7 42 L41 42" stroke-width="1.5"/>`), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC(`<path d="M24 42 Q10 36 12 22 Q13 14 20 18 Q17 8 24 6 Q28 12 25 19 Q32 12 34 21 Q38 32 24 42Z"/><path d="M20 34 Q18 28 22 26 Q21 30 24 32 Q27 28 26 24 Q30 28 28 34" stroke-width="1.5" stroke="rgba(13,30,64,0.5)"/>`), cats:['Fuertes'], ring:'Del Fuego' },
-    'Postres':   { e: IC(`<path d="M10 38 Q10 28 24 24 Q38 28 38 38 L10 38Z"/><path d="M16 24 Q18 14 24 12 Q30 14 32 24"/><path d="M24 12 L24 8"/><path d="M20 10 Q24 6 28 10"/><path d="M7 42 L41 42" stroke-width="1.5"/>`), cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC(`<path d="M15 10 L11 42 L37 42 L33 10Z"/><path d="M13 22 L35 22"/><path d="M27 10 L27 5 Q33 5 33 8 Q33 10 27 10" stroke-width="1.8"/><circle cx="22" cy="32" r="2" fill="rgba(13,30,64,0.3)" stroke="none"/>`), cats:['Bebidas'], ring:'Bebidas' }
+    // SUSHI — pez geométrico Nazca visto de lado
+    'Sushi':     { e: IC(`<path d="M6,24 L6,16 L10,12 L38,12 L42,16 L42,24 L38,32 L10,32 Z"/>
+      <path d="M6,20 L2,16 L2,20 M6,28 L2,28 L2,32"/>
+      <rect x="30" y="16" width="5" height="5"/>
+      <path d="M14,18 L18,18 L18,22 L14,22 M20,16 L24,16 L24,20 L20,20"/>
+      <path d="M14,26 L22,26 L22,30 L14,30"/>`), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    // CEVICHES — limón/cítrico estilo geoglifo
+    'Ceviches':  { e: IC(`<rect x="8" y="8" width="32" height="32"/>
+      <path d="M8,8 L24,24 L40,8 M8,40 L24,24 L40,40"/>
+      <rect x="18" y="18" width="12" height="12"/>
+      <path d="M24,8 L24,4 M8,24 L4,24 M40,24 L44,24 M24,40 L24,44"/>`), cats:['Ceviches'], ring:'Ceviches' },
+    // TIRADITOS — cuchillo/corte escalonado
+    'Tiraditos': { e: IC(`<path d="M10,38 L10,34 L14,34 L14,30 L18,30 L18,26 L22,26 L22,22 L26,22 L26,18 L30,18 L30,14 L34,14 L34,10 L38,10"/>
+      <path d="M10,42 L42,42 M10,38 L10,42 M38,10 L42,10 L42,42"/>`), cats:['Tiraditos'], ring:'Tiraditos' },
+    // ENSALADAS — espiral escalonada (caracol Nazca)
+    'Ensaladas': { e: IC(`<path d="M24,4 L44,4 L44,44 L4,44 L4,14 L34,14 L34,34 L14,34 L14,24 L24,24 L24,34"/>`), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    // DEL FUEGO — llama escalonada / sol Nazca
+    'Del Fuego': { e: IC(`<path d="M24,44 L16,36 L16,28 L12,28 L12,20 L16,20 L16,16 L20,16 L20,12 L24,8 L28,12 L28,16 L32,16 L32,20 L36,20 L36,28 L32,28 L32,36 Z"/>
+      <path d="M20,44 L20,40 L24,40 L24,44 M28,44 L28,40"/>`), cats:['Fuertes'], ring:'Del Fuego' },
+    // POSTRES — vasija Nazca escalonada
+    'Postres':   { e: IC(`<path d="M16,44 L12,44 L12,36 L8,36 L8,20 L12,20 L12,16 L16,16 L16,12 L32,12 L32,16 L36,16 L36,20 L40,20 L40,36 L36,36 L36,44 L32,44"/>
+      <path d="M20,12 L20,8 L28,8 L28,12"/>
+      <path d="M16,28 L32,28 M16,36 L32,36"/>`), cats:['Postres'], ring:'Postres' },
+    // BEBIDAS — copa escalonada estilo Tiwanaku
+    'Bebidas':   { e: IC(`<path d="M14,44 L14,40 L10,40 L10,36 L18,36 L18,32 L22,32 L22,28 L26,28 L26,32 L30,32 L30,36 L38,36 L38,40 L34,40 L34,44"/>
+      <path d="M18,28 L18,16 L14,16 L14,8 L34,8 L34,16 L30,16 L30,28"/>
+      <path d="M14,44 L34,44"/>`), cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
