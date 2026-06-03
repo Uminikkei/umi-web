@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Fondo oscuro estilo app icon -->
-  <rect width="100" height="100" rx="22" fill="#040709"/>
   <defs>
-    <!-- Convierte los píxeles del logo a color crema #f0ebe0 usando el canal alpha como máscara -->
-    <filter id="to-cream" color-interpolation-filters="sRGB">
-      <feFlood flood-color="#f0ebe0" result="cream"/>
-      <feComposite in="cream" in2="SourceGraphic" operator="in"/>
+    <filter id="to-teal" color-interpolation-filters="sRGB">
+      <feFlood flood-color="#62CAE3" result="teal"/>
+      <feComposite in="teal" in2="SourceGraphic" operator="in"/>
     </filter>
   </defs>
-  <!-- Caligrafía oficial logo-umi.png coloreada en crema sobre fondo oscuro -->
-  <image href="logo-umi.png"
-         x="4" y="22" width="92" height="56"
+  <!-- Isotipo UMI en teal sobre fondo transparente -->
+  <image href="logo-umi-icon.png"
+         x="5" y="5" width="90" height="90"
          preserveAspectRatio="xMidYMid meet"
-         filter="url(#to-cream)"/>
+         filter="url(#to-teal)"/>
 </svg>
