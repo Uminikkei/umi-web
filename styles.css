@@ -604,6 +604,7 @@ footer{
   display:flex;flex-direction:column;align-items:center;gap:.55rem;
   cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1);
   -webkit-tap-highlight-color:transparent;user-select:none;
+  overflow:visible;
 }
 .cat-circ:hover{transform:translateY(-8px) scale(1.06)}
 .cat-circ-wrap{position:relative;width:200px;height:200px;margin:0 -18px;flex-shrink:0;overflow:visible}
@@ -623,7 +624,7 @@ footer{
 /* Círculo interior — encima del anillo de texto */
 .cat-circ-inner{
   position:absolute;
-  inset:-30px;          /* sobresale 30px fuera del círculo de 200px */
+  inset:-70px;
   border-radius:50%;
   background:transparent;
   border:none;
@@ -631,7 +632,8 @@ footer{
   font-size:3rem;
   transition:border-color .3s,box-shadow .3s,background .3s;
   pointer-events:none;
-  z-index:3;             /* encima del texto rotatorio */
+  z-index:3;
+  overflow:visible;
 }
 .cat-circ.on .cat-circ-inner{
   background:transparent;
