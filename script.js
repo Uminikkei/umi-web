@@ -122,16 +122,16 @@ function toggleLongRev(){
 }
 
 function buildMenu(){
-  // Geoglifos dorados individuales — fondo transparente, SVG inline
-  const IC = (f) => `<img src="${f}" style="width:90px;height:90px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
+  // Geoglifos dorados — tamaños normalizados por viewBox de cada SVG
+  const IC = (f, s) => `<img src="${f}" style="width:${s}px;height:${s}px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
   const MAIN = {
-    'Sushi':     { e: IC('icon_sushi.svg'),     cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    'Ceviches':  { e: IC('icon_ceviches.svg'),  cats:['Ceviches'], ring:'Ceviches' },
-    'Tiraditos': { e: IC('icon_tiraditos.svg'), cats:['Tiraditos'], ring:'Tiraditos' },
-    'Ensaladas': { e: IC('icon_ensaladas.svg'), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC('icon_del_fuego.svg'), cats:['Fuertes'], ring:'Del Fuego' },
-    'Postres':   { e: IC('icon_postres.svg'),   cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC('icon_bebidas.svg'),   cats:['Bebidas'], ring:'Bebidas' }
+    'Sushi':     { e: IC('icon_sushi.svg',    115), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Ceviches':  { e: IC('icon_ceviches.svg', 155), cats:['Ceviches'], ring:'Ceviches' },
+    'Tiraditos': { e: IC('icon_tiraditos.svg',150), cats:['Tiraditos'], ring:'Tiraditos' },
+    'Ensaladas': { e: IC('icon_ensaladas.svg',130), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    'Del Fuego': { e: IC('icon_del_fuego.svg',130), cats:['Fuertes'], ring:'Del Fuego' },
+    'Postres':   { e: IC('icon_postres.svg',  130), cats:['Postres'], ring:'Postres' },
+    'Bebidas':   { e: IC('icon_bebidas.svg',  110), cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
