@@ -122,16 +122,16 @@ function toggleLongRev(){
 }
 
 function buildMenu(){
-  // Geoglifos dorados — sprite SVG oficial, viewBox por ícono (sin textos)
-  const IC = (vb) => `<svg width="64" height="64" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><image href="geoglifos.svg" width="3344" height="1882" x="0" y="0"/></svg>`;
+  // Geoglifos dorados individuales — fondo transparente, SVG inline
+  const IC = (f) => `<img src="${f}" width="56" height="56" style="object-fit:contain;display:block">`;
   const MAIN = {
-    'Sushi':     { e: IC("110 220 620 680"),  cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    'Ceviches':  { e: IC("880 200 860 700"),  cats:['Ceviches'], ring:'Ceviches' },
-    'Tiraditos': { e: IC("1580 200 960 700"), cats:['Tiraditos'], ring:'Tiraditos' },
-    'Ensaladas': { e: IC("2540 180 820 720"), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC("380 930 810 760"),  cats:['Fuertes'], ring:'Del Fuego' },
-    'Postres':   { e: IC("1160 930 1100 760"),cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC("2290 930 1080 760"),cats:['Bebidas'], ring:'Bebidas' }
+    'Sushi':     { e: IC('icon_sushi.svg'),     cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Ceviches':  { e: IC('icon_ceviches.svg'),  cats:['Ceviches'], ring:'Ceviches' },
+    'Tiraditos': { e: IC('icon_tiraditos.svg'), cats:['Tiraditos'], ring:'Tiraditos' },
+    'Ensaladas': { e: IC('icon_ensaladas.svg'), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    'Del Fuego': { e: IC('icon_del_fuego.svg'), cats:['Fuertes'], ring:'Del Fuego' },
+    'Postres':   { e: IC('icon_postres.svg'),   cats:['Postres'], ring:'Postres' },
+    'Bebidas':   { e: IC('icon_bebidas.svg'),   cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
