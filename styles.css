@@ -605,8 +605,10 @@ footer{
   cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1);
   -webkit-tap-highlight-color:transparent;user-select:none;
   overflow:visible;
+  position:relative;z-index:1;
 }
-.cat-circ:hover{transform:translateY(-8px) scale(1.06)}
+.cat-circ:hover{ transform:translateY(-8px) scale(1.06); z-index:4; }
+.cat-circ.on{ z-index:3; }
 .cat-circ-wrap{position:relative;width:200px;height:200px;margin:0 -18px;flex-shrink:0;overflow:visible}
 /* SVG del anillo rotatorio — encima del círculo interior (z-index mayor por orden DOM) */
 .cat-circ-ring{
