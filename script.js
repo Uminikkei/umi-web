@@ -473,9 +473,8 @@ function addToCart(name, price, emoji, category){
   if(existing){ existing.qty++; }
   else { cart.push({n:name, p:price, e:emoji, qty:1, cat:category||'Fuertes'}); }
   renderCart(); updateBadge();
-  const fab = document.querySelector('.cart-fab');
-  fab.style.transform = 'scale(1.25)';
-  setTimeout(()=>{ fab.style.transform = ''; }, 200);
+  const fab = document.querySelector('.side-tab--cart');
+  if(fab){ fab.style.transform = 'scale(1.12)'; setTimeout(()=>{ fab.style.transform = ''; }, 200); }
 }
 
 function removeFromCart(name){ cart = cart.filter(r => r.n !== name); renderCart(); updateBadge(); }
