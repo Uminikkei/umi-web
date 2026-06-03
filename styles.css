@@ -844,7 +844,9 @@ footer strong{color:var(--teal)}
 .side-tabs{
   position:fixed;right:0;top:50%;transform:translateY(-50%);
   z-index:999;display:flex;flex-direction:column;
+  pointer-events:none;
 }
+.side-tab{ pointer-events:auto; }
 .side-tab{
   display:flex;align-items:center;gap:12px;
   padding:0 0 0 18px;height:92px;width:168px;
