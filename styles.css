@@ -301,7 +301,7 @@ nav{
   line-height:1.7;
 }
 /* layout significado */
-.sig-layout{ position:relative; max-width:960px; margin:0 auto; }
+.sig-layout{ position:relative; max-width:800px; margin:1.5rem auto 0; }
 .sig-svg{ width:100%; height:auto; display:block; }
 .sig-labels{
   display:flex; justify-content:space-around;
