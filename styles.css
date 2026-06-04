@@ -301,21 +301,34 @@ nav{
   line-height:1.7;
 }
 /* layout significado */
-.sig-layout{ position:relative; max-width:960px; margin:0 auto; }
+.sig-layout{ max-width:960px; margin:0 auto; }
+.sig-img-wrap{ position:relative; }
 .sig-svg{ width:100%; height:auto; display:block; }
+
+/* operadores + y = sobre la imagen */
+.sig-op{
+  position:absolute;
+  top:50%; transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.4rem,3vw,2.2rem);
+  font-weight:700; color:#0d1e40;
+  pointer-events:none;
+}
+
+/* labels bajo cada símbolo */
 .sig-labels{
-  display:flex;
-  justify-content:space-around;
-  padding:0.3rem 2% 0 2%;
+  position:relative;
+  height:2rem;
+  margin-top:.2rem;
 }
 .sig-word{
+  position:absolute;
+  transform:translateX(-50%);
   font-family:'Cormorant Garamond',serif;
-  font-size:1.2rem; font-weight:700; font-style:italic;
-  color:#0d1e40; letter-spacing:.5px;
-  text-align:center; flex:1;
+  font-size:clamp(.9rem,2vw,1.2rem);
+  font-weight:700; font-style:italic;
+  color:#0d1e40; letter-spacing:.5px; white-space:nowrap;
 }
-/* El 4to elemento (UMI) no tiene label, ocupa espacio igual */
-.sig-labels span:last-child{ flex:1; }
 
 .cream-sec{
   background:var(--cream);
