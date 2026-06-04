@@ -303,19 +303,14 @@ nav{
 /* layout significado */
 .sig-layout{ position:relative; max-width:960px; margin:0 auto; }
 .sig-svg{ width:100%; height:auto; display:block; }
-.sig-labels{
-  display:flex;
-  justify-content:space-around;
-  padding:0.3rem 2% 0 2%;
-}
+.sig-labels{ position:relative; height:1.8rem; }
 .sig-word{
+  position:absolute;
+  transform:translateX(-50%);
   font-family:'Cormorant Garamond',serif;
-  font-size:1.2rem; font-weight:700; font-style:italic;
-  color:#0d1e40; letter-spacing:.5px;
-  text-align:center; flex:1;
+  font-size:1.15rem; font-weight:700; font-style:italic;
+  color:#0d1e40; letter-spacing:.5px; white-space:nowrap;
 }
-/* El 4to elemento (UMI) no tiene label, ocupa espacio igual */
-.sig-labels span:last-child{ flex:1; }
 
 .cream-sec{
   background:var(--cream);
