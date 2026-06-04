@@ -301,8 +301,26 @@ nav{
   line-height:1.7;
 }
 /* layout significado */
-.sig-layout{ position:relative; max-width:800px; margin:1.5rem auto 0; }
-.sig-svg{ width:100%; height:auto; display:block; }
+.sig-layout{
+  display:flex; align-items:center; justify-content:center;
+  gap:.8rem; max-width:860px; margin:1.2rem auto 0;
+  flex-wrap:nowrap;
+}
+.sig-unit{
+  display:flex; flex-direction:column; align-items:center; gap:.5rem;
+  flex:1;
+}
+.sig-icon{ width:100%; height:auto; display:block; max-width:160px; }
+.sig-op{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.4rem,3vw,2rem); font-weight:700;
+  color:#0d1e40; flex-shrink:0;
+}
+.sig-word{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.85rem,1.8vw,1.1rem); font-weight:700; font-style:italic;
+  color:#0d1e40; letter-spacing:.4px; text-align:center;
+}
 .sig-labels{
   display:flex; justify-content:space-around;
   padding:0 4% 0 2%;

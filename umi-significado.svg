@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 2788 370" width="697" height="200">
+  <view id="viento"   viewBox="0 50 720 370"/>
+  <view id="mar"      viewBox="790 50 570 370"/>
+  <view id="espiritu" viewBox="1430 50 530 370"/>
+  <view id="umi"      viewBox="2130 50 658 370"/>
   <g transform="translate(0.000000,800.000000) scale(0.100000,-0.100000)"
 fill="#0d1e40" stroke="none">
 <path d="M16235 6680 c-11 -5 -32 -11 -47 -14 -55 -12 -82 -120 -54 -217 39
