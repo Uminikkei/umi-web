@@ -301,31 +301,22 @@ nav{
   line-height:1.7;
 }
 /* layout significado */
-.sig-layout{
-  display:flex; align-items:center; justify-content:center;
-  gap:.5rem; max-width:900px; margin:1.2rem auto 0;
-}
-.sig-unit{
-  display:flex; flex-direction:column; align-items:center; gap:.4rem;
-  flex:1; min-width:0;
-}
-.sig-icon{
-  display:block;
-  width:100%;
-  height:100px;
-  object-fit:contain;
-  max-width:none;
-}
+.sig-layout{ max-width:900px; margin:1.2rem auto 0; }
+.sig-img-wrap{ position:relative; }
+.sig-svg{ width:100%; height:auto; display:block; }
 .sig-op{
+  position:absolute;
+  transform:translate(-50%,-50%);
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.2rem,2.5vw,1.8rem); font-weight:700;
-  color:#0d1e40; flex-shrink:0; align-self:center;
-  padding-bottom:1.8rem;
+  font-size:clamp(1rem,2.5vw,1.6rem); font-weight:700;
+  color:#0d1e40; pointer-events:none; line-height:1;
 }
+.sig-labels{ position:relative; height:1.8rem; margin-top:.3rem; }
 .sig-word{
+  position:absolute; transform:translateX(-50%);
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(.8rem,1.6vw,1.05rem); font-weight:700; font-style:italic;
-  color:#0d1e40; letter-spacing:.4px; text-align:center;
+  font-size:clamp(.85rem,1.8vw,1.1rem); font-weight:700; font-style:italic;
+  color:#0d1e40; white-space:nowrap;
 }
 .sig-labels{
   display:flex; justify-content:space-around;
