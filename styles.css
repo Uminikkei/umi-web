@@ -947,7 +947,7 @@ footer strong{color:var(--teal)}
   font-size:.74rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
 }
 
-.side-tab--cart  { background:#b2ddd9; }
+.side-tab--cart  { background:#b2ddd9; transform:translateX(0); }
 .side-tab--cart  .side-tab-icon svg{ width:20px;height:20px;fill:#1d4e4a; }
 .side-tab--cart  .side-tab-label{ color:#1d4e4a; }
 
