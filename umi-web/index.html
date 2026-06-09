@@ -1006,6 +1006,8 @@ function addToCart(name, price, emoji, category){
   else { cart.push({n:name, p:price, e:emoji, qty:1, cat:category||'Fuertes'}); }
   renderCart();
   updateBadge();
+  // Abrir carrito automáticamente
+  openCheckout();
   // flash the FAB
   const fab = document.querySelector('.cart-fab');
   fab.style.transform = 'scale(1.25)';
