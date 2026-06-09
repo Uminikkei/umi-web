@@ -971,7 +971,6 @@ footer strong{color:var(--teal)}
   border:2px solid #fff;pointer-events:none;
 }
 .cart-fab-badge.hidden{display:none}
-.cart-fab{ display:none; }
 .fab{ display:none; }
 
 /* ── ITEM ADD BUTTON ── */
