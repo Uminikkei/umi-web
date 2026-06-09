@@ -583,7 +583,12 @@ async function sendOrder(){
       });
       const data = await resp.json();
       if(data.success && data.url){
-        await sendToSpleat(name, phone, addr, notes);
+        // Guardar el pedido para enviarlo a SPLEAT + WhatsApp cuando el cliente vuelva del pago
+        localStorage.setItem('umi_pedido_pagado', JSON.stringify({
+          name, phone, addr, notes,
+          cart: JSON.parse(JSON.stringify(cart)),
+          entregaMode, deliveryFee, deliveryKm, ts: Date.now()
+        }));
         window.location.href = data.url;
         return;
       }
@@ -700,3 +705,67 @@ function toggleReelSound(e, btn) {
   const clone = track.innerHTML;
   track.innerHTML = clone + clone;
 })();
+
+// ── REGRESO DEL PAGO CON TARJETA (Mercado Pago) ────────────────────────────────
+async function handlePaymentReturn(){
+  const params = new URLSearchParams(location.search);
+  const pago = params.get('pago');
+  if(!pago) return;
+  // Limpiar la URL para que un refresh no repita el proceso
+  history.replaceState({}, '', location.pathname);
+
+  if(pago !== 'ok'){
+    if(pago === 'error') alert('El pago no se completó. Tu pedido sigue en el carrito, puedes intentar de nuevo.');
+    return;
+  }
+
+  const raw = localStorage.getItem('umi_pedido_pagado');
+  if(!raw) return;
+  localStorage.removeItem('umi_pedido_pagado');
+  let p; try { p = JSON.parse(raw); } catch(e){ return; }
+
+  // Restaurar estado para reutilizar las funciones existentes
+  cart = p.cart || [];
+  entregaMode = p.entregaMode || 'retiro';
+  deliveryFee = p.deliveryFee || 0;
+  deliveryKm  = p.deliveryKm || 0;
+  pagoMode = 'tarjeta';
+
+  // 1) Registrar el pedido PAGADO en el sistema (SPLEAT/POS)
+  try { await sendToSpleat(p.name, p.phone, p.addr, p.notes); } catch(e){}
+
+  // 2) Armar mensaje de WhatsApp con aviso de pago con tarjeta
+  const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
+  const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
+  let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n✅ *PAGADO CON TARJETA*\n\n*Detalle:*\n`;
+  cart.forEach(r => { lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`; });
+  const sub = cartSubtotal();
+  if(entregaMode === 'delivery' && deliveryFee > 0){ lines += `\nSubtotal: ${fmt(sub)}\nEnvío (${deliveryKm} km): ${fmt(deliveryFee)}\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  lines += `*Cliente:* ${p.name}\n*Tel:* ${p.phone}\n*Entrega:* ${entregaLabel}\n`;
+  if(entregaMode === 'delivery'){ lines += `*Dirección:* ${p.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent((p.addr||'')+', Coquimbo, Chile')}\n`; }
+  lines += `*Pago:* Tarjeta (pagado online) ✅\n`;
+  if(p.notes) lines += `*Notas:* ${p.notes}\n`;
+  lines += `\nPedido a las ${now}`;
+  const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
+
+  // Limpiar carrito visual
+  cart = []; renderCart(); updateBadge();
+
+  // 3) Mostrar pantalla de éxito con botón a WhatsApp
+  const ov = document.createElement('div');
+  ov.id = 'paidOverlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(8,12,16,.93);display:flex;align-items:center;justify-content:center;padding:1.5rem';
+  ov.innerHTML = `
+    <div style="max-width:420px;width:100%;background:#0d1520;border:1px solid #1e2d3d;border-radius:18px;padding:2rem 1.6rem;text-align:center;font-family:'Inter',sans-serif;color:#e8edf2">
+      <div style="font-size:3rem;margin-bottom:.4rem">✅</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-bottom:.5rem;color:#fff">¡Pago recibido!</h2>
+      <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Toca el botón para enviar tu pedido a Umi por WhatsApp y confirmar la preparación.</p>
+      <a href="${waLink}" target="_blank" style="display:block;background:#25D366;color:#fff;font-weight:700;padding:.9rem;border-radius:999px;text-decoration:none;margin-bottom:.8rem">📲 Enviar mi pedido por WhatsApp</a>
+      <button onclick="document.getElementById('paidOverlay').remove()" style="background:none;border:none;color:#6b7d8f;cursor:pointer;font-size:.85rem">Cerrar</button>
+    </div>`;
+  document.body.appendChild(ov);
+  // Intento de abrir WhatsApp automáticamente (algunos navegadores lo bloquean → por eso el botón)
+  try { window.open(waLink, '_blank'); } catch(e){}
+}
+handlePaymentReturn();
