@@ -475,6 +475,9 @@ function updateBadge(){
   const badge = document.getElementById('cartBadge');
   badge.textContent = total;
   badge.classList.toggle('hidden', total === 0);
+  // Abrir la pestaña "Mi Pedido" solo cuando hay productos
+  const cartTab = document.querySelector('.side-tab--cart');
+  if(cartTab) cartTab.classList.toggle('open', total > 0);
 }
 
 function renderCart(){
