@@ -1,12 +1,17 @@
 // Función serverless de Vercel para crear pagos con Mercado Pago.
 // Se ejecuta en el servidor (NO en el navegador), por eso el token está seguro aquí.
 
-const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN ||
-  'APP_USR-4798756519847293-060820-25839129f3280e0df182b99373fcd527-3458884731';
+// El token se lee SOLO desde la variable de entorno de Vercel (MP_ACCESS_TOKEN).
+// Nunca se escribe en el código porque el repositorio es público.
+const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Método no permitido' });
+  }
+
+  if (!ACCESS_TOKEN) {
+    return res.status(500).json({ success: false, error: 'Configuración de pago no disponible' });
   }
 
   try {
