@@ -561,6 +561,38 @@ async function sendOrder(){
   const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
   const pagoLabel = {efectivo:'Efectivo', transferencia:'Transferencia', tarjeta:'Tarjeta'}[pagoMode];
   const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
+
+  // ── Pago con tarjeta → Mercado Pago ──
+  if(pagoMode === 'tarjeta'){
+    const btn = document.querySelector('.btn-send');
+    if(btn){ btn.disabled = true; btn.textContent = 'Procesando pago...'; }
+    try {
+      const resp = await fetch('/api/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          monto: Math.round(cartTotal()),
+          nombre: name,
+          telefono: phone,
+          direccion: entregaMode === 'delivery' ? addr : 'Retiro en local',
+          notas: notes
+        })
+      });
+      const data = await resp.json();
+      if(data.success && data.url){
+        await sendToSpleat(name, phone, addr, notes);
+        window.location.href = data.url;
+        return;
+      }
+      alert('No se pudo procesar el pago: ' + (data.error || 'intenta de nuevo'));
+    } catch(e){
+      alert('Error de conexión al procesar el pago. Revisa tu internet e intenta de nuevo.');
+    } finally {
+      if(btn){ btn.disabled = false; btn.textContent = 'Enviar Pedido'; }
+    }
+    return;
+  }
+
   await sendToSpleat(name, phone, addr, notes);
   let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n*Detalle:*\n`;
   cart.forEach(r => { lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`; });
