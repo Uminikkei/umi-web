@@ -1154,11 +1154,45 @@ async function sendOrder(){
   const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
   const pagoLabel = {efectivo:'Efectivo', transferencia:'Transferencia', tarjeta:'Tarjeta'}[pagoMode];
   const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
+  const totalAmount = cartTotal();
 
-  // ── Intentar enviar directo a SPLEAT via bridge local ──
+  // ── Si el pago es con tarjeta, procesar con Mercado Pago ──
+  if(pagoMode === 'tarjeta'){
+    try {
+      const response = await fetch('/api/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          monto: Math.round(totalAmount),
+          nombre: name,
+          telefono: phone,
+          direccion: entregaMode === 'delivery' ? addr : 'Retiro en local',
+          notas: notes
+        })
+      });
+
+      const data = await response.json();
+
+      if(data.success && data.url){
+        // Redirigir a Mercado Pago
+        window.location.href = data.url;
+        return;
+      } else {
+        alert('Error al procesar el pago: ' + (data.error || 'Por favor intenta de nuevo'));
+        return;
+      }
+    } catch(error){
+      console.error('Error:', error);
+      alert('Error de conexión. Por favor verifica tu internet e intenta de nuevo.');
+      return;
+    }
+  }
+
+  // ── Para efectivo y transferencia: enviar pedido normal ──
+  // Intentar enviar directo a SPLEAT via bridge local
   const spleatOk = await sendToSpleat(name, phone, addr, notes);
 
-  // ── Siempre también avisar por WhatsApp ──
+  // Siempre también avisar por WhatsApp
   let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n`;
   lines += `*Detalle:*\n`;
   cart.forEach(r => {
@@ -1168,9 +1202,9 @@ async function sendOrder(){
   if(entregaMode === 'delivery' && deliveryFee > 0){
     lines += `\nSubtotal: ${fmt(sub)}\n`;
     lines += `Envío (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
-    lines += `*Total: ${fmt(cartTotal())}*\n\n`;
+    lines += `*Total: ${fmt(totalAmount)}*\n\n`;
   } else {
-    lines += `\n*Total: ${fmt(cartTotal())}*\n\n`;
+    lines += `\n*Total: ${fmt(totalAmount)}*\n\n`;
   }
   lines += `*Cliente:* ${name}\n`;
   lines += `*Tel:* ${phone}\n`;
