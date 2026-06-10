@@ -65,27 +65,30 @@ export default async function handler(req, res) {
 // ── Aviso automático a Umi por WhatsApp (CallMeBot) ─────────────────────────────
 async function avisarWhatsApp(order) {
   const APIKEY = process.env.CALLMEBOT_APIKEY;
-  const PHONE  = process.env.CALLMEBOT_PHONE || '+56961551728';
+  const PHONE  = process.env.CALLMEBOT_PHONE || '56961551728';
   if (!APIKEY || !order) return; // si no está configurado, no hace nada
 
   const fmt = (n) => '$' + Math.round(Number(n) || 0).toLocaleString('es-CL');
   const entregaLabel = order.entregaMode === 'delivery' ? 'Delivery' : 'Retiro en local';
   const items = Array.isArray(order.items) ? order.items : [];
 
-  let t = '🍣 *NUEVO PEDIDO - Umi*\n\n✅ *PAGADO CON TARJETA*\n\n*Detalle:*\n';
-  items.forEach((r) => { t += `  ▸ ${r.n} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
+  let t = '*NUEVO PEDIDO - Umi*\n\n*PAGADO CON TARJETA*\n\n*Detalle:*\n';
+  items.forEach((r) => { t += `- ${r.n} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
   if (order.entregaMode === 'delivery' && order.deliveryFee > 0) {
     const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
-    t += `\nSubtotal: ${fmt(sub)}\nEnvío (${order.deliveryKm} km): ${fmt(order.deliveryFee)}\n*Total: ${fmt(order.total)}*\n\n`;
+    t += `\nSubtotal: ${fmt(sub)}\nEnvio (${order.deliveryKm} km): ${fmt(order.deliveryFee)}\n*Total: ${fmt(order.total)}*\n\n`;
   } else {
     t += `\n*Total: ${fmt(order.total)}*\n\n`;
   }
   t += `*Cliente:* ${order.name || ''}\n*Tel:* ${order.phone || ''}\n*Entrega:* ${entregaLabel}\n`;
   if (order.entregaMode === 'delivery' && order.addr) {
-    t += `*Dirección:* ${order.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}\n`;
+    t += `*Direccion:* ${order.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}\n`;
   }
-  t += `*Pago:* Tarjeta (pagado online) ✅\n`;
+  t += `*Pago:* Tarjeta (pagado online)\n`;
   if (order.notes) t += `*Notas:* ${order.notes}\n`;
+
+  // CallMeBot no acepta emojis ni acentos: limpiar a ASCII para que SIEMPRE llegue
+  t = t.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\x00-\x7F]/g, '');
 
   const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(PHONE)}&text=${encodeURIComponent(t)}&apikey=${encodeURIComponent(APIKEY)}`;
   await fetch(url);
