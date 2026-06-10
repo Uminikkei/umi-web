@@ -593,6 +593,20 @@
 </div>
 
 
+<!-- CARD PAYMENT MODAL (Mercado Pago Brick) -->
+<div class="checkout-modal" id="cardModal">
+  <div class="checkout-modal-bg" onclick="closeCardModal()"></div>
+  <div class="checkout-box">
+    <h3>Pagar con tarjeta</h3>
+    <p style="color:var(--muted);margin:.3rem 0 1.2rem">Total a pagar: <strong id="cardAmount" style="color:var(--teal)"></strong></p>
+    <div id="cardBrickContainer"></div>
+    <div class="checkout-actions" style="margin-top:1rem">
+      <button class="btn-back" onclick="closeCardModal()">← Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <script src="script.js"></script>
 </body>
 </html>

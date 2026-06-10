@@ -565,39 +565,10 @@ async function sendOrder(){
   const pagoLabel = {efectivo:'Efectivo', transferencia:'Transferencia', tarjeta:'Tarjeta'}[pagoMode];
   const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
 
-  // ── Pago con tarjeta → Mercado Pago ──
+  // ── Pago con tarjeta → formulario en la misma web (Mercado Pago Brick) ──
   if(pagoMode === 'tarjeta'){
-    const btn = document.querySelector('.btn-send');
-    if(btn){ btn.disabled = true; btn.textContent = 'Procesando pago...'; }
-    try {
-      const resp = await fetch('/api/payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          monto: Math.round(cartTotal()),
-          nombre: name,
-          telefono: phone,
-          direccion: entregaMode === 'delivery' ? addr : 'Retiro en local',
-          notas: notes
-        })
-      });
-      const data = await resp.json();
-      if(data.success && data.url){
-        // Guardar el pedido para enviarlo a SPLEAT + WhatsApp cuando el cliente vuelva del pago
-        localStorage.setItem('umi_pedido_pagado', JSON.stringify({
-          name, phone, addr, notes,
-          cart: JSON.parse(JSON.stringify(cart)),
-          entregaMode, deliveryFee, deliveryKm, ts: Date.now()
-        }));
-        window.location.href = data.url;
-        return;
-      }
-      alert('No se pudo procesar el pago: ' + (data.error || 'intenta de nuevo'));
-    } catch(e){
-      alert('Error de conexión al procesar el pago. Revisa tu internet e intenta de nuevo.');
-    } finally {
-      if(btn){ btn.disabled = false; btn.textContent = 'Enviar Pedido'; }
-    }
+    closeCheckout();
+    openCardPayment({ name, phone, addr, notes, total: Math.round(cartTotal()) });
     return;
   }
 
@@ -706,34 +677,80 @@ function toggleReelSound(e, btn) {
   track.innerHTML = clone + clone;
 })();
 
-// ── REGRESO DEL PAGO CON TARJETA (Mercado Pago) ────────────────────────────────
-async function handlePaymentReturn(){
-  const params = new URLSearchParams(location.search);
-  const pago = params.get('pago');
-  if(!pago) return;
-  // Limpiar la URL para que un refresh no repita el proceso
-  history.replaceState({}, '', location.pathname);
+// ── PAGO CON TARJETA EN LA WEB (Mercado Pago Brick) ───────────────────────────
+const MP_PUBLIC_KEY = 'APP_USR-4f89ddca-0f8e-4dcb-bd6b-59ecb085ee70';
+let pendingCardOrder = null;
+let mpInstance = null;
+let cardBrickController = null;
 
-  if(pago !== 'ok'){
-    if(pago === 'error') alert('El pago no se completó. Tu pedido sigue en el carrito, puedes intentar de nuevo.');
-    return;
-  }
+function openCardPayment(orderData){
+  pendingCardOrder = orderData;
+  const amtEl = document.getElementById('cardAmount');
+  if(amtEl) amtEl.textContent = fmt(orderData.total);
+  document.getElementById('cardModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderCardBrick(orderData.total);
+}
 
-  const raw = localStorage.getItem('umi_pedido_pagado');
-  if(!raw) return;
-  localStorage.removeItem('umi_pedido_pagado');
-  let p; try { p = JSON.parse(raw); } catch(e){ return; }
+function closeCardModal(){
+  document.getElementById('cardModal').classList.remove('open');
+  document.body.style.overflow = '';
+  if(cardBrickController){ try{ cardBrickController.unmount(); }catch(e){} cardBrickController = null; }
+  const c = document.getElementById('cardBrickContainer'); if(c) c.innerHTML = '';
+}
 
-  // Restaurar estado para reutilizar las funciones existentes
-  cart = p.cart || [];
-  entregaMode = p.entregaMode || 'retiro';
-  deliveryFee = p.deliveryFee || 0;
-  deliveryKm  = p.deliveryKm || 0;
-  pagoMode = 'tarjeta';
+async function renderCardBrick(amount){
+  if(typeof MercadoPago === 'undefined'){ alert('No se pudo cargar el sistema de pago. Revisa tu conexión e intenta de nuevo.'); return; }
+  if(!mpInstance){ mpInstance = new MercadoPago(MP_PUBLIC_KEY, { locale:'es-CL' }); }
+  const bricks = mpInstance.bricks();
+  try {
+    cardBrickController = await bricks.create('cardPayment', 'cardBrickContainer', {
+      initialization: { amount: Math.round(amount) },
+      customization: { visual: { style: { theme: 'dark' } } },
+      callbacks: {
+        onReady: () => {},
+        onError: (error) => { console.error('Brick error:', error); },
+        onSubmit: (formData) => {
+          return new Promise((resolve, reject) => {
+            fetch('/api/process-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                token: formData.token,
+                payment_method_id: formData.payment_method_id,
+                issuer_id: formData.issuer_id,
+                installments: formData.installments,
+                payer: formData.payer,
+                monto: Math.round(amount),
+                descripcion: 'Pedido Umi - ' + ((pendingCardOrder && pendingCardOrder.name) || '')
+              })
+            })
+            .then(r => r.json())
+            .then(res => {
+              if(res.status === 'approved'){
+                resolve();
+                onCardApproved();
+              } else if(res.status === 'in_process' || res.status === 'pending'){
+                resolve();
+                alert('Tu pago está siendo procesado. Te confirmaremos apenas se acredite.');
+                closeCardModal();
+              } else {
+                reject();
+                alert('El pago no se aprobó: ' + (res.status_detail || res.error || 'intenta con otra tarjeta'));
+              }
+            })
+            .catch(() => { reject(); alert('Error de conexión al procesar el pago.'); });
+          });
+        }
+      }
+    });
+  } catch(e){ console.error(e); alert('No se pudo cargar el formulario de pago.'); }
+}
 
+async function onCardApproved(){
+  const p = pendingCardOrder || {};
   // 1) Registrar el pedido PAGADO en el sistema (SPLEAT/POS)
   try { await sendToSpleat(p.name, p.phone, p.addr, p.notes); } catch(e){}
-
   // 2) Armar mensaje de WhatsApp con aviso de pago con tarjeta
   const now = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
   const entregaLabel = entregaMode === 'retiro' ? 'Retiro en local' : 'Delivery';
@@ -748,10 +765,9 @@ async function handlePaymentReturn(){
   if(p.notes) lines += `*Notas:* ${p.notes}\n`;
   lines += `\nPedido a las ${now}`;
   const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
-
-  // Limpiar carrito visual
+  // Cerrar modal y limpiar carrito
+  closeCardModal();
   cart = []; renderCart(); updateBadge();
-
   // 3) Mostrar pantalla de éxito con botón a WhatsApp
   const ov = document.createElement('div');
   ov.id = 'paidOverlay';
@@ -765,7 +781,5 @@ async function handlePaymentReturn(){
       <button onclick="document.getElementById('paidOverlay').remove()" style="background:none;border:none;color:#6b7d8f;cursor:pointer;font-size:.85rem">Cerrar</button>
     </div>`;
   document.body.appendChild(ov);
-  // Intento de abrir WhatsApp automáticamente (algunos navegadores lo bloquean → por eso el botón)
   try { window.open(waLink, '_blank'); } catch(e){}
 }
-handlePaymentReturn();
