@@ -70,7 +70,8 @@ async function avisarWhatsApp(order) {
   console.log('[WA] apikey?', !!APIKEY, 'order?', !!order);
   if (!APIKEY || !order) return; // si no está configurado, no hace nada
 
-  const fmt = (n) => '$' + Math.round(Number(n) || 0).toLocaleString('es-CL');
+  // Nota: se usa "$ " con espacio porque CallMeBot interpreta "$3" como un código y borra el "$" + dígito
+  const fmt = (n) => '$ ' + Math.round(Number(n) || 0).toLocaleString('es-CL');
   const entregaLabel = order.entregaMode === 'delivery' ? 'Delivery' : 'Retiro en local';
   const items = Array.isArray(order.items) ? order.items : [];
 
