@@ -45,10 +45,11 @@ export default async function handler(req, res) {
     });
 
     const data = await mpRes.json();
+    console.log('[PAGO] status=', data.status, 'detail=', data.status_detail);
 
     // Si el pago fue aprobado, avisar a Umi por WhatsApp AUTOMÁTICAMENTE (CallMeBot)
     if (data.status === 'approved') {
-      try { await avisarWhatsApp(req.body.order); } catch (e) { /* no romper el pago si falla el aviso */ }
+      try { await avisarWhatsApp(req.body.order); } catch (e) { console.log('[WA] error:', e.message); }
     }
 
     return res.status(200).json({
@@ -66,6 +67,7 @@ export default async function handler(req, res) {
 async function avisarWhatsApp(order) {
   const APIKEY = process.env.CALLMEBOT_APIKEY;
   const PHONE  = process.env.CALLMEBOT_PHONE || '56961551728';
+  console.log('[WA] apikey?', !!APIKEY, 'order?', !!order);
   if (!APIKEY || !order) return; // si no está configurado, no hace nada
 
   const fmt = (n) => '$' + Math.round(Number(n) || 0).toLocaleString('es-CL');
@@ -91,5 +93,7 @@ async function avisarWhatsApp(order) {
   t = t.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\x00-\x7F]/g, '');
 
   const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(PHONE)}&text=${encodeURIComponent(t)}&apikey=${encodeURIComponent(APIKEY)}`;
-  await fetch(url);
+  const r = await fetch(url);
+  const body = await r.text();
+  console.log('[WA] CallMeBot respondió:', body.slice(0, 200));
 }
