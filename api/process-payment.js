@@ -46,6 +46,11 @@ export default async function handler(req, res) {
 
     const data = await mpRes.json();
 
+    // Si el pago fue aprobado, avisar a Umi por WhatsApp AUTOMÁTICAMENTE (CallMeBot)
+    if (data.status === 'approved') {
+      try { await avisarWhatsApp(req.body.order); } catch (e) { /* no romper el pago si falla el aviso */ }
+    }
+
     return res.status(200).json({
       status: data.status,
       status_detail: data.status_detail,
@@ -55,4 +60,33 @@ export default async function handler(req, res) {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+}
+
+// ── Aviso automático a Umi por WhatsApp (CallMeBot) ─────────────────────────────
+async function avisarWhatsApp(order) {
+  const APIKEY = process.env.CALLMEBOT_APIKEY;
+  const PHONE  = process.env.CALLMEBOT_PHONE || '+56961551728';
+  if (!APIKEY || !order) return; // si no está configurado, no hace nada
+
+  const fmt = (n) => '$' + Math.round(Number(n) || 0).toLocaleString('es-CL');
+  const entregaLabel = order.entregaMode === 'delivery' ? 'Delivery' : 'Retiro en local';
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  let t = '🍣 *NUEVO PEDIDO - Umi*\n\n✅ *PAGADO CON TARJETA*\n\n*Detalle:*\n';
+  items.forEach((r) => { t += `  ▸ ${r.n} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
+  if (order.entregaMode === 'delivery' && order.deliveryFee > 0) {
+    const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
+    t += `\nSubtotal: ${fmt(sub)}\nEnvío (${order.deliveryKm} km): ${fmt(order.deliveryFee)}\n*Total: ${fmt(order.total)}*\n\n`;
+  } else {
+    t += `\n*Total: ${fmt(order.total)}*\n\n`;
+  }
+  t += `*Cliente:* ${order.name || ''}\n*Tel:* ${order.phone || ''}\n*Entrega:* ${entregaLabel}\n`;
+  if (order.entregaMode === 'delivery' && order.addr) {
+    t += `*Dirección:* ${order.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}\n`;
+  }
+  t += `*Pago:* Tarjeta (pagado online) ✅\n`;
+  if (order.notes) t += `*Notas:* ${order.notes}\n`;
+
+  const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(PHONE)}&text=${encodeURIComponent(t)}&apikey=${encodeURIComponent(APIKEY)}`;
+  await fetch(url);
 }

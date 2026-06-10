@@ -722,7 +722,18 @@ async function renderCardBrick(amount){
                 installments: formData.installments,
                 payer: formData.payer,
                 monto: Math.round(amount),
-                descripcion: 'Pedido Umi - ' + ((pendingCardOrder && pendingCardOrder.name) || '')
+                descripcion: 'Pedido Umi - ' + ((pendingCardOrder && pendingCardOrder.name) || ''),
+                order: {
+                  name: (pendingCardOrder && pendingCardOrder.name) || '',
+                  phone: (pendingCardOrder && pendingCardOrder.phone) || '',
+                  addr: (pendingCardOrder && pendingCardOrder.addr) || '',
+                  notes: (pendingCardOrder && pendingCardOrder.notes) || '',
+                  entregaMode: entregaMode,
+                  deliveryFee: deliveryFee,
+                  deliveryKm: deliveryKm,
+                  items: cart.map(function(r){ return { n:r.n, qty:r.qty, p:r.p }; }),
+                  total: Math.round(amount)
+                }
               })
             })
             .then(r => r.json())
@@ -768,7 +779,7 @@ async function onCardApproved(){
   // Cerrar modal y limpiar carrito
   closeCardModal();
   cart = []; renderCart(); updateBadge();
-  // 3) Mostrar pantalla de éxito con botón a WhatsApp
+  // 3) Pantalla de éxito (el aviso a Umi se envía AUTOMÁTICO desde el servidor)
   const ov = document.createElement('div');
   ov.id = 'paidOverlay';
   ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(8,12,16,.93);display:flex;align-items:center;justify-content:center;padding:1.5rem';
@@ -776,10 +787,9 @@ async function onCardApproved(){
     <div style="max-width:420px;width:100%;background:#0d1520;border:1px solid #1e2d3d;border-radius:18px;padding:2rem 1.6rem;text-align:center;font-family:'Inter',sans-serif;color:#e8edf2">
       <div style="font-size:3rem;margin-bottom:.4rem">✅</div>
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-bottom:.5rem;color:#fff">¡Pago recibido!</h2>
-      <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Toca el botón para enviar tu pedido a Umi por WhatsApp y confirmar la preparación.</p>
-      <a href="${waLink}" target="_blank" style="display:block;background:#25D366;color:#fff;font-weight:700;padding:.9rem;border-radius:999px;text-decoration:none;margin-bottom:.8rem">📲 Enviar mi pedido por WhatsApp</a>
-      <button onclick="document.getElementById('paidOverlay').remove()" style="background:none;border:none;color:#6b7d8f;cursor:pointer;font-size:.85rem">Cerrar</button>
+      <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Tu pedido ya fue enviado a Umi y está en preparación. ¡Gracias! 🍣</p>
+      <button onclick="document.getElementById('paidOverlay').remove()" style="display:block;width:100%;background:var(--teal);color:#000;font-weight:700;padding:.9rem;border-radius:999px;border:none;cursor:pointer;margin-bottom:.7rem">Listo</button>
+      <a href="${waLink}" target="_blank" style="color:#6b7d8f;font-size:.8rem;text-decoration:underline">¿Algún problema? Avísanos por WhatsApp</a>
     </div>`;
   document.body.appendChild(ov);
-  try { window.open(waLink, '_blank'); } catch(e){}
 }
