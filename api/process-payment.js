@@ -224,7 +224,7 @@ async function avisarEmail(order) {
       'Authorization': `Bearer ${APIKEY}`
     },
     body: JSON.stringify({
-      from: 'Umi Pedidos <onboarding@resend.dev>',
+      from: 'Umi Pedidos <pedidos@uminikkeibar.cl>',
       to: ['umirestaurantcl@gmail.com'],
       subject: `🛎️ Nuevo pedido — ${order.name || 'Cliente'} · ${fmt(order.total)}`,
       html
