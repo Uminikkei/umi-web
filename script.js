@@ -467,8 +467,27 @@ function changeQty(name, delta){
   else { renderCart(); updateBadge(); }
 }
 
-function cartTotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0); }
+let cuponDescuento = 0; // porcentaje de descuento activo (0-100)
+
+function cartTotal(){
+  const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
+  return cuponDescuento > 0 ? Math.round(base * (1 - cuponDescuento / 100)) : base;
+}
 function cartSubtotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0); }
+
+function aplicarCupon(){
+  const val = (document.getElementById('cCupon')?.value || '').trim().toUpperCase();
+  const msg = document.getElementById('cuponMsg');
+  const CUPONES = { 'HOPLIX': 90 };
+  if(CUPONES[val] !== undefined){
+    cuponDescuento = CUPONES[val];
+    if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
+    openCheckout(); // refresca el resumen con el descuento
+  } else {
+    cuponDescuento = 0;
+    if(msg){ msg.textContent = '❌ Cupón inválido'; msg.style.color='#ef4444'; }
+  }
+}
 
 function updateBadge(){
   const total = cart.reduce((s,r) => s + r.qty, 0);
@@ -527,6 +546,10 @@ function openCheckout(){
     html += `<div class="checkout-summary-item" id="checkoutDeliveryFee"><span>🛵 Envío (${deliveryKm} km)</span><span class="fee-val">${fmt(deliveryFee)}</span></div>`;
   } else {
     html += `<div class="checkout-summary-item" id="checkoutDeliveryFee" style="display:none"><span>🛵 Envío</span><span class="fee-val"></span></div>`;
+  }
+  if(cuponDescuento > 0){
+    const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
+    html += `<div class="checkout-summary-item" style="color:#22c55e"><span>🏷️ Descuento (${cuponDescuento}%)</span><span>-${fmt(base - cartTotal())}</span></div>`;
   }
   html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
   sumEl.innerHTML = html;

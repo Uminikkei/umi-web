@@ -583,6 +583,15 @@
       <textarea id="cNotes" placeholder="Alergias, instrucciones especiales..."></textarea>
     </div>
 
+    <div class="field">
+      <label>Cupón de descuento (opcional)</label>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" id="cCupon" placeholder="Ingresa tu cupón" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"/>
+        <button type="button" onclick="aplicarCupon()" style="padding:.5rem 1rem;background:var(--teal);color:#0d1b3e;border:none;border-radius:.5rem;font-weight:bold;cursor:pointer;white-space:nowrap">Aplicar</button>
+      </div>
+      <div id="cuponMsg" style="margin-top:.4rem;font-size:.85rem"></div>
+    </div>
+
     <div class="checkout-actions">
       <button class="btn-back" onclick="closeCheckout()">← Volver</button>
       <button class="btn-send" onclick="sendOrder()">
