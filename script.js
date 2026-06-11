@@ -482,11 +482,28 @@ function aplicarCupon(){
   if(CUPONES[val] !== undefined){
     cuponDescuento = CUPONES[val];
     if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
-    openCheckout(); // refresca el resumen con el descuento
+    // Actualizar solo el resumen sin reabrir el modal
+    refrescarResumenCheckout();
   } else {
     cuponDescuento = 0;
     if(msg){ msg.textContent = '❌ Cupón inválido'; msg.style.color='#ef4444'; }
   }
+}
+
+function refrescarResumenCheckout(){
+  const sumEl = document.getElementById('checkoutSummary');
+  if(!sumEl) return;
+  let html = '<div class="checkout-summary-title">Resumen de tu pedido</div>';
+  cart.forEach(r => { html += `<div class="checkout-summary-item"><span>${r.e} ${r.n} ×${r.qty}</span><span>${fmt(r.p*r.qty)}</span></div>`; });
+  if(entregaMode === 'delivery' && deliveryFee > 0){
+    html += `<div class="checkout-summary-item"><span>🛵 Envío (${deliveryKm} km)</span><span>${fmt(deliveryFee)}</span></div>`;
+  }
+  if(cuponDescuento > 0){
+    const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
+    html += `<div class="checkout-summary-item" style="color:#22c55e"><span>🏷️ Descuento (${cuponDescuento}%)</span><span>-${fmt(base - cartTotal())}</span></div>`;
+  }
+  html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
+  sumEl.innerHTML = html;
 }
 
 function updateBadge(){
