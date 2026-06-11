@@ -558,8 +558,13 @@
 
     <div class="field" id="fieldAddr" style="display:none">
       <label>Dirección de entrega</label>
+      <button type="button" id="btnGps" onclick="pedirUbicacionGPS()"
+        style="width:100%;margin-bottom:.6rem;padding:.65rem;background:#16a34a;color:#fff;border:none;border-radius:.6rem;font-size:.95rem;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem">
+        📍 Compartir mi ubicación exacta (recomendado)
+      </button>
+      <div id="gpsStatus" style="font-size:.82rem;margin-bottom:.4rem;display:none"></div>
       <div class="addr-wrap">
-        <input type="text" id="cAddr" placeholder="Escribe calle, sector o lugar (ej: Mall Plaza)"
+        <input type="text" id="cAddr" placeholder="O escribe la dirección manualmente"
           autocomplete="off"
           oninput="onAddrInput(this.value)"
           onkeydown="onAddrKey(event)"

@@ -86,7 +86,10 @@ async function avisarWhatsApp(order) {
   }
   t += `*Cliente:* ${order.name || ''}\n*Tel:* ${order.phone || ''}\n*Entrega:* ${entregaLabel}\n`;
   if (order.entregaMode === 'delivery' && order.addr) {
-    t += `*Direccion:* ${order.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}\n`;
+    const mapsLink = (order.lat && order.lng)
+      ? `https://maps.google.com/?q=${order.lat},${order.lng}`
+      : `https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}`;
+    t += `*Direccion:* ${order.addr}\n*Maps:* ${mapsLink}\n`;
   }
   t += `*Pago:* Tarjeta (pagado online)\n`;
   if (order.notes) t += `*Notas:* ${order.notes}\n`;
@@ -118,8 +121,11 @@ async function avisarEmail(order) {
       <td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right">${fmt(r.p * r.qty)}</td>
     </tr>`).join('');
 
-  const mapsUrl = order.entregaMode === 'delivery' && order.addr
-    ? `https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}`
+  // Si hay coordenadas GPS exactas las usamos, si no usamos la dirección de texto
+  const mapsUrl = order.entregaMode === 'delivery'
+    ? (order.lat && order.lng
+        ? `https://maps.google.com/?q=${order.lat},${order.lng}`
+        : order.addr ? `https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}` : null)
     : null;
 
   const html = `

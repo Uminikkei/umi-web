@@ -252,6 +252,8 @@ let entregaMode = 'retiro';
 let pagoMode = 'efectivo';
 let deliveryFee = 0;
 let deliveryKm  = 0;
+let gpsLat = null;
+let gpsLng = null;
 let geocodeTimer = null;
 let addrSugIndex = -1;
 let addrSuggestions = [];
@@ -262,6 +264,67 @@ function splitAddrNum(q){
   const m = q.trim().match(/^(.*?)\s+(\d{1,6})\s*$/);
   if(m && m[1].trim().length >= 3) return { text: m[1].trim(), num: m[2] };
   return { text: q.trim(), num: '' };
+}
+
+function pedirUbicacionGPS(){
+  const btn = document.getElementById('btnGps');
+  const status = document.getElementById('gpsStatus');
+  if(!navigator.geolocation){
+    status.style.display='block'; status.style.color='#ef4444';
+    status.textContent='Tu navegador no soporta GPS. Escribe la dirección manualmente.';
+    return;
+  }
+  btn.textContent = '⏳ Obteniendo ubicación...';
+  btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      gpsLat = pos.coords.latitude;
+      gpsLng = pos.coords.longitude;
+      // Geocodificación inversa para mostrar la dirección en el input
+      try {
+        const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${gpsLat}&lon=${gpsLng}&format=json&accept-language=es`);
+        const d = await r.json();
+        const addr = d.display_name || `${gpsLat.toFixed(5)}, ${gpsLng.toFixed(5)}`;
+        const short = [d.address?.road, d.address?.house_number, d.address?.suburb, d.address?.city].filter(Boolean).join(' ');
+        document.getElementById('cAddr').value = short || addr;
+        // Calcular tarifa de delivery con las coords GPS
+        calcDeliveryFromCoords(gpsLat, gpsLng);
+      } catch(e) {
+        document.getElementById('cAddr').value = `${gpsLat.toFixed(5)}, ${gpsLng.toFixed(5)}`;
+      }
+      btn.textContent = '✅ Ubicación GPS capturada';
+      btn.style.background = '#15803d';
+      status.style.display='block'; status.style.color='#22c55e';
+      status.textContent = `📍 GPS: ${gpsLat.toFixed(5)}, ${gpsLng.toFixed(5)}`;
+    },
+    (err) => {
+      btn.textContent = '📍 Compartir mi ubicación exacta (recomendado)';
+      btn.disabled = false;
+      status.style.display='block'; status.style.color='#ef4444';
+      status.textContent = 'No se pudo obtener GPS. Escribe la dirección manualmente.';
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+function calcDeliveryFromCoords(lat, lng){
+  // Coordenadas del restaurante UMI (Av. Costanera 5633, Coquimbo)
+  const UMI_LAT = -29.9583, UMI_LNG = -71.3397;
+  const R = 6371;
+  const dLat = (lat - UMI_LAT) * Math.PI / 180;
+  const dLng = (lng - UMI_LNG) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(UMI_LAT*Math.PI/180)*Math.cos(lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  const km = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  deliveryKm = Math.round(km * 10) / 10;
+  deliveryFee = deliveryKm <= 1 ? 0 : deliveryKm <= 3 ? 1500 : deliveryKm <= 5 ? 2500 : 3500;
+  const box = document.getElementById('deliveryFeeBox');
+  if(box){
+    box.style.display = '';
+    box.innerHTML = deliveryFee === 0
+      ? `✅ Gratis (${deliveryKm} km)`
+      : `🛵 Envío: <strong>${fmt(deliveryFee)}</strong> (${deliveryKm} km)`;
+  }
+  updateDeliveryTotal();
 }
 
 function onAddrInput(val){
@@ -608,7 +671,7 @@ async function sendOrder(){
   // ── Pago con tarjeta → formulario en la misma web (Mercado Pago Brick) ──
   if(pagoMode === 'tarjeta'){
     closeCheckout();
-    openCardPayment({ name, phone, addr, notes, total: Math.round(cartTotal()) });
+    openCardPayment({ name, phone, addr, notes, total: Math.round(cartTotal()), lat: gpsLat, lng: gpsLng });
     return;
   }
 
@@ -768,6 +831,8 @@ async function renderCardBrick(amount){
                   phone: (pendingCardOrder && pendingCardOrder.phone) || '',
                   addr: (pendingCardOrder && pendingCardOrder.addr) || '',
                   notes: (pendingCardOrder && pendingCardOrder.notes) || '',
+                  lat: (pendingCardOrder && pendingCardOrder.lat) || null,
+                  lng: (pendingCardOrder && pendingCardOrder.lng) || null,
                   entregaMode: entregaMode,
                   deliveryFee: deliveryFee,
                   deliveryKm: deliveryKm,
