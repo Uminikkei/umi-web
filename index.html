@@ -620,7 +620,39 @@
   </div>
 </div>
 
+<!-- CHAT ASSISTANT WIDGET -->
+<div id="chatWidget" class="chat-widget">
+  <div class="chat-header">
+    <div class="chat-header-content">
+      <h4>Umi Assistant</h4>
+      <p>Online</p>
+    </div>
+    <button class="chat-close-btn" onclick="closeChatWidget()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot-msg">
+      <p>Hola! 👋 Soy tu asistente de Umi. ¿Cómo puedo ayudarte hoy?</p>
+    </div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="onChatKeyPress(event)">
+    <button onclick="sendChatMessage()" class="chat-send-btn">→</button>
+  </div>
+  <div class="chat-lang-toggle">
+    <button onclick="switchChatLanguage('es')" class="lang-btn active" id="langEs">ES</button>
+    <button onclick="switchChatLanguage('en')" class="lang-btn" id="langEn">EN</button>
+  </div>
+</div>
+
+<!-- CHAT TOGGLE BUTTON -->
+<button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChatWidget()">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+  </svg>
+</button>
+
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 <script src="script.js"></script>
+<script src="chat.js"></script>
 </body>
 </html>
