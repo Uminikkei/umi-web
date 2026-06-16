@@ -77,7 +77,19 @@ function addChatMessage(text, isUser = false) {
 // Convierte **negrita** y saltos de línea en nodos DOM reales (seguro contra XSS)
 function renderFormatted(parent, text) {
   const lines = text.split('\n');
-  lines.forEach((line, lineIndex) => {
+  lines.forEach((rawLine, lineIndex) => {
+    let line = rawLine;
+
+    // Línea de viñeta: empieza con "- " o "* " -> usar "• " con sangría
+    const isBullet = /^\s*[-*]\s+/.test(line);
+    if (isBullet) {
+      line = line.replace(/^\s*[-*]\s+/, '');
+      const bullet = document.createElement('span');
+      bullet.className = 'chat-bullet';
+      bullet.textContent = '• ';
+      parent.appendChild(bullet);
+    }
+
     // Divide la línea por **...** manteniendo los delimitadores
     const parts = line.split(/(\*\*[^*]+\*\*)/g);
     parts.forEach(part => {
