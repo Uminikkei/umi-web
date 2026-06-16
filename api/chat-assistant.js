@@ -78,6 +78,17 @@ ${Object.entries(MENU_DATA).map(([cat, items]) => `${cat}: ${items.join(", ")}`)
 Be concise, friendly and always offer help to place orders.`;
 
 module.exports = async function handler(req, res) {
+  // Diagnóstico temporal: GET devuelve estado del deploy y la env var (sin filtrar la clave)
+  if (req.method === 'GET') {
+    const k = process.env.ANTHROPIC_API_KEY || '';
+    return res.status(200).json({
+      deployMarker: 'diag-v1',
+      hasKey: !!k,
+      keyLength: k.length,
+      keyPrefix: k ? k.slice(0, 7) : null
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
