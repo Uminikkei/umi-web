@@ -57,13 +57,42 @@ function addChatMessage(text, isUser = false) {
   msgDiv.className = `chat-msg ${isUser ? 'user-msg' : 'bot-msg'}`;
 
   const p = document.createElement('p');
-  p.textContent = text;
+
+  if (isUser) {
+    p.textContent = text;
+  } else {
+    // Renderiza formato básico del bot de forma segura (sin innerHTML):
+    // - **negrita**  -> <strong>
+    // - saltos de línea -> <br>
+    renderFormatted(p, text);
+  }
 
   msgDiv.appendChild(p);
   chatMessages.appendChild(msgDiv);
 
   // Auto-scroll to bottom
   chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Convierte **negrita** y saltos de línea en nodos DOM reales (seguro contra XSS)
+function renderFormatted(parent, text) {
+  const lines = text.split('\n');
+  lines.forEach((line, lineIndex) => {
+    // Divide la línea por **...** manteniendo los delimitadores
+    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    parts.forEach(part => {
+      if (/^\*\*[^*]+\*\*$/.test(part)) {
+        const strong = document.createElement('strong');
+        strong.textContent = part.slice(2, -2);
+        parent.appendChild(strong);
+      } else if (part) {
+        parent.appendChild(document.createTextNode(part));
+      }
+    });
+    if (lineIndex < lines.length - 1) {
+      parent.appendChild(document.createElement('br'));
+    }
+  });
 }
 
 function showTypingIndicator() {
