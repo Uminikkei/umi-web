@@ -1,3 +1,4 @@
+// Redeploy trigger: force Vercel to pick up env vars
 const CLAUDE_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 const MENU_DATA = {
