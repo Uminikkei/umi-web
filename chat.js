@@ -123,7 +123,9 @@ async function sendChatMessage() {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get response');
+      const errorData = await response.json();
+      console.error('[CHAT] API Error:', response.status, errorData);
+      throw new Error(errorData.error || `API Error ${response.status}`);
     }
 
     const data = await response.json();
@@ -146,7 +148,7 @@ async function sendChatMessage() {
     };
 
     addChatMessage(errorMessages[chatLanguage], false);
-    console.error('Chat error:', error);
+    console.error('[CHAT] Catch error:', error.message);
   } finally {
     isLoading = false;
 
