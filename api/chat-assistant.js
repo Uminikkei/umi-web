@@ -125,7 +125,7 @@ module.exports = async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-1-20250805',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 500,
         system: systemPrompt,
         messages: messages
@@ -135,7 +135,7 @@ module.exports = async function handler(req, res) {
     if (!response.ok) {
       const errorData = await response.json();
       console.error('[CHAT] Claude API error:', errorData);
-      return res.status(500).json({ error: 'Failed to get response from AI' });
+      return res.status(500).json({ error: 'Failed to get response from AI', detail: errorData });
     }
 
     const data = await response.json();
