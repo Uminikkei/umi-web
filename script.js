@@ -249,7 +249,7 @@ function buildMenu(){
 // ── CART STATE ────────────────────────────────────────────────────────────────
 let cart = [];
 let entregaMode = 'retiro';
-let pagoMode = 'efectivo';
+let pagoMode = 'tarjeta';
 let deliveryFee = 0;
 let deliveryKm  = 0;
 let gpsLat = null;
@@ -928,6 +928,8 @@ async function onCardApproved(){
   if(p.notes) lines += `*Notas:* ${p.notes}\n`;
   lines += `\nPedido a las ${now}`;
   const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
+  // Puntos ganados con esta compra (capturar antes de limpiar el carrito)
+  const ganadosPuntos = (window.umiIsRegistered && window.umiIsRegistered()) ? Math.round(cartSubtotal() * PUNTOS_PORCENTAJE) : 0;
   // Cerrar modal y limpiar carrito
   closeCardModal();
   aplicarPuntosTrasPedido();
@@ -941,6 +943,7 @@ async function onCardApproved(){
       <div style="font-size:3rem;margin-bottom:.4rem">✅</div>
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-bottom:.5rem;color:#fff">¡Pago recibido!</h2>
       <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Tu pedido ya fue enviado a Umi y está en preparación. ¡Gracias! 🍣</p>
+      ${ganadosPuntos > 0 ? `<div style="background:rgba(98,202,227,.12);border:1px solid #62CAE3;border-radius:12px;color:#62CAE3;font-weight:700;font-size:1rem;padding:.85rem;margin-bottom:1.4rem">⭐ Con esta compra acumulaste ${ganadosPuntos.toLocaleString('es-CL')} puntos UMI</div>` : ''}
       <button onclick="document.getElementById('paidOverlay').remove()" style="display:block;width:100%;background:var(--teal);color:#000;font-weight:700;padding:.9rem;border-radius:999px;border:none;cursor:pointer;margin-bottom:.7rem">Listo</button>
       <a href="${waLink}" target="_blank" style="color:#6b7d8f;font-size:.8rem;text-decoration:underline">¿Algún problema? Avísanos por WhatsApp</a>
     </div>`;
