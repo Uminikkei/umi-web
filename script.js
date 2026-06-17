@@ -563,7 +563,7 @@ function puntosGanaPedido(){
 }
 function earnLineHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
-  if(entregaMode === 'delivery') return '🛵 Los pedidos delivery no acumulan puntos';
+  if(entregaMode === 'delivery') return '';
   const g = puntosGanaPedido();
   return g > 0 ? `🎁 Con esta compra acumulas <b>${g.toLocaleString('es-CL')} puntos</b>` : '';
 }
