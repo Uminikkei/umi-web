@@ -24,6 +24,7 @@
     <a class="ntb-link" href="#contacto">Contacto</a>
     <a class="nav-wa" href="#menu">Pedir ahora</a>
     <a class="nav-reserva" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">Reservar mesa</a>
+    <a class="ntb-link" id="ntbAccount" href="#" onclick="umiOpenAuth();return false;">Iniciar sesión</a>
   </div>
 
   <!-- OLA IZQUIERDA | LOGO CENTRADO | OLA DERECHA -->
@@ -53,6 +54,7 @@
     <a href="#contacto" onclick="closeMobileMenu()">Delivery</a>
     <a href="#galeria" onclick="closeMobileMenu()">Galería</a>
     <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+    <a href="#" id="mobAccount" onclick="closeMobileMenu();umiOpenAuth();return false;">Iniciar sesión</a>
   </div>
 </nav>
 
@@ -651,8 +653,53 @@
   </svg>
 </button>
 
+<!-- AUTH / REGISTRO MODAL -->
+<div class="auth-modal" id="authModal">
+  <div class="auth-modal-bg" onclick="umiCloseAuth()"></div>
+  <div class="auth-box">
+    <button class="auth-close" onclick="umiCloseAuth()" aria-label="Cerrar">✕</button>
+
+    <!-- Vista 1: iniciar sesión -->
+    <div id="authViewLogin">
+      <div class="auth-logo">UMI</div>
+      <h3>Únete a UMI</h3>
+      <p class="auth-sub">Regístrate para pedir y acumular puntos en cada compra.</p>
+      <button class="auth-google-btn" id="authGoogleBtn" onclick="umiLoginGoogle()">
+        <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 5.1 29.5 3 24 3 16 3 9.1 7.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 36 26.7 37 24 37c-5.3 0-9.7-2.6-11.3-7l-6.5 5C9.1 42.3 16 47 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.6l6.2 5.2C40.9 36.3 45 30.7 45 24c0-1.2-.1-2.3-.4-3.5z"/></svg>
+        Continuar con Google
+      </button>
+      <div class="auth-err" id="authErr"></div>
+      <p class="auth-mini">Es rápido y gratis. Solo te pediremos tu WhatsApp.</p>
+    </div>
+
+    <!-- Vista 2: completar perfil -->
+    <div id="authViewProfile" style="display:none">
+      <div class="auth-logo">UMI</div>
+      <h3>¡Casi listo! 🎉</h3>
+      <p class="auth-sub">Completa tu registro para activar tus puntos.</p>
+      <div class="auth-field"><label>Nombre</label><input id="authName" type="text" readonly></div>
+      <div class="auth-field"><label>Correo</label><input id="authEmail" type="email" readonly></div>
+      <div class="auth-field"><label>WhatsApp *</label><input id="authWhats" type="tel" inputmode="tel" placeholder="+56 9 1234 5678"></div>
+      <label class="auth-check"><input type="checkbox" id="authPromos" checked> Quiero recibir ofertas y promociones de UMI</label>
+      <label class="auth-check"><input type="checkbox" id="authTerms"> Acepto los términos y condiciones</label>
+      <div class="auth-err" id="authErr2"></div>
+      <button class="auth-submit" id="authSubmitBtn" onclick="umiCompleteProfile()">Completar registro</button>
+    </div>
+
+    <!-- Vista 3: cuenta activa -->
+    <div id="authViewDone" style="display:none">
+      <div class="auth-logo">UMI</div>
+      <h3 id="authDoneTitle">¡Hola!</h3>
+      <p class="auth-sub" id="authDoneSub">Tu cuenta UMI está activa.</p>
+      <div class="auth-points" id="authPoints">0 puntos UMI</div>
+      <button class="auth-logout" onclick="umiLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 <script src="script.js"></script>
 <script src="chat.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
