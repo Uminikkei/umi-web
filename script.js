@@ -747,7 +747,8 @@ async function sendOrder(){
   if(notes) lines += `*Notas:* ${notes}\n`;
   lines += `\nPedido a las ${now}`;
   window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(lines), '_blank');
-  aplicarPuntosTrasPedido();
+  // Nota: los puntos NO se mueven aquí. Solo se suman/canjean cuando un pago
+  // con tarjeta es aprobado (ver onCardApproved), para evitar dar puntos sin pago.
   cart=[]; renderCart(); updateBadge(); closeCheckout();
 }
 
