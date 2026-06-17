@@ -1486,3 +1486,27 @@ footer strong{color:var(--teal)}
   font-family:var(--sans);transition:border-color .2s,color .2s;
 }
 .auth-logout:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ─── PUNTOS UMI ────────────────────────────────────────────────────────────── */
+.ntb-account--pts{
+  color:var(--teal)!important;font-weight:700;
+}
+.checkout-puntos-action{
+  display:flex;flex-direction:column;align-items:stretch;gap:.35rem;
+  margin:.5rem 0 .2rem;
+}
+.puntos-btn-usar{
+  background:rgba(98,202,227,.12);border:1px solid var(--teal);border-radius:10px;
+  color:var(--teal);font-weight:700;font-size:.9rem;padding:.7rem .9rem;cursor:pointer;
+  font-family:var(--sans);transition:background .2s;
+}
+.puntos-btn-usar:hover{background:rgba(98,202,227,.22)}
+.puntos-btn-quitar{
+  background:transparent;border:1px solid var(--border2);border-radius:10px;
+  color:var(--muted);font-size:.82rem;padding:.5rem .9rem;cursor:pointer;
+  font-family:var(--sans);transition:color .2s,border-color .2s;
+}
+.puntos-btn-quitar:hover{color:#e74c3c;border-color:#e74c3c}
+.checkout-puntos-bal{
+  color:var(--muted);font-size:.76rem;text-align:center;
+}

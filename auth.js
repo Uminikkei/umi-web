@@ -70,18 +70,26 @@ function prefillProfile() {
   if ($('authName'))  $('authName').value  = currentUser.displayName || '';
   if ($('authEmail')) $('authEmail').value = currentUser.email || '';
   if ($('authWhats') && currentProfile && currentProfile.whatsapp) $('authWhats').value = currentProfile.whatsapp;
+  if ($('authBday')  && currentProfile && currentProfile.birthday) $('authBday').value = currentProfile.birthday;
   showView('authViewProfile');
 }
+
+const WELCOME_POINTS = 2000; // puntos de bienvenida por registrarse (una sola vez)
 
 window.umiCompleteProfile = async function () {
   setErr('');
   const whats = ($('authWhats').value || '').trim();
+  const bday  = ($('authBday').value || '').trim();
   const promos = $('authPromos').checked;
   const terms  = $('authTerms').checked;
 
   const digits = whats.replace(/\D/g, '');
   if (digits.length < 8) { setErr('Ingresa un WhatsApp válido (con código de país).'); return; }
+  if (!bday) { setErr('Ingresa tu fecha de cumpleaños.'); return; }
   if (!terms) { setErr('Debes aceptar los términos para registrarte.'); return; }
+
+  const isNew = !currentProfile;
+  const points = isNew ? WELCOME_POINTS : (currentProfile.points || 0);
 
   const btn = $('authSubmitBtn'); if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
   try {
@@ -91,16 +99,18 @@ window.umiCompleteProfile = async function () {
       name: currentUser.displayName || '',
       email: currentUser.email || '',
       whatsapp: whats,
+      birthday: bday,
       acceptsPromos: promos,
       acceptedTerms: true,
-      points: (currentProfile && currentProfile.points) || 0,
+      points: points,
+      welcomeGiven: true,
       createdAt: (currentProfile && currentProfile.createdAt) || serverTimestamp(),
       updatedAt: serverTimestamp()
     }, { merge: true });
 
-    currentProfile = { uid: currentUser.uid, name: currentUser.displayName, email: currentUser.email, whatsapp: whats, acceptsPromos: promos, points: (currentProfile && currentProfile.points) || 0 };
+    currentProfile = { uid: currentUser.uid, name: currentUser.displayName, email: currentUser.email, whatsapp: whats, birthday: bday, acceptsPromos: promos, points: points };
     updateAccountBtn();
-    showDone();
+    showDone(isNew);
   } catch (e) {
     console.error('[AUTH] save error:', e.code, e.message);
     setErr('No se pudo guardar tu registro. Intenta de nuevo.');
@@ -109,10 +119,29 @@ window.umiCompleteProfile = async function () {
   }
 };
 
-function showDone() {
+// Suma puntos ganados y resta los canjeados tras una compra. Devuelve el nuevo saldo.
+window.umiAddPoints = async function (earned, redeemed) {
+  if (!currentUser || !currentProfile) return null;
+  earned = Math.max(0, Math.round(earned || 0));
+  redeemed = Math.max(0, Math.round(redeemed || 0));
+  const nuevo = Math.max(0, (currentProfile.points || 0) - redeemed + earned);
+  try {
+    await updateDoc(doc(db, 'clientes', currentUser.uid), { points: nuevo, updatedAt: serverTimestamp() });
+    currentProfile.points = nuevo;
+    updateAccountBtn();
+    return nuevo;
+  } catch (e) {
+    console.error('[AUTH] addPoints:', e.message);
+    return null;
+  }
+};
+
+function showDone(justRegistered) {
   if ($('authDoneTitle')) $('authDoneTitle').textContent = '¡Hola, ' + (firstName(currentProfile && currentProfile.name) || '') + '! 👋';
-  if ($('authDoneSub'))   $('authDoneSub').textContent = 'Tu cuenta UMI está activa.';
-  if ($('authPoints'))    $('authPoints').textContent = (currentProfile && currentProfile.points ? currentProfile.points : 0) + ' puntos UMI';
+  if ($('authDoneSub'))   $('authDoneSub').textContent = justRegistered
+    ? '¡Bienvenido! Te regalamos 2.000 puntos de bienvenida 🎉'
+    : 'Tu cuenta UMI está activa.';
+  if ($('authPoints'))    $('authPoints').textContent = '⭐ ' + ((currentProfile && currentProfile.points ? currentProfile.points : 0)).toLocaleString('es-CL') + ' puntos UMI';
   showView('authViewDone');
 }
 
@@ -121,8 +150,16 @@ function firstName(n) { return (n || '').trim().split(' ')[0]; }
 function updateAccountBtn() {
   const btn = $('ntbAccount');
   const mob = $('mobAccount');
-  const label = currentProfile ? ('Hola, ' + (firstName(currentProfile.name) || 'cuenta')) : (currentUser ? 'Completar registro' : 'Iniciar sesión');
-  if (btn) btn.textContent = label;
+  let label;
+  if (currentProfile) {
+    const pts = (currentProfile.points || 0).toLocaleString('es-CL');
+    label = firstName(currentProfile.name) + ' · ⭐ ' + pts;
+  } else if (currentUser) {
+    label = 'Completar registro';
+  } else {
+    label = 'Iniciar sesión';
+  }
+  if (btn) { btn.textContent = label; btn.classList.toggle('ntb-account--pts', !!currentProfile); }
   if (mob) mob.textContent = label;
 }
 

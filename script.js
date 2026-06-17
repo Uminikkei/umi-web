@@ -531,12 +531,54 @@ function changeQty(name, delta){
 }
 
 let cuponDescuento = 0; // porcentaje de descuento activo (0-100)
+let puntosCanjeados = 0; // pesos descontados con puntos UMI (1 punto = $1)
+const PUNTOS_PORCENTAJE = 0.10;     // se gana 10% del subtotal en puntos
+const PUNTOS_TOPE_CANJE = 0.50;     // máximo 50% de la cuenta se puede pagar con puntos
 
-function cartTotal(){
+function billAfterCoupon(){
   const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
   return cuponDescuento > 0 ? Math.round(base * (1 - cuponDescuento / 100)) : base;
 }
+function cartTotal(){
+  return Math.max(0, billAfterCoupon() - puntosCanjeados);
+}
 function cartSubtotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0); }
+
+// ── PUNTOS UMI (canje en checkout) ──────────────────────────────────────────
+function maxPuntosCanjeables(){
+  if(!(window.umiIsRegistered && window.umiIsRegistered())) return 0;
+  const prof = window.umiGetProfile ? window.umiGetProfile() : null;
+  const saldo = (prof && prof.points) || 0;
+  const tope  = Math.floor(billAfterCoupon() * PUNTOS_TOPE_CANJE);
+  return Math.max(0, Math.min(saldo, tope));
+}
+function usarPuntos(){ puntosCanjeados = maxPuntosCanjeables(); refrescarResumenCheckout(); }
+function quitarPuntos(){ puntosCanjeados = 0; refrescarResumenCheckout(); }
+function puntosSummaryHtml(){
+  if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
+  const prof = window.umiGetProfile ? window.umiGetProfile() : null;
+  const saldo = (prof && prof.points) || 0;
+  if(puntosCanjeados > 0){
+    return `<div class="checkout-summary-item" style="color:#22c55e"><span>⭐ Puntos canjeados</span><span>-${fmt(puntosCanjeados)}</span></div>`
+      + `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-quitar" onclick="quitarPuntos()">Quitar puntos</button></div>`;
+  }
+  const maxR = maxPuntosCanjeables();
+  if(maxR > 0){
+    return `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-usar" onclick="usarPuntos()">⭐ Usar mis puntos (−${fmt(maxR)})</button><div class="checkout-puntos-bal">Tienes ${saldo.toLocaleString('es-CL')} pts disponibles</div></div>`;
+  }
+  if(saldo > 0){
+    return `<div class="checkout-puntos-bal">⭐ Tienes ${saldo.toLocaleString('es-CL')} pts (se canjean hasta el 50% de la cuenta)</div>`;
+  }
+  return '';
+}
+// Suma los puntos ganados (10% del subtotal) y descuenta los canjeados, tras un pedido
+function aplicarPuntosTrasPedido(){
+  if(window.umiAddPoints){
+    const ganados = Math.round(cartSubtotal() * PUNTOS_PORCENTAJE);
+    try { window.umiAddPoints(ganados, puntosCanjeados); } catch(e){}
+  }
+  puntosCanjeados = 0;
+}
 
 function aplicarCupon(){
   const val = (document.getElementById('cCupon')?.value || '').trim().toUpperCase();
@@ -565,6 +607,7 @@ function refrescarResumenCheckout(){
     const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
     html += `<div class="checkout-summary-item" style="color:#22c55e"><span>🏷️ Descuento (${cuponDescuento}%)</span><span>-${fmt(base - cartTotal())}</span></div>`;
   }
+  html += puntosSummaryHtml();
   html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
   sumEl.innerHTML = html;
 }
@@ -618,6 +661,7 @@ function closeCart(){ document.getElementById('cartDrawer').classList.remove('op
 
 function openCheckout(){
   if(cart.length === 0) return;
+  puntosCanjeados = 0;
   closeCart();
   const sumEl = document.getElementById('checkoutSummary');
   let html = '<div class="checkout-summary-title">Resumen de tu pedido</div>';
@@ -631,6 +675,7 @@ function openCheckout(){
     const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
     html += `<div class="checkout-summary-item" style="color:#22c55e"><span>🏷️ Descuento (${cuponDescuento}%)</span><span>-${fmt(base - cartTotal())}</span></div>`;
   }
+  html += puntosSummaryHtml();
   html += `<div class="checkout-summary-total"><span>Total</span><span id="checkoutTotalVal">${fmt(cartTotal())}</span></div>`;
   sumEl.innerHTML = html;
   document.getElementById('checkoutModal').classList.add('open');
@@ -687,6 +732,7 @@ async function sendOrder(){
   if(notes) lines += `*Notas:* ${notes}\n`;
   lines += `\nPedido a las ${now}`;
   window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(lines), '_blank');
+  aplicarPuntosTrasPedido();
   cart=[]; renderCart(); updateBadge(); closeCheckout();
 }
 
@@ -884,6 +930,7 @@ async function onCardApproved(){
   const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
   // Cerrar modal y limpiar carrito
   closeCardModal();
+  aplicarPuntosTrasPedido();
   cart = []; renderCart(); updateBadge();
   // 3) Pantalla de éxito (el aviso a Umi se envía AUTOMÁTICO desde el servidor)
   const ov = document.createElement('div');
