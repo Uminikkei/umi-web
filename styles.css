@@ -1510,3 +1510,10 @@ footer strong{color:var(--teal)}
 .checkout-puntos-bal{
   color:var(--muted);font-size:.76rem;text-align:center;
 }
+
+.checkout-earn-line{
+  text-align:center;font-size:.82rem;color:var(--teal);
+  padding:.5rem .2rem .1rem;line-height:1.3;
+}
+.checkout-earn-line:empty{display:none}
+.checkout-earn-line b{font-weight:700}

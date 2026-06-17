@@ -509,6 +509,8 @@ function updateDeliveryTotal() {
   }
   const checkTotalEl = document.getElementById('checkoutTotalVal');
   if (checkTotalEl) checkTotalEl.textContent = fmt(cartTotal());
+  const earnEl = document.getElementById('checkoutEarnLine');
+  if (earnEl) earnEl.innerHTML = earnLineHtml();
 }
 
 function addToCart(name, price, emoji, category){
@@ -554,28 +556,41 @@ function maxPuntosCanjeables(){
 }
 function usarPuntos(){ puntosCanjeados = maxPuntosCanjeables(); refrescarResumenCheckout(); }
 function quitarPuntos(){ puntosCanjeados = 0; refrescarResumenCheckout(); }
+// Puntos que se GANAN con este pedido. Los delivery NO acumulan puntos.
+function puntosGanaPedido(){
+  if(entregaMode === 'delivery') return 0;
+  return Math.round(cartSubtotal() * PUNTOS_PORCENTAJE);
+}
+function earnLineHtml(){
+  if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
+  if(entregaMode === 'delivery') return '🛵 Los pedidos delivery no acumulan puntos';
+  const g = puntosGanaPedido();
+  return g > 0 ? `🎁 Con esta compra acumulas <b>${g.toLocaleString('es-CL')} puntos</b>` : '';
+}
+
 function puntosSummaryHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
   const prof = window.umiGetProfile ? window.umiGetProfile() : null;
   const saldo = (prof && prof.points) || 0;
+  let h = '';
   if(puntosCanjeados > 0){
-    return `<div class="checkout-summary-item" style="color:#22c55e"><span>⭐ Puntos canjeados</span><span>-${fmt(puntosCanjeados)}</span></div>`
-      + `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-quitar" onclick="quitarPuntos()">Quitar puntos</button></div>`;
+    h += `<div class="checkout-summary-item" style="color:#22c55e"><span>⭐ Puntos canjeados</span><span>-${fmt(puntosCanjeados)}</span></div>`;
+    h += `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-quitar" onclick="quitarPuntos()">Quitar puntos</button></div>`;
+  } else {
+    const maxR = maxPuntosCanjeables();
+    if(maxR > 0){
+      h += `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-usar" onclick="usarPuntos()">⭐ Usar mis puntos (−${fmt(maxR)})</button><div class="checkout-puntos-bal">Tienes ${saldo.toLocaleString('es-CL')} pts disponibles</div></div>`;
+    } else if(saldo > 0){
+      h += `<div class="checkout-puntos-bal">⭐ Tienes ${saldo.toLocaleString('es-CL')} pts (se canjean hasta el 50% de la cuenta)</div>`;
+    }
   }
-  const maxR = maxPuntosCanjeables();
-  if(maxR > 0){
-    return `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-usar" onclick="usarPuntos()">⭐ Usar mis puntos (−${fmt(maxR)})</button><div class="checkout-puntos-bal">Tienes ${saldo.toLocaleString('es-CL')} pts disponibles</div></div>`;
-  }
-  if(saldo > 0){
-    return `<div class="checkout-puntos-bal">⭐ Tienes ${saldo.toLocaleString('es-CL')} pts (se canjean hasta el 50% de la cuenta)</div>`;
-  }
-  return '';
+  h += `<div class="checkout-earn-line" id="checkoutEarnLine">${earnLineHtml()}</div>`;
+  return h;
 }
-// Suma los puntos ganados (10% del subtotal) y descuenta los canjeados, tras un pedido
+// Suma los puntos ganados y descuenta los canjeados, tras un pedido
 function aplicarPuntosTrasPedido(){
   if(window.umiAddPoints){
-    const ganados = Math.round(cartSubtotal() * PUNTOS_PORCENTAJE);
-    try { window.umiAddPoints(ganados, puntosCanjeados); } catch(e){}
+    try { window.umiAddPoints(puntosGanaPedido(), puntosCanjeados); } catch(e){}
   }
   puntosCanjeados = 0;
 }
@@ -929,7 +944,7 @@ async function onCardApproved(){
   lines += `\nPedido a las ${now}`;
   const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
   // Puntos ganados con esta compra (capturar antes de limpiar el carrito)
-  const ganadosPuntos = (window.umiIsRegistered && window.umiIsRegistered()) ? Math.round(cartSubtotal() * PUNTOS_PORCENTAJE) : 0;
+  const ganadosPuntos = (window.umiIsRegistered && window.umiIsRegistered()) ? puntosGanaPedido() : 0;
   // Cerrar modal y limpiar carrito
   closeCardModal();
   aplicarPuntosTrasPedido();
