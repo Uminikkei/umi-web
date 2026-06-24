@@ -676,8 +676,21 @@ function closeCart(){ document.getElementById('cartDrawer').classList.remove('op
 
 function openCheckout(){
   if(cart.length === 0) return;
+  // Registro obligatorio antes de pedir
+  if(!(window.umiIsRegistered && window.umiIsRegistered())){
+    if(window.umiOpenAuth) window.umiOpenAuth();
+    return;
+  }
   puntosCanjeados = 0;
   closeCart();
+  // Prefill con los datos del cliente registrado
+  try {
+    const prof = window.umiGetProfile && window.umiGetProfile();
+    if(prof){
+      const nEl = document.getElementById('cName');  if(nEl && !nEl.value)  nEl.value  = prof.name || '';
+      const pEl = document.getElementById('cPhone'); if(pEl && !pEl.value) pEl.value = prof.whatsapp || '';
+    }
+  } catch(e){}
   const sumEl = document.getElementById('checkoutSummary');
   let html = '<div class="checkout-summary-title">Resumen de tu pedido</div>';
   cart.forEach(r => { html += `<div class="checkout-summary-item"><span>${r.e} ${r.n} ×${r.qty}</span><span>${fmt(r.p*r.qty)}</span></div>`; });
@@ -716,6 +729,11 @@ function selectPago(mode){
 }
 
 async function sendOrder(){
+  // Seguro: registro obligatorio antes de pedir
+  if(!(window.umiIsRegistered && window.umiIsRegistered())){
+    if(window.umiOpenAuth) window.umiOpenAuth();
+    return;
+  }
   const name  = document.getElementById('cName').value.trim();
   const phone = document.getElementById('cPhone').value.trim();
   const addr  = document.getElementById('cAddr').value.trim();
