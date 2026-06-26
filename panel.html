@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Panel UMI</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="icon" type="image/png" href="favicon.png"/>
+<style>
+  :root{ --bg:#080e1f; --bg2:#0d1726; --bg3:#13203200; --card:#0f1b2e; --border:#1e2d3d; --teal:#62CAE3; --text:#e8edf2; --muted:#7d8fa3; --cream:#f0ebe0; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,Arial,sans-serif;min-height:100vh}
+  a{color:var(--teal)}
+  .wrap{max-width:1100px;margin:0 auto;padding:1.2rem}
+  /* Login / gate */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+  .gate-box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:2.4rem 2rem;text-align:center;max-width:380px;width:100%}
+  .logo{font-size:1.8rem;letter-spacing:5px;color:var(--teal);font-weight:700;margin-bottom:.4rem}
+  .gate-box h1{font-size:1.3rem;margin:.2rem 0 .3rem}
+  .gate-box p{color:var(--muted);font-size:.9rem;margin:0 0 1.4rem}
+  .g-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1f1f1f;border:none;border-radius:10px;padding:.85rem;font-size:.95rem;font-weight:600;cursor:pointer}
+  .g-btn:hover{opacity:.9}
+  .err{color:#e74c3c;font-size:.9rem;margin-top:1rem}
+  /* Header */
+  header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding:1rem 1.2rem;position:sticky;top:0;background:var(--bg);z-index:5}
+  header .h-left{display:flex;align-items:center;gap:.7rem}
+  header .logo{font-size:1.3rem;margin:0}
+  header .who{color:var(--muted);font-size:.82rem}
+  .logout{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:999px;padding:.5rem 1rem;font-size:.8rem;cursor:pointer}
+  .logout:hover{border-color:var(--teal);color:var(--teal)}
+  /* Cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1.2rem 0}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem}
+  .card .k{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:1px}
+  .card .v{font-size:1.9rem;font-weight:700;color:var(--teal);margin-top:.3rem}
+  .card .v small{font-size:.9rem;color:var(--muted);font-weight:400}
+  /* Section */
+  .sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin-bottom:1.2rem}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem}
+  .sec-head h2{font-size:1.05rem;margin:0}
+  .tools{display:flex;gap:.6rem;flex-wrap:wrap}
+  .tools input{background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.5rem .8rem;font-size:.85rem;outline:none;min-width:200px}
+  .tools input:focus{border-color:var(--teal)}
+  .btn{background:var(--teal);color:#06121f;border:none;border-radius:8px;padding:.55rem 1rem;font-size:.85rem;font-weight:700;cursor:pointer}
+  .btn:hover{opacity:.9}
+  /* Table */
+  .tbl-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  th,td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--border);white-space:nowrap}
+  th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0}
+  tbody tr:hover{background:rgba(98,202,227,.05)}
+  .pts{color:var(--teal);font-weight:700}
+  .empty{color:var(--muted);text-align:center;padding:2rem}
+  .tag-bday{background:rgba(98,202,227,.15);color:var(--teal);border-radius:6px;padding:.1rem .45rem;font-size:.72rem}
+  .loading{color:var(--muted);text-align:center;padding:2rem}
+</style>
+</head>
+<body>
+
+<!-- GATE (login / acceso) -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <div class="logo">UMI</div>
+    <h1>Panel privado</h1>
+    <p id="gateMsg">Inicia sesión para acceder al panel de tu restaurante.</p>
+    <button class="g-btn" id="gateBtn" onclick="login()">
+      <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 5.1 29.5 3 24 3 16 3 9.1 7.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 36 26.7 37 24 37c-5.3 0-9.7-2.6-11.3-7l-6.5 5C9.1 42.3 16 47 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.6l6.2 5.2C40.9 36.3 45 30.7 45 24c0-1.2-.1-2.3-.4-3.5z"/></svg>
+      Entrar con Google
+    </button>
+    <div class="err" id="gateErr"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash" style="display:none">
+  <header>
+    <div class="h-left"><span class="logo">UMI</span><span class="who" id="who"></span></div>
+    <button class="logout" onclick="logout()">Cerrar sesión</button>
+  </header>
+  <div class="wrap">
+    <div class="cards">
+      <div class="card"><div class="k">Clientes registrados</div><div class="v" id="cTotal">—</div></div>
+      <div class="card"><div class="k">Puntos otorgados</div><div class="v" id="cPoints">—</div></div>
+      <div class="card"><div class="k">Cumpleaños este mes</div><div class="v" id="cBdays">—</div></div>
+      <div class="card"><div class="k">Aceptan promociones</div><div class="v" id="cPromos">—</div></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head">
+        <h2>Clientes</h2>
+        <div class="tools">
+          <input type="text" id="search" placeholder="Buscar por nombre, correo o WhatsApp..." oninput="renderClientes()">
+          <button class="btn" onclick="exportCSV()">📥 Exportar Excel/CSV</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Nombre</th><th>WhatsApp</th><th>Correo</th><th>Cumpleaños</th><th>Puntos</th><th>Promos</th></tr></thead>
+          <tbody id="cBody"><tr><td colspan="6" class="loading">Cargando clientes…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><h2>Tráfico de la web</h2></div>
+      <p style="color:var(--muted);font-size:.9rem;margin:.2rem 0 1rem">De dónde entran, qué dispositivos usan y más, en Google Analytics.</p>
+      <a class="btn" href="https://analytics.google.com" target="_blank" style="text-decoration:none;display:inline-block">Abrir Google Analytics ↗</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCzwcCVQ0xPeGZbpjYT3CLsxYMqof6KyCE",
+  authDomain: "umi-clientes.firebaseapp.com",
+  projectId: "umi-clientes",
+  storageBucket: "umi-clientes.firebasestorage.app",
+  messagingSenderId: "103545801738",
+  appId: "1:103545801738:web:4079b9f8ae474516f9a3f3"
+};
+const ADMIN_EMAILS = ["adnanrisache@gmail.com"];
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+let clientes = [];
+const $ = (id) => document.getElementById(id);
+
+window.login = async () => {
+  $('gateErr').textContent = '';
+  try { await signInWithPopup(auth, provider); }
+  catch(e){ console.error(e); $('gateErr').textContent = 'No se pudo iniciar sesión.'; }
+};
+window.logout = async () => { await signOut(auth); };
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { showGate('Inicia sesión para acceder al panel de tu restaurante.'); return; }
+  if (!ADMIN_EMAILS.includes((user.email||'').toLowerCase())) {
+    $('gateErr').textContent = 'Esta cuenta (' + user.email + ') no tiene acceso al panel.';
+    showGate('Acceso restringido.');
+    return;
+  }
+  // Admin OK
+  $('gate').style.display = 'none';
+  $('dash').style.display = 'block';
+  $('who').textContent = user.email;
+  await cargarClientes();
+});
+
+function showGate(msg){
+  $('dash').style.display = 'none';
+  $('gate').style.display = 'flex';
+  $('gateMsg').textContent = msg;
+}
+
+async function cargarClientes(){
+  try {
+    const snap = await getDocs(collection(db, 'clientes'));
+    clientes = snap.docs.map(d => d.data());
+  } catch(e){ console.error('[PANEL]', e); $('cBody').innerHTML = '<tr><td colspan="6" class="empty">Error al cargar. ¿Publicaste la regla de admin en Firestore?</td></tr>'; return; }
+  renderResumen();
+  renderClientes();
+}
+
+function mesActual(){ return new Date().getMonth() + 1; }
+function bdayMes(b){ if(!b) return null; const m = parseInt(String(b).split('-')[1],10); return m || null; }
+
+function renderResumen(){
+  const total = clientes.length;
+  const pts = clientes.reduce((s,c)=> s + (Number(c.points)||0), 0);
+  const bdays = clientes.filter(c => bdayMes(c.birthday) === mesActual()).length;
+  const promos = clientes.filter(c => c.acceptsPromos).length;
+  $('cTotal').textContent = total;
+  $('cPoints').textContent = pts.toLocaleString('es-CL');
+  $('cBdays').textContent = bdays;
+  $('cPromos').innerHTML = promos + ' <small>de ' + total + '</small>';
+}
+
+window.renderClientes = function(){
+  const q = ($('search').value||'').trim().toLowerCase();
+  let list = clientes.slice().sort((a,b)=> (Number(b.points)||0)-(Number(a.points)||0));
+  if(q) list = list.filter(c =>
+    (c.name||'').toLowerCase().includes(q) ||
+    (c.email||'').toLowerCase().includes(q) ||
+    (c.whatsapp||'').toLowerCase().includes(q));
+  if(list.length === 0){ $('cBody').innerHTML = '<tr><td colspan="6" class="empty">Sin resultados.</td></tr>'; return; }
+  const cm = mesActual();
+  $('cBody').innerHTML = list.map(c => {
+    const isBday = bdayMes(c.birthday) === cm;
+    return `<tr>
+      <td>${esc(c.name)||'—'}</td>
+      <td>${esc(c.whatsapp)||'—'}</td>
+      <td>${esc(c.email)||'—'}</td>
+      <td>${esc(c.birthday)||'—'} ${isBday?'<span class="tag-bday">🎂 este mes</span>':''}</td>
+      <td class="pts">${(Number(c.points)||0).toLocaleString('es-CL')}</td>
+      <td>${c.acceptsPromos?'✅':'—'}</td>
+    </tr>`;
+  }).join('');
+};
+
+function esc(s){ return (s==null?'':String(s)).replace(/[<>&"]/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m])); }
+
+window.exportCSV = function(){
+  const rows = [['Nombre','WhatsApp','Correo','Cumpleaños','Puntos','AceptaPromos']];
+  clientes.forEach(c => rows.push([c.name||'', c.whatsapp||'', c.email||'', c.birthday||'', (Number(c.points)||0), c.acceptsPromos?'Si':'No']));
+  const csv = rows.map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob(["﻿"+csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'clientes-umi-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+};
+</script>
+</body>
+</html>
