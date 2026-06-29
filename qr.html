@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>QR para imprimir — UMI</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0d1726;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem}
+  .card{
+    width:420px;max-width:100%;background:#fff;border-radius:26px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.3);text-align:center;
+  }
+  .card-top{background:#0d1b3e;padding:26px 24px 22px;color:#fff}
+  .iso{width:74px;height:74px;margin:0 auto 10px;display:block}
+  .brand{font-family:'Cormorant Garamond',serif;font-size:1.5rem;letter-spacing:6px;color:#2CA0E0;font-weight:700}
+  .brand-sub{font-size:.7rem;letter-spacing:3px;color:#cfe7f5;margin-top:2px}
+  .card-body{padding:26px 28px 30px}
+  .headline{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:#0d1b3e;line-height:1.1;margin-bottom:4px}
+  .headline b{color:#2CA0E0}
+  .sub{font-size:.92rem;color:#5b6b7d;margin-bottom:18px}
+  .qr-box{background:#fff;border:3px solid #0d1b3e;border-radius:18px;padding:14px;display:inline-block;margin-bottom:18px}
+  #qr img, #qr canvas{display:block}
+  .gift{background:#eaf6fc;border:1px dashed #2CA0E0;border-radius:14px;padding:12px 14px;margin-bottom:14px}
+  .gift .big{font-size:1.15rem;font-weight:700;color:#0d1b3e}
+  .gift .small{font-size:.8rem;color:#5b6b7d;margin-top:2px}
+  .url{font-weight:700;color:#0d1b3e;letter-spacing:.5px;font-size:1rem}
+  .url span{color:#2CA0E0}
+  .actions{display:flex;gap:.7rem}
+  .btn{background:#2CA0E0;color:#fff;border:none;border-radius:999px;padding:.8rem 1.6rem;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+  .btn.sec{background:transparent;color:#cfe7f5;border:1px solid #34506e}
+  @media print{
+    body{background:#fff;padding:0}
+    .actions{display:none}
+    .card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-top">
+      <img class="iso" src="favicon.png" alt="UMI"/>
+      <div class="brand">UMI</div>
+      <div class="brand-sub">NIKKEI BAR · COQUIMBO</div>
+    </div>
+    <div class="card-body">
+      <div class="headline">Escanea y <b>pide directo</b></div>
+      <div class="sub">Sushi, ceviches y más, frente al mar 🍣</div>
+      <div class="qr-box"><div id="qr"></div></div>
+      <div class="gift">
+        <div class="big">🎁 Regístrate y gana $2.000</div>
+        <div class="small">+ 10% de vuelta en puntos en cada compra</div>
+      </div>
+      <div class="url">www.<span>uminikkeibar.cl</span></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+    <button class="btn sec" onclick="descargarQR()">Descargar QR (PNG)</button>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+<script>
+  var URL_PEDIDOS = 'https://www.uminikkeibar.cl/?utm_source=qr&utm_medium=local';
+  var qr = new QRCode(document.getElementById('qr'), {
+    text: URL_PEDIDOS,
+    width: 300, height: 300,
+    colorDark: '#0d1b3e', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  function descargarQR(){
+    var img = document.querySelector('#qr img') || document.querySelector('#qr canvas');
+    var src = img.tagName === 'IMG' ? img.src : img.toDataURL('image/png');
+    var a = document.createElement('a');
+    a.href = src; a.download = 'qr-umi.png'; a.click();
+  }
+</script>
+</body>
+</html>
