@@ -71,6 +71,25 @@
   .hbar .fill{height:100%;background:var(--teal);border-radius:6px;min-width:3px}
   .hbar .hv{text-align:right;color:var(--teal);font-weight:700}
   .hbars .empty-mini{color:var(--muted);font-size:.8rem}
+  .edit-btn{background:transparent;border:1px solid var(--border);color:var(--teal);border-radius:8px;padding:.35rem .7rem;font-size:.78rem;cursor:pointer;white-space:nowrap}
+  .edit-btn:hover{background:rgba(98,202,227,.1)}
+  /* modal editar */
+  .ed-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:1rem}
+  .ed-modal.open{display:flex}
+  .ed-bg{position:absolute;inset:0;background:rgba(0,0,0,.7)}
+  .ed-box{position:relative;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.6rem;width:100%;max-width:380px;z-index:1}
+  .ed-box h3{margin:0 0 .2rem;font-size:1.2rem}
+  .ed-sub{color:var(--muted);font-size:.82rem;margin:0 0 1.1rem;word-break:break-all}
+  .ed-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer}
+  .ed-field{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.8rem}
+  .ed-field span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .ed-field input{background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.6rem .8rem;font-size:.9rem;outline:none}
+  .ed-field input:focus{border-color:var(--teal)}
+  .ed-check{display:flex;align-items:center;gap:.5rem;font-size:.86rem;margin:.2rem 0 .6rem;cursor:pointer}
+  .ed-check input{width:16px;height:16px;accent-color:var(--teal)}
+  .ed-err{color:#e74c3c;font-size:.8rem;min-height:1em;margin-bottom:.5rem}
+  .ed-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem}
+  .ed-cancel{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:.55rem 1rem;font-size:.85rem;cursor:pointer}
 </style>
 </head>
 <body>
@@ -113,8 +132,8 @@
       </div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Nombre</th><th>WhatsApp</th><th>Correo</th><th>Cumpleaños</th><th>Puntos</th><th>Promos</th></tr></thead>
-          <tbody id="cBody"><tr><td colspan="6" class="loading">Cargando clientes…</td></tr></tbody>
+          <thead><tr><th>Nombre</th><th>WhatsApp</th><th>Correo</th><th>Cumpleaños</th><th>Puntos</th><th>Promos</th><th></th></tr></thead>
+          <tbody id="cBody"><tr><td colspan="7" class="loading">Cargando clientes…</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -143,10 +162,31 @@
   </div>
 </div>
 
+<!-- MODAL EDITAR CLIENTE -->
+<div class="ed-modal" id="editModal">
+  <div class="ed-bg" onclick="closeEdit()"></div>
+  <div class="ed-box">
+    <button class="ed-close" onclick="closeEdit()">✕</button>
+    <h3>Editar cliente</h3>
+    <p class="ed-sub" id="edTitle"></p>
+    <input type="hidden" id="edId"/>
+    <label class="ed-field"><span>Nombre</span><input type="text" id="edName"/></label>
+    <label class="ed-field"><span>WhatsApp</span><input type="tel" id="edWhats"/></label>
+    <label class="ed-field"><span>Cumpleaños (AAAA-MM-DD)</span><input type="date" id="edBday"/></label>
+    <label class="ed-field"><span>Puntos</span><input type="number" id="edPoints" min="0" step="100"/></label>
+    <label class="ed-check"><input type="checkbox" id="edPromos"/> Acepta promociones</label>
+    <div class="ed-err" id="edErr"></div>
+    <div class="ed-actions">
+      <button class="ed-cancel" onclick="closeEdit()">Cancelar</button>
+      <button class="btn" id="edSaveBtn" onclick="guardarCliente()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzwcCVQ0xPeGZbpjYT3CLsxYMqof6KyCE",
@@ -197,8 +237,8 @@ function showGate(msg){
 async function cargarClientes(){
   try {
     const snap = await getDocs(collection(db, 'clientes'));
-    clientes = snap.docs.map(d => d.data());
-  } catch(e){ console.error('[PANEL]', e); $('cBody').innerHTML = '<tr><td colspan="6" class="empty">Error al cargar. ¿Publicaste la regla de admin en Firestore?</td></tr>'; return; }
+    clientes = snap.docs.map(d => Object.assign({ _id: d.id }, d.data()));
+  } catch(e){ console.error('[PANEL]', e); $('cBody').innerHTML = '<tr><td colspan="7" class="empty">Error al cargar. ¿Publicaste la regla de admin en Firestore?</td></tr>'; return; }
   renderResumen();
   renderClientes();
 }
@@ -224,7 +264,7 @@ window.renderClientes = function(){
     (c.name||'').toLowerCase().includes(q) ||
     (c.email||'').toLowerCase().includes(q) ||
     (c.whatsapp||'').toLowerCase().includes(q));
-  if(list.length === 0){ $('cBody').innerHTML = '<tr><td colspan="6" class="empty">Sin resultados.</td></tr>'; return; }
+  if(list.length === 0){ $('cBody').innerHTML = '<tr><td colspan="7" class="empty">Sin resultados.</td></tr>'; return; }
   const cm = mesActual();
   $('cBody').innerHTML = list.map(c => {
     const isBday = bdayMes(c.birthday) === cm;
@@ -235,8 +275,50 @@ window.renderClientes = function(){
       <td>${esc(c.birthday)||'—'} ${isBday?'<span class="tag-bday">🎂 este mes</span>':''}</td>
       <td class="pts">${(Number(c.points)||0).toLocaleString('es-CL')}</td>
       <td>${c.acceptsPromos?'✅':'—'}</td>
+      <td><button class="edit-btn" onclick="editCliente('${esc(c._id)}')">✏️ Editar</button></td>
     </tr>`;
   }).join('');
+};
+
+window.editCliente = function(id){
+  const c = clientes.find(x => x._id === id);
+  if(!c) return;
+  $('edId').value = c._id;
+  $('edName').value = c.name || '';
+  $('edWhats').value = c.whatsapp || '';
+  $('edBday').value = c.birthday || '';
+  $('edPoints').value = Number(c.points)||0;
+  $('edPromos').checked = !!c.acceptsPromos;
+  $('edTitle').textContent = c.email || 'Cliente';
+  $('edErr').textContent = '';
+  $('editModal').classList.add('open');
+};
+window.closeEdit = function(){ $('editModal').classList.remove('open'); };
+
+window.guardarCliente = async function(){
+  $('edErr').textContent = '';
+  const id = $('edId').value;
+  const cambios = {
+    name: $('edName').value.trim(),
+    whatsapp: $('edWhats').value.trim(),
+    birthday: $('edBday').value.trim(),
+    points: Math.max(0, Math.round(Number($('edPoints').value)||0)),
+    acceptsPromos: $('edPromos').checked
+  };
+  const btn = $('edSaveBtn'); if(btn){ btn.disabled = true; btn.textContent = 'Guardando...'; }
+  try {
+    await updateDoc(doc(db, 'clientes', id), cambios);
+    const c = clientes.find(x => x._id === id);
+    if(c) Object.assign(c, cambios);
+    closeEdit();
+    renderResumen();
+    renderClientes();
+  } catch(e){
+    console.error('[PANEL] guardar:', e);
+    $('edErr').textContent = 'No se pudo guardar. ¿Publicaste la regla de admin (escritura) en Firestore?';
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = 'Guardar cambios'; }
+  }
 };
 
 function esc(s){ return (s==null?'':String(s)).replace(/[<>&"]/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m])); }
