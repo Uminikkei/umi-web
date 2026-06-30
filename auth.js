@@ -4,7 +4,7 @@ import {
   getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
+  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, getDocs
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -25,6 +25,21 @@ const provider = new GoogleAuthProvider();
 // Estado del cliente actual (perfil de Firestore)
 let currentUser = null;
 let currentProfile = null;
+
+// ── Cupones de descuento (gestionados desde el panel) ───────────────────────
+window.umiCupones = {};
+(async function loadCupones(){
+  try {
+    const snap = await getDocs(collection(db, 'cupones'));
+    snap.forEach(d => {
+      const c = d.data();
+      const codigo = String(c.codigo || d.id || '').trim().toUpperCase();
+      if (codigo && c.active !== false) {
+        window.umiCupones[codigo] = Number(c.descuento) || 0;
+      }
+    });
+  } catch(e){ console.warn('[UMI] No se pudieron cargar cupones de Firestore', e); }
+})();
 
 // ── Helpers de UI ──────────────────────────────────────────────────────────
 const $ = (id) => document.getElementById(id);

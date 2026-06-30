@@ -597,10 +597,11 @@ function maxPuntosCanjeables(){
 }
 function usarPuntos(){ puntosCanjeados = maxPuntosCanjeables(); refrescarResumenCheckout(); }
 function quitarPuntos(){ puntosCanjeados = 0; refrescarResumenCheckout(); }
-// Puntos que se GANAN con este pedido. Los delivery NO acumulan puntos.
+// Puntos que se GANAN con este pedido, calculados sobre lo que REALMENTE se paga
+// (después de cupón de descuento y puntos canjeados). Los delivery NO acumulan puntos.
 function puntosGanaPedido(){
   if(entregaMode === 'delivery') return 0;
-  return Math.round(cartSubtotal() * PUNTOS_PORCENTAJE);
+  return Math.round(cartTotal() * PUNTOS_PORCENTAJE);
 }
 function earnLineHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
@@ -639,7 +640,8 @@ function aplicarPuntosTrasPedido(){
 function aplicarCupon(){
   const val = (document.getElementById('cCupon')?.value || '').trim().toUpperCase();
   const msg = document.getElementById('cuponMsg');
-  const CUPONES = { 'HOPLIX': 90, 'CHOCOLATE': 50 };
+  // Cupones fijos de respaldo + cupones creados desde el panel (Firestore)
+  const CUPONES = Object.assign({ 'HOPLIX': 90, 'CHOCOLATE': 50 }, window.umiCupones || {});
   if(CUPONES[val] !== undefined){
     cuponDescuento = CUPONES[val];
     if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }

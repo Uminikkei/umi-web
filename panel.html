@@ -140,6 +140,24 @@
 
     <div class="sec">
       <div class="sec-head">
+        <h2>Cupones de descuento</h2>
+        <div class="tools">
+          <input type="text" id="cuponCodigo" placeholder="Código (ej: VERANO20)" style="min-width:160px;text-transform:uppercase">
+          <input type="number" id="cuponPct" placeholder="% descuento" min="1" max="100" style="min-width:120px">
+          <button class="btn" onclick="crearCupon()">+ Crear cupón</button>
+        </div>
+      </div>
+      <div class="ed-err" id="cuponErr"></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Descuento</th><th>Estado</th><th></th><th></th></tr></thead>
+          <tbody id="cuponBody"><tr><td colspan="5" class="loading">Cargando cupones…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head">
         <h2>Tráfico de la web <span style="font-weight:400;color:var(--muted);font-size:.8rem">· últimos 30 días</span></h2>
         <a class="who" href="https://analytics.google.com" target="_blank" style="text-decoration:none">Ver en Analytics ↗</a>
       </div>
@@ -186,7 +204,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzwcCVQ0xPeGZbpjYT3CLsxYMqof6KyCE",
@@ -225,6 +243,7 @@ onAuthStateChanged(auth, async (user) => {
   $('dash').style.display = 'block';
   $('who').textContent = user.email;
   await cargarClientes();
+  await cargarCupones();
   cargarTrafico();
 });
 
@@ -322,6 +341,67 @@ window.guardarCliente = async function(){
 };
 
 function esc(s){ return (s==null?'':String(s)).replace(/[<>&"]/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m])); }
+
+// ── CUPONES DE DESCUENTO ─────────────────────────────────────────────────────
+let cupones = [];
+
+async function cargarCupones(){
+  try {
+    const snap = await getDocs(collection(db, 'cupones'));
+    cupones = snap.docs.map(d => Object.assign({ _id: d.id }, d.data()));
+  } catch(e){ console.error('[PANEL] cupones:', e); $('cuponBody').innerHTML = '<tr><td colspan="5" class="empty">Error al cargar cupones.</td></tr>'; return; }
+  renderCupones();
+}
+
+function renderCupones(){
+  if(!cupones.length){ $('cuponBody').innerHTML = '<tr><td colspan="5" class="empty">Aún no has creado cupones.</td></tr>'; return; }
+  const list = cupones.slice().sort((a,b)=> (a.codigo||'').localeCompare(b.codigo||''));
+  $('cuponBody').innerHTML = list.map(c => {
+    const activo = c.active !== false;
+    return `<tr>
+      <td><b>${esc(c.codigo)}</b></td>
+      <td class="pts">${Number(c.descuento)||0}%</td>
+      <td>${activo ? '✅ Activo' : '⛔ Desactivado'}</td>
+      <td><button class="edit-btn" onclick="toggleCupon('${esc(c._id)}')">${activo?'Desactivar':'Activar'}</button></td>
+      <td><button class="edit-btn" style="color:#e74c3c;border-color:#e74c3c" onclick="eliminarCupon('${esc(c._id)}')">🗑️ Eliminar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.crearCupon = async function(){
+  $('cuponErr').textContent = '';
+  const codigo = ($('cuponCodigo').value || '').trim().toUpperCase();
+  const descuento = Math.round(Number($('cuponPct').value) || 0);
+  if(!codigo){ $('cuponErr').textContent = 'Escribe un código para el cupón.'; return; }
+  if(descuento < 1 || descuento > 100){ $('cuponErr').textContent = 'El descuento debe ser entre 1% y 100%.'; return; }
+  if(cupones.some(c => (c.codigo||'').toUpperCase() === codigo)){ $('cuponErr').textContent = 'Ya existe un cupón con ese código.'; return; }
+  try {
+    const ref = await addDoc(collection(db, 'cupones'), { codigo, descuento, active: true, creado: new Date().toISOString() });
+    cupones.push({ _id: ref.id, codigo, descuento, active: true });
+    $('cuponCodigo').value = ''; $('cuponPct').value = '';
+    renderCupones();
+  } catch(e){ console.error('[PANEL] crear cupon:', e); $('cuponErr').textContent = 'No se pudo crear el cupón.'; }
+};
+
+window.toggleCupon = async function(id){
+  const c = cupones.find(x => x._id === id);
+  if(!c) return;
+  const nuevoEstado = !(c.active !== false);
+  try {
+    await updateDoc(doc(db, 'cupones', id), { active: nuevoEstado });
+    c.active = nuevoEstado;
+    renderCupones();
+  } catch(e){ console.error('[PANEL] toggle cupon:', e); $('cuponErr').textContent = 'No se pudo actualizar el cupón.'; }
+};
+
+window.eliminarCupon = async function(id){
+  if(!confirm('¿Eliminar este cupón? Esta acción no se puede deshacer.')) return;
+  try {
+    await deleteDoc(doc(db, 'cupones', id));
+    cupones = cupones.filter(x => x._id !== id);
+    renderCupones();
+  } catch(e){ console.error('[PANEL] eliminar cupon:', e); $('cuponErr').textContent = 'No se pudo eliminar el cupón.'; }
+};
 
 window.exportCSV = function(){
   const rows = [['Nombre','WhatsApp','Correo','Cumpleaños','Puntos','AceptaPromos']];
