@@ -744,10 +744,10 @@ footer{
 }
 .items-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
-  gap:.9rem;
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:.5rem;
 }
-@media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.7rem} }
+@media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.45rem} }
 /* Card compacto estilo Spleat */
 .item{
   background:var(--card);border:1px solid var(--border);border-radius:14px;
@@ -760,29 +760,29 @@ footer{
   box-shadow:0 8px 24px rgba(98,202,227,.12);
 }
 .item-img{
-  width:100%;aspect-ratio:1/1;object-fit:cover;
+  width:100%;aspect-ratio:4/3;object-fit:cover;
   background:var(--bg3);flex-shrink:0;
 }
 .item-img--bebida{
-  object-fit:contain;padding:14px;
+  object-fit:contain;padding:10px;
   background:#060e1f;
 }
 .item-img-placeholder{
-  width:100%;aspect-ratio:1/1;background:var(--bg3);
+  width:100%;aspect-ratio:4/3;background:var(--bg3);
   display:flex;align-items:center;justify-content:center;
-  font-size:2.6rem;flex-shrink:0;
+  font-size:2.2rem;flex-shrink:0;
   border-bottom:1px solid var(--border);
 }
-.item-body{padding:.6rem .7rem .7rem;display:flex;flex-direction:column;gap:.45rem;flex:1}
+.item-body{padding:.4rem .55rem .5rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
 .item-name{
-  font-weight:600;font-size:.82rem;color:var(--text);line-height:1.25;
+  font-weight:600;font-size:.76rem;color:var(--text);line-height:1.2;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-  min-height:2.05em;
+  min-height:1.85em;
 }
 .item-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:.4rem}
-.item-price{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--teal)}
+.item-price{font-family:var(--serif);font-size:.95rem;font-weight:700;color:var(--teal)}
 .item-cart{
-  flex-shrink:0;width:34px;height:34px;border-radius:9px;border:none;cursor:pointer;
+  flex-shrink:0;width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;
   background:var(--teal);display:flex;align-items:center;justify-content:center;transition:opacity .2s;
 }
 .item-cart svg{fill:#06121f}
