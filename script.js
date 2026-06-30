@@ -639,7 +639,7 @@ function aplicarPuntosTrasPedido(){
 function aplicarCupon(){
   const val = (document.getElementById('cCupon')?.value || '').trim().toUpperCase();
   const msg = document.getElementById('cuponMsg');
-  const CUPONES = { 'HOPLIX': 90 };
+  const CUPONES = { 'HOPLIX': 90, 'CHOCOLATE': 50 };
   if(CUPONES[val] !== undefined){
     cuponDescuento = CUPONES[val];
     if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
