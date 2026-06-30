@@ -245,6 +245,17 @@ function buildMenu(){
     }
   }
 
+  // Formas orgánicas (originales) azul marino detrás de cada geoglifo
+  const BLOBS = [
+    "M100 30C134 30 168 52 170 90C172 128 150 156 114 166C78 176 44 162 32 128C20 94 34 54 70 38C80 33 90 30 100 30Z",
+    "M100 38C140 34 174 60 172 100C170 140 138 158 100 162C62 166 30 142 28 102C26 62 60 42 100 38Z",
+    "M100 26C130 30 158 50 162 86C166 122 150 150 122 166C94 182 60 176 40 150C20 124 26 84 50 56C64 40 82 28 100 26Z",
+    "M96 30C128 24 156 44 166 76C176 108 168 138 142 158C116 178 80 178 54 160C28 142 18 108 30 78C40 52 66 36 96 30Z",
+    "M108 30C146 36 168 70 162 108C156 146 124 162 88 160C52 158 28 130 30 94C32 58 64 34 100 30C103 30 105 30 108 30Z",
+    "M100 28C138 30 164 54 168 92C172 130 148 156 110 166C72 176 40 158 30 122C20 86 36 50 72 36C81 32 90 28 100 28Z",
+    "M70 36C100 26 134 28 156 50C178 72 178 110 162 138C146 166 110 178 80 168C50 158 28 130 26 98C24 66 44 46 70 36Z"
+  ];
+
   Object.entries(MAIN).forEach(([mainName, {e, cats, ring}], idx) => {
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
@@ -266,6 +277,7 @@ function buildMenu(){
             <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
         </svg>
+        <div class="cat-circ-blob"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#0d1e40"/></svg></div>
         <div class="cat-circ-inner">${e}</div>
       </div>
       <div class="cat-circ-label">${mainName}</div>`;
@@ -627,7 +639,7 @@ function aplicarPuntosTrasPedido(){
 function aplicarCupon(){
   const val = (document.getElementById('cCupon')?.value || '').trim().toUpperCase();
   const msg = document.getElementById('cuponMsg');
-  const CUPONES = { 'HOPLIX': 90, 'CHOCOLATE': 50 };
+  const CUPONES = { 'HOPLIX': 90 };
   if(CUPONES[val] !== undefined){
     cuponDescuento = CUPONES[val];
     if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
