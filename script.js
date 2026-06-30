@@ -207,7 +207,7 @@ function buildMenu(){
         <div class="item-footer">
           <div class="item-price">${fmt(item.p)}</div>
           <button class="item-cart" title="Agregar al carrito" aria-label="Agregar" onclick="event.stopPropagation();addToCart('${nEsc}',${item.p},'${eEsc}','${cEsc}')">
-            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4V3a1 1 0 011-1h8a1 1 0 011 1v1h3.2a1 1 0 01.99 1.14l-1.7 12A2 2 0 0117.5 19h-11a2 2 0 01-1.99-1.86l-1.7-12A1 1 0 013.8 4H7zm2 0h6V4H9z"/></svg>
+            <svg viewBox="0 0 24 24" width="17" height="17"><path d="M16 6V5a4 4 0 0 0-8 0v1H4.8a1 1 0 0 0-1 .92l-1 12A2 2 0 0 0 4.8 21.1h14.4a2 2 0 0 0 2-2.18l-1-12a1 1 0 0 0-1-.92H16zM10 5a2 2 0 0 1 4 0v1h-4V5z"/></svg>
           </button>
         </div>`;
       card.onclick = () => openProductModal(item.n, item.p, eEsc, cat);
