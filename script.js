@@ -121,6 +121,32 @@ function toggleLongRev(){
   btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más ↓';
 }
 
+// ── VENTANA DE PRODUCTO (nombre + descripción) ──────────────────────────────
+let _prodCurrent = null;
+function openProductModal(name, price, emoji, cat){
+  const desc = (typeof SPLEAT_DESC !== 'undefined' && SPLEAT_DESC[name]) || '';
+  const img  = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[name]) || null;
+  _prodCurrent = { name, price, emoji, cat };
+  const imgEl = document.getElementById('prodImg');
+  if(img){ imgEl.src = img; imgEl.style.display = ''; } else { imgEl.style.display = 'none'; }
+  document.getElementById('prodName').textContent = name;
+  const dEl = document.getElementById('prodDesc');
+  dEl.textContent = desc; dEl.style.display = desc ? '' : 'none';
+  document.getElementById('prodPrice').textContent = fmt(price);
+  document.getElementById('prodModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeProductModal(){
+  document.getElementById('prodModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function prodModalAdd(){
+  if(_prodCurrent){
+    addToCart(_prodCurrent.name, _prodCurrent.price, _prodCurrent.emoji, _prodCurrent.cat);
+    closeProductModal();
+  }
+}
+
 function buildMenu(){
   // Geoglifos dorados — tamaños normalizados por viewBox de cada SVG
   const IC = (f, s) => `<img src="${f}" style="width:${s}px;height:${s}px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
@@ -173,15 +199,18 @@ function buildMenu(){
       }
       const body = document.createElement('div');
       body.className = 'item-body';
-      const _desc = item.d || (typeof SPLEAT_DESC !== 'undefined' && SPLEAT_DESC[item.n]) || '';
+      const nEsc = item.n.replace(/'/g,"\\'");
+      const eEsc = item.e || '🍣';
+      const cEsc = cat.replace(/'/g,"\\'");
       body.innerHTML = `
         <div class="item-name">${item.n}</div>
-        ${_desc ? `<div class="item-desc">${_desc}</div>` : ''}
         <div class="item-footer">
           <div class="item-price">${fmt(item.p)}</div>
-          <button class="item-wa" onclick="event.stopPropagation();addToCart('${item.n.replace(/'/g,"\\'")}',${item.p},'${item.e||'🍣'}','${cat.replace(/'/g,"\\'")}')">+ Agregar</button>
+          <button class="item-cart" title="Agregar al carrito" aria-label="Agregar" onclick="event.stopPropagation();addToCart('${nEsc}',${item.p},'${eEsc}','${cEsc}')">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 4V3a1 1 0 011-1h8a1 1 0 011 1v1h3.2a1 1 0 01.99 1.14l-1.7 12A2 2 0 0117.5 19h-11a2 2 0 01-1.99-1.86l-1.7-12A1 1 0 013.8 4H7zm2 0h6V4H9z"/></svg>
+          </button>
         </div>`;
-      card.onclick = () => addToCart(item.n, item.p, item.e||'🍣', cat);
+      card.onclick = () => openProductModal(item.n, item.p, eEsc, cat);
       card.appendChild(body);
       grid.appendChild(card);
     });

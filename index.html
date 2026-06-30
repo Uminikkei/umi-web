@@ -659,6 +659,23 @@
   </svg>
 </button>
 
+<!-- VENTANA DE PRODUCTO (nombre + descripción) -->
+<div class="prod-modal" id="prodModal">
+  <div class="prod-bg" onclick="closeProductModal()"></div>
+  <div class="prod-box">
+    <button class="prod-close" onclick="closeProductModal()" aria-label="Cerrar">✕</button>
+    <img class="prod-img" id="prodImg" alt=""/>
+    <div class="prod-body">
+      <div class="prod-name" id="prodName"></div>
+      <div class="prod-desc" id="prodDesc"></div>
+      <div class="prod-footer">
+        <div class="prod-price" id="prodPrice"></div>
+        <button class="prod-add" onclick="prodModalAdd()">🛒 Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- AUTH / REGISTRO MODAL -->
 <div class="auth-modal" id="authModal">
   <div class="auth-modal-bg" onclick="umiCloseAuth()"></div>
