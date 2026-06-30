@@ -245,6 +245,16 @@ function buildMenu(){
     }
   }
 
+  // Formas orgánicas (originales) azul marino detrás de cada geoglifo
+  const BLOBS = [
+    "M99 32C131 28 168 49 173 84C178 119 152 142 130 160C108 178 78 180 54 163C30 146 22 113 28 84C34 55 67 36 99 32Z",
+    "M104 30C140 33 165 58 167 95C169 132 150 160 113 168C76 176 41 159 30 124C19 89 33 53 66 39C79 33 91 29 104 30Z",
+    "M100 28C138 28 172 55 170 96C168 137 146 156 110 167C74 178 45 165 31 130C17 95 28 58 62 40C75 33 87 28 100 28Z",
+    "M96 31C133 25 170 52 172 90C174 128 156 148 124 164C92 180 56 176 36 147C16 118 22 78 49 53C63 40 79 34 96 31Z",
+    "M100 30C145 32 168 66 165 104C162 142 134 160 98 166C62 172 35 150 29 113C23 76 41 44 76 34C84 31 92 30 100 30Z",
+    "M101 29C142 31 171 60 168 100C165 140 140 158 104 167C68 176 38 162 28 126C18 90 34 52 70 38C80 34 91 29 101 29Z"
+  ];
+
   Object.entries(MAIN).forEach(([mainName, {e, cats, ring}], idx) => {
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
@@ -266,6 +276,7 @@ function buildMenu(){
             <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
         </svg>
+        <div class="cat-circ-blob"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#0d1e40"/></svg></div>
         <div class="cat-circ-inner">${e}</div>
       </div>
       <div class="cat-circ-label">${mainName}</div>`;
