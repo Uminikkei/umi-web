@@ -245,7 +245,7 @@ function buildMenu(){
     }
   }
 
-  // Formas orgánicas (originales) azul marino detrás de cada geoglifo
+  // Formas orgánicas beige detrás de cada geoglifo (para que resalte el navy)
   const BLOBS = [
     "M100 30C134 30 168 52 170 90C172 128 150 156 114 166C78 176 44 162 32 128C20 94 34 54 70 38C80 33 90 30 100 30Z",
     "M100 38C140 34 174 60 172 100C170 140 138 158 100 162C62 166 30 142 28 102C26 62 60 42 100 38Z",
@@ -277,7 +277,7 @@ function buildMenu(){
             <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
         </svg>
-        <div class="cat-circ-blob"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#0d1e40"/></svg></div>
+        <div class="cat-circ-blob"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#f0e8d8"/></svg></div>
         <div class="cat-circ-inner">${e}</div>
       </div>
       <div class="cat-circ-label">${mainName}</div>`;
