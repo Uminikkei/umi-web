@@ -512,6 +512,7 @@ footer{
   margin-bottom:1.6rem;padding-bottom:.7rem;line-height:1.1;
   border-bottom:1px solid rgba(4,7,9,.15);
   display:flex;align-items:center;gap:.6rem;
+  text-transform:lowercase;
 }
 /* Tarjetas estilo Spleat sobre fondo beige */
 .menu-dark-area .item{background:#fff;border-color:rgba(0,0,0,.08)}
