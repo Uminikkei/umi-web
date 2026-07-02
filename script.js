@@ -249,7 +249,7 @@ function buildMenu(){
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
     const uid = 'rp' + idx;
-    const R = 60, fontSize = 19, letterSpacing = 1;
+    const R = 56.5, fontSize = 19, letterSpacing = 1;
     const word = (ring || mainName).toUpperCase();
     circ.innerHTML = `
       <div class="cat-circ-wrap">
