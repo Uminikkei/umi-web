@@ -784,13 +784,6 @@ footer{
   width:100%;aspect-ratio:4/3;object-fit:cover;
   background:var(--bg3);flex-shrink:0;
 }
-/* Close-up (zoom) de imágenes específicas para dar protagonismo a la comida */
-.item-img[src*="Chirashi"],
-.item-img[src*="Udon%20Saltado"],
-.item-img[src*="Sakana%20Furai"],
-.item-img[src*="Tiramis"],
-.item-img[src*="%2FOpera%2F"],
-.item-img[src*="anticuchero"]{ transform:scale(1.4); }
 .item-img--bebida{
   object-fit:contain;padding:10px;
   background:#060e1f;
