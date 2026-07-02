@@ -484,7 +484,7 @@ footer{
 .menu-sec .menu-sec-sub{color:rgba(4,7,9,.58)}
 .menu-sec .cat-circ-label{color:rgba(4,7,9,.65)}
 .menu-sec .cat-circ.on .cat-circ-label{color:#0d1e40;font-weight:700}
-.menu-sec .cat-circ-ring text{fill:rgba(4,7,9,.82)}
+.menu-sec .cat-circ-ring text{fill:#1f3f8c}
 .menu-sec .cat-circ-ring circle:first-child{stroke:rgba(4,7,9,.18) !important}
 .menu-sec .cat-circ-ring circle:not(:first-child){fill:rgba(4,7,9,.38) !important}
 .menu-sec .cat-circ.on .cat-circ-inner{

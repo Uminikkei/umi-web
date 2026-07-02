@@ -257,11 +257,11 @@ function buildMenu(){
           <defs>
             <path id="${uid}" d="M 100 100 m -${R} 0 a ${R} ${R} 0 1 1 ${R*2} 0 a ${R} ${R} 0 1 1 -${R*2} 0"/>
           </defs>
-          <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
+          <text fill="#1f3f8c" font-size="${fontSize}"
                 font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
             <textPath href="#${uid}" startOffset="25%" text-anchor="middle">${word}</textPath>
           </text>
-          <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
+          <text fill="#1f3f8c" font-size="${fontSize}"
                 font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
             <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
