@@ -745,7 +745,7 @@ footer{
   .cat-circles{padding:0 .3rem}
   .cat-circ{flex:0 0 50%;max-width:50%}
   .cat-circ-wrap{width:152px;height:152px;margin:0 auto}
-  .cat-circ-inner img{width:72%!important;height:72%!important}
+  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.76)!important}
   .cat-circ-blob{width:86px;height:86px}
   .cat-circ-label{margin-top:-1.5rem;font-size:.6rem;letter-spacing:1.5px}
 }
