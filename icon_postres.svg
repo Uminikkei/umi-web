@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 892.124760 901.605007" width="89" height="90">
   <g transform="translate(-38.000000,936.758004) scale(0.100000,-0.100000)"
-fill="#3f63a6" stroke="none">
+fill="#3f63a6" stroke="#3f63a6" stroke-width="150" stroke-linejoin="round" stroke-linecap="round">
 <path d="M4800 9356 c-335 -86 -882 -509 -1199 -927 -92 -122 -193 -284 -246
 -394 -140 -291 -180 -466 -172 -760 6 -242 45 -397 149 -596 161 -308 518
 -619 776 -675 94 -20 156 -51 160 -79 2 -14 -29 -51 -104 -125 -241 -237 -338
