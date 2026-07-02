@@ -260,13 +260,13 @@ function buildMenu(){
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
     const uid = 'rp' + idx;
-    const R = 68, fontSize = 19, letterSpacing = 1;
+    const R = mainName === 'Sushi' ? 56 : 68, fontSize = 19, letterSpacing = 1;
     const word = (ring || mainName).toUpperCase();
     circ.innerHTML = `
       <div class="cat-circ-wrap">
         <svg class="cat-circ-ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
-            <path id="${uid}" d="M 100 100 m -68 0 a 68 68 0 1 1 136 0 a 68 68 0 1 1 -136 0"/>
+            <path id="${uid}" d="M 100 100 m -${R} 0 a ${R} ${R} 0 1 1 ${R*2} 0 a ${R} ${R} 0 1 1 -${R*2} 0"/>
           </defs>
           <text fill="rgba(98,202,227,.95)" font-size="${fontSize}"
                 font-family="Inter,sans-serif" font-weight="700" letter-spacing="${letterSpacing}">
