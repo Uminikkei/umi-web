@@ -710,6 +710,8 @@ footer{
   width:162px;height:162px;z-index:2;pointer-events:none;
 }
 .cat-circ-blob svg{width:100%;height:100%;display:block}
+/* Recorte redondeado solo del geoglifo de fuego: las rayas que sobresalen se cortan */
+.cat-circ-inner img[src*="del_fuego"]{ clip-path: circle(46% at 50% 47%); }
 /* Círculo interior */
 .cat-circ-inner{
   position:absolute;
