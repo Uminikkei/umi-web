@@ -771,7 +771,7 @@ footer{
 @media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.4rem} }
 /* Card compacto estilo Spleat */
 .item{
-  background:var(--card);border:1px solid var(--border);border-radius:6px;
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
   overflow:hidden;display:flex;flex-direction:column;
   transition:transform .2s,border-color .2s,box-shadow .2s;
   cursor:pointer;
