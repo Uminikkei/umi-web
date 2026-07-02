@@ -711,6 +711,8 @@ footer{
 }
 .cat-circ-blob svg{width:100%;height:100%;display:block;
   filter:drop-shadow(0 8px 10px rgba(4,7,9,.28));}
+/* Sombra suave para los geoglifos */
+.cat-circ-inner img{ filter:drop-shadow(0 3px 4px rgba(4,7,9,.35)); }
 /* Círculo interior */
 .cat-circ-inner{
   position:absolute;
