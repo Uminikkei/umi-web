@@ -771,7 +771,7 @@ footer{
 @media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.4rem} }
 /* Card compacto estilo Spleat */
 .item{
-  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  background:var(--card);border:1px solid var(--border);border-radius:0;
   overflow:hidden;display:flex;flex-direction:column;
   transition:transform .2s,border-color .2s,box-shadow .2s;
   cursor:pointer;
@@ -812,7 +812,7 @@ footer{
 .prod-modal{position:fixed;inset:0;z-index:1150;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
 .prod-modal.open{opacity:1;pointer-events:all}
 .prod-bg{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px)}
-.prod-box{position:relative;z-index:1;width:100%;max-width:420px;background:#f0e8d8;border:1px solid rgba(4,7,9,.12);border-radius:20px;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.5)}
+.prod-box{position:relative;z-index:1;width:100%;max-width:420px;background:#f0e8d8;border:1px solid rgba(4,7,9,.12);border-radius:0;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.5)}
 .prod-box::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;box-shadow:inset 0 3px 9px rgba(4,7,9,.30), inset 0 -2px 6px rgba(4,7,9,.16)}
 .prod-close{position:absolute;top:12px;right:14px;z-index:2;background:rgba(0,0,0,.5);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .prod-img{width:100%;height:240px;object-fit:cover;display:block;background:#e6ddcb}
