@@ -277,7 +277,7 @@ function buildMenu(){
             <textPath href="#${uid}" startOffset="75%" text-anchor="middle">${word}</textPath>
           </text>
         </svg>
-        <div class="cat-circ-blob"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#f0e8d8"/></svg></div>
+        <div class="cat-circ-blob${mainName==='Sushi'?' cat-circ-blob--sushi':''}"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="${BLOBS[idx % BLOBS.length]}" fill="#f0e8d8"/></svg></div>
         <div class="cat-circ-inner">${e}</div>
       </div>
       <div class="cat-circ-label">${mainName}</div>`;
