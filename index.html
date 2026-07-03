@@ -119,33 +119,24 @@
       <img src="fondo-umi.jpg" alt="Interior Restaurante UMI" loading="lazy"/>
     </div>
 
-    <!-- Columna derecha: Los más pedidos -->
-    <div class="cream-pedidos">
-      <span class="cream-label">Los más pedidos</span>
-      <div class="cream-pedidos-grid" id="topDishesGrid">
-        <!-- Relleno dinámico por JS o estático -->
-        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-          <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAcevichado%20Roll%2Fphotos%2FDSC03723.jpg.jpeg?alt=media" alt="Acevichado Roll" loading="lazy"/></div>
-          <span class="pedido-name">Acevichado Roll</span>
-          <span class="pedido-price">$13.990</span>
+    <!-- Columna derecha: Etimología -->
+    <div class="cream-pedidos cream-etim">
+      <span class="cream-label">Etimología</span>
+      <h2 class="significado-title">¿Qué significa <em>UMI</em>?</h2>
+      <p class="significado-desc">En japonés, <strong>海 (Umi)</strong> significa <strong>"Mar"</strong> — el océano que nos rodea, nos inspira y da nombre a nuestra cocina frente al Pacífico.</p>
+      <div class="sig-layout">
+        <div class="sig-img-wrap">
+          <img src="umi-significado.svg" class="sig-svg" alt="Viento + Mar + Espíritu = UMI"/>
+          <span class="sig-op" style="left:26.5%;top:48%">+</span>
+          <span class="sig-op" style="left:50.2%;top:48%">+</span>
+          <span class="sig-op" style="left:73.8%;top:48%">=</span>
         </div>
-        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-          <div class="pedido-circle"><img src="saito-roll.jpg" alt="Saito Roll" loading="lazy"/></div>
-          <span class="pedido-name">Saito Roll</span>
-          <span class="pedido-price">$14.990</span>
-        </div>
-        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-          <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLomo%20saltado%2Fphotos%2FLOMO%20SALTADO%20(1).jpg.jpeg?alt=media" alt="Lomo Saltado" loading="lazy"/></div>
-          <span class="pedido-name">Lomo Saltado</span>
-          <span class="pedido-price">$18.990</span>
-        </div>
-        <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-          <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Nikkei%2Fphotos%2FTARTARE%20(3).jpg.jpeg?alt=media" alt="Tartare Nikkei" loading="lazy"/></div>
-          <span class="pedido-name">Tartare Nikkei</span>
-          <span class="pedido-price">$13.990</span>
+        <div class="sig-labels">
+          <span class="sig-word" style="left:12.5%">Viento</span>
+          <span class="sig-word" style="left:38.5%">Mar</span>
+          <span class="sig-word" style="left:61%">Espíritu</span>
         </div>
       </div>
-      <a class="cream-menu-link" href="#menu">Ver menú completo →</a>
     </div>
 
   </div>
@@ -161,25 +152,32 @@
 <!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
 <section class="significado-sec">
   <div class="significado-inner">
-    <span class="significado-label">Etimología</span>
-    <h2 class="significado-title">¿Qué significa <em>UMI</em>?</h2>
-    <p class="significado-desc">En japonés, <strong>海 (Umi)</strong> significa <strong>"Mar"</strong> — el océano que nos rodea, nos inspira y da nombre a nuestra cocina frente al Pacífico.</p>
-    <div class="sig-layout">
-      <!-- Imagen SVG completa -->
-      <div class="sig-img-wrap">
-        <img src="umi-significado.svg" class="sig-svg" alt="Viento + Mar + Espíritu = UMI"/>
-        <!-- Operadores HTML superpuestos -->
-        <span class="sig-op" style="left:26.5%;top:48%">+</span>
-        <span class="sig-op" style="left:50.2%;top:48%">+</span>
-        <span class="sig-op" style="left:73.8%;top:48%">=</span>
+    <span class="significado-label">Los más pedidos</span>
+    <h2 class="significado-title">Nuestros <em>favoritos</em></h2>
+    <p class="significado-desc">Los platos que eligen nuestros clientes una y otra vez.</p>
+    <div class="mp-row">
+      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAcevichado%20Roll%2Fphotos%2FDSC03723.jpg.jpeg?alt=media" alt="Acevichado Roll" loading="lazy"/></div>
+        <span class="pedido-name">Acevichado Roll</span>
+        <span class="pedido-price">$13.990</span>
       </div>
-      <!-- Labels debajo de cada símbolo -->
-      <div class="sig-labels">
-        <span class="sig-word" style="left:12.5%">Viento</span>
-        <span class="sig-word" style="left:38.5%">Mar</span>
-        <span class="sig-word" style="left:61%">Espíritu</span>
+      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+        <div class="pedido-circle"><img src="saito-roll.jpg" alt="Saito Roll" loading="lazy"/></div>
+        <span class="pedido-name">Saito Roll</span>
+        <span class="pedido-price">$14.990</span>
+      </div>
+      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLomo%20saltado%2Fphotos%2FLOMO%20SALTADO%20(1).jpg.jpeg?alt=media" alt="Lomo Saltado" loading="lazy"/></div>
+        <span class="pedido-name">Lomo Saltado</span>
+        <span class="pedido-price">$18.990</span>
+      </div>
+      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Nikkei%2Fphotos%2FTARTARE%20(3).jpg.jpeg?alt=media" alt="Tartare Nikkei" loading="lazy"/></div>
+        <span class="pedido-name">Tartare Nikkei</span>
+        <span class="pedido-price">$13.990</span>
       </div>
     </div>
+    <a class="cream-menu-link" href="#menu" style="display:inline-block;margin-top:1.6rem">Ver menú completo →</a>
   </div>
 
   <!-- Ola inferior: dorado → teal -->

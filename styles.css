@@ -1573,3 +1573,13 @@ footer strong{color:var(--teal)}
 }
 .checkout-earn-line:empty{display:none}
 .checkout-earn-line b{font-weight:700}
+
+/* ─── SWAP: Etimología en columna Historia + Más pedidos a lo ancho ─────────── */
+.cream-etim{ text-align:center; }
+.cream-etim .significado-title{ font-size:clamp(1.5rem,2.4vw,2rem); margin:.2rem 0 .7rem; }
+.cream-etim .significado-desc{ font-size:.9rem; line-height:1.55; }
+.cream-etim .sig-layout{ margin-top:.6rem; }
+/* Los más pedidos a lo ancho en la sección dorada */
+.mp-row{ display:flex; justify-content:center; gap:2.4rem; flex-wrap:wrap; margin:2rem 0 0; }
+.mp-row .pedido-name{ color:#0d1e40; font-weight:700; font-size:.9rem; }
+.mp-row .pedido-price{ color:#1f3f8c; font-weight:700; }
