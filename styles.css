@@ -325,8 +325,9 @@ nav{
 }
 .sig-word{
   font-family:'Inter',sans-serif;
-  font-size:1.05rem; font-weight:600; font-style:normal;
-  color:#0d1e40; letter-spacing:.5px;
+  font-size:.7rem; font-weight:700; font-style:normal;
+  text-transform:uppercase; letter-spacing:3px;
+  color:#0d1e40;
   flex:1; text-align:center;
 }
 .sig-op{
