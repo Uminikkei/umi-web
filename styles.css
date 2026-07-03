@@ -324,8 +324,8 @@ nav{
   margin-top:.3rem;
 }
 .sig-word{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem; font-weight:600; font-style:italic;
+  font-family:'Inter',sans-serif;
+  font-size:1.05rem; font-weight:600; font-style:normal;
   color:#0d1e40; letter-spacing:.5px;
   flex:1; text-align:center;
 }
