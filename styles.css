@@ -307,8 +307,8 @@ nav{
 .sig-op{
   position:absolute;
   transform:translate(-50%,-50%);
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1rem,2.5vw,1.6rem); font-weight:700;
+  font-family:'Inter',sans-serif;
+  font-size:.7rem; font-weight:700;
   color:rgba(13,30,64,.7); pointer-events:none; line-height:1;
 }
 .sig-labels{ position:relative; height:1.8rem; margin-top:.3rem; }
