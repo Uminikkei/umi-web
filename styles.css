@@ -327,7 +327,7 @@ nav{
   font-family:'Inter',sans-serif;
   font-size:.7rem; font-weight:700; font-style:normal;
   text-transform:uppercase; letter-spacing:3px;
-  color:#0d1e40;
+  color:rgba(13,30,64,.6);
   flex:1; text-align:center;
 }
 .sig-op{
