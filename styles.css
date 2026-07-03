@@ -473,7 +473,7 @@ footer{
 /* ── MENU SECTION ── */
 .menu-sec{
   background:var(--teal);
-  padding:5rem 0 0;   /* sin padding inferior — termina en la ola */
+  padding:2.4rem 0 0;   /* sin padding inferior — termina en la ola */
   position:relative;
 }
 .menu-sec-inner{max-width:1440px;margin:0 auto;text-align:center;padding:0 1rem}
@@ -496,7 +496,7 @@ footer{
 /* ── OLA INTERNA: curva inferior UMI — teal → oscuro ── */
 .menu-wave-cut{
   position:relative;height:120px;line-height:0;
-  margin-top:2rem;
+  margin-top:0.4rem;
 }
 .menu-wave-cut svg{display:block;width:100%;height:100%}
 
@@ -684,7 +684,7 @@ footer{
 }
 .menu-sec-sub{color:var(--muted);font-size:1rem;text-align:center;margin:0 auto .5rem;display:block}
 /* Círculos principales con texto SVG rotatorio */
-.cat-circles{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:3rem 0 0;padding:0 1rem;overflow:visible}
+.cat-circles{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:1.4rem 0 0;padding:0 1rem;overflow:visible}
 .cat-circ{
   display:flex;flex-direction:column;align-items:center;gap:.55rem;
   cursor:pointer;transition:transform .35s cubic-bezier(.34,1.56,.64,1);
