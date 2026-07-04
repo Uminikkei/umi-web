@@ -8,10 +8,43 @@ const chatInput = document.getElementById('chatInput');
 const chatWidget = document.getElementById('chatWidget');
 const chatToggleBtn = document.getElementById('chatToggleBtn');
 
+// ── Garzonas disponibles ──────────────────────────────────────────────────────
+const GARZONAS = {
+  yani:  { name: 'Yani',  img: 'garzona.png' },
+  laura: { name: 'Laura', img: 'laura.png' }
+};
+let garzonaId = localStorage.getItem('umiGarzona') || 'yani';
+if (!GARZONAS[garzonaId]) garzonaId = 'yani';
+
+function applyGarzonaUI() {
+  const g = GARZONAS[garzonaId];
+  const av = document.getElementById('chatAvatar');
+  const tg = document.getElementById('chatToggleImg');
+  const nm = document.getElementById('chatGarzonaName');
+  if (av) av.src = g.img;
+  if (tg) tg.src = g.img;
+  if (nm) nm.textContent = g.name;
+  document.querySelectorAll('.garzona-opt').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(garzonaId === 'laura' ? 'optLaura' : 'optYani');
+  if (btn) btn.classList.add('active');
+}
+
+function selectGarzona(id) {
+  if (!GARZONAS[id] || id === garzonaId) return;
+  garzonaId = id;
+  localStorage.setItem('umiGarzona', id);
+  applyGarzonaUI();
+  const g = GARZONAS[id];
+  const msg = chatLanguage === 'en'
+    ? `Hi! 👋 I'm ${g.name}, now I'll be taking care of you. How can I help?`
+    : `¡Hola! 👋 Soy ${g.name}, ahora te atiendo yo. ¿En qué te ayudo?`;
+  addChatMessage(msg, false);
+}
+
 // Initial greeting based on language
 const greetings = {
-  es: '¡Hola! 👋 Soy Yani, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?',
-  en: 'Hi! 👋 I\'m Yani, your virtual waitress at Umi. How can I help you today?'
+  es: (n) => `¡Hola! 👋 Soy ${n}, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?`,
+  en: (n) => `Hi! 👋 I'm ${n}, your virtual waitress at Umi. How can I help you today?`
 };
 
 const placeholders = {
@@ -194,6 +227,7 @@ async function sendChatMessage() {
       body: JSON.stringify({
         message: message,
         language: chatLanguage,
+        garzona: GARZONAS[garzonaId].name,
         conversationHistory: conversationHistory
       })
     });
@@ -245,10 +279,12 @@ async function sendChatMessage() {
 
 // Initialize chat
 function initChat() {
+  applyGarzonaUI();
+
   // Set initial greeting
   const firstMsg = chatMessages.querySelector('.bot-msg p');
   if (firstMsg) {
-    firstMsg.textContent = greetings[chatLanguage];
+    firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId].name);
   }
 
   // Set initial language

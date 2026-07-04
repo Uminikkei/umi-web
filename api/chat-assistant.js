@@ -52,7 +52,7 @@ const RESTAURANT_INFO = {
   }
 };
 
-const SYSTEM_PROMPT_ES = `Eres Yani, la garzona virtual de Umi Nikkei Bar, un restaurante de comida Nikkei (fusión japonesa-peruana) en Coquimbo, Chile. Preséntate como Yani cuando sea natural hacerlo.
+const SYSTEM_PROMPT_ES = (GARZONA) => `Eres ${GARZONA}, la garzona virtual de Umi Nikkei Bar, un restaurante de comida Nikkei (fusión japonesa-peruana) en Coquimbo, Chile. Preséntate como ${GARZONA} cuando sea natural hacerlo.
 
 Tu objetivo es:
 1. Ayudar a los clientes a explorar el menú
@@ -99,7 +99,7 @@ Ejemplo de buena respuesta:
 
 ¿Prefieres algo picante o suave?`;
 
-const SYSTEM_PROMPT_EN = `You are Yani, the virtual waitress at Umi Nikkei Bar, a Nikkei restaurant (Japanese-Peruvian fusion) in Coquimbo, Chile. Introduce yourself as Yani when natural.
+const SYSTEM_PROMPT_EN = (GARZONA) => `You are ${GARZONA}, the virtual waitress at Umi Nikkei Bar, a Nikkei restaurant (Japanese-Peruvian fusion) in Coquimbo, Chile. Introduce yourself as ${GARZONA} when natural.
 
 Your goal is to:
 1. Help customers explore the menu
@@ -162,7 +162,9 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    const systemPrompt = language === 'en' ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_ES;
+    // Nombre de la garzona elegida (solo letras, máx 20 chars; default Yani)
+    const garzonaName = String(req.body.garzona || 'Yani').replace(/[^\p{L} ]/gu, '').slice(0, 20) || 'Yani';
+    const systemPrompt = language === 'en' ? SYSTEM_PROMPT_EN(garzonaName) : SYSTEM_PROMPT_ES(garzonaName);
 
     const messages = [
       ...conversationHistory.map(msg => ({
