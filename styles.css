@@ -293,6 +293,15 @@ nav{
   font-weight:600;
 }
 .significado-title em{color:#fff;font-style:italic;}
+/* Título de la sección dorada "Nuestros favoritos" con la misma estética que los demás (serif + palabra manuscrita) */
+.significado-sec .significado-title{
+  font-family:var(--serif); font-size:clamp(2.2rem,4vw,3rem);
+  font-weight:700; color:#0d1e40; line-height:1.05; letter-spacing:-1px;
+}
+.significado-sec .significado-title em{
+  font-family:'SignHandwriting', var(--script); font-style:normal;
+  font-size:clamp(2rem,3.5vw,2.6rem); color:#0d1e40; font-weight:400;
+}
 .significado-desc{
   color:rgba(13,30,64,.7);
   font-size:1rem;
