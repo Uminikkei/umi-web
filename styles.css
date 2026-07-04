@@ -1259,8 +1259,8 @@ footer strong{color:var(--teal)}
 }
 
 .chat-toggle-btn img {
-  width: 46px;
-  height: 46px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
   pointer-events: none;
 }
@@ -1312,8 +1312,8 @@ footer strong{color:var(--teal)}
 }
 
 .chat-header-avatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #fff;
   object-fit: contain;
