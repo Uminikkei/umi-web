@@ -1039,18 +1039,23 @@ function fbCount(){
   document.getElementById('fbChars').textContent = t.value.length;
 }
 async function enviarFeedback(){
-  const nombre  = document.getElementById('fbNombre').value.trim();
-  const correo  = document.getElementById('fbCorreo').value.trim();
-  const mensaje = document.getElementById('fbMensaje').value.trim();
-  const status  = document.getElementById('fbStatus');
-  const btn     = document.getElementById('fbSend');
+  const nombre   = document.getElementById('fbNombre').value.trim();
+  const correo   = document.getElementById('fbCorreo').value.trim();
+  const telefono = document.getElementById('fbTelefono').value.trim();
+  const mensaje  = document.getElementById('fbMensaje').value.trim();
+  const status   = document.getElementById('fbStatus');
+  const btn      = document.getElementById('fbSend');
 
-  if(!nombre || !correo || !mensaje){
-    status.textContent = 'Completa nombre, correo y mensaje.';
+  if(!nombre || !correo || !telefono || !mensaje){
+    status.textContent = 'Todos los campos son obligatorios.';
     status.className = 'fb-status error'; return;
   }
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){
     status.textContent = 'Ingresa un correo válido.';
+    status.className = 'fb-status error'; return;
+  }
+  if(telefono.replace(/\D/g,'').length < 8){
+    status.textContent = 'Ingresa un teléfono válido (mín. 8 dígitos).';
     status.className = 'fb-status error'; return;
   }
 
@@ -1060,7 +1065,7 @@ async function enviarFeedback(){
     const r = await fetch('/api/feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, correo, mensaje })
+      body: JSON.stringify({ nombre, correo, telefono, mensaje })
     });
     const data = await r.json();
     if(!r.ok) throw new Error(data.error || 'Error al enviar');
@@ -1068,6 +1073,7 @@ async function enviarFeedback(){
     status.className = 'fb-status ok';
     document.getElementById('fbNombre').value = '';
     document.getElementById('fbCorreo').value = '';
+    document.getElementById('fbTelefono').value = '';
     document.getElementById('fbMensaje').value = '';
     fbCount();
     setTimeout(closeFeedback, 2500);

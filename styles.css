@@ -1027,45 +1027,29 @@ footer strong{color:var(--teal)}
 }
 .side-tab{
   pointer-events:auto;
-  display:flex;align-items:center;gap:9px;
-  height:46px;padding:0 12px;
-  border-radius:23px;
-  max-width:46px;overflow:hidden;
-  transition:max-width .3s cubic-bezier(.4,0,.2,1);
-  cursor:pointer;border:none;text-decoration:none;
-  white-space:nowrap;position:relative;
-  box-shadow:0 4px 14px rgba(0,0,0,.25);
-  font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:none;padding:0;cursor:pointer;
+  text-decoration:none;position:relative;
+  transition:transform .2s ease;
 }
 .side-tab:hover,
-.side-tab:focus-visible,
-.side-tab--cart.open{ max-width:220px; }
+.side-tab:focus-visible{ transform:translateX(-4px) scale(1.15); }
 
 .side-tab-icon{
-  flex-shrink:0;width:22px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
 }
-.side-tab-label{
-  font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+.side-tab-label{ display:none; }
+
+.side-tab .side-tab-icon svg{
+  width:30px;height:30px;
+  filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
-
-.side-tab--cart  { background:#b2ddd9; }
-.side-tab--cart  .side-tab-icon svg{ width:20px;height:20px;fill:#1d4e4a; }
-.side-tab--cart  .side-tab-label{ color:#1d4e4a; }
-
-.side-tab--wa    { background:#b4e0c0; }
-.side-tab--wa    .side-tab-icon svg{ width:20px;height:20px;fill:#1a4a2c; }
-.side-tab--wa    .side-tab-label{ color:#1a4a2c; }
-
-.side-tab--google{ background:#b4cfe8; }
-.side-tab--google .side-tab-icon svg{ width:20px;height:20px; }
-.side-tab--google .side-tab-label{ color:#1a2e4a; }
-
-.side-tab--ta    { background:#b2dcc8; }
-.side-tab--ta    .side-tab-icon svg{ width:20px;height:20px;fill:#1a3c2e; }
-.side-tab--ta    .side-tab-label{ color:#1a3c2e; }
+.side-tab--cart .side-tab-icon svg{ fill:var(--teal); }
+.side-tab--fb   .side-tab-icon svg{ color:var(--teal); }
+.side-tab--wa   .side-tab-icon svg{ fill:#25D366; }
 
 .cart-fab-badge{
-  position:absolute;top:-3px;left:26px;
+  position:absolute;top:-6px;right:-6px;left:auto;
   background:#e03050;color:#fff;font-size:.6rem;font-weight:700;
   width:18px;height:18px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;

@@ -14,13 +14,17 @@ module.exports = async function handler(req, res) {
     const body = req.body || {};
     const nombre = String(body.nombre || '').trim().slice(0, 80);
     const correo = String(body.correo || '').trim().slice(0, 120);
+    const telefono = String(body.telefono || '').trim().slice(0, 15);
     const mensaje = String(body.mensaje || '').trim().slice(0, 500);
 
-    if (!nombre || !correo || !mensaje) {
-      return res.status(400).json({ error: 'Completa nombre, correo y mensaje' });
+    if (!nombre || !correo || !telefono || !mensaje) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
       return res.status(400).json({ error: 'Correo inválido' });
+    }
+    if (telefono.replace(/\D/g, '').length < 8) {
+      return res.status(400).json({ error: 'Teléfono inválido' });
     }
 
     const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -47,6 +51,10 @@ module.exports = async function handler(req, res) {
         <tr>
           <td style="padding:6px 0;color:#64748b;font-size:13px">Correo</td>
           <td style="padding:6px 0;font-size:15px"><a href="mailto:${esc(correo)}" style="color:#0d1b3e;font-weight:bold">${esc(correo)}</a></td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;color:#64748b;font-size:13px">Teléfono</td>
+          <td style="padding:6px 0;font-size:15px"><a href="tel:${esc(telefono)}" style="color:#0d1b3e;font-weight:bold">${esc(telefono)}</a></td>
         </tr>
       </table>
       <h3 style="margin:0 0 10px;color:#0d1b3e;font-size:15px;border-bottom:2px solid #62CAE3;padding-bottom:6px">Mensaje</h3>
