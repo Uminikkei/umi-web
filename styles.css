@@ -513,7 +513,7 @@ footer{
 /* ── ZONA OSCURA: items del menú ── */
 .menu-dark-area{
   background:var(--cream);
-  padding:3rem 0 5rem;
+  padding:1.25rem 0 2.5rem;
   position:relative;
 }
 .menu-dark-area > div{padding:0 2rem}
