@@ -10,8 +10,8 @@ const chatToggleBtn = document.getElementById('chatToggleBtn');
 
 // Initial greeting based on language
 const greetings = {
-  es: '¡Hola! 👋 Soy tu asistente de Umi. ¿Cómo puedo ayudarte hoy?',
-  en: 'Hello! 👋 I\'m Umi\'s assistant. How can I help you today?'
+  es: '¡Hola! 👋 Soy Yani, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?',
+  en: 'Hi! 👋 I\'m Yani, your virtual waitress at Umi. How can I help you today?'
 };
 
 const placeholders = {
@@ -107,6 +107,41 @@ function renderFormatted(parent, text) {
   });
 }
 
+// ── Agregar platos al carrito desde el bot ──────────────────────────────────
+// El asistente marca los platos a agregar con [[AGREGAR: Nombre]] al final
+// de su respuesta. Aquí se procesan: se agregan al carrito y se quitan del texto.
+function findMenuItem(name) {
+  if (typeof MENU === 'undefined') return null;
+  const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  const target = norm(name);
+  // 1) coincidencia exacta
+  for (const [cat, items] of Object.entries(MENU)) {
+    for (const it of items) {
+      if (norm(it.n) === target) return { cat, item: it };
+    }
+  }
+  // 2) coincidencia parcial
+  for (const [cat, items] of Object.entries(MENU)) {
+    for (const it of items) {
+      if (norm(it.n).includes(target) || target.includes(norm(it.n))) return { cat, item: it };
+    }
+  }
+  return null;
+}
+
+function processCartCommands(text) {
+  const added = [];
+  const clean = text.replace(/\s*\[\[\s*(?:AGREGAR|ADD)\s*:\s*([^\]]+)\]\]/gi, (m, name) => {
+    const found = findMenuItem(name);
+    if (found && typeof addToCart === 'function') {
+      addToCart(found.item.n, found.item.p, found.item.e, found.cat);
+      added.push(found.item.n);
+    }
+    return '';
+  }).trim();
+  return { clean, added };
+}
+
 function showTypingIndicator() {
   const msgDiv = document.createElement('div');
   msgDiv.className = 'chat-msg bot-msg';
@@ -174,8 +209,16 @@ async function sendChatMessage() {
     // Remove typing indicator
     removeTypingIndicator();
 
-    // Add bot response
-    addChatMessage(data.message, false);
+    // Procesar comandos de carrito y mostrar respuesta limpia
+    const { clean, added } = processCartCommands(data.message);
+    if (clean) {
+      addChatMessage(clean, false);
+    } else if (added.length) {
+      const confirm = chatLanguage === 'en'
+        ? `Done! I added ${added.join(', ')} to your order. 🛒`
+        : `¡Listo! Agregué ${added.join(', ')} a tu pedido. 🛒`;
+      addChatMessage(confirm, false);
+    }
 
     // Update conversation history
     conversationHistory = data.conversationHistory;
