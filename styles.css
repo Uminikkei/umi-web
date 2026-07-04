@@ -33,13 +33,13 @@ img{display:block;max-width:100%}
 /* ── NAVBAR TRANSPARENTE — logotipo grande centrado, olas desde extremos ── */
 body{padding-top:0}
 nav{
-  position:fixed;top:34px;left:0;right:0;z-index:200;
+  position:absolute;top:34px;left:0;right:0;z-index:200;
   background:transparent;
 }
 
 /* ── BANNER PROMO PUNTOS (marquesina aqua translúcida) ── */
 .promo-banner{
-  position:fixed;top:0;left:0;right:0;z-index:300;
+  position:absolute;top:0;left:0;right:0;z-index:300;
   height:34px;overflow:hidden;
   display:flex;align-items:center;
   background:rgba(98,202,227,.20);
