@@ -345,7 +345,7 @@ nav{
 }
 .cream-inner{
   max-width:1240px;margin:0 auto;
-  padding:5rem 2rem 5rem;
+  padding:3rem 2rem 3rem;
   display:grid;
   grid-template-columns:1fr 380px 1fr;
   gap:3.5rem;
@@ -536,11 +536,11 @@ footer{
 
 /* ── FEATURED SECTION (Más Pedido) ── */
 .featured-sec{
-  min-height:58vh;
+  min-height:42vh;
   background:url('saito-roll-h.jpg') 60% center/cover no-repeat;
   position:relative;
   display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:7rem 2rem 10rem;
+  text-align:center;padding:5rem 2rem 6rem;
   overflow:hidden;
 }
 .featured-sec::before{
@@ -574,7 +574,7 @@ footer{
 /* ── VIDEOS SECTION ── */
 .videos-sec{
   background:#142751;
-  padding:5rem 2rem 6rem;
+  padding:3rem 2rem 3.5rem;
   position:relative;
 }
 .videos-inner{
@@ -659,7 +659,7 @@ footer{
 }
 
 /* ── SECTION WRAPPER ── */
-.section{padding:6rem 2rem;max-width:1200px;margin:0 auto}
+.section{padding:3.5rem 2rem;max-width:1200px;margin:0 auto}
 .sec-label{display:block;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem}
 .sec-title{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.5rem);color:var(--white-1);line-height:1.1;margin-bottom:.8rem}
 .sec-sub{color:var(--muted);font-weight:300;max-width:500px}
