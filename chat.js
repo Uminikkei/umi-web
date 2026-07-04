@@ -10,7 +10,7 @@ const chatToggleBtn = document.getElementById('chatToggleBtn');
 
 // ── Garzonas disponibles ──────────────────────────────────────────────────────
 const GARZONAS = {
-  yani:   { name: 'Yani',   img: 'garzona.png', genero: 'f' },
+  yani:   { name: 'Jean',   img: 'garzona.png', genero: 'f' },
   laura:  { name: 'Laura',  img: 'laura.png',   genero: 'f' },
   juliet: { name: 'Juliet', img: 'juliet.png',  genero: 'f' },
   sam:    { name: 'Sam',    img: 'sam.png',     genero: 'm' }

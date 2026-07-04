@@ -163,7 +163,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Nombre y género del garzón/a elegido (solo letras, máx 20 chars; default Yani)
-    const garzonaName = String(req.body.garzona || 'Yani').replace(/[^\p{L} ]/gu, '').slice(0, 20) || 'Yani';
+    const garzonaName = String(req.body.garzona || 'Jean').replace(/[^\p{L} ]/gu, '').slice(0, 20) || 'Jean';
     const esHombre = req.body.genero === 'm';
     const systemPrompt = language === 'en'
       ? SYSTEM_PROMPT_EN(garzonaName, esHombre ? 'waiter' : 'waitress')
