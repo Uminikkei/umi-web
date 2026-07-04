@@ -726,7 +726,7 @@ footer{
   line-height:.88;letter-spacing:-3px;
   text-align:center;margin-bottom:.6rem;
 }
-.menu-sec-sub{color:var(--muted);font-size:1rem;text-align:center;margin:0 auto .5rem;display:block}
+.menu-sec-sub{color:var(--muted);font-family:'Inter',sans-serif;font-size:.88rem;line-height:1.75;text-align:center;margin:0 auto .5rem;display:block}
 /* Círculos principales con texto SVG rotatorio */
 .cat-circles{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin:1.4rem 0 0;padding:0 1rem;overflow:visible}
 .cat-circ{
