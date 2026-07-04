@@ -33,9 +33,32 @@ img{display:block;max-width:100%}
 /* ── NAVBAR TRANSPARENTE — logotipo grande centrado, olas desde extremos ── */
 body{padding-top:0}
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
+  position:fixed;top:34px;left:0;right:0;z-index:200;
   background:transparent;
 }
+
+/* ── BANNER PROMO PUNTOS (marquesina aqua translúcida) ── */
+.promo-banner{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:34px;overflow:hidden;
+  display:flex;align-items:center;
+  background:rgba(98,202,227,.20);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(98,202,227,.38);
+}
+.promo-track{
+  display:flex;flex-shrink:0;white-space:nowrap;will-change:transform;
+  animation:promoScroll 32s linear infinite;
+}
+.promo-track span{
+  padding-right:3rem;
+  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:1px;color:#eafcff;text-shadow:0 1px 2px rgba(4,7,9,.35);
+}
+.promo-track strong{color:#fff;font-weight:700}
+.promo-banner:hover .promo-track{animation-play-state:paused}
+@keyframes promoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.promo-track{animation-duration:0s}}
 
 /* ── BARRA SUPERIOR ── */
 .nav-topbar{
