@@ -303,7 +303,7 @@ nav{
 /* layout significado */
 .sig-layout{ max-width:900px; margin:1.2rem auto 0; }
 .sig-img-wrap{ position:relative; }
-.sig-svg{ width:100%; height:auto; display:block; }
+.sig-svg{ width:100%; height:auto; display:block; aspect-ratio:2788/340; object-fit:contain; }
 .sig-op{
   position:absolute;
   transform:translate(-50%,-50%);
