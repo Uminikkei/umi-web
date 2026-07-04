@@ -1254,14 +1254,15 @@ footer strong{color:var(--teal)}
 
 .chat-toggle-btn:hover {
   background: #00b8d4;
-  transform: scale(1.1);
+  transform: translateY(-6px) scale(1.05);
   box-shadow: 0 6px 32px rgba(98, 202, 227, 0.6);
 }
 
-.chat-toggle-btn svg {
-  width: 28px;
-  height: 28px;
-  fill: #fff;
+.chat-toggle-btn img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 .chat-toggle-btn.hidden {
@@ -1302,6 +1303,22 @@ footer strong{color:var(--teal)}
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chat-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+  padding: 3px;
+  flex-shrink: 0;
 }
 
 .chat-header-content h4 {
