@@ -476,7 +476,7 @@ footer{
   text-align:center;
 }
 .footer-inner > div{display:flex;flex-direction:column;align-items:center}
-.footer-brand{}
+.footer-brand{align-self:center}
 .footer-brand-logos{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.6rem}
 .footer-brand-iso svg{opacity:.85}
 .footer-brand-name{
