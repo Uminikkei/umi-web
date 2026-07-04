@@ -34,11 +34,13 @@ function selectGarzona(id) {
   garzonaId = id;
   localStorage.setItem('umiGarzona', id);
   applyGarzonaUI();
-  const g = GARZONAS[id];
-  const msg = chatLanguage === 'en'
-    ? `Hi! 👋 I'm ${g.name}, now I'll be taking care of you. How can I help?`
-    : `¡Hola! 👋 Soy ${g.name}, ahora te atiendo yo. ¿En qué te ayudo?`;
-  addChatMessage(msg, false);
+  // Sin mensaje de presentación: el nuevo garzón simplemente sigue atendiendo.
+  // Si es el primer mensaje del chat (solo saludo inicial), actualizarlo al nuevo nombre.
+  const msgs = chatMessages.querySelectorAll('.chat-msg');
+  if (msgs.length === 1) {
+    const firstMsg = chatMessages.querySelector('.bot-msg p');
+    if (firstMsg) firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId].name);
+  }
 }
 
 // Initial greeting based on language
