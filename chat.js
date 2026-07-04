@@ -10,9 +10,10 @@ const chatToggleBtn = document.getElementById('chatToggleBtn');
 
 // ── Garzonas disponibles ──────────────────────────────────────────────────────
 const GARZONAS = {
-  yani:   { name: 'Yani',   img: 'garzona.png' },
-  laura:  { name: 'Laura',  img: 'laura.png' },
-  juliet: { name: 'Juliet', img: 'juliet.png' }
+  yani:   { name: 'Yani',   img: 'garzona.png', genero: 'f' },
+  laura:  { name: 'Laura',  img: 'laura.png',   genero: 'f' },
+  juliet: { name: 'Juliet', img: 'juliet.png',  genero: 'f' },
+  sam:    { name: 'Sam',    img: 'sam.png',     genero: 'm' }
 };
 let garzonaId = localStorage.getItem('umiGarzona') || 'yani';
 if (!GARZONAS[garzonaId]) garzonaId = 'yani';
@@ -40,14 +41,14 @@ function selectGarzona(id) {
   const msgs = chatMessages.querySelectorAll('.chat-msg');
   if (msgs.length === 1) {
     const firstMsg = chatMessages.querySelector('.bot-msg p');
-    if (firstMsg) firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId].name);
+    if (firstMsg) firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId]);
   }
 }
 
 // Initial greeting based on language
 const greetings = {
-  es: (n) => `¡Hola! 👋 Soy ${n}, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?`,
-  en: (n) => `Hi! 👋 I'm ${n}, your virtual waitress at Umi. How can I help you today?`
+  es: (g) => `¡Hola! 👋 Soy ${g.name}, tu ${g.genero === 'm' ? 'garzón' : 'garzona'} virtual en Umi. ¿Cómo puedo ayudarte hoy?`,
+  en: (g) => `Hi! 👋 I'm ${g.name}, your virtual ${g.genero === 'm' ? 'waiter' : 'waitress'} at Umi. How can I help you today?`
 };
 
 const placeholders = {
@@ -231,6 +232,7 @@ async function sendChatMessage() {
         message: message,
         language: chatLanguage,
         garzona: GARZONAS[garzonaId].name,
+        genero: GARZONAS[garzonaId].genero,
         conversationHistory: conversationHistory
       })
     });
@@ -287,7 +289,7 @@ function initChat() {
   // Set initial greeting
   const firstMsg = chatMessages.querySelector('.bot-msg p');
   if (firstMsg) {
-    firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId].name);
+    firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId]);
   }
 
   // Set initial language
