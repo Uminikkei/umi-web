@@ -325,6 +325,9 @@ nav{
   font-family:'SignHandwriting', var(--script); font-style:normal;
   font-size:clamp(2rem,3.5vw,2.6rem); color:#0d1e40; font-weight:400;
 }
+.significado-sec .significado-desc{
+  font-family:'Inter',sans-serif; font-size:.88rem; color:#444; line-height:1.75;
+}
 .significado-desc{
   color:rgba(13,30,64,.7);
   font-size:1rem;
