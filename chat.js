@@ -10,8 +10,9 @@ const chatToggleBtn = document.getElementById('chatToggleBtn');
 
 // ── Garzonas disponibles ──────────────────────────────────────────────────────
 const GARZONAS = {
-  yani:  { name: 'Yani',  img: 'garzona.png' },
-  laura: { name: 'Laura', img: 'laura.png' }
+  yani:   { name: 'Yani',   img: 'garzona.png' },
+  laura:  { name: 'Laura',  img: 'laura.png' },
+  juliet: { name: 'Juliet', img: 'juliet.png' }
 };
 let garzonaId = localStorage.getItem('umiGarzona') || 'yani';
 if (!GARZONAS[garzonaId]) garzonaId = 'yani';
@@ -25,7 +26,7 @@ function applyGarzonaUI() {
   if (tg) tg.src = g.img;
   if (nm) nm.textContent = g.name;
   document.querySelectorAll('.garzona-opt').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById(garzonaId === 'laura' ? 'optLaura' : 'optYani');
+  const btn = document.getElementById('opt' + garzonaId.charAt(0).toUpperCase() + garzonaId.slice(1));
   if (btn) btn.classList.add('active');
 }
 
