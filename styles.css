@@ -938,7 +938,7 @@ footer{
 .cc-icon svg{width:26px;height:26px}
 .cc-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--subtle)}
 .cc-val{font-size:.92rem;font-weight:500;color:var(--text);line-height:1.5}
-.cc-val a{color:var(--teal)}
+.cc-val a{color:#fff}
 .cc-val a:hover{text-decoration:underline}
 
 /* ── REVIEWS MARQUEE ── */
