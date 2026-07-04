@@ -13,7 +13,8 @@ const GARZONAS = {
   yani:   { name: 'Jean',   img: 'garzona.png', genero: 'f' },
   laura:  { name: 'Laura',  img: 'laura.png',   genero: 'f' },
   juliet: { name: 'Juliet', img: 'juliet.png',  genero: 'f' },
-  sam:    { name: 'Sam',    img: 'sam.png',     genero: 'm' }
+  sam:    { name: 'Sam',    img: 'sam.png',     genero: 'm' },
+  fran:   { name: 'Fran',   img: 'fran.png',    genero: 'm' }
 };
 let garzonaId = localStorage.getItem('umiGarzona') || 'yani';
 if (!GARZONAS[garzonaId]) garzonaId = 'yani';
