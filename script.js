@@ -1024,3 +1024,57 @@ async function onCardApproved(){
     </div>`;
   document.body.appendChild(ov);
 }
+
+// ── COMENTARIOS Y RECLAMOS ────────────────────────────────────────────────────
+function openFeedback(){
+  document.getElementById('feedbackModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeFeedback(){
+  document.getElementById('feedbackModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function fbCount(){
+  const t = document.getElementById('fbMensaje');
+  document.getElementById('fbChars').textContent = t.value.length;
+}
+async function enviarFeedback(){
+  const nombre  = document.getElementById('fbNombre').value.trim();
+  const correo  = document.getElementById('fbCorreo').value.trim();
+  const mensaje = document.getElementById('fbMensaje').value.trim();
+  const status  = document.getElementById('fbStatus');
+  const btn     = document.getElementById('fbSend');
+
+  if(!nombre || !correo || !mensaje){
+    status.textContent = 'Completa nombre, correo y mensaje.';
+    status.className = 'fb-status error'; return;
+  }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){
+    status.textContent = 'Ingresa un correo válido.';
+    status.className = 'fb-status error'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  status.textContent = ''; status.className = 'fb-status';
+  try {
+    const r = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, correo, mensaje })
+    });
+    const data = await r.json();
+    if(!r.ok) throw new Error(data.error || 'Error al enviar');
+    status.textContent = '¡Mensaje enviado! Gracias por escribirnos. 💙';
+    status.className = 'fb-status ok';
+    document.getElementById('fbNombre').value = '';
+    document.getElementById('fbCorreo').value = '';
+    document.getElementById('fbMensaje').value = '';
+    fbCount();
+    setTimeout(closeFeedback, 2500);
+  } catch(e){
+    status.textContent = e.message || 'No se pudo enviar. Intenta de nuevo.';
+    status.className = 'fb-status error';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Enviar';
+  }
+}
