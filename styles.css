@@ -1591,6 +1591,7 @@ footer strong{color:var(--teal)}
 .cream-etim-full .significado-title em{
   font-family:'SignHandwriting', var(--script); font-style:normal;
   font-size:clamp(2rem,3.5vw,2.6rem); color:#222; font-weight:400;
+  text-transform:lowercase;
 }
 .cream-etim-full .significado-desc{
   font-size:.88rem; color:#444; line-height:1.75;
