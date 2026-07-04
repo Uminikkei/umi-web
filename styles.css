@@ -1327,17 +1327,17 @@ footer strong{color:var(--teal)}
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-left: 74px;
-  min-height: 44px;
+  padding-left: 92px;
+  min-height: 52px;
 }
 
 /* Garzona sobresaliendo por encima del chat, sin círculo */
 .chat-header-avatar {
   position: absolute;
-  top: -22px;
-  left: 10px;
-  width: 76px;
-  height: 76px;
+  top: -12px;
+  left: 8px;
+  width: 88px;
+  height: 88px;
   border-radius: 0;
   background: transparent;
   object-fit: contain;
