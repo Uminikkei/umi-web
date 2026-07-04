@@ -674,7 +674,16 @@ function renderCart(){
   const footer = document.getElementById('cartFooter');
   const totalEl = document.getElementById('cartTotal');
   if(cart.length === 0){
-    el.innerHTML = `<div class="cart-empty"><span>🍽️</span><p>Tu pedido está vacío.<br/>Agrega platos desde el menú.</p></div>`;
+    el.innerHTML = `<div class="cart-empty">
+      <svg class="cart-empty-icon" viewBox="0 0 36 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="13" r="9"/>
+        <circle cx="18" cy="13" r="4"/>
+        <path d="M4 3v5a2 2 0 0 0 4 0V3"/><path d="M6 10v13"/>
+        <path d="M31 3c-1.6 1.2-2 3.2-2 5.5V13h3v10"/>
+      </svg>
+      <p>Tu pedido está vacío.<br/>Agrega platos desde el menú.</p>
+      <button class="cart-empty-btn" onclick="closeCart();document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Ir al menú →</button>
+    </div>`;
     footer.style.display = 'none'; return;
   }
   footer.style.display = '';
