@@ -12,14 +12,18 @@ function connectNavWaves() {
   const navR   = navTop.getBoundingClientRect();
   const leftR  = leftSvg.getBoundingClientRect();
   const rightR = rightSvg.getBoundingClientRect();
-  const connYabs = logoR.top + logoR.height * 0.51;
-  const connYL = ((connYabs - leftR.top)  / leftR.height)  * 380;
-  const connYR = ((connYabs - rightR.top) / rightR.height) * 380;
-  const amp = 380 * 0.22;
+  // Puntos reales del trazo (medidos en el PNG): la "u" entra al 65.8% de la
+  // altura y la cola de la "i" termina al 63.6%.
+  const connYLabs = logoR.top + logoR.height * 0.658;
+  const connYRabs = logoR.top + logoR.height * 0.636;
+  const yL = ((connYLabs - leftR.top)  / leftR.height)  * 380;
+  const yR = ((connYRabs - rightR.top) / rightR.height) * 380;
+  // Ondas de doble curva suaves; la izquierda desciende hacia el inicio de la
+  // "u" y la derecha sale subiendo desde la cola de la "i".
   leftPath.setAttribute('d',
-    `M 0,${connYL} C 160,${connYL - amp} 380,${connYL + amp} 600,${connYL}`);
+    `M 0,${yL - 12} C 110,${yL - 58} 200,${yL + 38} 320,${yL - 8} S 510,${yL - 52} 600,${yL}`);
   rightPath.setAttribute('d',
-    `M 0,${connYR} C 180,${connYR - amp} 420,${connYR + amp} 600,${connYR}`);
+    `M 0,${yR} C 90,${yR - 52} 190,${yR + 34} 310,${yR - 10} S 500,${yR - 48} 600,${yR - 12}`);
 }
 document.getElementById('navLogo').addEventListener('load', connectNavWaves);
 window.addEventListener('resize', connectNavWaves);
