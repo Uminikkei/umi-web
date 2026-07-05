@@ -56,7 +56,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260706g"/>
+<link rel="stylesheet" href="styles.css?v=20260706h"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -356,20 +356,6 @@
 </section>
 
 <!-- CONTACTO + INFO ── integrado antes del footer -->
-<section class="section" id="contacto" style="max-width:1200px;margin:0 auto;padding:4rem 2rem 3rem">
-  <span class="sec-label" style="display:block;text-align:center">Encuéntranos</span>
-  <h2 class="sec-title" style="text-align:center;margin-bottom:2.5rem">Contacto</h2>
-  <div class="contact-grid">
-    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span class="cc-label">Dirección</span><span class="cc-val">Av. Costanera 5633<br/>Coquimbo, Chile</span></div>
-    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><span class="cc-label">WhatsApp</span><span class="cc-val"><a href="https://wa.me/56961551728" target="_blank">+56 9 6155 1728</a></span></div>
-    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span><span class="cc-label">Instagram</span><span class="cc-val"><a href="https://www.instagram.com/uminikkeibar" target="_blank">@uminikkeibar</a></span></div>
-    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="cc-label">Horario</span><span class="cc-val">Todos los días<br/>12:00 – 00:00 hrs</span></div>
-  </div>
-  <!-- Mapa -->
-  <div class="contact-map">
-    <iframe src="https://www.google.com/maps?q=Av.+Costanera+5633,+Coquimbo,+Chile&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen title="Mapa UMI Nikkei Bar"></iframe>
-  </div>
-</section>
 
 <!-- REVIEWS -->
 <section class="reviews-sec">
@@ -493,7 +479,7 @@
   </div><!-- /.reviews-track-wrap -->
 </section>
 
-<footer>
+<footer id="contacto">
   <div class="footer-inner">
 
     <!-- Marca -->
@@ -504,11 +490,20 @@
       </div>
     </div>
 
+    <!-- Contacto -->
+    <div>
+      <span class="footer-col-title">Contacto</span>
+      <div class="footer-info">
+        <a href="https://wa.me/56961551728" target="_blank">+56 9 6155 1728</a><br/>
+        <a href="https://www.instagram.com/uminikkeibar" target="_blank">@uminikkeibar</a>
+      </div>
+    </div>
+
     <!-- Horarios -->
     <div>
       <span class="footer-col-title">Horarios</span>
       <div class="footer-info">
-        <strong>Lunes a Domingo</strong><br/>
+        Lunes a Domingo<br/>
         12:00 – 00:00 hrs
       </div>
     </div>
@@ -518,7 +513,7 @@
       <span class="footer-col-title">Ubicación</span>
       <div class="footer-info">
         Av. Costanera 5633<br/>Coquimbo, Chile<br/>
-        <a href="https://maps.app.goo.gl/HqihN96CYeotXjff6" target="_blank" style="color:var(--teal);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;font-weight:700">Ver en mapa →</a>
+        <button class="footer-map-link" onclick="openMap()">Ver en mapa →</button>
       </div>
     </div>
 
@@ -626,6 +621,20 @@
       </ul>
       <p class="terms-note">UMI Nikkei Bar puede actualizar estos términos; la versión vigente estará siempre disponible en esta página. Última actualización: julio 2026.</p>
     </div>
+  </div>
+</div>
+
+<!-- MODAL MAPA -->
+<div class="feedback-modal" id="mapModal">
+  <div class="feedback-bg" onclick="closeMap()"></div>
+  <div class="feedback-box map-box">
+    <button class="feedback-close" onclick="closeMap()" aria-label="Cerrar">✕</button>
+    <h3>Encuéntranos</h3>
+    <p class="feedback-sub">Av. Costanera 5633, Coquimbo · Todos los días 12:00 – 00:00 hrs</p>
+    <div class="contact-map">
+      <iframe id="mapFrame" data-src="https://www.google.com/maps?q=Av.+Costanera+5633,+Coquimbo,+Chile&output=embed" referrerpolicy="no-referrer-when-downgrade" allowfullscreen title="Mapa UMI Nikkei Bar"></iframe>
+    </div>
+    <a class="fb-send map-open-btn" href="https://maps.app.goo.gl/HqihN96CYeotXjff6" target="_blank">Abrir en Google Maps</a>
   </div>
 </div>
 
@@ -839,7 +848,7 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260706f"></script>
+<script src="script.js?v=20260706h"></script>
 <script src="chat.js?v=20260706a"></script>
 <script type="module" src="auth.js?v=20260706a"></script>
 </body>

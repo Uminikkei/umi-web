@@ -1052,6 +1052,18 @@ function closeUserInfo(){
   document.body.style.overflow = '';
 }
 
+// ── MAPA (modal) ──────────────────────────────────────────────────────────────
+function openMap(){
+  const frame = document.getElementById('mapFrame');
+  if(frame && !frame.src) frame.src = frame.dataset.src; // carga perezosa
+  document.getElementById('mapModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMap(){
+  document.getElementById('mapModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ── TÉRMINOS Y CONDICIONES ────────────────────────────────────────────────────
 function openTerms(){
   document.getElementById('termsModal').classList.add('open');
