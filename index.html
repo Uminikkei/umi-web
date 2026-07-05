@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260705j"/>
+<link rel="stylesheet" href="styles.css?v=20260705k"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -105,10 +105,18 @@
   </div>
 
   <!-- Sello / badge circular derecho -->
-  <div class="hero-badge" aria-hidden="true">
-    <span class="hero-badge-top">COCINA NIKKEI</span>
-    <!-- isotipo pendiente archivo oficial -->
-    <span class="hero-badge-bot">FRENTE AL MAR</span>
+  <div class="hero-badge hero-stamp" aria-hidden="true">
+    <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="stampArcTop" d="M 24 80 A 56 56 0 0 1 136 80"/>
+        <path id="stampArcBot" d="M 28 80 A 52 52 0 0 0 132 80"/>
+      </defs>
+      <circle cx="80" cy="80" r="76" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="80" cy="80" r="69" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3.5 4.5"/>
+      <text class="stamp-txt"><textPath href="#stampArcTop" startOffset="50%" text-anchor="middle">COCINA NIKKEI</textPath></text>
+      <text class="stamp-word" x="80" y="90" text-anchor="middle">UMI</text>
+      <text class="stamp-stars"><textPath href="#stampArcBot" startOffset="50%" text-anchor="middle">★ ★ ★ ★ ★</textPath></text>
+    </svg>
   </div>
 
   <!-- Separador inferior: bezier suave -->
