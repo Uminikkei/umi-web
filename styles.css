@@ -1077,8 +1077,8 @@ footer strong{color:var(--teal)}
 /* ── FAB ── */
 /* ── SIDE TABS (pastillas compactas con icono, se expanden al pasar el mouse) ── */
 .side-tabs{
-  position:fixed;right:128px;bottom:46px;
-  z-index:999;display:flex;flex-direction:row;gap:16px;align-items:center;
+  position:fixed;right:8px;bottom:140px;
+  z-index:999;display:flex;flex-direction:column;gap:14px;align-items:center;
   pointer-events:none;
 }
 .side-tab{
