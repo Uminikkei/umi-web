@@ -33,14 +33,14 @@ img{display:block;max-width:100%}
 /* ── NAVBAR TRANSPARENTE — logotipo grande centrado, olas desde extremos ── */
 body{padding-top:0}
 nav{
-  position:absolute;top:34px;left:0;right:0;z-index:200;
+  position:absolute;top:26px;left:0;right:0;z-index:200;
   background:transparent;
 }
 
 /* ── BANNER PROMO PUNTOS (marquesina aqua translúcida) ── */
 .promo-banner{
   position:absolute;top:0;left:0;right:0;z-index:300;
-  height:34px;overflow:hidden;
+  height:26px;overflow:hidden;
   display:flex;align-items:center;
   background:rgba(98,202,227,.20);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
@@ -69,7 +69,7 @@ nav{
 .nav-topbar{
   position:absolute;top:0;left:0;right:0;z-index:10;
   display:flex;align-items:center;
-  padding:.5rem 2vw;
+  padding:.15rem 2vw;
   gap:1.8vw;
 }
 /* Isotipo izquierda */
