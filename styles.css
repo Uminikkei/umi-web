@@ -318,18 +318,20 @@ nav{
   text-align:center;gap:.2rem;
   background:rgba(4,7,9,.4);backdrop-filter:blur(8px);
 }
-/* Sello vintage (tapa de botella) */
+/* Sello vintage (SVG oficial, blanco hueso) */
 .hero-stamp{
-  width:170px;height:178px;
+  width:180px;height:180px;
   background:transparent;border:none;backdrop-filter:none;
-  color:rgba(240,235,224,.85);
-  transform:rotate(10deg);
+  color:rgba(240,235,224,.88);
 }
 .hero-stamp svg{width:100%;height:100%;overflow:visible}
-.stamp-txt{font-family:'Inter',sans-serif;font-size:19px;letter-spacing:5px;font-weight:700;fill:currentColor}
-.stamp-band{font-family:'Inter',sans-serif;font-size:31px;letter-spacing:4px;font-weight:800;fill:currentColor}
-.stamp-mini{font-size:11px;letter-spacing:4px;fill:currentColor}
-.stamp-stars{font-size:16px;fill:currentColor}
+.hero-stamp .ust{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.hero-stamp .ufl{fill:currentColor}
+.hero-stamp .utx{
+  font-family:'Arial Black','Impact','Inter',sans-serif;
+  font-weight:900;letter-spacing:10px;fill:currentColor;
+}
+.hero-stamp .udist{fill:#0d1e40;opacity:.18}
 
 .hero-badge-top{
   font-size:.52rem;letter-spacing:3px;text-transform:uppercase;
