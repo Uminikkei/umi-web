@@ -80,6 +80,11 @@ nav{
 }
 .ntb-icon-btn:hover{color:var(--teal);transform:translateY(-2px)}
 .ntb-icon-btn svg{width:21px;height:21px}
+.ntb-user-pts{
+  font-size:.62rem;font-weight:700;letter-spacing:.5px;
+  color:#f2c94c;white-space:nowrap;margin-left:.35rem;
+}
+.ntb-user-pts.hidden{display:none}
 .ntb-bag-badge{
   position:absolute;top:-4px;right:-5px;
   background:#e03050;color:#fff;font-size:.56rem;font-weight:700;

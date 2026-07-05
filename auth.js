@@ -180,6 +180,16 @@ function updateAccountBtn() {
     btn.textContent = label;
     btn.classList.toggle('ntb-account--pts', !!currentProfile);
   }
+  // Puntos en dorado junto al ícono de persona
+  const pts = $('ntbUserPts');
+  if (pts) {
+    if (currentProfile) {
+      pts.textContent = '⭐ ' + (currentProfile.points || 0).toLocaleString('es-CL');
+      pts.classList.remove('hidden');
+    } else {
+      pts.classList.add('hidden');
+    }
+  }
   if (mob) mob.textContent = label;
 }
 
