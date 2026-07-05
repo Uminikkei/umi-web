@@ -659,8 +659,12 @@ footer{
   transition:transform .55s cubic-bezier(.22,1,.36,1);
 }
 .menu-dark-area .item:hover .item-img{ transform:scale(1.05); }
-.menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; }
-.menu-dark-area .item-name{ color:#5a544c; letter-spacing:.2px; font-weight:500; font-size:.98rem; }
+.menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; flex:1; }
+.menu-dark-area .item-name{
+  color:#5a544c; letter-spacing:.2px; font-weight:500; font-size:.98rem;
+  min-height:2.4em; /* siempre reserva 2 líneas: todas las cajas iguales */
+}
+.menu-dark-area .item-footer{ margin-top:auto; }
 .menu-dark-area .item-footer{
   border-top:1px solid rgba(13,30,64,.08);
   padding-top:.55rem; margin-top:.15rem;
@@ -927,7 +931,7 @@ footer{
 .items-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:.7rem;align-items:start;
+  gap:.7rem;align-items:stretch;
 }
 @media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.4rem} }
 /* Card compacto estilo Spleat */
