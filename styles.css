@@ -1041,12 +1041,12 @@ footer strong{color:var(--teal)}
 .side-tab-label{ display:none; }
 
 .side-tab .side-tab-icon svg{
-  width:30px;height:30px;
   filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
-.side-tab--cart .side-tab-icon svg{ fill:var(--teal); }
-.side-tab--fb   .side-tab-icon svg{ color:var(--teal); }
-.side-tab--wa   .side-tab-icon svg{ fill:#25D366; }
+/* Tamaños compensados: cada dibujo llena distinto su lienzo SVG */
+.side-tab--cart .side-tab-icon svg{ fill:var(--teal); width:28px;height:28px; }
+.side-tab--fb   .side-tab-icon svg{ color:var(--teal); width:30px;height:30px; }
+.side-tab--wa   .side-tab-icon svg{ fill:#25D366; width:26px;height:26px; }
 
 .cart-fab-badge{
   position:absolute;top:-6px;right:-6px;left:auto;
