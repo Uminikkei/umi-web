@@ -322,6 +322,7 @@ nav{
 .hero-stamp{
   width:135px;height:135px;
   background:transparent;border:none;backdrop-filter:none;
+  transform:rotate(45deg);
 }
 .hero-stamp img{width:100%;height:100%;display:block}
 
