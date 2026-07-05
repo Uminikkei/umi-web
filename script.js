@@ -1165,13 +1165,15 @@ function buildFavCarousel(){
     slide.className = 'fav-slide' + (i === 0 ? ' on' : '');
     slide.innerHTML = `
       <img src="${img}" alt="${name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"/>
-      <span class="fav-price">${fmt(f.item.p)}</span>
-      <div class="fav-caption">
+      <div class="fav-info">
         <span class="fav-name">${name}</span>
-        <button class="fav-add" onclick="addToCart('${nEsc}',${f.item.p},'','${cEsc}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
-          Agregar
-        </button>
+        <div class="fav-row">
+          <span class="fav-price">${fmt(f.item.p)}</span>
+          <button class="fav-add" aria-label="Agregar a tu orden" onclick="addToCart('${nEsc}',${f.item.p},'','${cEsc}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+            <span class="fav-tip">Agregar a tu orden</span>
+          </button>
+        </div>
       </div>`;
     track.appendChild(slide);
     const dot = document.createElement('button');
