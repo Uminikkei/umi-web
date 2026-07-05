@@ -659,15 +659,15 @@ footer{
   transition:transform .55s cubic-bezier(.22,1,.36,1);
 }
 .menu-dark-area .item:hover .item-img{ transform:scale(1.05); }
-.menu-dark-area .item-body{ padding:.75rem .9rem .8rem; gap:.4rem; }
-.menu-dark-area .item-name{ color:#5a544c; letter-spacing:.2px; }
+.menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; }
+.menu-dark-area .item-name{ color:#5a544c; letter-spacing:.2px; font-weight:500; font-size:.98rem; }
 .menu-dark-area .item-footer{
   border-top:1px solid rgba(13,30,64,.08);
   padding-top:.55rem; margin-top:.15rem;
 }
-.menu-dark-area .item-price{ color:#94793f; font-size:.98rem; }
+.menu-dark-area .item-price{ color:#94793f; font-size:.88rem; font-weight:500; }
 .menu-dark-area .item-cart{
-  width:36px;height:36px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   background:#c9a84c;
   box-shadow:0 3px 8px rgba(151,120,50,.3);
 }
@@ -926,8 +926,8 @@ footer{
 }
 .items-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  gap:.4rem;align-items:start;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:.7rem;align-items:start;
 }
 @media(max-width:480px){ .items-grid{grid-template-columns:repeat(2,1fr);gap:.4rem} }
 /* Card compacto estilo Spleat */
