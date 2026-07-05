@@ -1934,31 +1934,50 @@ footer strong{color:var(--teal)}
 }
 /* Los más pedidos a lo ancho en la sección dorada */
 .mp-row{ display:flex; justify-content:center; gap:2.4rem; flex-wrap:wrap; margin:2rem 0 0; }
-/* ─── Carrusel de favoritos: una imagen grande a la vez ─── */
-.fav-carousel{max-width:860px;margin:2.2rem auto 0}
-.fav-viewport{overflow:hidden;border-radius:20px;box-shadow:0 18px 44px rgba(97,62,12,.22)}
-.fav-track{display:flex;transition:transform .6s cubic-bezier(.22,1,.36,1)}
-.fav-slide{min-width:100%;position:relative;aspect-ratio:16/9;background:#0d1e40}
+/* ─── Carrusel de favoritos: fotos que abarcan toda la sección ─── */
+#favCarousel{
+  position:relative;overflow:hidden;
+  height:clamp(480px,72vh,680px);
+}
+.fav-track{position:absolute;inset:0}
+.fav-slide{
+  position:absolute;inset:0;
+  opacity:0;transition:opacity .9s ease;pointer-events:none;
+}
+.fav-slide.on{opacity:1;pointer-events:auto}
 .fav-slide img{width:100%;height:100%;object-fit:cover;display:block}
+/* degradados para legibilidad del texto superpuesto */
+.fav-slide::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:38%;
+  background:linear-gradient(to bottom,rgba(4,7,9,.55),transparent);pointer-events:none;
+}
 .fav-slide::after{
-  content:'';position:absolute;left:0;right:0;bottom:0;height:55%;
-  background:linear-gradient(to top,rgba(4,7,9,.72),transparent);
-  pointer-events:none;
+  content:'';position:absolute;left:0;right:0;bottom:0;height:45%;
+  background:linear-gradient(to top,rgba(4,7,9,.65),transparent);pointer-events:none;
 }
+/* encabezado superpuesto */
+.fav-head{
+  position:absolute;top:74px;left:0;right:0;z-index:3;
+  text-align:center;pointer-events:none;
+}
+.fav-head .significado-label{color:rgba(253,248,236,.85)}
+.fav-head .significado-title{color:#fdf8ec;text-shadow:0 2px 12px rgba(4,7,9,.55)}
+.fav-head .significado-title em{color:#fdf8ec}
+/* precio en la esquina */
 .fav-price{
-  position:absolute;top:14px;right:14px;z-index:2;
+  position:absolute;top:88px;right:5vw;z-index:3;
   background:rgba(4,7,9,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  color:#f2c94c;font-family:'Inter',sans-serif;font-weight:700;font-size:1rem;
-  padding:.45rem 1rem;border-radius:999px;border:1px solid rgba(242,201,76,.35);
+  color:#f2c94c;font-family:'Inter',sans-serif;font-weight:700;font-size:1.05rem;
+  padding:.5rem 1.1rem;border-radius:999px;border:1px solid rgba(242,201,76,.35);
 }
+/* nombre + agregar sobre la ola inferior */
 .fav-caption{
-  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  position:absolute;left:5vw;right:5vw;bottom:124px;z-index:3;
   display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;
-  padding:1.1rem 1.3rem;
 }
 .fav-name{
-  font-family:var(--serif);font-size:clamp(1.3rem,3vw,1.9rem);font-weight:600;
-  color:#fdf8ec;text-shadow:0 2px 8px rgba(4,7,9,.5);
+  font-family:var(--serif);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:600;
+  color:#fdf8ec;text-shadow:0 2px 10px rgba(4,7,9,.55);
 }
 .fav-add{
   display:flex;align-items:center;gap:.5rem;
@@ -1971,15 +1990,31 @@ footer strong{color:var(--teal)}
 }
 .fav-add:hover{transform:translateY(-2px);background:#b3923c}
 .fav-add svg{width:17px;height:17px}
-.fav-dots{display:flex;justify-content:center;gap:10px;margin-top:1.1rem}
+/* puntitos */
+.fav-dots{
+  position:absolute;left:0;right:0;bottom:96px;z-index:3;
+  display:flex;justify-content:center;gap:10px;
+}
 .fav-dot{
   width:9px;height:9px;border-radius:50%;padding:0;cursor:pointer;
-  border:1.5px solid rgba(13,30,64,.55);background:transparent;
+  border:1.5px solid rgba(253,248,236,.85);background:transparent;
   transition:background .25s,transform .25s;
 }
-.fav-dot.on{background:#0d1e40;transform:scale(1.25)}
+.fav-dot.on{background:#fdf8ec;transform:scale(1.25)}
+/* olas que recortan sobre la foto */
+#favCarousel .sig-wave-top{
+  position:absolute;top:-1px;left:0;right:0;z-index:2;line-height:0;pointer-events:none;
+}
+#favCarousel .sig-wave-top svg{display:block;width:100%;height:80px}
+#favCarousel .sig-wave-bottom{
+  position:absolute;bottom:-1px;left:0;right:0;z-index:2;line-height:0;pointer-events:none;
+}
+#favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px}
 @media(max-width:640px){
-  .fav-slide{aspect-ratio:4/3}
+  #favCarousel{height:460px}
+  .fav-head{top:58px}
+  .fav-price{top:64px;font-size:.9rem}
+  .fav-caption{bottom:112px}
   .fav-add{padding:.5rem .9rem;font-size:.7rem}
 }
 

@@ -56,7 +56,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260706j"/>
+<link rel="stylesheet" href="styles.css?v=20260706k"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -200,29 +200,30 @@
     </div>
   </div>
 
-  <!-- Separador inferior cream → dorado -->
-  <div class="cream-wave-bottom">
-    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#e2be94" d="M0,55 C200,95 400,20 600,60 C800,95 1000,25 1200,55 C1320,72 1400,45 1440,50 L1440,100 L0,100 Z"/>
-    </svg>
-  </div>
 </section>
 
 <!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
-<section class="significado-sec">
-  <div class="significado-inner">
+<section class="significado-sec" id="favCarousel">
+  <!-- Fotos a pantalla completa de la sección -->
+  <div class="fav-track" id="favTrack"></div>
+
+  <!-- Encabezado superpuesto -->
+  <div class="fav-head">
     <span class="significado-label">Los más pedidos</span>
     <h2 class="significado-title">Nuestros <em>favoritos</em></h2>
-    <p class="significado-desc">Los platos que eligen nuestros clientes una y otra vez.</p>
-    <div class="fav-carousel" id="favCarousel">
-      <div class="fav-viewport">
-        <div class="fav-track" id="favTrack"></div>
-      </div>
-      <div class="fav-dots" id="favDots"></div>
-    </div>
   </div>
 
-  <!-- Ola inferior: dorado → teal -->
+  <!-- Puntitos de navegación -->
+  <div class="fav-dots" id="favDots"></div>
+
+  <!-- Ola superior: cream recorta sobre la foto -->
+  <div class="sig-wave-top" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#f0e8d8" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
+    </svg>
+  </div>
+
+  <!-- Ola inferior: teal recorta sobre la foto -->
   <div class="sig-wave-bottom">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path fill="var(--teal)" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
@@ -811,7 +812,7 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260706j"></script>
+<script src="script.js?v=20260706k"></script>
 <script src="chat.js?v=20260706a"></script>
 <script type="module" src="auth.js?v=20260706i"></script>
 </body>

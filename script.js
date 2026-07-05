@@ -1155,7 +1155,7 @@ function buildFavCarousel(){
     const nEsc = name.replace(/'/g, "\\'");
     const cEsc = f.cat.replace(/'/g, "\\'");
     const slide = document.createElement('div');
-    slide.className = 'fav-slide';
+    slide.className = 'fav-slide' + (i === 0 ? ' on' : '');
     slide.innerHTML = `
       <img src="${img}" alt="${name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"/>
       <span class="fav-price">${fmt(f.item.p)}</span>
@@ -1183,7 +1183,7 @@ function favGo(i, manual){
   const track = document.getElementById('favTrack');
   const n = track.children.length; if(!n) return;
   favIdx = ((i % n) + n) % n;
-  track.style.transform = `translateX(-${favIdx * 100}%)`;
+  [...track.children].forEach((s, k) => s.classList.toggle('on', k === favIdx));
   document.querySelectorAll('.fav-dot').forEach((d, k) => d.classList.toggle('on', k === favIdx));
   if(manual) favAuto(); // reinicia el reloj al navegar a mano
 }
