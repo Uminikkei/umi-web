@@ -1133,3 +1133,64 @@ async function enviarFeedback(){
     btn.disabled = false; btn.textContent = 'Enviar';
   }
 }
+
+// ── CARRUSEL FAVORITOS (Los más pedidos) ─────────────────────────────────────
+const FAVORITOS = ['Acevichado Roll', 'Saito Roll', 'Lomo saltado', 'Tartare Nikkei'];
+let favIdx = 0, favTimer = null;
+
+function favFind(name){
+  for(const [cat, items] of Object.entries(MENU)){
+    for(const it of items){ if(it.n === name) return { cat, item: it }; }
+  }
+  return null;
+}
+
+function buildFavCarousel(){
+  const track = document.getElementById('favTrack');
+  const dots  = document.getElementById('favDots');
+  if(!track || !dots) return;
+  FAVORITOS.forEach((name, i) => {
+    const f = favFind(name); if(!f) return;
+    const img = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[name]) ? SPLEAT_PHOTOS[name] : '';
+    const nEsc = name.replace(/'/g, "\\'");
+    const cEsc = f.cat.replace(/'/g, "\\'");
+    const slide = document.createElement('div');
+    slide.className = 'fav-slide';
+    slide.innerHTML = `
+      <img src="${img}" alt="${name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"/>
+      <span class="fav-price">${fmt(f.item.p)}</span>
+      <div class="fav-caption">
+        <span class="fav-name">${name}</span>
+        <button class="fav-add" onclick="addToCart('${nEsc}',${f.item.p},'','${cEsc}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+          Agregar
+        </button>
+      </div>`;
+    track.appendChild(slide);
+    const dot = document.createElement('button');
+    dot.className = 'fav-dot' + (i === 0 ? ' on' : '');
+    dot.setAttribute('aria-label', 'Ver ' + name);
+    dot.onclick = () => favGo(i, true);
+    dots.appendChild(dot);
+  });
+  favAuto();
+  const car = document.getElementById('favCarousel');
+  car.addEventListener('mouseenter', () => clearInterval(favTimer));
+  car.addEventListener('mouseleave', favAuto);
+}
+
+function favGo(i, manual){
+  const track = document.getElementById('favTrack');
+  const n = track.children.length; if(!n) return;
+  favIdx = ((i % n) + n) % n;
+  track.style.transform = `translateX(-${favIdx * 100}%)`;
+  document.querySelectorAll('.fav-dot').forEach((d, k) => d.classList.toggle('on', k === favIdx));
+  if(manual) favAuto(); // reinicia el reloj al navegar a mano
+}
+
+function favAuto(){
+  clearInterval(favTimer);
+  favTimer = setInterval(() => favGo(favIdx + 1), 6000);
+}
+
+buildFavCarousel();

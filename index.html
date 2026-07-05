@@ -56,7 +56,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260706i"/>
+<link rel="stylesheet" href="styles.css?v=20260706j"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -214,27 +214,11 @@
     <span class="significado-label">Los más pedidos</span>
     <h2 class="significado-title">Nuestros <em>favoritos</em></h2>
     <p class="significado-desc">Los platos que eligen nuestros clientes una y otra vez.</p>
-    <div class="mp-row">
-      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FAcevichado%20Roll%2Fphotos%2FDSC03723.jpg.jpeg?alt=media" alt="Acevichado Roll" loading="lazy"/></div>
-        <span class="pedido-name">Acevichado Roll</span>
-        <span class="pedido-price">$13.990</span>
+    <div class="fav-carousel" id="favCarousel">
+      <div class="fav-viewport">
+        <div class="fav-track" id="favTrack"></div>
       </div>
-      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-        <div class="pedido-circle"><img src="saito-roll.jpg" alt="Saito Roll" loading="lazy"/></div>
-        <span class="pedido-name">Saito Roll</span>
-        <span class="pedido-price">$14.990</span>
-      </div>
-      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FLomo%20saltado%2Fphotos%2FLOMO%20SALTADO%20(1).jpg.jpeg?alt=media" alt="Lomo Saltado" loading="lazy"/></div>
-        <span class="pedido-name">Lomo Saltado</span>
-        <span class="pedido-price">$18.990</span>
-      </div>
-      <div class="pedido-item" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-        <div class="pedido-circle"><img src="https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/restaurants%2FlFwud0mMFsVrrHJlslCrRpEwPsc2%2Fmenu%2FTartare%20Nikkei%2Fphotos%2FTARTARE%20(3).jpg.jpeg?alt=media" alt="Tartare Nikkei" loading="lazy"/></div>
-        <span class="pedido-name">Tartare Nikkei</span>
-        <span class="pedido-price">$13.990</span>
-      </div>
+      <div class="fav-dots" id="favDots"></div>
     </div>
   </div>
 
@@ -282,25 +266,6 @@
     </svg>
   </div>
 
-</section>
-
-<!-- ═══ SECCIÓN 3: MÁS PEDIDO — tercio medio de fondo-umi.jpg ═══ -->
-<section class="featured-sec" id="top">
-  <div class="featured-content">
-    <span class="featured-label">Los favoritos</span>
-    <h2 class="featured-title">
-      <span class="ml-front">L</span><span class="ml-behind">O</span> <span class="ml-front">M</span><span class="ml-behind">Á</span><span class="ml-front">S</span><br/>
-      <span class="ml-front">P</span><span class="ml-behind">E</span><span class="ml-front">D</span><span class="ml-behind">I</span><span class="ml-front">D</span><span class="ml-behind">O</span>
-    </h2>
-    <p class="featured-sub">Los platos que eligen nuestros clientes una y otra vez</p>
-    <a class="btn-featured" href="#menu">Ver todo el menú</a>
-  </div>
-  <!-- Curva bezier suave → sección videos -->
-  <div class="wave-sep">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#142751" d="M0,90 C160,120 320,75 480,95 C640,115 800,70 960,92 C1120,112 1280,78 1440,95 L1440,120 L0,120 Z"/>
-    </svg>
-  </div>
 </section>
 
 <!-- ═══ SECCIÓN 4: VIDEOS / REELS ═══ -->
@@ -846,7 +811,7 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260706h"></script>
+<script src="script.js?v=20260706j"></script>
 <script src="chat.js?v=20260706a"></script>
 <script type="module" src="auth.js?v=20260706i"></script>
 </body>
