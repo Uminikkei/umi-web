@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260705m"/>
+<link rel="stylesheet" href="styles.css?v=20260705n"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -43,13 +43,13 @@
     <a class="nav-wa" href="#menu">Pedir ahora</a>
     <a class="nav-reserva" href="https://wa.me/56961551728?text=Hola%20Umi!%20Quiero%20reservar%20una%20mesa" target="_blank">Reservar mesa</a>
     <a class="ntb-link" id="ntbAccount" href="#" onclick="umiOpenAuth();return false;">Iniciar sesión</a>
-    <button class="ntb-icon-btn" id="ntbUserBtn" onclick="umiUserClick()" aria-label="Mi cuenta">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
-      <span class="ntb-user-pts hidden" id="ntbUserPts"></span>
-    </button>
     <button class="ntb-icon-btn" onclick="openCart()" aria-label="Mi pedido">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
       <span class="ntb-bag-badge hidden" id="ntbBagBadge">0</span>
+    </button>
+    <button class="ntb-icon-btn" id="ntbUserBtn" onclick="umiUserClick()" aria-label="Mi cuenta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+      <span class="ntb-user-pts hidden" id="ntbUserPts"></span>
     </button>
   </div>
 
