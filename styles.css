@@ -512,7 +512,7 @@ nav{
 }
 @media(max-width:640px){
   .cream-inner{grid-template-columns:1fr;gap:2.5rem}
-  .hero-sec{padding:150px 1.5rem 8rem}
+  .hero-sec{padding:130px 1.5rem 15rem}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello más pequeño en vez de ocultarlo */
   .hero-badge.hero-stamp{display:flex;width:92px;height:92px;bottom:7rem;right:5vw}
