@@ -317,17 +317,18 @@ nav{
   text-align:center;gap:.2rem;
   background:rgba(4,7,9,.4);backdrop-filter:blur(8px);
 }
-/* Sello vintage */
+/* Sello vintage (tapa de botella) */
 .hero-stamp{
-  width:150px;height:150px;
+  width:170px;height:178px;
   background:transparent;border:none;backdrop-filter:none;
   color:rgba(240,235,224,.85);
   transform:rotate(-8deg);
 }
 .hero-stamp svg{width:100%;height:100%;overflow:visible}
-.stamp-txt{font-family:'Inter',sans-serif;font-size:13.5px;letter-spacing:4px;font-weight:700;fill:currentColor}
-.stamp-word{font-family:var(--serif);font-size:32px;letter-spacing:6px;font-weight:600;fill:currentColor}
-.stamp-stars{font-size:13px;letter-spacing:3px;fill:#f2c94c}
+.stamp-txt{font-family:'Inter',sans-serif;font-size:19px;letter-spacing:5px;font-weight:700;fill:currentColor}
+.stamp-band{font-family:'Inter',sans-serif;font-size:31px;letter-spacing:4px;font-weight:800;fill:currentColor}
+.stamp-mini{font-size:11px;letter-spacing:4px;fill:currentColor}
+.stamp-stars{font-size:16px;fill:currentColor}
 
 .hero-badge-top{
   font-size:.52rem;letter-spacing:3px;text-transform:uppercase;
