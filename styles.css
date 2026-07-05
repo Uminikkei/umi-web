@@ -512,9 +512,23 @@ nav{
 }
 @media(max-width:640px){
   .cream-inner{grid-template-columns:1fr;gap:2.5rem}
-  .hero-badge{display:none}
-  .hero-sec{padding:190px 1.5rem 10rem}
+  .hero-sec{padding:150px 1.5rem 8rem}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
+  /* Sello más pequeño en vez de ocultarlo */
+  .hero-badge.hero-stamp{display:flex;width:92px;height:92px;bottom:7rem;right:5vw}
+}
+
+/* ── MÓVIL: barra superior compacta ── */
+@media(max-width:700px){
+  /* Solo isotipo + cuenta + persona + bolsa; el resto se oculta */
+  .ntb-link:not(#ntbAccount){display:none}
+  .nav-wa,.nav-reserva{display:none}
+  .nav-topbar{gap:4vw;padding:.3rem 4vw;justify-content:space-between}
+  .ntb-icon-btn svg{width:24px;height:24px}
+  #ntbUserBtn{margin-left:0}
+  .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
+  .footer-brand{grid-column:auto}
+  .chat-garzona-picker{flex-wrap:wrap;white-space:normal;row-gap:5px}
 }
 
 /* ── FOOTER REDISEÑADO ── */
