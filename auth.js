@@ -174,7 +174,12 @@ function updateAccountBtn() {
   } else {
     label = 'Iniciar sesión';
   }
-  if (btn) { btn.textContent = label; btn.classList.toggle('ntb-account--pts', !!currentProfile); }
+  if (btn) {
+    // Con perfil activo, el ícono de persona reemplaza al texto en el topbar
+    btn.style.display = currentProfile ? 'none' : '';
+    btn.textContent = label;
+    btn.classList.toggle('ntb-account--pts', !!currentProfile);
+  }
   if (mob) mob.textContent = label;
 }
 

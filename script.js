@@ -664,6 +664,8 @@ function updateBadge(){
   const badge = document.getElementById('cartBadge');
   badge.textContent = total;
   badge.classList.toggle('hidden', total === 0);
+  const navBadge = document.getElementById('ntbBagBadge');
+  if(navBadge){ navBadge.textContent = total; navBadge.classList.toggle('hidden', total === 0); }
   // Abrir la pestaña "Mi Pedido" solo cuando hay productos
   const cartTab = document.querySelector('.side-tab--cart');
   if(cartTab) cartTab.classList.toggle('open', total > 0);
@@ -1023,6 +1025,23 @@ async function onCardApproved(){
       <a href="${waLink}" target="_blank" style="color:#6b7d8f;font-size:.8rem;text-decoration:underline">¿Algún problema? Avísanos por WhatsApp</a>
     </div>`;
   document.body.appendChild(ov);
+}
+
+// ── INFO DE USUARIO (modal esquina superior) ─────────────────────────────────
+function umiUserClick(){
+  const p = window.umiGetProfile ? window.umiGetProfile() : null;
+  if(!p){ if(window.umiOpenAuth) umiOpenAuth(); return; }
+  document.getElementById('uiName').textContent = p.name || '—';
+  document.getElementById('uiMail').textContent = p.email || '';
+  document.getElementById('uiPts').textContent = (p.points || 0).toLocaleString('es-CL');
+  document.getElementById('uiWa').textContent = p.whatsapp || '—';
+  document.getElementById('uiBday').textContent = p.birthday || '—';
+  document.getElementById('userModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeUserInfo(){
+  document.getElementById('userModal').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ── COMENTARIOS Y RECLAMOS ────────────────────────────────────────────────────

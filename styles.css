@@ -72,6 +72,48 @@ nav{
   padding:.15rem 2vw;
   gap:1.8vw;
 }
+/* Iconos de cuenta y bolsa (derecha del topbar) */
+.ntb-icon-btn{
+  position:relative;background:transparent;border:none;cursor:pointer;padding:.2rem;
+  color:rgba(240,235,224,.75);display:flex;align-items:center;justify-content:center;
+  transition:color .2s,transform .2s;flex-shrink:0;
+}
+.ntb-icon-btn:hover{color:var(--teal);transform:translateY(-2px)}
+.ntb-icon-btn svg{width:21px;height:21px}
+.ntb-bag-badge{
+  position:absolute;top:-4px;right:-5px;
+  background:#e03050;color:#fff;font-size:.56rem;font-weight:700;
+  min-width:16px;height:16px;border-radius:999px;padding:0 3px;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.ntb-bag-badge.hidden{display:none}
+
+/* Modal info de usuario */
+.user-box{align-items:center;text-align:center}
+.ui-avatar{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(98,202,227,.15);border:1px solid rgba(98,202,227,.4);
+  display:flex;align-items:center;justify-content:center;color:var(--teal);
+}
+.ui-avatar svg{width:32px;height:32px}
+.user-box h3{margin-top:.2rem}
+.ui-mail{font-size:.78rem;color:var(--muted);margin-top:-.5rem}
+.ui-points{
+  font-size:1.05rem;font-weight:700;color:var(--teal);
+  background:rgba(98,202,227,.12);border:1px solid rgba(98,202,227,.35);
+  border-radius:999px;padding:.45rem 1.3rem;margin:.2rem 0 .3rem;
+}
+.ui-rows{width:100%;display:flex;flex-direction:column;gap:.4rem;margin-bottom:.4rem}
+.ui-row{
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
+  padding:.55rem .9rem;font-size:.82rem;
+}
+.ui-row span{color:var(--muted)}
+.ui-row b{color:var(--text);font-weight:600}
+.user-box .fb-send{width:100%}
+
 /* Isotipo izquierda */
 .ntb-iso{
   height:clamp(36px,4.2vw,56px);width:auto;
