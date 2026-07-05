@@ -176,7 +176,8 @@ function updateAccountBtn() {
   }
   if (btn) {
     // Con perfil activo, el ícono de persona reemplaza al texto en el topbar
-    btn.style.display = currentProfile ? 'none' : '';
+    // (se oculta sin salir del flujo para conservar el empuje a la derecha)
+    btn.classList.toggle('ntb-acc-hidden', !!currentProfile);
     btn.textContent = label;
     btn.classList.toggle('ntb-account--pts', !!currentProfile);
   }

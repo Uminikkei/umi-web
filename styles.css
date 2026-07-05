@@ -150,10 +150,11 @@ nav{
   padding:.3rem clamp(.5rem,.8vw,1rem);
   white-space:nowrap;
 }
-/* Links empujan botones a la derecha */
+/* Links empujan el grupo de cuenta a la derecha */
 .ntb-iso{ margin-left:0; }
-.nav-topbar .nav-wa{ margin-left:auto; background:rgba(255,255,255,.55); }
-.nav-topbar .nav-reserva{ margin-left:0; }
+.nav-topbar #ntbAccount{ margin-left:auto; }
+/* Oculto sin salir del flujo: conserva el margin-left:auto que empuja los íconos */
+#ntbAccount.ntb-acc-hidden{ visibility:hidden; width:0; padding:0; overflow:hidden; }
 
 /* Navbar top: olas + logo centrado */
 .nav-top{
