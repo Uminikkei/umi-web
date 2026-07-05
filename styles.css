@@ -1199,7 +1199,11 @@ footer strong{color:var(--teal)}
   display:none;align-items:center;justify-content:center;padding:1.2rem;
 }
 .feedback-modal.open{display:flex}
-.feedback-bg{position:absolute;inset:0;background:rgba(0,0,0,.65)}
+.feedback-bg{
+  position:absolute;inset:0;
+  background:rgba(4,7,9,.45);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
 .feedback-box{
   position:relative;z-index:1;width:100%;max-width:420px;
   background:rgba(20,39,81,.92);
@@ -1245,15 +1249,42 @@ footer strong{color:var(--teal)}
 .terms-content strong{color:var(--text)}
 .terms-note{font-size:.72rem;color:var(--subtle);margin-top:1rem}
 
-/* Mapa (modal) */
+/* Mapa (modal): elementos flotando sobre el fondo borroso, sin recuadro */
 .map-box{max-width:640px}
-.contact-map{
-  border-radius:14px;overflow:hidden;
-  border:1px solid var(--border2);
-  width:100%;
+#mapModal .feedback-box,
+#feedbackModal .feedback-box{
+  background:transparent;border:none;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  padding:1.4rem 0 0;
 }
-.contact-map iframe{width:100%;height:340px;border:0;display:block;filter:grayscale(.15)}
-.map-open-btn{display:block;text-align:center;width:100%}
+#feedbackModal .feedback-box{gap:.5rem}
+#feedbackModal .fb-counter{margin-top:-.25rem}
+#feedbackModal .feedback-box input,
+#feedbackModal .feedback-box textarea{
+  background:rgba(15,29,58,.72);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-color:rgba(98,202,227,.25);
+  box-shadow:0 10px 28px rgba(0,0,0,.35);
+}
+#feedbackModal .fb-send{box-shadow:0 14px 36px rgba(0,0,0,.45)}
+#mapModal .feedback-close,
+#feedbackModal .feedback-close{
+  top:-.4rem;right:0;
+  background:rgba(20,39,81,.55);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-color:rgba(255,255,255,.15);color:#f0ebe0;
+}
+.contact-map{
+  border-radius:16px;overflow:hidden;
+  border:none;width:100%;
+  box-shadow:0 26px 70px rgba(0,0,0,.6);
+}
+.contact-map iframe{width:100%;height:380px;border:0;display:block;filter:grayscale(.15)}
+.map-open-btn{
+  display:block;text-align:center;width:100%;
+  margin-top:.9rem;
+  box-shadow:0 14px 36px rgba(0,0,0,.45);
+}
 
 /* ── CART OVERLAY ── */
 .cart-overlay{
