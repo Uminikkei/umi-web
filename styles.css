@@ -660,20 +660,20 @@ footer{
 }
 .menu-dark-area .item:hover .item-img{ transform:scale(1.05); }
 .menu-dark-area .item-body{ padding:.75rem .9rem .8rem; gap:.4rem; }
-.menu-dark-area .item-name{ color:#1a2433; letter-spacing:.2px; }
+.menu-dark-area .item-name{ color:#5a544c; letter-spacing:.2px; }
 .menu-dark-area .item-footer{
   border-top:1px solid rgba(13,30,64,.08);
   padding-top:.55rem; margin-top:.15rem;
 }
-.menu-dark-area .item-price{ color:#0d1e40; font-size:.98rem; }
+.menu-dark-area .item-price{ color:#94793f; font-size:.98rem; }
 .menu-dark-area .item-cart{
   width:36px;height:36px;border-radius:50%;
-  background:#0d1e40;
-  box-shadow:0 3px 8px rgba(13,30,64,.25);
+  background:#c9a84c;
+  box-shadow:0 3px 8px rgba(151,120,50,.3);
 }
-.menu-dark-area .item-cart svg{ fill:#f0ebe0; transition:fill .2s; }
-.menu-dark-area .item-cart:hover{ background:#c9a84c; transform:scale(1.1); }
-.menu-dark-area .item-cart:hover svg{ fill:#0d1e40; }
+.menu-dark-area .item-cart svg{ fill:#fffdf6; transition:fill .2s; }
+.menu-dark-area .item-cart:hover{ background:#b3923c; transform:scale(1.1); }
+.menu-dark-area .item-cart:hover svg{ fill:#fffdf6; }
 .item-img-placeholder svg{width:56px;height:40px}
 .menu-dark-area .item-img-placeholder{background:#eef0f2;border-bottom-color:rgba(0,0,0,.08);color:rgba(13,30,64,.35)}
 .menu-dark-area .item-img--bebida{background:#0d1e40}
