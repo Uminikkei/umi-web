@@ -1138,10 +1138,10 @@ async function enviarFeedback(){
 const FAVORITOS = ['Acevichado Roll', 'Saito Roll', 'Lomo saltado', 'Tartare Nikkei'];
 // Fotos propias en alta calidad para el carrusel (optimizadas a 1920px)
 const FAV_IMGS = {
-  'Acevichado Roll': 'fav-acevichado.jpg',
+  'Acevichado Roll': 'fav-acevichado.jpg?v=2',
   'Saito Roll':      'fav-saito.jpg',
   'Lomo saltado':    'fav-lomo.jpg',
-  'Tartare Nikkei':  'fav-tartare.jpg'
+  'Tartare Nikkei':  'fav-tartare.jpg?v=2'
 };
 let favIdx = 0, favTimer = null;
 
