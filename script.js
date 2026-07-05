@@ -35,6 +35,10 @@ function closeMobileMenu() {
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';
 
+// Ícono 2D de plato para productos sin foto
+const PLATE_SVG = '<svg viewBox="0 0 36 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="13" r="9"/><circle cx="18" cy="13" r="4"/><path d="M4 3v5a2 2 0 0 0 4 0V3"/><path d="M6 10v13"/><path d="M31 3c-1.6 1.2-2 3.2-2 5.5V13h3v10"/></svg>';
+window.__plateSpan = `<span class="cart-row-emoji">${PLATE_SVG}</span>`;
+
 const RESTO_LAT = -29.9641;
 const RESTO_LNG = -71.3387;
 const DELIVERY_TIERS = [
@@ -184,17 +188,17 @@ function buildMenu(){
         : imgUrl(item.i || null);
       if(url){
         const img = document.createElement('img');
-        img.className = 'item-img' + (cat === 'Bebidas' ? ' item-img--bebida' : ''); img.alt = item.n; img.loading = 'lazy';
+        img.className = 'item-img' + (cat === 'Bebidas' ? ' item-img--bebida' : ''); img.alt = item.n; img.loading = 'lazy'; img.decoding = 'async';
         img.onerror = function(){
           this.style.display='none';
           const ph = document.createElement('div');
-          ph.className='item-img-placeholder'; ph.textContent = item.e||'🍣';
+          ph.className='item-img-placeholder'; ph.innerHTML = PLATE_SVG;
           card.insertBefore(ph, card.firstChild);
         };
         img.src = url; card.appendChild(img);
       } else {
         const ph = document.createElement('div');
-        ph.className = 'item-img-placeholder'; ph.textContent = item.e||'🍣';
+        ph.className = 'item-img-placeholder'; ph.innerHTML = PLATE_SVG;
         card.appendChild(ph);
       }
       const body = document.createElement('div');
@@ -322,7 +326,7 @@ function pedirUbicacionGPS(){
       } catch(e) {
         document.getElementById('cAddr').value = `${gpsLat.toFixed(5)}, ${gpsLng.toFixed(5)}`;
       }
-      btn.textContent = '✅ Ubicación GPS capturada';
+      btn.textContent = '✓ Ubicación GPS capturada';
       btn.style.background = '#15803d';
       status.style.display='block'; status.style.color='#22c55e';
       status.textContent = `📍 GPS: ${gpsLat.toFixed(5)}, ${gpsLng.toFixed(5)}`;
@@ -351,7 +355,7 @@ function calcDeliveryFromCoords(lat, lng){
   if(box){
     box.style.display = '';
     box.innerHTML = deliveryFee === 0
-      ? `✅ Gratis (${deliveryKm} km)`
+      ? `✓ Gratis (${deliveryKm} km)`
       : `🛵 Envío: <strong>${fmt(deliveryFee)}</strong> (${deliveryKm} km)`;
   }
   updateDeliveryTotal();
@@ -605,14 +609,14 @@ function puntosSummaryHtml(){
   const saldo = (prof && prof.points) || 0;
   let h = '';
   if(puntosCanjeados > 0){
-    h += `<div class="checkout-summary-item" style="color:#22c55e"><span>⭐ Puntos canjeados</span><span>-${fmt(puntosCanjeados)}</span></div>`;
+    h += `<div class="checkout-summary-item" style="color:#22c55e"><span>★ Puntos canjeados</span><span>-${fmt(puntosCanjeados)}</span></div>`;
     h += `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-quitar" onclick="quitarPuntos()">Quitar puntos</button></div>`;
   } else {
     const maxR = maxPuntosCanjeables();
     if(maxR > 0){
-      h += `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-usar" onclick="usarPuntos()">⭐ Usar mis puntos (−${fmt(maxR)})</button><div class="checkout-puntos-bal">Tienes ${saldo.toLocaleString('es-CL')} pts disponibles</div></div>`;
+      h += `<div class="checkout-puntos-action"><button type="button" class="puntos-btn-usar" onclick="usarPuntos()">★ Usar mis puntos (−${fmt(maxR)})</button><div class="checkout-puntos-bal">Tienes ${saldo.toLocaleString('es-CL')} pts disponibles</div></div>`;
     } else if(saldo > 0){
-      h += `<div class="checkout-puntos-bal">⭐ Tienes ${saldo.toLocaleString('es-CL')} pts (se canjean hasta el 50% de la cuenta)</div>`;
+      h += `<div class="checkout-puntos-bal">★ Tienes ${saldo.toLocaleString('es-CL')} pts (se canjean hasta el 50% de la cuenta)</div>`;
     }
   }
   h += `<div class="checkout-earn-line" id="checkoutEarnLine">${earnLineHtml()}</div>`;
@@ -633,7 +637,7 @@ function aplicarCupon(){
   const CUPONES = Object.assign({ 'HOPLIX': 90, 'CHOCOLATE': 50 }, window.umiCupones || {});
   if(CUPONES[val] !== undefined){
     cuponDescuento = CUPONES[val];
-    if(msg){ msg.textContent = `✅ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
+    if(msg){ msg.textContent = `✓ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
     // Actualizar solo el resumen sin reabrir el modal
     refrescarResumenCheckout();
   } else {
@@ -696,8 +700,8 @@ function renderCart(){
     row.className = 'cart-row';
     const thumbUrl = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[item.n]) ? SPLEAT_PHOTOS[item.n] : null;
     const thumbHtml = thumbUrl
-      ? `<img class="cart-row-thumb" src="${thumbUrl}" alt="${item.n}" onerror="this.outerHTML='<span class=\\'cart-row-emoji\\'>${item.e}</span>'">`
-      : `<span class="cart-row-emoji">${item.e}</span>`;
+      ? `<img class="cart-row-thumb" src="${thumbUrl}" alt="${item.n}" onerror="this.outerHTML=window.__plateSpan">`
+      : window.__plateSpan;
     row.innerHTML = `
       ${thumbHtml}
       <div class="cart-row-info">
@@ -1017,10 +1021,10 @@ async function onCardApproved(){
   ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(8,12,16,.93);display:flex;align-items:center;justify-content:center;padding:1.5rem';
   ov.innerHTML = `
     <div style="max-width:420px;width:100%;background:#0d1520;border:1px solid #1e2d3d;border-radius:18px;padding:2rem 1.6rem;text-align:center;font-family:'Inter',sans-serif;color:#e8edf2">
-      <div style="font-size:3rem;margin-bottom:.4rem">✅</div>
+      <div style="margin-bottom:.4rem;display:flex;justify-content:center"><svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.6 2.6L16 9.5"/></svg></div>
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-bottom:.5rem;color:#fff">¡Pago recibido!</h2>
-      <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Tu pedido ya fue enviado a Umi y está en preparación. ¡Gracias! 🍣</p>
-      ${ganadosPuntos > 0 ? `<div style="background:rgba(98,202,227,.12);border:1px solid #62CAE3;border-radius:12px;color:#62CAE3;font-weight:700;font-size:1rem;padding:.85rem;margin-bottom:1.4rem">⭐ Con esta compra acumulaste ${ganadosPuntos.toLocaleString('es-CL')} puntos UMI</div>` : ''}
+      <p style="color:#6b7d8f;font-size:.95rem;margin-bottom:1.4rem">Tu pedido ya fue enviado a Umi y está en preparación. ¡Gracias!</p>
+      ${ganadosPuntos > 0 ? `<div style="background:rgba(98,202,227,.12);border:1px solid #62CAE3;border-radius:12px;color:#62CAE3;font-weight:700;font-size:1rem;padding:.85rem;margin-bottom:1.4rem">★ Con esta compra acumulaste ${ganadosPuntos.toLocaleString('es-CL')} puntos UMI</div>` : ''}
       <button onclick="document.getElementById('paidOverlay').remove()" style="display:block;width:100%;background:var(--teal);color:#000;font-weight:700;padding:.9rem;border-radius:999px;border:none;cursor:pointer;margin-bottom:.7rem">Listo</button>
       <a href="${waLink}" target="_blank" style="color:#6b7d8f;font-size:.8rem;text-decoration:underline">¿Algún problema? Avísanos por WhatsApp</a>
     </div>`;
@@ -1041,6 +1045,16 @@ function umiUserClick(){
 }
 function closeUserInfo(){
   document.getElementById('userModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── TÉRMINOS Y CONDICIONES ────────────────────────────────────────────────────
+function openTerms(){
+  document.getElementById('termsModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeTerms(){
+  document.getElementById('termsModal').classList.remove('open');
   document.body.style.overflow = '';
 }
 
@@ -1088,7 +1102,7 @@ async function enviarFeedback(){
     });
     const data = await r.json();
     if(!r.ok) throw new Error(data.error || 'Error al enviar');
-    status.textContent = '¡Mensaje enviado! Gracias por escribirnos. 💙';
+    status.textContent = '¡Mensaje enviado! Gracias por escribirnos.';
     status.className = 'fb-status ok';
     document.getElementById('fbNombre').value = '';
     document.getElementById('fbCorreo').value = '';

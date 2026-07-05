@@ -5,12 +5,58 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Umi – La Real Cocina Nikkei · Coquimbo</title>
 <meta name="description" content="Restaurante Umi en Coquimbo. Cocina Nikkei japonesa-peruana. Sushi, ceviches, rolls y más."/>
+<link rel="canonical" href="https://uminikkeibar.cl/"/>
+<meta name="theme-color" content="#0d1b3e"/>
+<!-- Open Graph / redes sociales -->
+<meta property="og:type" content="restaurant"/>
+<meta property="og:title" content="UMI Nikkei Bar · La Real Cocina Nikkei · Coquimbo"/>
+<meta property="og:description" content="Fusión peruana y japonesa frente al mar. Sushi, ceviches, rolls de autor y más. Pide online con retiro o delivery."/>
+<meta property="og:url" content="https://uminikkeibar.cl/"/>
+<meta property="og:image" content="https://uminikkeibar.cl/fondo-umi.jpg"/>
+<meta property="og:locale" content="es_CL"/>
+<meta property="og:site_name" content="UMI Nikkei Bar"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="UMI Nikkei Bar · Coquimbo"/>
+<meta name="twitter:description" content="Fusión peruana y japonesa frente al mar. Pide online."/>
+<meta name="twitter:image" content="https://uminikkeibar.cl/fondo-umi.jpg"/>
+<link rel="preload" as="image" href="fondo-umi.jpg"/>
+<!-- Datos estructurados: restaurante -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "UMI Nikkei Bar",
+  "url": "https://uminikkeibar.cl/",
+  "image": "https://uminikkeibar.cl/fondo-umi.jpg",
+  "servesCuisine": ["Nikkei", "Japonesa", "Peruana", "Sushi"],
+  "priceRange": "$$",
+  "telephone": "+56961551728",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Costanera 5633",
+    "addressLocality": "Coquimbo",
+    "addressCountry": "CL"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": -29.9641, "longitude": -71.3387 },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "12:00",
+    "closes": "00:00"
+  },
+  "sameAs": [
+    "https://www.instagram.com/uminikkeibar",
+    "https://www.tiktok.com/@uminikkeibar.cl",
+    "https://www.tripadvisor.cl/Restaurant_Review-g303669-d34105428-Reviews-Umi_Nikkei_Bar-Coquimbo_Coquimbo_Region.html"
+  ]
+}
+</script>
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png"/>
 <link rel="shortcut icon" type="image/png" href="favicon.png"/>
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260705z"/>
+<link rel="stylesheet" href="styles.css?v=20260706a"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -25,10 +71,10 @@
 <!-- ═══ BANNER PROMO PUNTOS (marquesina) ═══ -->
 <div class="promo-banner" role="region" aria-label="Programa de puntos UMI">
   <div class="promo-track">
-    <span>Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> Aplican términos y condiciones <span class="promo-dot"></span></span>
-    <span>Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> Aplican términos y condiciones <span class="promo-dot"></span></span>
-    <span aria-hidden="true">Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> Aplican términos y condiciones <span class="promo-dot"></span></span>
-    <span aria-hidden="true">Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> Aplican términos y condiciones <span class="promo-dot"></span></span>
+    <span>Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> <button class="promo-tyc" onclick="openTerms()">Aplican términos y condiciones</button> <span class="promo-dot"></span></span>
+    <span>Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> <button class="promo-tyc" onclick="openTerms()">Aplican términos y condiciones</button> <span class="promo-dot"></span></span>
+    <span aria-hidden="true">Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> <button class="promo-tyc" onclick="openTerms()">Aplican términos y condiciones</button> <span class="promo-dot"></span></span>
+    <span aria-hidden="true">Por cada compra acumulas <strong>puntos UMI</strong> canjeables por descuentos <span class="promo-dot"></span> <button class="promo-tyc" onclick="openTerms()">Aplican términos y condiciones</button> <span class="promo-dot"></span></span>
   </div>
 </div>
 
@@ -127,22 +173,11 @@
       <span class="cream-label">Nuestra Historia</span>
       <h2 class="cream-title">Un sueño<br/>hecho <em>realidad</em></h2>
       <p class="cream-desc">UMI nace de un sueño personal, vivir y ofrecer la mejor experiencia culinaria frente al mar de Coquimbo. ¿Porque Nikkei? La cocina japonesa junto con la cocina peruana son las favoritas y consentidas de cada rincón de Chile. Nikkei es la perfecta fusión de ambas, con una combinación de sabores que llegan al corazón. En UMI tenemos la convicción de que aunque la perfección no existe, cada día debemos ser un poco mejor que el anterior.</p>
-      <a class="cream-link" href="#contacto">Conoce más →</a>
     </div>
 
-    <!-- Columna central: foto del restaurante -->
+    <!-- Columna derecha: foto del restaurante -->
     <div class="cream-photo">
       <img src="fondo-umi.jpg" alt="Interior Restaurante UMI" loading="lazy"/>
-    </div>
-
-    <!-- Columna derecha: Galería de fotos (placeholder hasta recibir las fotos) -->
-    <div class="cream-fotos">
-      <div class="cream-fotos-grid">
-        <div class="foto-slot"><span>📷</span></div>
-        <div class="foto-slot"><span>📷</span></div>
-        <div class="foto-slot"><span>📷</span></div>
-        <div class="foto-slot"><span>📷</span></div>
-      </div>
     </div>
 
   </div>
@@ -328,7 +363,11 @@
     <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span class="cc-label">Dirección</span><span class="cc-val">Av. Costanera 5633<br/>Coquimbo, Chile</span></div>
     <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><span class="cc-label">WhatsApp</span><span class="cc-val"><a href="https://wa.me/56961551728" target="_blank">+56 9 6155 1728</a></span></div>
     <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span><span class="cc-label">Instagram</span><span class="cc-val"><a href="https://www.instagram.com/uminikkeibar" target="_blank">@uminikkeibar</a></span></div>
-    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="cc-label">Horario</span><span class="cc-val">Todos los días<br/>12:00 pm – 00:00 am</span></div>
+    <div class="contact-card"><span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="cc-label">Horario</span><span class="cc-val">Todos los días<br/>12:00 – 00:00 hrs</span></div>
+  </div>
+  <!-- Mapa -->
+  <div class="contact-map">
+    <iframe src="https://www.google.com/maps?q=Av.+Costanera+5633,+Coquimbo,+Chile&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen title="Mapa UMI Nikkei Bar"></iframe>
   </div>
 </section>
 
@@ -507,7 +546,7 @@
   </div>
 
   <div class="footer-bottom" style="max-width:1240px;margin:0 auto">
-    <span class="footer-copy">© 2026 UMI Nikkei Bar · Todos los derechos reservados</span>
+    <span class="footer-copy">© 2026 UMI Nikkei Bar · Todos los derechos reservados · <button class="footer-tyc" onclick="openTerms()">Términos y condiciones</button></span>
   </div>
 </footer>
 
@@ -551,12 +590,42 @@
     <span class="ui-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></span>
     <h3 id="uiName">—</h3>
     <p class="ui-mail" id="uiMail"></p>
-    <div class="ui-points">⭐ <span id="uiPts">0</span> puntos UMI</div>
+    <div class="ui-points">★ <span id="uiPts">0</span> puntos UMI</div>
     <div class="ui-rows">
       <div class="ui-row"><span>WhatsApp</span><b id="uiWa">—</b></div>
       <div class="ui-row"><span>Cumpleaños</span><b id="uiBday">—</b></div>
     </div>
     <button class="fb-send" onclick="closeUserInfo();umiOpenAuth()">Editar mis datos</button>
+  </div>
+</div>
+
+<!-- MODAL TÉRMINOS Y CONDICIONES -->
+<div class="feedback-modal" id="termsModal">
+  <div class="feedback-bg" onclick="closeTerms()"></div>
+  <div class="feedback-box terms-box">
+    <button class="feedback-close" onclick="closeTerms()" aria-label="Cerrar">✕</button>
+    <h3>Términos y Condiciones</h3>
+    <div class="terms-content">
+      <h4>Programa de puntos UMI</h4>
+      <ul>
+        <li>Por cada compra con <strong>retiro en local</strong> acumulas puntos UMI equivalentes a un porcentaje del monto final pagado. Los pedidos con delivery no acumulan puntos.</li>
+        <li>Para acumular y canjear puntos debes tener una cuenta UMI activa e iniciar sesión antes de completar tu pedido.</li>
+        <li>Los puntos se canjean como descuento en tus próximas compras, hasta un máximo del 50% del valor de la cuenta.</li>
+        <li>Los puntos son personales e intransferibles, no son canjeables por dinero y no aplican con otras promociones salvo que se indique lo contrario.</li>
+        <li>Los puntos de bienvenida se otorgan una única vez por persona al registrarse.</li>
+      </ul>
+      <h4>Cupones de descuento</h4>
+      <ul>
+        <li>Los cupones tienen vigencia y condiciones definidas por UMI y pueden ser modificados o desactivados en cualquier momento.</li>
+        <li>No son acumulables entre sí; se aplica un cupón por pedido.</li>
+      </ul>
+      <h4>Datos y privacidad</h4>
+      <ul>
+        <li>Los datos entregados al registrarte (nombre, correo, WhatsApp, fecha de nacimiento) se usan exclusivamente para gestionar tu cuenta, tus puntos y comunicaciones de UMI Nikkei Bar.</li>
+        <li>No compartimos tus datos con terceros. Puedes solicitar la eliminación de tu cuenta y tus datos escribiéndonos a umirestaurantcl@gmail.com.</li>
+      </ul>
+      <p class="terms-note">UMI Nikkei Bar puede actualizar estos términos; la versión vigente estará siempre disponible en esta página. Última actualización: julio 2026.</p>
+    </div>
   </div>
 </div>
 
@@ -688,7 +757,7 @@
   </div>
   <div class="chat-messages" id="chatMessages">
     <div class="chat-msg bot-msg">
-      <p>¡Hola! 👋 Soy Jean, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?</p>
+      <p>¡Hola! Soy Jean, tu garzona virtual en Umi. ¿Cómo puedo ayudarte hoy?</p>
     </div>
   </div>
   <div class="chat-input-area">
@@ -746,7 +815,7 @@
     <!-- Vista 2: completar perfil -->
     <div id="authViewProfile" style="display:none">
       <div class="auth-logo">UMI</div>
-      <h3>¡Casi listo! 🎉</h3>
+      <h3>¡Casi listo!</h3>
       <p class="auth-sub">Completa tu registro para activar tus puntos.</p>
       <div class="auth-field"><label>Nombre</label><input id="authName" type="text" readonly></div>
       <div class="auth-field"><label>Correo</label><input id="authEmail" type="email" readonly></div>
@@ -770,8 +839,8 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260705j"></script>
-<script src="chat.js?v=20260705a"></script>
-<script type="module" src="auth.js?v=20260705l"></script>
+<script src="script.js?v=20260706a"></script>
+<script src="chat.js?v=20260706a"></script>
+<script type="module" src="auth.js?v=20260706a"></script>
 </body>
 </html>

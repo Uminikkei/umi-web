@@ -62,6 +62,12 @@ nav{
   vertical-align:0.12em;
 }
 .promo-banner:hover .promo-track{animation-play-state:paused}
+.promo-tyc{
+  background:none;border:none;padding:0;cursor:pointer;
+  font:inherit;color:inherit;letter-spacing:inherit;
+  text-decoration:underline dotted;text-underline-offset:3px;
+}
+.promo-tyc:hover{color:#fff}
 @keyframes promoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.promo-track{animation-duration:0s}}
 
@@ -443,9 +449,9 @@ nav{
   max-width:1240px;margin:0 auto;
   padding:3rem 2rem 3rem;
   display:grid;
-  grid-template-columns:1fr 380px 1fr;
+  grid-template-columns:1.15fr 1fr;
   gap:3.5rem;
-  align-items:start;
+  align-items:center;
 }
 /* Historia — columna izquierda */
 .cream-historia{}
@@ -508,7 +514,6 @@ nav{
 .cream-wave-bottom svg{display:block;width:100%;height:70px}
 @media(max-width:1000px){
   .cream-inner{grid-template-columns:1fr 1fr;gap:2rem}
-  .cream-photo{display:none}
 }
 @media(max-width:640px){
   .cream-inner{grid-template-columns:1fr;gap:2.5rem}
@@ -533,7 +538,7 @@ nav{
 
 /* ── FOOTER REDISEÑADO ── */
 footer{
-  background:#0a0a0a;
+  background:var(--bg);
   padding:0;
   border-top:1px solid rgba(255,255,255,.06);
 }
@@ -579,6 +584,12 @@ footer{
   display:flex;justify-content:center;text-align:center;align-items:center;gap:1rem;flex-wrap:wrap;
 }
 .footer-copy{font-size:.72rem;color:rgba(240,235,224,.3);letter-spacing:.5px}
+.footer-tyc{
+  background:none;border:none;padding:0;cursor:pointer;
+  font:inherit;color:inherit;
+  text-decoration:underline;text-underline-offset:3px;
+}
+.footer-tyc:hover{color:var(--teal)}
 @media(max-width:900px){
   .footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
   .footer-brand{grid-column:1/-1}
@@ -637,7 +648,8 @@ footer{
 .menu-dark-area .item:hover{border-color:var(--teal);box-shadow:0 6px 18px rgba(0,0,0,.14)}
 .menu-dark-area .item-name{color:#1a2433}
 .menu-dark-area .item-price{color:#0d1e40}
-.menu-dark-area .item-img-placeholder{background:#eef0f2;border-bottom-color:rgba(0,0,0,.08)}
+.item-img-placeholder svg{width:56px;height:40px}
+.menu-dark-area .item-img-placeholder{background:#eef0f2;border-bottom-color:rgba(0,0,0,.08);color:rgba(13,30,64,.35)}
 .menu-dark-area .item-img--bebida{background:#0d1e40}
 
 /* ── OLA INFERIOR DEL MENÚ: oscuro → siguiente sección ── */
@@ -914,7 +926,7 @@ footer{
 .item-img-placeholder{
   width:100%;aspect-ratio:4/3;background:var(--bg3);
   display:flex;align-items:center;justify-content:center;
-  font-size:2.2rem;flex-shrink:0;
+  color:rgba(240,235,224,.4);flex-shrink:0;
   border-bottom:1px solid var(--border);
 }
 .item-body{padding:.4rem .55rem .45rem;display:flex;flex-direction:column;gap:.25rem}
@@ -1183,6 +1195,22 @@ footer strong{color:var(--teal)}
 .fb-status.ok{color:#7ee2a8}
 .fb-status.error{color:#ff8f8f}
 
+/* Modal Términos y Condiciones */
+.terms-box{max-width:540px;max-height:82vh;overflow-y:auto;text-align:left;scrollbar-width:thin}
+.terms-content h4{color:var(--teal);font-size:.92rem;margin:.9rem 0 .4rem;letter-spacing:.5px}
+.terms-content h4:first-child{margin-top:.2rem}
+.terms-content ul{padding-left:1.1rem;display:flex;flex-direction:column;gap:.35rem}
+.terms-content li{font-size:.82rem;color:var(--muted);line-height:1.6}
+.terms-content strong{color:var(--text)}
+.terms-note{font-size:.72rem;color:var(--subtle);margin-top:1rem}
+
+/* Mapa de contacto */
+.contact-map{
+  margin-top:2rem;border-radius:16px;overflow:hidden;
+  border:1px solid var(--border2);
+}
+.contact-map iframe{width:100%;height:320px;border:0;display:block;filter:grayscale(.15)}
+
 /* ── CART OVERLAY ── */
 .cart-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;
@@ -1234,7 +1262,8 @@ footer strong{color:var(--teal)}
   background:var(--card);border:1px solid var(--border);border-radius:10px;
   padding:.8rem 1rem;
 }
-.cart-row-emoji{font-size:1.6rem;flex-shrink:0;width:2.6rem;text-align:center}
+.cart-row-emoji{flex-shrink:0;width:2.6rem;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.cart-row-emoji svg{width:30px;height:22px}
 .cart-row-thumb{width:2.6rem;height:2.6rem;border-radius:.5rem;object-fit:cover;flex-shrink:0;background:var(--bg3)}
 
 /* ── Address autocomplete dropdown ── */

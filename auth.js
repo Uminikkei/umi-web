@@ -152,11 +152,11 @@ window.umiAddPoints = async function (earned, redeemed) {
 };
 
 function showDone(justRegistered) {
-  if ($('authDoneTitle')) $('authDoneTitle').textContent = '¡Hola, ' + (firstName(currentProfile && currentProfile.name) || '') + '! 👋';
+  if ($('authDoneTitle')) $('authDoneTitle').textContent = '¡Hola, ' + (firstName(currentProfile && currentProfile.name) || '') + '!';
   if ($('authDoneSub'))   $('authDoneSub').textContent = justRegistered
-    ? '¡Bienvenido! Te regalamos 2.000 puntos de bienvenida 🎉'
+    ? '¡Bienvenido! Te regalamos 2.000 puntos de bienvenida'
     : 'Tu cuenta UMI está activa.';
-  if ($('authPoints'))    $('authPoints').textContent = '⭐ ' + ((currentProfile && currentProfile.points ? currentProfile.points : 0)).toLocaleString('es-CL') + ' puntos UMI';
+  if ($('authPoints'))    $('authPoints').textContent = '★ ' + ((currentProfile && currentProfile.points ? currentProfile.points : 0)).toLocaleString('es-CL') + ' puntos UMI';
   showView('authViewDone');
 }
 
@@ -168,7 +168,7 @@ function updateAccountBtn() {
   let label;
   if (currentProfile) {
     const pts = (currentProfile.points || 0).toLocaleString('es-CL');
-    label = firstName(currentProfile.name) + ' · ⭐ ' + pts;
+    label = firstName(currentProfile.name) + ' · ★ ' + pts;
   } else if (currentUser) {
     label = 'Completar registro';
   } else {
@@ -184,7 +184,7 @@ function updateAccountBtn() {
   const pts = $('ntbUserPts');
   if (pts) {
     if (currentProfile) {
-      pts.textContent = '⭐ ' + (currentProfile.points || 0).toLocaleString('es-CL');
+      pts.textContent = '★ ' + (currentProfile.points || 0).toLocaleString('es-CL');
       pts.classList.remove('hidden');
     } else {
       pts.classList.add('hidden');

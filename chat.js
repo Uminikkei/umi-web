@@ -48,8 +48,8 @@ function selectGarzona(id) {
 
 // Initial greeting based on language
 const greetings = {
-  es: (g) => `¡Hola! 👋 Soy ${g.name}, tu ${g.genero === 'm' ? 'garzón' : 'garzona'} virtual en Umi. ¿Cómo puedo ayudarte hoy?`,
-  en: (g) => `Hi! 👋 I'm ${g.name}, your virtual ${g.genero === 'm' ? 'waiter' : 'waitress'} at Umi. How can I help you today?`
+  es: (g) => `¡Hola! Soy ${g.name}, tu ${g.genero === 'm' ? 'garzón' : 'garzona'} virtual en Umi. ¿Cómo puedo ayudarte hoy?`,
+  en: (g) => `Hi! I'm ${g.name}, your virtual ${g.genero === 'm' ? 'waiter' : 'waitress'} at Umi. How can I help you today?`
 };
 
 const placeholders = {
@@ -255,8 +255,8 @@ async function sendChatMessage() {
       addChatMessage(clean, false);
     } else if (added.length) {
       const confirm = chatLanguage === 'en'
-        ? `Done! I added ${added.join(', ')} to your order. 🛒`
-        : `¡Listo! Agregué ${added.join(', ')} a tu pedido. 🛒`;
+        ? `Done! I added ${added.join(', ')} to your order.`
+        : `¡Listo! Agregué ${added.join(', ')} a tu pedido.`;
       addChatMessage(confirm, false);
     }
 
