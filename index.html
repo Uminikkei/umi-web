@@ -56,7 +56,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260706a"/>
+<link rel="stylesheet" href="styles.css?v=20260706b"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -80,7 +80,24 @@
 
 <!-- ═══ NAVBAR ═══ -->
 <nav>
-  <!-- BARRA SUPERIOR -->
+  <!-- OLA IZQUIERDA | LOGO CENTRADO | OLA DERECHA -->
+  <div class="nav-top">
+    <div class="nav-wave-left" aria-hidden="true">
+      <svg id="waveLeftSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="waveLeftPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">
+      <img id="navLogo" src="logo-umi-word.png" alt="UMI">
+    </div>
+    <div class="nav-wave-right" aria-hidden="true">
+      <svg id="waveRightSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="waveRightPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- BARRA DE ENLACES BAJO LA OLA -->
   <div class="nav-topbar" id="navTopbar">
     <img class="ntb-iso" src="logo-umi-icon.png" alt="UMI">
     <a class="ntb-link" href="#nosotros">Nosotros</a>
@@ -97,23 +114,6 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
       <span class="ntb-user-pts hidden" id="ntbUserPts"></span>
     </button>
-  </div>
-
-  <!-- OLA IZQUIERDA | LOGO CENTRADO | OLA DERECHA -->
-  <div class="nav-top">
-    <div class="nav-wave-left" aria-hidden="true">
-      <svg id="waveLeftSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="waveLeftPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
-      </svg>
-    </div>
-    <div class="nav-wordmark">
-      <img id="navLogo" src="logo-umi-word.png" alt="UMI">
-    </div>
-    <div class="nav-wave-right" aria-hidden="true">
-      <svg id="waveRightSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="waveRightPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
-      </svg>
-    </div>
   </div>
 
 
