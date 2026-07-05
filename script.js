@@ -1136,6 +1136,13 @@ async function enviarFeedback(){
 
 // ── CARRUSEL FAVORITOS (Los más pedidos) ─────────────────────────────────────
 const FAVORITOS = ['Acevichado Roll', 'Saito Roll', 'Lomo saltado', 'Tartare Nikkei'];
+// Fotos propias en alta calidad para el carrusel (optimizadas a 1920px)
+const FAV_IMGS = {
+  'Acevichado Roll': 'fav-acevichado.jpg',
+  'Saito Roll':      'fav-saito.jpg',
+  'Lomo saltado':    'fav-lomo.jpg',
+  'Tartare Nikkei':  'fav-tartare.jpg'
+};
 let favIdx = 0, favTimer = null;
 
 function favFind(name){
@@ -1151,7 +1158,7 @@ function buildFavCarousel(){
   if(!track || !dots) return;
   FAVORITOS.forEach((name, i) => {
     const f = favFind(name); if(!f) return;
-    const img = (typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[name]) ? SPLEAT_PHOTOS[name] : '';
+    const img = FAV_IMGS[name] || ((typeof SPLEAT_PHOTOS !== 'undefined' && SPLEAT_PHOTOS[name]) ? SPLEAT_PHOTOS[name] : '');
     const nEsc = name.replace(/'/g, "\\'");
     const cEsc = f.cat.replace(/'/g, "\\'");
     const slide = document.createElement('div');
