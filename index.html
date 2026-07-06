@@ -733,7 +733,7 @@
       <img class="chat-header-avatar" id="chatAvatar" src="garzona.png" alt="Garzón/a Virtual"/>
       <div>
         <h4 id="chatGarzonaName">Jean</h4>
-        <p>Garzón/a virtual · En línea</p>
+        <p>Tu<br/>Garzón/a</p>
       </div>
     </div>
     <button class="chat-close-btn" onclick="closeChatWidget()">✕</button>
@@ -753,7 +753,7 @@
   </div>
   <div class="chat-input-area">
     <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="onChatKeyPress(event)">
-    <button onclick="sendChatMessage()" class="chat-send-btn">→</button>
+    <button onclick="sendChatMessage()" class="chat-send-btn" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
   </div>
   <div class="chat-lang-toggle">
     <button onclick="switchChatLanguage('es')" class="lang-btn active" id="langEs">ES</button>

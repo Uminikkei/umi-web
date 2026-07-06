@@ -469,7 +469,6 @@ nav{
 .cream-label{
   display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
   color:var(--teal);font-weight:700;margin-bottom:.8rem;
-  text-align:center;
 }
 .cream-title{
   font-family:var(--serif);
@@ -1621,9 +1620,10 @@ footer strong{color:var(--teal)}
   right: 24px;
   width: 420px;
   max-width: calc(100vw - 32px);
-  height: min(420px, 60vh);
-  background: var(--bg2);
-  border: 1px solid var(--border2);
+  height: min(390px, 60vh);
+  background: rgba(20, 39, 81, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 8px;
   box-shadow: 0 8px 48px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -1674,6 +1674,7 @@ footer strong{color:var(--teal)}
   object-fit: contain;
   padding: 0;
   filter: drop-shadow(0 4px 6px rgba(4, 7, 9, 0.35));
+  clip-path: inset(-24px -24px -9px -24px);
   z-index: 2;
   pointer-events: none;
 }
@@ -1686,7 +1687,8 @@ footer strong{color:var(--teal)}
 
 .chat-header-content p {
   margin: 4px 0 0;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
+  line-height: 1.15;
   opacity: 0.9;
 }
 
@@ -1739,7 +1741,7 @@ footer strong{color:var(--teal)}
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--bg1);
+  background: rgba(13, 27, 62, 0.55);
   scrollbar-width: thin;
   scrollbar-color: rgba(98,202,227,.45) transparent;
 }
@@ -1800,7 +1802,7 @@ footer strong{color:var(--teal)}
   gap: 8px;
   padding: 12px;
   border-top: 1px solid var(--border2);
-  background: var(--bg2);
+  background: rgba(20, 39, 81, 0.55);
 }
 
 #chatInput {
@@ -1850,10 +1852,10 @@ footer strong{color:var(--teal)}
 
 .chat-lang-toggle {
   display: flex;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 5px;
+  padding: 5px 10px;
   border-top: 1px solid var(--border2);
-  background: var(--bg2);
+  background: rgba(20, 39, 81, 0.55);
   justify-content: center;
   border-radius: 0 0 8px 8px;
 }
@@ -1861,11 +1863,11 @@ footer strong{color:var(--teal)}
 .lang-btn {
   background: var(--bg3);
   border: 1px solid var(--border2);
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 5px;
+  padding: 3px 9px;
   cursor: pointer;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   transition: all 0.2s;
 }
