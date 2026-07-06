@@ -148,12 +148,13 @@
   <div class="wave-sep">
     <svg viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="heroWaveBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="4"/>
-        </filter>
+        <linearGradient id="heroWaveShadow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(4,7,9,.32)"/>
+          <stop offset="0.5" stop-color="rgba(4,7,9,0)"/>
+        </linearGradient>
       </defs>
       <path fill="var(--cream)" d="M0,0 L0,25 C180,8 360,45 540,20 C720,4 900,40 1080,18 C1260,5 1380,23 1440,20 L1440,0 L1440,50 L0,50 Z"/>
-      <path d="M0,25 C180,8 360,45 540,20 C720,4 900,40 1080,18 C1260,5 1380,23 1440,20" fill="none" stroke="rgba(4,7,9,.35)" stroke-width="8" filter="url(#heroWaveBlur)" transform="translate(0,7)"/>
+      <path fill="url(#heroWaveShadow)" d="M0,0 L0,25 C180,8 360,45 540,20 C720,4 900,40 1080,18 C1260,5 1380,23 1440,20 L1440,0 L1440,50 L0,50 Z"/>
     </svg>
   </div>
 </section>
@@ -183,12 +184,13 @@
   <div class="etim-wave" aria-hidden="true">
     <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="etimWaveBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="4"/>
-        </filter>
+        <linearGradient id="etimWaveShadow" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(4,7,9,.28)"/>
+          <stop offset="0.5" stop-color="rgba(4,7,9,0)"/>
+        </linearGradient>
       </defs>
       <path fill="#f0e8d8" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
-      <path d="M1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45" fill="none" stroke="rgba(4,7,9,.3)" stroke-width="8" filter="url(#etimWaveBlur)" transform="translate(0,7)"/>
+      <path fill="url(#etimWaveShadow)" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
     </svg>
   </div>
 
@@ -230,12 +232,13 @@
   <div class="sig-wave-top" aria-hidden="true">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="favTopBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="4"/>
-        </filter>
+        <linearGradient id="favTopShadow" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(4,7,9,.36)"/>
+          <stop offset="0.5" stop-color="rgba(4,7,9,0)"/>
+        </linearGradient>
       </defs>
       <path fill="#e2be94" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
-      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.38)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,7)"/>
+      <path fill="url(#favTopShadow)" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
     </svg>
   </div>
 
@@ -243,12 +246,13 @@
   <div class="sig-wave-bottom">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="favWaveBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="5"/>
-        </filter>
+        <linearGradient id="favBottomShadow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(4,7,9,.38)"/>
+          <stop offset="0.5" stop-color="rgba(4,7,9,0)"/>
+        </linearGradient>
       </defs>
       <path fill="var(--teal)" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
-      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(4,7,9,.42)" stroke-width="10" filter="url(#favWaveBlur)" transform="translate(0,9)"/>
+      <path fill="url(#favBottomShadow)" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
     </svg>
   </div>
 </section>
@@ -270,13 +274,7 @@
   <!-- Wave cut bezier suave -->
   <div class="menu-wave-cut" aria-hidden="true">
     <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="menuCutBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="5"/>
-        </filter>
-      </defs>
       <path fill="#f0e8d8" d="M0,0 L0,40 C200,85 400,10 600,50 C800,88 1000,15 1200,48 C1320,65 1400,38 1440,42 L1440,0 L1440,100 L0,100 Z"/>
-      <path d="M0,40 C200,85 400,10 600,50 C800,88 1000,15 1200,48 C1320,65 1400,38 1440,42" fill="none" stroke="rgba(4,7,9,.38)" stroke-width="9" filter="url(#menuCutBlur)" transform="translate(0,8)"/>
     </svg>
   </div>
 
@@ -291,13 +289,15 @@
   <div class="menu-bottom-wave" aria-hidden="true">
     <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="menuWaveBlur" x="-20%" y="-300%" width="140%" height="700%">
-          <feGaussianBlur stdDeviation="5"/>
-        </filter>
+        <linearGradient id="menuBottomShadow" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(4,7,9,.36)"/>
+          <stop offset="0.5" stop-color="rgba(4,7,9,0)"/>
+        </linearGradient>
       </defs>
       <path fill="var(--teal)"
             d="M0,0 L1440,0 L1440,55 C1420,50 1360,22 1260,40 C1040,75 820,10 600,45 C380,85 180,15 0,55 Z"/>
-      <path d="M1440,55 C1420,50 1360,22 1260,40 C1040,75 820,10 600,45 C380,85 180,15 0,55" fill="none" stroke="rgba(4,7,9,.4)" stroke-width="9" filter="url(#menuWaveBlur)" transform="translate(0,8)"/>
+      <path fill="url(#menuBottomShadow)"
+            d="M0,0 L1440,0 L1440,55 C1420,50 1360,22 1260,40 C1040,75 820,10 600,45 C380,85 180,15 0,55 Z"/>
     </svg>
   </div>
 

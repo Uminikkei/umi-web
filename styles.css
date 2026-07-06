@@ -645,14 +645,13 @@ footer{
 /* Tarjetas elegantes sobre fondo beige */
 .menu-dark-area .item{
   background:#fbf7ee;
-  border:1px solid rgba(4,7,9,.15);
+  border:none;
   border-radius:16px;position:relative;
   box-shadow:0 2px 10px rgba(60,40,10,.06);
-  transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .35s;
+  transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;
 }
 .menu-dark-area .item:hover{
   transform:translateY(-5px);
-  border-color:rgba(201,168,76,.55);
   box-shadow:0 16px 34px rgba(60,40,10,.16);
 }
 .menu-dark-area .item .item-img{
