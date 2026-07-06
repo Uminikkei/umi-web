@@ -10,19 +10,28 @@
 
   const MIN_THUMB = 30;
   let dragging = false, dragStartY = 0, dragStartScroll = 0;
+  let lastScrollTop = -1, lastFullH = -1, lastViewH = -1;
 
   function update(){
     const doc = document.scrollingElement || document.documentElement;
     const viewH = window.innerHeight;
     const fullH = doc.scrollHeight;
+    const scrollTop = doc.scrollTop;
+    if (scrollTop === lastScrollTop && fullH === lastFullH && viewH === lastViewH) return;
+    lastScrollTop = scrollTop; lastFullH = fullH; lastViewH = viewH;
     if (fullH <= viewH + 2){ track.style.display = 'none'; return; }
     track.style.display = 'block';
     const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * viewH);
     const maxThumbTop = viewH - thumbH;
     const maxScroll = fullH - viewH;
-    const thumbTop = maxScroll > 0 ? (doc.scrollTop) / maxScroll * maxThumbTop : 0;
+    const thumbTop = maxScroll > 0 ? scrollTop / maxScroll * maxThumbTop : 0;
     thumb.style.height = thumbH + 'px';
     thumb.style.top = thumbTop + 'px';
+  }
+
+  function loop(){
+    update();
+    requestAnimationFrame(loop);
   }
 
   thumb.addEventListener('mousedown', (e) => {
@@ -31,6 +40,7 @@
     dragStartScroll = (document.scrollingElement || document.documentElement).scrollTop;
     thumb.classList.add('dragging');
     document.body.style.userSelect = 'none';
+    document.documentElement.style.scrollBehavior = 'auto';
     e.preventDefault();
   });
   window.addEventListener('mousemove', (e) => {
@@ -50,12 +60,13 @@
     dragging = false;
     thumb.classList.remove('dragging');
     document.body.style.userSelect = '';
+    document.documentElement.style.scrollBehavior = '';
   });
 
-  window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
   window.addEventListener('load', update);
   update();
+  requestAnimationFrame(loop);
 })();
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
