@@ -457,11 +457,12 @@ nav{
   overflow:hidden;
   display:flex;
   align-items:stretch;
+  height:460px;
 }
 .cream-inner{
   flex:1 1 55%;
   min-width:0;
-  padding:3rem 2rem 2rem 5vw;
+  padding:2rem 2rem 2rem 5vw;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -531,8 +532,9 @@ nav{
 .cream-wave-bottom{position:relative;line-height:0;background:var(--cream)}
 .cream-wave-bottom svg{display:block;width:100%;height:70px}
 @media(max-width:1000px){
-  .cream-sec{flex-direction:column}
-  .cream-inner{padding:2.5rem 1.5rem 1.5rem}
+  .cream-sec{flex-direction:column;height:auto}
+  .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:center;align-items:center}
+  .cream-desc{margin-left:auto;margin-right:auto}
   .cream-photo{flex:none;width:100%;height:320px}
   .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.6) 12%,rgba(0,0,0,0) 35%)}
 }
