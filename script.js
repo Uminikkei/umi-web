@@ -553,6 +553,10 @@ function cartTotal(){
   return Math.max(0, billAfterCoupon() - puntosCanjeados);
 }
 function cartSubtotal(){ return cart.reduce((s,r) => s + r.p * r.qty, 0); }
+function productsAfterCoupon(){
+  const base = cartSubtotal();
+  return cuponDescuento > 0 ? Math.round(base * (1 - cuponDescuento / 100)) : base;
+}
 
 // ── PUNTOS UMI (canje en checkout) ──────────────────────────────────────────
 function maxPuntosCanjeables(){
@@ -564,10 +568,12 @@ function maxPuntosCanjeables(){
 }
 function usarPuntos(){ puntosCanjeados = maxPuntosCanjeables(); refrescarResumenCheckout(); }
 function quitarPuntos(){ puntosCanjeados = 0; refrescarResumenCheckout(); }
-// Puntos que se GANAN con este pedido, calculados sobre lo que REALMENTE se paga
-// (después de cupón de descuento y puntos canjeados). Aplica a retiro y a delivery.
+// Puntos que se GANAN con este pedido: solo sobre el valor de los PRODUCTOS
+// (con cupón aplicado y descontando puntos canjeados). El costo de envío
+// del delivery nunca genera puntos.
 function puntosGanaPedido(){
-  return Math.round(cartTotal() * PUNTOS_PORCENTAJE);
+  const base = Math.max(0, productsAfterCoupon() - puntosCanjeados);
+  return Math.round(base * PUNTOS_PORCENTAJE);
 }
 function earnLineHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
