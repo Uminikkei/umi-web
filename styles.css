@@ -901,10 +901,14 @@ footer{
 @media(max-width:600px){
   .cat-circles{padding:0 .3rem}
   .cat-circ{flex:0 0 33.333%;max-width:33.333%}
-  .cat-circ-wrap{width:104px;height:104px;margin:0 auto}
-  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.55)!important}
-  .cat-circ-blob{width:60px;height:60px}
-  .cat-circ-label{margin-top:-1rem;font-size:.52rem;letter-spacing:1px}
+  .cat-circ-wrap{width:120px;height:120px;margin:0 auto}
+  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.64)!important}
+  .cat-circ-blob{width:70px;height:70px}
+  .cat-circ-label{margin-top:-1.2rem;font-size:.56rem;letter-spacing:1px}
+  /* Cajas del menú: azul pastel de la sección en vez de beige (mucho contraste) */
+  .menu-dark-area .item{background:#e3f5f9}
+  /* Título de categoría más pegado a la línea inferior */
+  .menu-dark-area .cat-heading{padding-bottom:.25rem;margin-bottom:1.3rem}
 }
 /* Subcategorías — pills elegantes bajo los círculos */
 .subcat-row{
@@ -2050,13 +2054,16 @@ footer strong{color:var(--teal)}
 }
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
-  #favCarousel{height:540px}
-  .fav-head{top:58px}
-  .fav-info{bottom:56px;right:6vw}
-  .fav-dots{bottom:112px}
+  /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
+  #favCarousel{height:440px}
+  .fav-head{top:48px}
+  .fav-info{bottom:44px;right:6vw}
+  .fav-dots{bottom:92px}
   .fav-name{font-size:1rem}
   .fav-price{font-size:.85rem}
   .fav-add{width:38px;height:38px}
+  /* El tartare queda cortado centrado; correr el encuadre a la derecha */
+  #favCarousel .fav-slide img[src*="fav-tartare"]{object-position:78% 50%}
 }
 
 /* Favoritos elegantes: anillo doble, zoom suave, serif */
