@@ -1,34 +1,4 @@
 // UMI Nikkei Bar - script v2
-// ── NAV WAVES ────────────────────────────────────────────────────────────────
-function connectNavWaves() {
-  const logo     = document.getElementById('navLogo');
-  const navTop   = document.querySelector('.nav-top');
-  const leftSvg  = document.getElementById('waveLeftSvg');
-  const rightSvg = document.getElementById('waveRightSvg');
-  const leftPath = document.getElementById('waveLeftPath');
-  const rightPath= document.getElementById('waveRightPath');
-  if (!logo.complete || !logo.naturalWidth) return;
-  const logoR  = logo.getBoundingClientRect();
-  const navR   = navTop.getBoundingClientRect();
-  const leftR  = leftSvg.getBoundingClientRect();
-  const rightR = rightSvg.getBoundingClientRect();
-  // Puntos reales del trazo (medidos en el PNG): la "u" entra al 65.8% de la
-  // altura y la cola de la "i" termina al 63.6%.
-  const connYLabs = logoR.top + logoR.height * 0.658;
-  const connYRabs = logoR.top + logoR.height * 0.636;
-  const yL = ((connYLabs - leftR.top)  / leftR.height)  * 380;
-  const yR = ((connYRabs - rightR.top) / rightR.height) * 380;
-  // Ondas de doble curva suaves; la izquierda desciende hacia el inicio de la
-  // "u" y la derecha sale subiendo desde la cola de la "i".
-  leftPath.setAttribute('d',
-    `M 0,${yL - 12} C 110,${yL - 58} 200,${yL + 38} 320,${yL - 8} S 510,${yL - 52} 600,${yL}`);
-  rightPath.setAttribute('d',
-    `M 0,${yR} C 90,${yR - 52} 190,${yR + 34} 310,${yR - 10} S 500,${yR - 48} 600,${yR - 12}`);
-}
-document.getElementById('navLogo').addEventListener('load', connectNavWaves);
-window.addEventListener('resize', connectNavWaves);
-window.addEventListener('load', connectNavWaves);
-
 // ── MOBILE MENU ───────────────────────────────────────────────────────────────
 function closeMobileMenu() {
   document.getElementById('mobileOverlay').classList.remove('open');
@@ -165,7 +135,7 @@ function buildMenu(){
     'Ensaladas': { e: IC('icon_ensaladas.svg',130), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
     'Del Fuego': { e: IC('icon_del_fuego.svg',130), cats:['Fuertes'], ring:'Del Fuego' },
     'Postres':   { e: IC('icon_postres.svg',  130), cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC('icon_bebidas.svg',  110), cats:['Bebidas'], ring:'Bebidas' }
+    'Bebidas':   { e: IC('icon_bebidas.svg',  128), cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
@@ -215,7 +185,7 @@ function buildMenu(){
         <div class="item-footer">
           <div class="item-price">${fmt(item.p)}</div>
           <button class="item-cart" title="Agregar al carrito" aria-label="Agregar" onclick="event.stopPropagation();addToCart('${nEsc}',${item.p},'${eEsc}','${cEsc}')">
-            <svg viewBox="0 0 24 24" width="17" height="17"><path d="M16 6V5a4 4 0 0 0-8 0v1H4.8a1 1 0 0 0-1 .92l-1 12A2 2 0 0 0 4.8 21.1h14.4a2 2 0 0 0 2-2.18l-1-12a1 1 0 0 0-1-.92H16zM10 5a2 2 0 0 1 4 0v1h-4V5z"/></svg>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M7 4V3a1 1 0 011-1h8a1 1 0 011 1v1h3.2a1 1 0 01.99 1.14l-1.7 12A2 2 0 0117.5 19h-11a2 2 0 01-1.99-1.86l-1.7-12A1 1 0 013.8 4H7zm2 0h6V4H9zm-.5 5a1 1 0 10-2 0 5.5 5.5 0 0011 0 1 1 0 10-2 0 3.5 3.5 0 01-7 0z"/></svg>
           </button>
         </div>`;
       card.onclick = () => openProductModal(item.n, item.p, eEsc, cat);
@@ -1170,7 +1140,7 @@ function buildFavCarousel(){
         <div class="fav-row">
           <span class="fav-price">${fmt(f.item.p)}</span>
           <button class="fav-add" aria-label="Agregar a tu orden" onclick="addToCart('${nEsc}',${f.item.p},'','${cEsc}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4V3a1 1 0 011-1h8a1 1 0 011 1v1h3.2a1 1 0 01.99 1.14l-1.7 12A2 2 0 0117.5 19h-11a2 2 0 01-1.99-1.86l-1.7-12A1 1 0 013.8 4H7zm2 0h6V4H9zm-.5 5a1 1 0 10-2 0 5.5 5.5 0 0011 0 1 1 0 10-2 0 3.5 3.5 0 01-7 0z"/></svg>
             <span class="fav-tip">Agregar a tu orden</span>
           </button>
         </div>
@@ -1199,7 +1169,7 @@ function favGo(i, manual){
 
 function favAuto(){
   clearInterval(favTimer);
-  favTimer = setInterval(() => favGo(favIdx + 1), 6000);
+  favTimer = setInterval(() => favGo(favIdx + 1), 4000);
 }
 
 buildFavCarousel();

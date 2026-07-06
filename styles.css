@@ -71,14 +71,14 @@ nav{
 @keyframes promoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.promo-track{animation-duration:0s}}
 
-/* ── BARRA SUPERIOR ── */
-.nav-topbar{
+/* ── BARRA SUPERIOR: enlaces y cuenta al mismo nivel del logo ── */
+.nav-side{
   position:relative;z-index:10;
+  flex:1;min-width:0;
   display:flex;align-items:center;
-  padding:.15rem 2vw;
   gap:1.8vw;
-  margin-top:-6px;
 }
+.nav-side--right{justify-content:flex-end}
 /* Iconos de cuenta y bolsa (derecha del topbar) */
 .ntb-icon-btn{
   position:relative;background:transparent;border:none;cursor:pointer;padding:.2rem;
@@ -143,39 +143,30 @@ nav{
 }
 .ntb-link:hover{color:var(--white-1)}
 /* Botones — tamaño proporcional */
-.nav-topbar .nav-wa,
-.nav-topbar .nav-reserva{
+.nav-side .nav-wa,
+.nav-side .nav-reserva{
   font-size:clamp(.48rem,1vw,.68rem);
   letter-spacing:clamp(.8px,.22vw,2.5px);
   padding:.3rem clamp(.5rem,.8vw,1rem);
   white-space:nowrap;
 }
-/* Links empujan el grupo de cuenta a la derecha */
 .ntb-iso{ margin-left:0; }
-.nav-topbar #ntbAccount{ margin-left:auto; }
-/* Oculto sin salir del flujo: conserva el margin-left:auto que empuja los íconos */
+/* Oculto sin salir del flujo */
 #ntbAccount.ntb-acc-hidden{ visibility:hidden; width:0; padding:0; overflow:hidden; }
 
-/* Navbar top: olas + logo centrado */
+/* Navbar top: fila única con logo centrado */
 .nav-top{
   display:flex;
   align-items:center;
   height:72px;
+  padding:0 2vw;
   overflow:visible;
-}
-.nav-wave-left,.nav-wave-right{
-  flex:1;min-width:0;
-  height:72px;
-  display:flex;align-items:center;
-}
-.nav-wave-left svg,.nav-wave-right svg{
-  display:block;width:100%;height:72px;overflow:visible;
 }
 .nav-wordmark{
   flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   z-index:5;pointer-events:none;
-  margin:0 -10px; /* las olas tocan los extremos del logo */
+  margin:0 1.5vw;
 }
 .nav-wordmark img{
   height:64px;width:auto;display:block;
@@ -184,8 +175,6 @@ nav{
 @media(max-width:900px){
   .nav-wordmark img{height:44px}
   .nav-top{height:52px}
-  .nav-wave-left,.nav-wave-right{height:52px}
-  .nav-wave-left svg,.nav-wave-right svg{height:52px}
 }
 
 /* Botones pill (fuera del topbar también) */
@@ -532,7 +521,8 @@ nav{
   /* Solo isotipo + cuenta + persona + bolsa; el resto se oculta */
   .ntb-link:not(#ntbAccount){display:none}
   .nav-wa,.nav-reserva{display:none}
-  .nav-topbar{gap:4vw;padding:.3rem 4vw;justify-content:space-between}
+  .nav-side{gap:3vw}
+  .nav-top{padding:0 4vw}
   .ntb-icon-btn svg{width:24px;height:24px}
   #ntbUserBtn{margin-left:0}
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
@@ -1166,7 +1156,7 @@ footer strong{color:var(--teal)}
   filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
 /* Tamaños compensados: cada dibujo llena distinto su lienzo SVG */
-.side-tab--cart .side-tab-icon svg{ fill:var(--teal); width:28px;height:28px; }
+.side-tab--cart .side-tab-icon svg{ fill:#e2be94; width:28px;height:28px; }
 .side-tab--fb   .side-tab-icon svg{ color:var(--teal); width:30px;height:30px; }
 .side-tab--wa   .side-tab-icon svg{ fill:#25D366; width:26px;height:26px; }
 

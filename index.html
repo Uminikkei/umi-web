@@ -80,38 +80,28 @@
 
 <!-- ═══ NAVBAR ═══ -->
 <nav>
-  <!-- OLA IZQUIERDA | LOGO CENTRADO | OLA DERECHA -->
+  <!-- FILA ÚNICA: enlaces izquierda | logo centrado | cuenta/cesta/puntos derecha -->
   <div class="nav-top">
-    <div class="nav-wave-left" aria-hidden="true">
-      <svg id="waveLeftSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="waveLeftPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
-      </svg>
+    <div class="nav-side nav-side--left">
+      <img class="ntb-iso" src="logo-umi-icon.png" alt="UMI">
+      <a class="ntb-link" href="#nosotros">Nosotros</a>
+      <a class="ntb-link" href="#menu">Menú</a>
+      <a class="ntb-link" href="#contacto">Contacto</a>
     </div>
     <div class="nav-wordmark">
       <img id="navLogo" src="logo-umi-word.png" alt="UMI">
     </div>
-    <div class="nav-wave-right" aria-hidden="true">
-      <svg id="waveRightSvg" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="waveRightPath" fill="none" stroke="rgba(255,255,255,0.70)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" d=""/>
-      </svg>
+    <div class="nav-side nav-side--right">
+      <a class="ntb-link" id="ntbAccount" href="#" onclick="umiOpenAuth();return false;">Iniciar sesión</a>
+      <button class="ntb-icon-btn" onclick="openCart()" aria-label="Mi pedido">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+        <span class="ntb-bag-badge hidden" id="ntbBagBadge">0</span>
+      </button>
+      <button class="ntb-icon-btn" id="ntbUserBtn" onclick="umiUserClick()" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+        <span class="ntb-user-pts hidden" id="ntbUserPts"></span>
+      </button>
     </div>
-  </div>
-
-  <!-- BARRA DE ENLACES BAJO LA OLA -->
-  <div class="nav-topbar" id="navTopbar">
-    <img class="ntb-iso" src="logo-umi-icon.png" alt="UMI">
-    <a class="ntb-link" href="#nosotros">Nosotros</a>
-    <a class="ntb-link" href="#menu">Menú</a>
-    <a class="ntb-link" href="#contacto">Contacto</a>
-    <a class="ntb-link" id="ntbAccount" href="#" onclick="umiOpenAuth();return false;">Iniciar sesión</a>
-    <button class="ntb-icon-btn" onclick="openCart()" aria-label="Mi pedido">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
-      <span class="ntb-bag-badge hidden" id="ntbBagBadge">0</span>
-    </button>
-    <button class="ntb-icon-btn" id="ntbUserBtn" onclick="umiUserClick()" aria-label="Mi cuenta">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
-      <span class="ntb-user-pts hidden" id="ntbUserPts"></span>
-    </button>
   </div>
 
 
