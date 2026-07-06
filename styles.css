@@ -512,8 +512,9 @@ nav{
   .cream-inner{grid-template-columns:1fr;gap:2.5rem}
   .hero-sec{padding:130px 1.5rem 15rem}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
-  /* Sello más pequeño en vez de ocultarlo */
-  .hero-badge.hero-stamp{display:flex;width:92px;height:92px;bottom:7rem;right:5vw}
+  /* Sello arriba a la derecha: en la esquina inferior se amontona con la
+     garzona virtual y los iconos flotantes (fijos al viewport) */
+  .hero-badge.hero-stamp{display:flex;width:76px;height:76px;top:118px;bottom:auto;right:4vw}
 }
 
 /* ── MÓVIL: barra superior compacta ── */
@@ -528,6 +529,11 @@ nav{
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
   .footer-brand{grid-column:auto}
   .chat-garzona-picker{flex-wrap:wrap;white-space:normal;row-gap:5px}
+  /* Garzona virtual al lado izquierdo: a la derecha ya están la bolsa,
+     comentarios y WhatsApp (side-tabs), y quedaban todos amontonados */
+  .chat-toggle-btn{right:auto;left:12px}
+  .chat-bubble-tip{right:auto;left:6px}
+  .chat-bubble-tip::after{right:auto;left:16px}
 }
 
 /* ── FOOTER REDISEÑADO ── */
@@ -807,6 +813,7 @@ footer{
 @media(max-width:900px){
   .videos-inner{grid-template-columns:1fr;gap:2.5rem}
   .reels-grid{grid-template-columns:repeat(2,1fr)}
+  .videos-left{text-align:center}
 }
 @media(max-width:600px){
   .reels-grid{grid-template-columns:repeat(2,1fr)}
@@ -895,14 +902,14 @@ footer{
   transition:color .3s;line-height:1.3;margin-top:-2rem;
 }
 .cat-circ.on .cat-circ-label{color:var(--teal)}
-/* Móvil: categorías de 2 en 2 */
+/* Móvil: categorías de 3 en 3 para acortar la sección */
 @media(max-width:600px){
   .cat-circles{padding:0 .3rem}
-  .cat-circ{flex:0 0 50%;max-width:50%}
-  .cat-circ-wrap{width:152px;height:152px;margin:0 auto}
-  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.76)!important}
-  .cat-circ-blob{width:86px;height:86px}
-  .cat-circ-label{margin-top:-1.5rem;font-size:.6rem;letter-spacing:1.5px}
+  .cat-circ{flex:0 0 33.333%;max-width:33.333%}
+  .cat-circ-wrap{width:104px;height:104px;margin:0 auto}
+  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.55)!important}
+  .cat-circ-blob{width:60px;height:60px}
+  .cat-circ-label{margin-top:-1rem;font-size:.52rem;letter-spacing:1px}
 }
 /* Subcategorías — pills elegantes bajo los círculos */
 .subcat-row{
@@ -1066,6 +1073,11 @@ footer{
 .reviews-head h2{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:700;color:var(--text);line-height:1.2;letter-spacing:-1px}
 .reviews-head h2 em{font-family:'SignHandwriting',var(--script);font-style:normal;font-weight:400;color:#fff;text-transform:lowercase}
 .reviews-head p{margin-top:.5rem;color:var(--muted);font-size:.88rem}
+@media(max-width:600px){
+  /* "Reseñas de nuestros clientes" en una sola línea */
+  .reviews-head{padding:0 1rem 2.8rem}
+  .reviews-head h2{font-size:5.6vw;white-space:nowrap;letter-spacing:-.5px}
+}
 .reviews-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:.35rem 1rem .35rem .6rem;margin-top:1rem}
 .reviews-badge svg{width:18px;height:18px}
 .reviews-badge span{font-size:.8rem;font-weight:600;color:var(--gold);letter-spacing:.5px}
@@ -1824,7 +1836,8 @@ footer strong{color:var(--teal)}
     width: calc(100vw - 32px);
     max-height: 70vh;
     bottom: 80px;
-    right: 16px;
+    right: auto;
+    left: 16px;
   }
 
   .chat-msg p {
