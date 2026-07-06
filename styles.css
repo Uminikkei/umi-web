@@ -749,8 +749,8 @@ footer{
   position:relative;
 }
 .videos-inner{
-  max-width:1400px;margin:0 auto;
-  display:grid;grid-template-columns:minmax(220px,360px) 1fr;
+  max-width:1600px;margin:0 auto;
+  display:grid;grid-template-columns:minmax(200px,260px) 1fr;
   gap:2rem;align-items:center;
 }
 .videos-left{padding-top:0}
@@ -764,6 +764,11 @@ footer{
   font-weight:700;color:var(--white-1);
   line-height:1.1;letter-spacing:-.5px;margin-bottom:.7rem;
   white-space:nowrap;
+}
+/* Móvil: una sola línea. Escritorio: "¿CÓMO" arriba, "LO HACEMOS?" abajo */
+.videos-title-break{display:none}
+@media(min-width:901px){
+  .videos-title-break{display:inline}
 }
 .videos-left p{color:var(--muted);font-size:.78rem;margin-bottom:1rem;font-weight:300;line-height:1.6}
 .btn-reels{
@@ -1195,7 +1200,7 @@ footer strong{color:var(--teal)}
   filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
 /* Tamaños compensados: cada dibujo llena distinto su lienzo SVG */
-.side-tab--cart .side-tab-icon svg{ fill:#e2be94; width:28px;height:28px; }
+.side-tab--cart .side-tab-icon svg{ fill:#f0ebe0; width:28px;height:28px; }
 .side-tab--fb   .side-tab-icon svg{ color:var(--teal); width:30px;height:30px; }
 .side-tab--wa   .side-tab-icon svg{ fill:#25D366; width:26px;height:26px; }
 
@@ -1915,8 +1920,8 @@ footer strong{color:var(--teal)}
 }
 .auth-close:hover{color:var(--text)}
 .auth-logo{
-  font-family:var(--serif);font-size:1.6rem;letter-spacing:4px;color:var(--teal);
-  font-weight:700;margin-bottom:.6rem;
+  height:34px;width:auto;display:block;margin:0 auto .8rem;
+  filter:brightness(0) invert(1) opacity(.92);
 }
 .auth-box h3{font-family:var(--serif);font-size:1.5rem;color:var(--white-1);margin:0 0 .4rem}
 .auth-sub{color:var(--muted);font-size:.9rem;margin:0 0 1.4rem;line-height:1.4}
