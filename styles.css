@@ -469,6 +469,7 @@ nav{
 .cream-label{
   display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
   color:var(--teal);font-weight:700;margin-bottom:.8rem;
+  text-align:center;
 }
 .cream-title{
   font-family:var(--serif);
