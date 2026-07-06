@@ -56,7 +56,7 @@
 <link rel="apple-touch-icon" href="favicon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="styles.css?v=20260706o"/>
+<link rel="stylesheet" href="styles.css?v=20260706p"/>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PS7JT1F1NV"></script>
 <script>
@@ -179,8 +179,17 @@
     </div>
 
   </div>
+</section>
 
-  <!-- Etimología a lo ancho, debajo de Nuestra Historia -->
+<!-- ═══ SECCIÓN: ETIMOLOGÍA — fondo arena, separada por ola ═══ -->
+<section class="etim-sec">
+  <!-- Ola: cream (historia) por delante, proyecta sombra sobre la arena -->
+  <div class="etim-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#f0e8d8" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
+    </svg>
+  </div>
+
   <div class="cream-etim-full">
     <span class="significado-label">Etimología</span>
     <h2 class="significado-title">¿Qué significa <em>UMI</em>?</h2>
@@ -199,7 +208,6 @@
       </div>
     </div>
   </div>
-
 </section>
 
 <!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
@@ -216,17 +224,23 @@
   <!-- Puntitos de navegación -->
   <div class="fav-dots" id="favDots"></div>
 
-  <!-- Ola superior: cream recorta sobre la foto -->
+  <!-- Ola superior: arena recorta sobre la foto (con sombra de profundidad) -->
   <div class="sig-wave-top" aria-hidden="true">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#f0e8d8" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
+      <path fill="#e2be94" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
     </svg>
   </div>
 
-  <!-- Ola inferior: teal recorta sobre la foto -->
+  <!-- Ola inferior: teal recorta sobre la foto; la foto proyecta sombra sobre el teal -->
   <div class="sig-wave-bottom">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="favWaveBlur" x="-20%" y="-300%" width="140%" height="700%">
+          <feGaussianBlur stdDeviation="5"/>
+        </filter>
+      </defs>
       <path fill="var(--teal)" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
+      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(4,7,9,.42)" stroke-width="10" filter="url(#favWaveBlur)" transform="translate(0,9)"/>
     </svg>
   </div>
 </section>
@@ -262,7 +276,7 @@
   <!-- Contorno INFERIOR real de la caligrafía UMI — fondo oscuro asciende desde el suelo de las letras -->
   <div class="menu-bottom-wave" aria-hidden="true">
     <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#f0e8d8"
+      <path fill="var(--teal)"
             d="M0,0 L1440,0 L1440,55 C1420,50 1360,22 1260,40 C1040,75 820,10 600,45 C380,85 180,15 0,55 Z"/>
     </svg>
   </div>
