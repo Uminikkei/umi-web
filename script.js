@@ -1,10 +1,4 @@
 // UMI Nikkei Bar - script v2
-// ── MOBILE MENU ───────────────────────────────────────────────────────────────
-function closeMobileMenu() {
-  document.getElementById('mobileOverlay').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
-}
-
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';

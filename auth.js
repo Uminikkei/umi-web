@@ -164,22 +164,20 @@ function firstName(n) { return (n || '').trim().split(' ')[0]; }
 
 function updateAccountBtn() {
   const btn = $('ntbAccount');
-  const mob = $('mobAccount');
-  let label;
+  let label, onClick;
   if (currentProfile) {
-    const pts = (currentProfile.points || 0).toLocaleString('es-CL');
-    label = firstName(currentProfile.name) + ' · ★ ' + pts;
+    label = 'Cerrar sesión';
+    onClick = () => window.umiLogout();
   } else if (currentUser) {
     label = 'Completar registro';
+    onClick = () => window.umiOpenAuth();
   } else {
     label = 'Iniciar sesión';
+    onClick = () => window.umiOpenAuth();
   }
   if (btn) {
-    // Con perfil activo, el ícono de persona reemplaza al texto en el topbar
-    // (se oculta sin salir del flujo para conservar el empuje a la derecha)
-    btn.classList.toggle('ntb-acc-hidden', !!currentProfile);
     btn.textContent = label;
-    btn.classList.toggle('ntb-account--pts', !!currentProfile);
+    btn.onclick = (e) => { e.preventDefault(); onClick(); };
   }
   // Puntos en dorado junto al ícono de persona
   const pts = $('ntbUserPts');
@@ -191,7 +189,6 @@ function updateAccountBtn() {
       pts.classList.add('hidden');
     }
   }
-  if (mob) mob.textContent = label;
 }
 
 // ── Estado de sesión ───────────────────────────────────────────────────────

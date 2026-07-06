@@ -79,6 +79,9 @@ nav{
   gap:1.8vw;
 }
 .nav-side--right{justify-content:flex-end}
+/* Envoltorios invisibles en escritorio; en móvil se activan para balancear
+   el logo centrado entre el isotipo y el grupo de iconos (ver @media 700px) */
+.nav-iso-wrap,.nav-icons-wrap{display:contents}
 /* Iconos de cuenta y bolsa (derecha del topbar) */
 .ntb-icon-btn{
   position:relative;background:transparent;border:none;cursor:pointer;padding:.2rem;
@@ -126,6 +129,7 @@ nav{
 .ui-row span{color:var(--muted)}
 .ui-row b{color:var(--text);font-weight:600}
 .user-box .fb-send{width:100%}
+.user-box .auth-logout{width:100%;margin-top:.6rem}
 
 /* Isotipo izquierda */
 .ntb-iso{
@@ -151,8 +155,8 @@ nav{
   white-space:nowrap;
 }
 .ntb-iso{ margin-left:0; }
-/* Oculto sin salir del flujo */
-#ntbAccount.ntb-acc-hidden{ visibility:hidden; width:0; padding:0; overflow:hidden; }
+/* Fuerza el salto a una 2da fila en móvil (ver @media 700px); invisible en escritorio */
+.nav-linebreak{ display:none; }
 
 /* Navbar top: fila única con logo centrado */
 .nav-top{
@@ -196,19 +200,6 @@ nav{
 .nav-reserva:hover{background:rgba(255,255,255,.14);border-color:var(--white-1);color:var(--white-1)}
 
 /* Mobile menu — oculto por defecto */
-.mobile-menu-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300}
-.mobile-menu-overlay.open{display:block}
-.mobile-menu{display:none;position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--bg2);z-index:400;flex-direction:column;padding:2rem 1.5rem;gap:1.5rem}
-.mobile-menu.open{display:flex}
-.mobile-menu a{color:var(--text);font-size:1rem;text-transform:uppercase;letter-spacing:2px}
-
-/* Hamburger */
-.nav-hamburger{
-  background:none;border:none;color:rgba(240,235,224,.65);
-  cursor:pointer;padding:.2rem;display:flex;align-items:center;transition:color .2s;
-}
-.nav-hamburger:hover{color:var(--white-1)}
-
 /* Search */
 .search-btn{color:rgba(240,235,224,.6)}
 .search-btn:hover{color:var(--teal)}
@@ -517,13 +508,26 @@ nav{
   .hero-badge.hero-stamp{display:flex;width:76px;height:76px;top:118px;bottom:auto;right:4vw}
 }
 
-/* ── MÓVIL: barra superior compacta ── */
+/* ── MÓVIL: navbar en 2 filas — arriba enlaces + sesión, abajo marca ── */
 @media(max-width:700px){
-  /* Solo isotipo + cuenta + persona + bolsa; el resto se oculta */
-  .ntb-link:not(#ntbAccount){display:none}
   .nav-wa,.nav-reserva{display:none}
-  .nav-side{gap:3vw}
-  .nav-top{padding:0 4vw}
+  .nav-top{
+    flex-wrap:wrap;
+    height:auto;
+    padding:.55rem 4vw .45rem;
+    gap:.5rem 3vw;
+  }
+  /* Los wrappers desaparecen del layout: sus hijos pasan a ser ítems
+     directos de .nav-top y se pueden reordenar libremente con "order" */
+  .nav-side--left,.nav-side--right{ display:contents; }
+  .ntb-link{ order:1; font-size:.68rem; letter-spacing:1px; }
+  #ntbAccount{ order:2; margin-left:auto; }
+  .nav-linebreak{ display:block; order:3; flex-basis:100%; height:0; }
+  /* Isotipo y grupo de iconos: mismo ancho flexible a cada lado para que
+     el logo quede realmente centrado (no solo a mitad de camino entre ambos) */
+  .nav-iso-wrap{ display:flex; order:4; flex:1; }
+  .nav-wordmark{ order:5; }
+  .nav-icons-wrap{ display:flex; order:6; flex:1; justify-content:flex-end; align-items:center; gap:1.8vw; }
   .ntb-icon-btn svg{width:24px;height:24px}
   #ntbUserBtn{margin-left:0}
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
@@ -1910,9 +1914,6 @@ footer strong{color:var(--teal)}
 .auth-logout:hover{border-color:var(--teal);color:var(--teal)}
 
 /* ─── PUNTOS UMI ────────────────────────────────────────────────────────────── */
-.ntb-account--pts{
-  color:var(--teal)!important;font-weight:700;
-}
 .checkout-puntos-action{
   display:flex;flex-direction:column;align-items:stretch;gap:.35rem;
   margin:.5rem 0 .2rem;
