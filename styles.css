@@ -471,7 +471,7 @@ nav{
 }
 
 .cream-sec{
-  background:var(--cream);
+  background:#000;
   padding:0 0 0;
   position:relative;
   overflow:hidden;
@@ -494,15 +494,15 @@ nav{
 .cream-title{
   font-family:var(--serif);
   font-size:clamp(2.2rem,4vw,3rem);
-  font-weight:700;color:#0a0a0a;
+  font-weight:700;color:var(--white-1);
   line-height:1.05;letter-spacing:-1px;margin-bottom:.4rem;
 }
 .cream-title em{
   font-family:'SignHandwriting', var(--script);font-style:normal;
-  font-size:clamp(2rem,3.5vw,2.6rem);color:#222;font-weight:400;
+  font-size:clamp(2rem,3.5vw,2.6rem);color:var(--white-1);font-weight:400;
 }
 .cream-desc{
-  font-size:.88rem;color:#444;line-height:1.75;
+  font-size:.88rem;color:rgba(240,235,224,.75);line-height:1.75;
   margin-bottom:1.5rem;max-width:340px;
 }
 .cream-link{
@@ -513,8 +513,12 @@ nav{
 }
 .cream-link:hover{color:var(--teal);border-color:var(--teal)}
 /* Foto central */
-.cream-photo{border-radius:8px;overflow:hidden}
+.cream-photo{border-radius:8px;overflow:hidden;position:relative}
 .cream-photo img{width:100%;height:360px;object-fit:cover;display:block}
+.cream-photo::before{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to right,#000 0%,rgba(0,0,0,.6) 18%,rgba(0,0,0,0) 45%);
+}
 /* Más Pedidos — columna derecha */
 .cream-pedidos{}
 .cream-pedidos-grid{
@@ -1244,6 +1248,7 @@ footer strong{color:var(--teal)}
   filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
 /* Tamaños compensados: cada dibujo llena distinto su lienzo SVG */
+.side-tab--cart{ margin-bottom:-6px; }
 .side-tab--cart .side-tab-icon svg{ color:#f0ebe0; width:28px;height:28px; }
 .side-tab--fb   .side-tab-icon svg{ color:var(--teal); width:30px;height:30px; }
 .side-tab--wa   .side-tab-icon svg{ fill:#25D366; width:26px;height:26px; }
