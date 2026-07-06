@@ -1223,7 +1223,7 @@ footer strong{color:var(--teal)}
   filter:drop-shadow(0 2px 4px rgba(4,7,9,.4));
 }
 /* Tamaños compensados: cada dibujo llena distinto su lienzo SVG */
-.side-tab--cart .side-tab-icon svg{ fill:#f0ebe0; width:28px;height:28px; }
+.side-tab--cart .side-tab-icon svg{ color:#f0ebe0; width:28px;height:28px; }
 .side-tab--fb   .side-tab-icon svg{ color:var(--teal); width:30px;height:30px; }
 .side-tab--wa   .side-tab-icon svg{ fill:#25D366; width:26px;height:26px; }
 
