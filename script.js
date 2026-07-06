@@ -565,14 +565,12 @@ function maxPuntosCanjeables(){
 function usarPuntos(){ puntosCanjeados = maxPuntosCanjeables(); refrescarResumenCheckout(); }
 function quitarPuntos(){ puntosCanjeados = 0; refrescarResumenCheckout(); }
 // Puntos que se GANAN con este pedido, calculados sobre lo que REALMENTE se paga
-// (después de cupón de descuento y puntos canjeados). Los delivery NO acumulan puntos.
+// (después de cupón de descuento y puntos canjeados). Aplica a retiro y a delivery.
 function puntosGanaPedido(){
-  if(entregaMode === 'delivery') return 0;
   return Math.round(cartTotal() * PUNTOS_PORCENTAJE);
 }
 function earnLineHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
-  if(entregaMode === 'delivery') return '';
   const g = puntosGanaPedido();
   return g > 0 ? `🎁 Con esta compra acumulas <b>${g.toLocaleString('es-CL')} puntos</b>` : '';
 }
