@@ -561,6 +561,7 @@ function productsAfterCoupon(){
 // ── PUNTOS UMI (canje en checkout) ──────────────────────────────────────────
 function maxPuntosCanjeables(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return 0;
+  if(cuponDescuento > 0) return 0; // cupón y puntos no se combinan
   const prof = window.umiGetProfile ? window.umiGetProfile() : null;
   const saldo = (prof && prof.points) || 0;
   const tope  = Math.floor(billAfterCoupon() * PUNTOS_TOPE_CANJE);
@@ -614,8 +615,15 @@ function aplicarCupon(){
   // Cupones fijos de respaldo + cupones creados desde el panel (Firestore)
   const CUPONES = Object.assign({ 'HOPLIX': 90, 'CHOCOLATE': 50 }, window.umiCupones || {});
   if(CUPONES[val] !== undefined){
+    const teniaPuntos = puntosCanjeados > 0;
     cuponDescuento = CUPONES[val];
-    if(msg){ msg.textContent = `✓ Cupón aplicado: ${cuponDescuento}% de descuento`; msg.style.color='#22c55e'; }
+    puntosCanjeados = 0; // cupón y puntos no se combinan
+    if(msg){
+      msg.textContent = teniaPuntos
+        ? `✓ Cupón aplicado: ${cuponDescuento}% de descuento. Se quitaron tus puntos canjeados (no se pueden combinar con cupones).`
+        : `✓ Cupón aplicado: ${cuponDescuento}% de descuento`;
+      msg.style.color='#22c55e';
+    }
     // Actualizar solo el resumen sin reabrir el modal
     refrescarResumenCheckout();
   } else {
