@@ -2118,7 +2118,7 @@ footer strong{color:var(--teal)}
   .fav-price{font-size:.85rem}
   .fav-add{width:38px;height:38px}
   /* El tartare queda cortado centrado; correr el encuadre a la derecha */
-  #favCarousel .fav-slide img[src*="fav-tartare"]{object-position:78% 50%}
+  #favCarousel .fav-slide img[src*="fav-tartare"]{object-position:100% 50%}
 }
 
 /* Favoritos elegantes: anillo doble, zoom suave, serif */
