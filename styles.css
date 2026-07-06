@@ -361,12 +361,12 @@ nav{
 .hf-5{width:135px;top:6%;left:56%;animation-duration:5.8s;animation-delay:1.6s}
 .hf-6{width:180px;top:4%;right:4%;animation-duration:6.2s;animation-delay:.9s}
 @media(max-width:900px){
-  .hf-1{width:48px;top:11%;left:38%;right:auto;bottom:auto}
-  .hf-2{width:52px;top:12%;left:55%;right:auto;bottom:auto}
-  .hf-3{width:42px;top:16%;left:22%;right:auto;bottom:auto}
-  .hf-4{width:48px;top:12%;left:6%;right:auto;bottom:auto}
-  .hf-5{width:52px;top:1%;left:8%}
-  .hf-6{width:76px;top:1%;right:6%}
+  .hf-1{width:48px;top:2%;left:26%;right:auto;bottom:auto}
+  .hf-2{width:40px;top:2%;left:44%;right:auto;bottom:auto}
+  .hf-3{width:40px;top:18%;left:32%;right:auto;bottom:auto}
+  .hf-4{width:40px;top:18%;left:6%;right:auto;bottom:auto}
+  .hf-5{width:74px;top:2%;left:4%}
+  .hf-6{width:150px;top:.5%;right:3%}
 }
 
 .hero-badge-top{
