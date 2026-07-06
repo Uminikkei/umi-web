@@ -550,9 +550,6 @@ nav{
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
   .footer-brand{grid-column:auto}
   .chat-garzona-picker{flex-wrap:wrap;white-space:normal;row-gap:5px}
-  /* La bandeja de la garzona (arriba a la derecha del personaje) choca con el
-     ícono de WhatsApp; se sube y se corre un poco a la izquierda */
-  .chat-toggle-btn{bottom:34px;right:46px}
 }
 
 /* ── FOOTER REDISEÑADO ── */
@@ -1510,7 +1507,7 @@ footer strong{color:var(--teal)}
 /* ─── CHAT WIDGET ─────────────────────────────────────────────────────────────── */
 .chat-toggle-btn {
   position: fixed;
-  bottom: 10px;
+  bottom: 16px;
   right: 34px;
   width: 90px;
   height: auto;
@@ -1528,6 +1525,11 @@ footer strong{color:var(--teal)}
 
 .chat-toggle-btn:hover {
   transform: translateY(-8px) scale(1.05);
+}
+/* La bandeja de la garzona (arriba a la derecha del personaje) choca con el
+   ícono de WhatsApp en móvil; se sube y se corre un poco a la izquierda */
+@media(max-width:700px){
+  .chat-toggle-btn{bottom:34px;right:46px}
 }
 
 .chat-toggle-btn img {
