@@ -197,7 +197,7 @@ function buildMenu(){
     'Ceviches':  { e: IC('icon_ceviches.svg', 155), cats:['Ceviches'], ring:'Ceviches' },
     'Tiraditos': { e: IC('icon_tiraditos.svg',150), cats:['Tiraditos'], ring:'Tiraditos' },
     'Ensaladas': { e: IC('icon_ensaladas.svg',130), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC('icon_del_fuego.svg',130), cats:['Fuertes'], ring:'Del Fuego' },
+    'Del Fuego': { e: '', cats:['Fuertes'], ring:'Del Fuego' },
     'Postres':   { e: IC('icon_postres.svg',  130), cats:['Postres'], ring:'Postres' },
     'Bebidas':   { e: IC('icon_bebidas.svg',  128), cats:['Bebidas'], ring:'Bebidas' }
   };
