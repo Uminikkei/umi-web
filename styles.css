@@ -481,14 +481,16 @@ nav{
   padding:0 0 0;
   position:relative;
   overflow:hidden;
+  display:flex;
+  align-items:stretch;
 }
 .cream-inner{
-  max-width:1240px;margin:0 auto;
-  padding:5rem 2rem 3rem;
-  display:grid;
-  grid-template-columns:1.15fr 1fr;
-  gap:3.5rem;
-  align-items:center;
+  flex:1 1 55%;
+  min-width:0;
+  padding:3rem 2rem 2rem 5vw;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 /* Historia — columna izquierda */
 .cream-historia{}
@@ -518,9 +520,9 @@ nav{
   padding-bottom:.15rem;transition:color .2s;
 }
 .cream-link:hover{color:var(--teal);border-color:var(--teal)}
-/* Foto central */
-.cream-photo{border-radius:8px;overflow:hidden;position:relative}
-.cream-photo img{width:100%;height:360px;object-fit:cover;display:block}
+/* Foto: pegada al borde derecho, a todo el alto de la sección */
+.cream-photo{flex:1 1 45%;min-width:0;position:relative;overflow:hidden}
+.cream-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .cream-photo::before{
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to right,#000 0%,rgba(0,0,0,.6) 18%,rgba(0,0,0,0) 45%);
@@ -555,10 +557,12 @@ nav{
 .cream-wave-bottom{position:relative;line-height:0;background:var(--cream)}
 .cream-wave-bottom svg{display:block;width:100%;height:70px}
 @media(max-width:1000px){
-  .cream-inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .cream-sec{flex-direction:column}
+  .cream-inner{padding:2.5rem 1.5rem 1.5rem}
+  .cream-photo{flex:none;width:100%;height:320px}
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.6) 12%,rgba(0,0,0,0) 35%)}
 }
 @media(max-width:640px){
-  .cream-inner{grid-template-columns:1fr;gap:2.5rem}
   .hero-sec{padding:130px 1.5rem 15rem}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello arriba a la derecha: en la esquina inferior se amontona con la
@@ -1653,7 +1657,7 @@ footer strong{color:var(--teal)}
   width: 420px;
   max-width: calc(100vw - 32px);
   height: min(390px, 60vh);
-  background: rgba(20, 39, 81, 0.8);
+  background: rgba(20, 39, 81, 0.65);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-radius: 8px;
@@ -1691,7 +1695,7 @@ footer strong{color:var(--teal)}
   align-items: center;
   gap: 10px;
   padding-left: 92px;
-  min-height: 52px;
+  min-height: 44px;
 }
 
 /* Garzona sobresaliendo por encima del chat, sin círculo */
@@ -1706,7 +1710,7 @@ footer strong{color:var(--teal)}
   object-fit: contain;
   padding: 0;
   filter: drop-shadow(0 4px 6px rgba(4, 7, 9, 0.35));
-  clip-path: inset(-24px -24px -9px -24px);
+  clip-path: inset(-24px -24px -2px -24px);
   z-index: 2;
   pointer-events: none;
 }
@@ -1773,7 +1777,7 @@ footer strong{color:var(--teal)}
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: rgba(13, 27, 62, 0.55);
+  background: rgba(13, 27, 62, 0.42);
   scrollbar-width: thin;
   scrollbar-color: rgba(98,202,227,.45) transparent;
 }
@@ -1834,7 +1838,7 @@ footer strong{color:var(--teal)}
   gap: 8px;
   padding: 12px;
   border-top: 1px solid var(--border2);
-  background: rgba(20, 39, 81, 0.55);
+  background: rgba(20, 39, 81, 0.42);
 }
 
 #chatInput {
@@ -1887,7 +1891,7 @@ footer strong{color:var(--teal)}
   gap: 5px;
   padding: 5px 10px;
   border-top: 1px solid var(--border2);
-  background: rgba(20, 39, 81, 0.55);
+  background: rgba(20, 39, 81, 0.42);
   justify-content: center;
   border-radius: 0 0 8px 8px;
 }
