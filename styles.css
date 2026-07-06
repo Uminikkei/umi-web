@@ -1448,7 +1448,7 @@ footer strong{color:var(--teal)}
 .chat-toggle-btn {
   position: fixed;
   bottom: 10px;
-  right: 58px;
+  right: 34px;
   width: 90px;
   height: auto;
   background: transparent;
