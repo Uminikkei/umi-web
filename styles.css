@@ -133,7 +133,7 @@ nav{
 
 /* Isotipo izquierda */
 .ntb-iso{
-  height:clamp(36px,4.2vw,56px);width:auto;
+  height:clamp(40px,6vw,78px);width:auto;
   filter:brightness(0) invert(1) opacity(0.55);
   flex-shrink:0;
 }
@@ -431,7 +431,7 @@ nav{
 }
 .cream-inner{
   max-width:1240px;margin:0 auto;
-  padding:3rem 2rem 3rem;
+  padding:5rem 2rem 3rem;
   display:grid;
   grid-template-columns:1.15fr 1fr;
   gap:3.5rem;
@@ -442,6 +442,7 @@ nav{
 .cream-label{
   display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
   color:var(--teal);font-weight:700;margin-bottom:.8rem;
+  text-align:center;
 }
 .cream-title{
   font-family:var(--serif);
@@ -519,17 +520,24 @@ nav{
   }
   /* Los wrappers desaparecen del layout: sus hijos pasan a ser ítems
      directos de .nav-top y se pueden reordenar libremente con "order" */
+  .nav-top{ position:relative; }
   .nav-side--left,.nav-side--right{ display:contents; }
+  /* Fila 1: isotipo junto a Nosotros/Menú/Contacto, sesión al extremo derecho */
+  .nav-iso-wrap{ display:flex; order:0; }
   .ntb-link{ order:1; font-size:.68rem; letter-spacing:1px; }
   #ntbAccount{ order:2; margin-left:auto; }
   .nav-linebreak{ display:block; order:3; flex-basis:100%; height:0; }
-  /* Isotipo y grupo de iconos: mismo ancho flexible a cada lado para que
-     el logo quede realmente centrado (no solo a mitad de camino entre ambos) */
-  .nav-iso-wrap{ display:flex; order:4; flex:1; }
-  .nav-wordmark{ order:5; }
-  .nav-icons-wrap{ display:flex; order:6; flex:1; justify-content:flex-end; align-items:center; gap:1.8vw; }
+  /* Fila 2: solo los iconos, alineados bajo "Iniciar sesión" */
+  .nav-icons-wrap{ display:flex; order:4; width:100%; justify-content:flex-end; align-items:center; gap:1.8vw; }
   .ntb-icon-btn svg{width:24px;height:24px}
   #ntbUserBtn{margin-left:0}
+  /* Logo centrado, fuera del flujo, subido hasta alinear el punto de la "i"
+     con el texto de la fila 1 */
+  .nav-wordmark{
+    order:5;
+    position:absolute; left:50%; top:27px;
+    transform:translateX(-50%);
+  }
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
   .footer-brand{grid-column:auto}
   .chat-garzona-picker{flex-wrap:wrap;white-space:normal;row-gap:5px}
@@ -562,7 +570,7 @@ footer{
 }
 .footer-col-title{
   font-size:.62rem;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(240,235,224,.45);font-weight:600;margin-bottom:1rem;display:block;
+  color:var(--teal);font-weight:600;margin-bottom:1rem;display:block;
 }
 .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
 .footer-links li a{
@@ -645,7 +653,7 @@ footer{
 .menu-dark-area > div{padding:0 2rem}
 .menu-dark-area .cat-heading{
   font-family:'SignHandwriting', var(--script);font-size:2.6rem;color:#0d1e40;
-  margin-bottom:1.6rem;padding-bottom:.7rem;line-height:1.1;
+  margin-bottom:1.6rem;padding-bottom:.1rem;line-height:1.1;
   border-bottom:1px solid rgba(4,7,9,.15);
   display:flex;align-items:center;gap:.6rem;
   text-transform:lowercase;
@@ -915,7 +923,7 @@ footer{
   .cat-circ-blob{width:70px;height:70px}
   .cat-circ-label{margin-top:-1.2rem;font-size:.56rem;letter-spacing:1px}
   /* Título de categoría más pegado a la línea inferior */
-  .menu-dark-area .cat-heading{padding-bottom:.25rem;margin-bottom:1.3rem}
+  .menu-dark-area .cat-heading{padding-bottom:0;margin-bottom:1.3rem}
 }
 /* Subcategorías — pills elegantes bajo los círculos */
 .subcat-row{
@@ -2047,7 +2055,7 @@ footer strong{color:var(--teal)}
   text-align:right;
 }
 .fav-name{
-  font-family:var(--serif);font-size:clamp(1.05rem,1.7vw,1.35rem);font-weight:600;
+  font-family:var(--serif);font-size:clamp(1.4rem,2.3vw,1.9rem);font-weight:700;
   color:#fdf8ec;text-shadow:0 2px 8px rgba(4,7,9,.6);
 }
 .fav-row{display:flex;align-items:center;gap:.7rem}
