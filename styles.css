@@ -1544,10 +1544,11 @@ footer strong{color:var(--teal)}
 .chat-toggle-btn:hover {
   transform: translateY(-8px) scale(1.05);
 }
-/* La bandeja de la garzona (arriba a la derecha del personaje) choca con el
-   ícono de WhatsApp en móvil; se sube y se corre un poco a la izquierda */
+/* La bandeja de la garzona (arriba a la derecha del personaje) en móvil:
+   se corre a la izquierda y se ajusta la altura para que la bandeja quede
+   en el espacio entre el ícono de comentarios y el de WhatsApp */
 @media(max-width:700px){
-  .chat-toggle-btn{bottom:34px;right:46px}
+  .chat-toggle-btn{bottom:19px;right:46px}
 }
 
 .chat-toggle-btn img {
