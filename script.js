@@ -1,4 +1,63 @@
 // UMI Nikkei Bar - script v2
+// ── SCROLLBAR PROPIO (flota sobre el contenido, sin gutter/fondo nativo) ────────
+(function(){
+  const track = document.createElement('div');
+  track.className = 'umi-scrollbar';
+  const thumb = document.createElement('div');
+  thumb.className = 'umi-scrollbar-thumb';
+  track.appendChild(thumb);
+  document.body.appendChild(track);
+
+  const MIN_THUMB = 30;
+  let dragging = false, dragStartY = 0, dragStartScroll = 0;
+
+  function update(){
+    const doc = document.scrollingElement || document.documentElement;
+    const viewH = window.innerHeight;
+    const fullH = doc.scrollHeight;
+    if (fullH <= viewH + 2){ track.style.display = 'none'; return; }
+    track.style.display = 'block';
+    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * viewH);
+    const maxThumbTop = viewH - thumbH;
+    const maxScroll = fullH - viewH;
+    const thumbTop = maxScroll > 0 ? (doc.scrollTop) / maxScroll * maxThumbTop : 0;
+    thumb.style.height = thumbH + 'px';
+    thumb.style.top = thumbTop + 'px';
+  }
+
+  thumb.addEventListener('mousedown', (e) => {
+    dragging = true;
+    dragStartY = e.clientY;
+    dragStartScroll = (document.scrollingElement || document.documentElement).scrollTop;
+    thumb.classList.add('dragging');
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const doc = document.scrollingElement || document.documentElement;
+    const viewH = window.innerHeight;
+    const fullH = doc.scrollHeight;
+    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * viewH);
+    const maxThumbTop = viewH - thumbH;
+    const maxScroll = fullH - viewH;
+    const deltaY = e.clientY - dragStartY;
+    const deltaScroll = maxThumbTop > 0 ? (deltaY / maxThumbTop) * maxScroll : 0;
+    doc.scrollTop = dragStartScroll + deltaScroll;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    thumb.classList.remove('dragging');
+    document.body.style.userSelect = '';
+  });
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  update();
+})();
+
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';
