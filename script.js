@@ -956,7 +956,9 @@ const EVENTOS = {
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-02.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-03.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-04.mp4' },
-      { t:'video', s:'eventos/dia-de-las-madres-2026/video-05.mp4' }
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-05.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-06.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-07.mp4' }
     ]
   },
   'barco-gigante-2026': {
