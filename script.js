@@ -946,6 +946,76 @@ function toggleReelSound(e, btn) {
   btn.querySelector('.icon-sound').style.display  = muted ? '' : 'none';
 }
 
+// ── EVENTOS / GALERÍA ─────────────────────────────────────────────────────────
+// Cada evento: portada = primer elemento de media. Agregar imágenes/video aquí.
+const EVENTOS = {
+  'halloween-2025': {
+    title: 'Halloween 2025',
+    media: [
+      { t:'img', s:'eventos/halloween-2025/01.jpg' },
+      { t:'img', s:'eventos/halloween-2025/02.jpg' },
+      { t:'img', s:'eventos/halloween-2025/03.jpg' },
+      { t:'img', s:'eventos/halloween-2025/04.jpg' },
+      { t:'img', s:'eventos/halloween-2025/05.jpg' }
+    ]
+  }
+};
+
+let _elbImgs = [], _elbIdx = 0;
+
+function openEventGallery(id){
+  const ev = EVENTOS[id]; if(!ev) return;
+  const modal = document.getElementById('eventModal');
+  document.getElementById('eventModalTitle').textContent = ev.title;
+  const grid = document.getElementById('eventModalGrid');
+  grid.innerHTML = '';
+  _elbImgs = ev.media.filter(m => m.t === 'img').map(m => m.s);
+  ev.media.forEach(m => {
+    const cell = document.createElement('div');
+    cell.className = 'event-media';
+    if(m.t === 'img'){
+      const idx = _elbImgs.indexOf(m.s);
+      cell.innerHTML = `<img src="${m.s}" alt="${ev.title}" loading="lazy">`;
+      cell.onclick = () => openEventLightbox(idx);
+    } else {
+      cell.innerHTML = `<video src="${m.s}" controls playsinline preload="metadata"></video>`;
+    }
+    grid.appendChild(cell);
+  });
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeEventGallery(){
+  document.getElementById('eventModal').classList.remove('open');
+  if(!document.getElementById('eventLightbox').classList.contains('open')) document.body.style.overflow = '';
+}
+function openEventLightbox(i){
+  _elbIdx = i;
+  document.getElementById('eventLightboxImg').src = _elbImgs[_elbIdx];
+  document.getElementById('eventLightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function eventLightboxNav(d){
+  if(!_elbImgs.length) return;
+  _elbIdx = (_elbIdx + d + _elbImgs.length) % _elbImgs.length;
+  document.getElementById('eventLightboxImg').src = _elbImgs[_elbIdx];
+}
+function closeEventLightbox(){
+  document.getElementById('eventLightbox').classList.remove('open');
+  if(!document.getElementById('eventModal').classList.contains('open')) document.body.style.overflow = '';
+}
+document.addEventListener('keydown', (e) => {
+  const lb = document.getElementById('eventLightbox');
+  const md = document.getElementById('eventModal');
+  if(lb && lb.classList.contains('open')){
+    if(e.key === 'Escape') closeEventLightbox();
+    else if(e.key === 'ArrowLeft') eventLightboxNav(-1);
+    else if(e.key === 'ArrowRight') eventLightboxNav(1);
+  } else if(md && md.classList.contains('open') && e.key === 'Escape'){
+    closeEventGallery();
+  }
+});
+
 // ── REVIEWS MARQUEE ───────────────────────────────────────────────────────────
 // Comillas azules de apertura/cierre y cierre truncado (con puntos suspensivos)
 const REV_QO = '<span class="rev-q">"</span>';        // apertura

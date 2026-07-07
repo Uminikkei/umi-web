@@ -302,6 +302,42 @@
 
 </section>
 
+<!-- ═══ SECCIÓN: EVENTOS / GALERÍA ═══ -->
+<section class="eventos-sec" id="eventos">
+  <div class="eventos-inner">
+    <span class="eventos-label">Galería</span>
+    <div class="eventos-grid" id="eventosGrid">
+      <button class="evento-card" type="button" onclick="openEventGallery('halloween-2025')">
+        <img src="eventos/halloween-2025/01.jpg" alt="Halloween 2025" loading="lazy">
+        <div class="evento-overlay"><span class="evento-title">Halloween 2025</span></div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Modal: catálogo del evento -->
+<div class="event-modal" id="eventModal" onclick="if(event.target===this)closeEventGallery()">
+  <div class="event-modal-inner">
+    <div class="event-modal-head">
+      <h3 class="event-modal-title" id="eventModalTitle"></h3>
+      <button class="event-modal-close" onclick="closeEventGallery()" aria-label="Cerrar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="event-modal-grid" id="eventModalGrid"></div>
+  </div>
+</div>
+
+<!-- Lightbox: imagen individual del catálogo -->
+<div class="event-lightbox" id="eventLightbox" onclick="if(event.target===this)closeEventLightbox()">
+  <button class="elb-close" onclick="closeEventLightbox()" aria-label="Cerrar">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+  <button class="elb-btn elb-prev" onclick="eventLightboxNav(-1)" aria-label="Anterior">‹</button>
+  <img id="eventLightboxImg" src="" alt="">
+  <button class="elb-btn elb-next" onclick="eventLightboxNav(1)" aria-label="Siguiente">›</button>
+</div>
+
 <!-- ═══ SECCIÓN 4: VIDEOS / REELS ═══ -->
 <section class="videos-sec" id="nosotros">
   <div class="videos-inner">
