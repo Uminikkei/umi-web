@@ -2359,7 +2359,7 @@ footer strong{color:var(--teal)}
   .fav-price{font-size:.85rem}
   .fav-add{width:38px;height:38px}
   /* El tartare queda cortado; correr el encuadre a la izquierda para que se vea el bowl completo */
-  #favCarousel .fav-slide img[src*="fav-tartare"]{object-position:0% 50%}
+  #favCarousel .fav-slide img[src*="fav-tartare"]{object-position:30% 50%}
 }
 
 /* Favoritos elegantes: anillo doble, zoom suave, serif */
