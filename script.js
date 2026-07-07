@@ -956,7 +956,12 @@ const EVENTOS = {
       { t:'img', s:'eventos/halloween-2025/02.jpg' },
       { t:'img', s:'eventos/halloween-2025/03.jpg' },
       { t:'img', s:'eventos/halloween-2025/04.jpg' },
-      { t:'img', s:'eventos/halloween-2025/05.jpg' }
+      { t:'img', s:'eventos/halloween-2025/05.jpg' },
+      { t:'img', s:'eventos/halloween-2025/06.jpg' },
+      { t:'img', s:'eventos/halloween-2025/07.jpg' },
+      { t:'img', s:'eventos/halloween-2025/08.jpg' },
+      { t:'img', s:'eventos/halloween-2025/09.jpg' },
+      { t:'img', s:'eventos/halloween-2025/10.jpg' }
     ]
   }
 };
