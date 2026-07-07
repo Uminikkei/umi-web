@@ -972,7 +972,8 @@ const EVENTOS = {
       { t:'img', s:'eventos/halloween-2025/18.jpg' },
       { t:'img', s:'eventos/halloween-2025/19.jpg' },
       { t:'img', s:'eventos/halloween-2025/20.jpg' },
-      { t:'img', s:'eventos/halloween-2025/21.jpg' }
+      { t:'img', s:'eventos/halloween-2025/21.jpg' },
+      { t:'img', s:'eventos/halloween-2025/22.jpg' }
     ]
   }
 };
