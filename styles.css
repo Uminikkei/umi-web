@@ -371,7 +371,7 @@ nav{
   padding:0;
   /* La imagen distintiva del hero se alarga sobre la franja negra plana de la
      ola superior: subimos la sección bajo el hero (que tiene z-index mayor). */
-  margin-top:-34px;
+  margin-top:-72px;
   z-index:1;
 }
 .sig-wave-bottom{
