@@ -880,7 +880,7 @@ footer{
   color:var(--teal);font-weight:700;margin-bottom:1.8rem;text-align:center;
 }
 .eventos-grid{
-  display:flex;gap:1.4rem;justify-content:safe center;
+  display:flex;gap:.7rem;justify-content:safe center;
   overflow-x:auto;overflow-y:hidden;
   padding:.3rem 1.6rem 1rem;
   scrollbar-width:none;-ms-overflow-style:none;
