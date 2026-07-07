@@ -205,7 +205,7 @@ nav{
 /* ── Menú móvil desplegable (lista traslúcida) ── */
 .mobile-menu{
   display:none;position:fixed;inset:0;z-index:1200;
-  background:rgba(6,12,22,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:transparent; /* no oscurece ni difumina el resto de la web */
   opacity:0;transition:opacity .3s ease;
 }
 .mobile-menu.open{display:block;opacity:1}
@@ -216,6 +216,7 @@ nav{
   display:flex;flex-direction:column;
   padding:4.6rem 1.5rem 1.4rem 1.3rem;gap:.1rem;
   background:rgba(8,14,24,.42);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px); /* difumina sólo detrás de la barra */
   border-bottom-right-radius:14px;
   box-shadow:2px 8px 24px rgba(4,7,9,.35);
 }
@@ -1583,6 +1584,12 @@ footer strong{color:var(--teal)}
   transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
 }
 .cart-drawer.open{transform:translateX(0)}
+@media(max-width:700px){
+  /* El overlay no difumina ni oscurece el resto de la web */
+  .cart-overlay{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+  /* Barra pequeña (como la hamburguesa), de arriba abajo, con blur sólo en ella */
+  .cart-drawer{width:min(66vw,262px)}
+}
 .cart-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:1.3rem 1.5rem;border-bottom:1px solid var(--border);
