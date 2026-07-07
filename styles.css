@@ -395,7 +395,7 @@ nav{
   background:transparent;border:none;backdrop-filter:none;
   transform:rotate(20deg);
 }
-.hero-stamp img{width:100%;height:100%;display:block}
+.hero-stamp img{width:100%;height:100%;display:block;opacity:.42} /* marca de agua blanca translúcida */
 
 .hero-badge-top{
   font-size:.52rem;letter-spacing:3px;text-transform:uppercase;
