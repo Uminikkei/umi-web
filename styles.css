@@ -502,6 +502,19 @@ nav{
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to right,#000 0%,rgba(0,0,0,.6) 18%,rgba(0,0,0,0) 45%);
 }
+/* PC: la foto sube y asoma por detrás de la ola de la sección anterior
+   (misma franja de 80px que #favCarousel .sig-wave-bottom), en vez de
+   cortar en una línea recta visible; el texto se corre un poco a la derecha */
+@media(min-width:1001px){
+  .cream-inner{flex:0 0 55%;width:55%;padding-left:9vw}
+  .cream-sec{overflow:visible}
+  .cream-photo{
+    position:absolute;
+    top:-80px;right:0;bottom:0;
+    width:45%;
+    z-index:1;
+  }
+}
 /* Más Pedidos — columna derecha */
 .cream-pedidos{}
 .cream-pedidos-grid{

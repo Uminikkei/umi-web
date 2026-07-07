@@ -1235,6 +1235,26 @@ function buildFavCarousel(){
   const car = document.getElementById('favCarousel');
   car.addEventListener('mouseenter', () => clearInterval(favTimer));
   car.addEventListener('mouseleave', favAuto);
+
+  // Deslizar con el dedo (móvil) para cambiar de foto, además de puntitos/botones
+  let touchX = 0, touchY = 0, touchDX = 0, dragging = false;
+  car.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    touchX = t.clientX; touchY = t.clientY; touchDX = 0; dragging = true;
+  }, { passive: true });
+  car.addEventListener('touchmove', (e) => {
+    if(!dragging) return;
+    const t = e.touches[0];
+    touchDX = t.clientX - touchX;
+    const dy = t.clientY - touchY;
+    if(Math.abs(touchDX) > Math.abs(dy)) e.preventDefault();
+  }, { passive: false });
+  car.addEventListener('touchend', () => {
+    if(!dragging) return;
+    dragging = false;
+    if(touchDX <= -40) favGo(favIdx + 1, true);
+    else if(touchDX >= 40) favGo(favIdx - 1, true);
+  });
 }
 
 function favGo(i, manual){
