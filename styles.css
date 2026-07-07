@@ -871,7 +871,7 @@ footer{
 
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
-  background:#2e5488;   /* azul intermedio (más oscuro que el teal del menú, más claro que el navy de "cómo lo hacemos") */
+  background:#26456c;   /* azul UMI 2-3 tonos más oscuro (sigue por encima del navy de "cómo lo hacemos") */
   padding:8rem 0 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
   position:relative;
 }
