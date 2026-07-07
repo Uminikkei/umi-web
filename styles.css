@@ -311,6 +311,8 @@ nav{
   position:relative;overflow:hidden;z-index:2;
   /* Borde inferior en ola: la propia imagen distintiva hace de ola sobre "Los más pedidos" */
   clip-path:url(#heroWaveClip);
+  /* Sombra bajo la ola: da profundidad sobre la sección siguiente */
+  filter:drop-shadow(0 7px 8px rgba(4,7,9,.55));
 }
 .hero-sec::before{
   content:'';position:absolute;inset:0;
