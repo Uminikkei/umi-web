@@ -135,18 +135,7 @@
     <img src="sello-nikkei.png?v=2" alt="Sello Cocina Nikkei Premium"/>
   </div>
 
-  <!-- Separador inferior: bezier suave -->
-  <div class="wave-sep">
-    <svg viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="heroWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
-          <feGaussianBlur stdDeviation="2"/>
-        </filter>
-      </defs>
-      <path fill="#000" d="M0,0 L0,25 C180,8 360,45 540,20 C720,4 900,40 1080,18 C1260,5 1380,23 1440,20 L1440,0 L1440,50 L0,50 Z"/>
-      <path d="M0,25 C180,8 360,45 540,20 C720,4 900,40 1080,18 C1260,5 1380,23 1440,20" fill="none" stroke="rgba(4,7,9,.3)" stroke-width="7" filter="url(#heroWaveBlur)" transform="translate(0,4)"/>
-    </svg>
-  </div>
+  <!-- Sin ola negra aquí: la imagen distintiva se alarga y toca la ola de "Los más pedidos" -->
 </section>
 
 <!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
@@ -162,7 +151,18 @@
   <!-- Puntitos de navegación -->
   <div class="fav-dots" id="favDots"></div>
 
-  <!-- La transición superior la hace la ola de Hero; no duplicamos ola aquí -->
+  <!-- Ola superior: negro recorta sobre la foto (la imagen distintiva de Hero la toca por arriba) -->
+  <div class="sig-wave-top" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
+          <feGaussianBlur stdDeviation="2.5"/>
+        </filter>
+      </defs>
+      <path fill="#000" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
+      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
+    </svg>
+  </div>
 
   <!-- Ola inferior: negro recorta sobre la foto; la foto proyecta sombra sobre nuestra historia -->
   <div class="sig-wave-bottom">

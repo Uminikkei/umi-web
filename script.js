@@ -205,10 +205,6 @@ function buildMenu(){
     const block = document.createElement('div');
     block.className = 'cat-block';
     block.id = catId(cat);
-    const h = document.createElement('div');
-    h.className = 'cat-heading';
-    h.textContent = cat;
-    block.appendChild(h);
     const grid = document.createElement('div');
     grid.className = 'items-grid';
     MENU[cat].forEach(item => {
@@ -1422,7 +1418,7 @@ async function enviarFeedback(){
 }
 
 // ── CARRUSEL FAVORITOS (Los más pedidos) ─────────────────────────────────────
-const FAVORITOS = ['Acevichado Roll', 'Saito Roll', 'Lomo saltado', 'Tartare Nikkei'];
+const FAVORITOS = ['Saito Roll', 'Tartare Nikkei', 'Lomo saltado', 'Acevichado Roll'];
 // Fotos propias en alta calidad para el carrusel (optimizadas a 1920px)
 const FAV_IMGS = {
   'Acevichado Roll': 'fav-acevichado.jpg?v=2',
