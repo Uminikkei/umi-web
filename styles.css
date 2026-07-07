@@ -391,11 +391,11 @@ nav{
 }
 /* Sello vintage (SVG oficial, blanco hueso) */
 .hero-stamp{
-  width:135px;height:135px;
+  width:168px;height:168px;
   background:transparent;border:none;backdrop-filter:none;
   transform:rotate(20deg);
 }
-.hero-stamp img{width:100%;height:100%;display:block;opacity:.42} /* marca de agua blanca translúcida */
+.hero-stamp img{width:100%;height:100%;display:block;opacity:.55} /* marca de agua blanca translúcida */
 
 .hero-badge-top{
   font-size:.52rem;letter-spacing:3px;text-transform:uppercase;
@@ -618,7 +618,7 @@ nav{
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello al lado de los botones (Pedir ahora / Reservar mesa), tamaño moderado,
      sin tocar los botones ni el borde derecho */
-  .hero-badge.hero-stamp{display:flex;width:80px;height:80px;top:auto;bottom:15.75rem;right:8vw}
+  .hero-badge.hero-stamp{display:flex;width:94px;height:94px;top:auto;bottom:15.4rem;right:7vw}
 }
 
 /* ── MÓVIL: navbar en 2 filas — arriba enlaces + sesión, abajo marca ── */
@@ -658,7 +658,7 @@ nav{
     background:var(--teal);
     padding:.9rem .4rem .7rem;margin:0 -1rem;
     box-shadow:0 6px 14px rgba(4,7,9,.18);
-    flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;
+    flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;scrollbar-width:none;
   }
   .subcat-row.open::-webkit-scrollbar{display:none}
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
