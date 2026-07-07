@@ -156,13 +156,6 @@ document.addEventListener('click',e=>{
   if(wrap && !wrap.contains(e.target)) closeSearch();
 });
 
-function toggleLongRev(){
-  const txt = document.getElementById('longRev');
-  const btn = document.getElementById('longRevBtn');
-  const expanded = txt.classList.toggle('expanded');
-  btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más...';
-}
-
 // ── VENTANA DE PRODUCTO (nombre + descripción) ──────────────────────────────
 let _prodCurrent = null;
 function openProductModal(name, price, emoji, cat){
@@ -954,34 +947,73 @@ function toggleReelSound(e, btn) {
 }
 
 // ── REVIEWS MARQUEE ───────────────────────────────────────────────────────────
+// Comillas azules de apertura/cierre y cierre truncado (con puntos suspensivos)
+const REV_QO = '<span class="rev-q">"</span>';        // apertura
+const REV_QC = '<span class="rev-q">"</span>';        // cierre completo
+const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
+
 (function(){
   const track = document.getElementById('revTrack');
   if(!track) return;
-  // Recortar reseñas de más de 8 líneas y mostrar "Ver más..."
   const MAX_LINES = 8;
-  track.querySelectorAll('.rev-text').forEach(txt => {
-    // Envolver cada frase del cliente entre comillas rectas
-    txt.insertAdjacentText('afterbegin', '"');
-    txt.insertAdjacentText('beforeend', '"');
-    if(txt.id === 'longRev') return; // esa reseña ya tiene su propio toggle
-    const lh = parseFloat(getComputedStyle(txt).lineHeight) || 22;
-    if(txt.scrollHeight > lh * MAX_LINES + 2){
-      txt.classList.add('rev-clamp');
-      const btn = document.createElement('button');
-      btn.className = 'rev-more visible';
-      btn.textContent = 'Ver más...';
-      btn.setAttribute('onclick', 'toggleRevMore(this)');
-      txt.insertAdjacentElement('afterend', btn);
-    }
-  });
+
+  function processAll(){
+    track.querySelectorAll('.rev-text').forEach(txt => {
+      if(txt.classList.contains('rev-open')) return; // no tocar las abiertas por el usuario
+      if(txt.dataset.full === undefined){
+        txt.dataset.full  = txt.innerHTML;   // HTML original (conserva <br>)
+        txt.dataset.plain = txt.textContent; // texto plano para truncar
+      }
+      const lh = parseFloat(getComputedStyle(txt).lineHeight) || 22;
+      const maxH = lh * MAX_LINES + 2;
+      // ¿cabe completa entre comillas?
+      txt.innerHTML = REV_QO + txt.dataset.full + REV_QC;
+      if(txt.scrollHeight <= maxH){
+        txt.classList.remove('rev-clamped');
+        return; // reseña corta: sin botón
+      }
+      // reseña larga: truncar por palabras hasta que quepa con ..."
+      const words = txt.dataset.plain.trim().split(/\s+/);
+      let lo = 1, hi = words.length, best = 1;
+      while(lo <= hi){
+        const mid = (lo + hi) >> 1;
+        const s = words.slice(0, mid).join(' ').replace(/[\s,;.]+$/, '');
+        txt.innerHTML = REV_QO + s + REV_QT;
+        if(txt.scrollHeight <= maxH){ best = mid; lo = mid + 1; }
+        else { hi = mid - 1; }
+      }
+      const s = words.slice(0, best).join(' ').replace(/[\s,;.]+$/, '');
+      txt.dataset.trunc = s;
+      txt.innerHTML = REV_QO + s + REV_QT;
+      txt.classList.add('rev-clamped');
+      let btn = txt.nextElementSibling;
+      if(!btn || !btn.classList.contains('rev-more')){
+        btn = document.createElement('button');
+        btn.className = 'rev-more visible';
+        btn.setAttribute('onclick', 'toggleRevMore(this)');
+        txt.insertAdjacentElement('afterend', btn);
+      }
+      btn.textContent = 'Ver más';
+    });
+  }
+
+  processAll();
   const clone = track.innerHTML;
   track.innerHTML = clone + clone;
+  // Recalcular el corte cuando la fuente termine de cargar (medidas exactas)
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(processAll); }
 })();
 
 function toggleRevMore(btn){
   const txt = btn.previousElementSibling;
-  const open = txt.classList.toggle('rev-expanded');
-  btn.textContent = open ? 'Ver menos ↑' : 'Ver más...';
+  const open = txt.classList.toggle('rev-open');
+  if(open){
+    txt.innerHTML = REV_QO + txt.dataset.full + REV_QC;
+    btn.textContent = 'Ver menos';
+  } else {
+    txt.innerHTML = REV_QO + txt.dataset.trunc + REV_QT;
+    btn.textContent = 'Ver más';
+  }
 }
 
 // ── PAGO CON TARJETA EN LA WEB (Mercado Pago Brick) ───────────────────────────
