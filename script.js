@@ -1148,6 +1148,27 @@ document.addEventListener('keydown', (e) => {
   });
 })();
 
+// Móvil: la galería de categorías y los reels se mueven solos (como los reviews)
+(function(){
+  if(!window.matchMedia('(max-width:700px)').matches) return;
+  function autoLoop(el, speed){
+    if(!el || el.children.length === 0) return;
+    el.innerHTML += el.innerHTML;        // duplica el contenido para un bucle continuo
+    el.style.scrollBehavior = 'auto';
+    let auto = null, pos = 0;
+    const half = () => el.scrollWidth / 2;
+    function tick(){ pos += speed; const h = half(); if(h && pos >= h) pos -= h; el.scrollLeft = pos; }
+    function start(){ clearInterval(auto); pos = el.scrollLeft; auto = setInterval(tick, 16); }
+    function stop(){ clearInterval(auto); }
+    // Pausa mientras el usuario desliza con el dedo; reanuda después
+    el.addEventListener('touchstart', stop, {passive:true});
+    el.addEventListener('touchend', () => { clearTimeout(el._rs); el._rs = setTimeout(start, 2500); }, {passive:true});
+    start();
+  }
+  autoLoop(document.getElementById('eventosGrid'), 0.3);
+  autoLoop(document.querySelector('.reels-grid'), 0.3);
+})();
+
 // Deslizar con el dedo en móvil (o mouse-drag) para cambiar de imagen
 (function(){
   const stage = document.getElementById('eventStage');
@@ -1226,14 +1247,15 @@ const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
   // ── Auto-scroll continuo + navegación con flechas del teclado ──────────────
   const wrap = track.closest('.reviews-track-wrap');
   if(wrap){
-    let auto = null;
+    let auto = null, pos = 0;
     const half = () => track.scrollWidth / 2;
     function tick(){
-      wrap.scrollLeft += 0.28;
+      pos += 0.35;
       const h = half();
-      if(h && wrap.scrollLeft >= h) wrap.scrollLeft -= h;
+      if(h && pos >= h) pos -= h;
+      wrap.scrollLeft = pos;   // acumulador flotante: permite sub-píxel continuo
     }
-    function start(){ clearInterval(auto); auto = setInterval(tick, 16); }
+    function start(){ clearInterval(auto); pos = wrap.scrollLeft; auto = setInterval(tick, 16); }
     function stop(){ clearInterval(auto); }
     wrap.addEventListener('mouseenter', stop);
     wrap.addEventListener('mouseleave', start);

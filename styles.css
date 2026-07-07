@@ -1034,11 +1034,11 @@ footer{
   .reels-grid{
     display:flex;grid-template-columns:none;gap:.7rem;
     overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    -webkit-overflow-scrolling:touch;
     padding-bottom:.5rem;scrollbar-width:none;
   }
   .reels-grid::-webkit-scrollbar{display:none}
-  .reel-card{flex:0 0 60%;scroll-snap-align:center}
+  .reel-card{flex:0 0 60%}
 }
 
 /* ── SECTION WRAPPER ── */
