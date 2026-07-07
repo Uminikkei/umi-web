@@ -202,9 +202,20 @@
 
   </div>
 
-  <!-- Foto: a todo el ancho/alto restante, pegada al borde derecho -->
+  <!-- Foto: a todo el ancho/alto restante, pegada al borde derecho.
+       Olas negras arriba y abajo recortan la imagen (igual que Los más pedidos) -->
   <div class="cream-photo">
+    <div class="cream-photo-wave top" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#000" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
+      </svg>
+    </div>
     <img src="historia-conchas.jpg" alt="Conchas UMI" loading="lazy"/>
+    <div class="cream-photo-wave bot" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#000" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
+      </svg>
+    </div>
   </div>
 </section>
 
