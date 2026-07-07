@@ -1000,7 +1000,7 @@ function scheduleEventAuto(){
     _evIdx = (_evIdx + 1) % _evMedia.length;
     renderEventStage();
     scheduleEventAuto();
-  }, 1000);
+  }, 3000);
 }
 function openEventGallery(id){
   const ev = EVENTOS[id]; if(!ev) return;
