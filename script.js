@@ -949,6 +949,16 @@ function toggleReelSound(e, btn) {
 // ── EVENTOS / GALERÍA ─────────────────────────────────────────────────────────
 // Cada evento: portada = primer elemento de media. Agregar imágenes/video aquí.
 const EVENTOS = {
+  'san-valentin-2026': {
+    title: 'San Valentín 2026',
+    media: [
+      { t:'img', s:'eventos/san-valentin-2026/05.jpg' },
+      { t:'img', s:'eventos/san-valentin-2026/01.jpg' },
+      { t:'img', s:'eventos/san-valentin-2026/02.jpg' },
+      { t:'img', s:'eventos/san-valentin-2026/03.jpg' },
+      { t:'img', s:'eventos/san-valentin-2026/04.jpg' }
+    ]
+  },
   'halloween-2025': {
     title: 'Halloween 2025',
     media: [
