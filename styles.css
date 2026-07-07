@@ -785,7 +785,7 @@ footer{
 
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
-  background:#142751;
+  background:#2b2d31;   /* gris plomo oscuro */
   padding:8rem 2rem 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
   position:relative;
 }

@@ -964,11 +964,11 @@ const EVENTOS = {
   'barco-gigante-2026': {
     title: 'Barco Gigante 2026',
     media: [
+      { t:'img', s:'eventos/barco-gigante-2026/05.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/01.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/02.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/03.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/04.jpg' },
-      { t:'img', s:'eventos/barco-gigante-2026/05.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/06.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/07.jpg' },
       { t:'img', s:'eventos/barco-gigante-2026/08.jpg' },
