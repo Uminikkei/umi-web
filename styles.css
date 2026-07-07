@@ -86,7 +86,7 @@ nav{
 .promo-track span.promo-dot{
   display:inline-block;width:5px;height:5px;border-radius:50%;
   background:#eafcff;margin:0 1rem;padding:0;
-  vertical-align:0.12em;
+  vertical-align:middle;
 }
 .promo-banner:hover .promo-track{animation-play-state:paused}
 .promo-tyc{
