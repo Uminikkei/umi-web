@@ -612,6 +612,8 @@ nav{
 }
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem}
+  /* "frente al mar" justo debajo del subtítulo, alineado a la izquierda */
+  .hero-script-line{justify-content:flex-start!important;padding-right:0!important}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello arriba a la derecha: en la esquina inferior se amontona con la
      garzona virtual y los iconos flotantes (fijos al viewport) */
@@ -901,6 +903,10 @@ footer{
 /* Ola divisoria Eventos → ¿Cómo lo hacemos? */
 .eventos-wave-bottom{position:absolute;left:0;right:0;bottom:0;height:80px;line-height:0;pointer-events:none;z-index:1}
 .eventos-wave-bottom svg{display:block;width:100%;height:100%;overflow:visible}
+/* Móvil: oculta el trazo de sombra que queda como una línea justo bajo la ola */
+@media(max-width:700px){
+  .eventos-wave-bottom svg path:nth-of-type(2){display:none}
+}
 
 /* Modal catálogo del evento — carrusel coverflow sobre la web borrosa */
 .event-modal{
@@ -1114,28 +1120,11 @@ footer{
 .cat-circ-blob{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:113px;height:113px;z-index:2;pointer-events:none;
-  /* Recorta la silueta del geoglifo del disco beige -> queda un hueco
-     transparente con forma del geoglifo (efecto brocado/grabado). */
-  -webkit-mask-image: var(--gi), linear-gradient(#000,#000);
-          mask-image: var(--gi), linear-gradient(#000,#000);
-  -webkit-mask-size: var(--gs) var(--gs), 100% 100%;
-          mask-size: var(--gs) var(--gs), 100% 100%;
-  -webkit-mask-position: center, center;
-          mask-position: center, center;
-  -webkit-mask-repeat: no-repeat, no-repeat;
-          mask-repeat: no-repeat, no-repeat;
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
 }
 .cat-circ-blob svg{width:100%;height:100%;display:block;
   filter:drop-shadow(0 8px 10px rgba(4,7,9,.28));}
-/* Geoglifos beige: sólo se ve la parte que SOBRESALE del disco (fuera del
-   radio 56.5px); dentro del disco queda transparente para revelar el hueco. */
-.cat-circ-inner img{
-  filter:drop-shadow(0 3px 4px rgba(4,7,9,.35));
-  -webkit-mask-image: radial-gradient(circle 56.5px at 50% 50%, transparent 56.5px, #000 56.5px);
-          mask-image: radial-gradient(circle 56.5px at 50% 50%, transparent 56.5px, #000 56.5px);
-}
+/* Geoglifos en azul oscuro del título MENÚ, sobre el disco beige */
+.cat-circ-inner img{ filter:drop-shadow(0 3px 4px rgba(4,7,9,.35)); }
 /* Círculo interior */
 .cat-circ-inner{
   position:absolute;
@@ -1164,9 +1153,7 @@ footer{
   .cat-circ{flex:0 0 33.333%;max-width:33.333%}
   .cat-circ-wrap{width:120px;height:120px;margin:0 auto}
   .cat-circ-inner img{transform:translate(-50%,-50%) scale(.64)!important}
-  .cat-circ-blob{width:70px;height:70px;
-    -webkit-mask-size:calc(var(--gs)*.64) calc(var(--gs)*.64),100% 100%;
-            mask-size:calc(var(--gs)*.64) calc(var(--gs)*.64),100% 100%;}
+  .cat-circ-blob{width:70px;height:70px}
   .cat-circ-label{margin-top:-1.2rem;font-size:.56rem;letter-spacing:1px}
   /* Título de categoría más pegado a la línea inferior */
   .menu-dark-area .cat-heading{padding-bottom:0;margin-bottom:1.3rem}
