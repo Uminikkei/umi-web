@@ -185,6 +185,48 @@ nav{
 /* Fuerza el salto a una 2da fila en móvil (ver @media 700px); invisible en escritorio */
 .nav-linebreak{ display:none; }
 
+/* ── Botón hamburguesa (sólo móvil) ── */
+.nav-burger{
+  display:none;
+  flex-direction:column;justify-content:center;gap:5px;
+  width:38px;height:38px;padding:0 8px;
+  background:none;border:none;cursor:pointer;
+}
+.nav-burger span{
+  display:block;height:2px;width:22px;border-radius:2px;
+  background:var(--white-1,#f0ebe0);
+  transition:transform .28s ease,opacity .2s ease;
+}
+.nav-burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.on span:nth-child(2){opacity:0}
+.nav-burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ── Menú móvil desplegable (lista traslúcida) ── */
+.mobile-menu{
+  display:none;position:fixed;inset:0;z-index:1200;
+  background:rgba(6,12,22,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:0;transition:opacity .3s ease;
+}
+.mobile-menu.open{display:block;opacity:1}
+.mobile-menu-list{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;flex-direction:column;
+  padding:5.5rem 2rem 2rem;gap:.2rem;
+}
+.mobile-menu-list a{
+  font-family:var(--serif);
+  font-size:1.6rem;font-weight:600;letter-spacing:.5px;
+  color:#f0ebe0;padding:1rem .2rem;
+  border-bottom:1px solid rgba(240,235,224,.12);
+  transition:color .2s;
+}
+.mobile-menu-list a:hover{color:var(--teal)}
+.mobile-menu-list .mm-login{
+  margin-top:1rem;border:1px solid var(--teal);border-radius:999px;
+  text-align:center;color:var(--teal);font-size:1.1rem;padding:.8rem;
+  font-family:'Inter',sans-serif;font-weight:600;letter-spacing:1px;
+}
+
 /* Navbar top: fila única con logo centrado */
 .nav-top{
   display:flex;
@@ -550,6 +592,8 @@ nav{
   .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:center;align-items:center}
   .cream-desc{margin-left:auto;margin-right:auto}
   .cream-photo{flex:none;width:100%;height:320px}
+  /* Sube la imagen: el fuego y el plato negro quedan más abajo, bajo el texto */
+  .cream-photo img{object-position:50% 68%}
   .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.6) 12%,rgba(0,0,0,0) 35%)}
 }
 @media(max-width:640px){
@@ -575,20 +619,30 @@ nav{
   .nav-side--left,.nav-side--right{ display:contents; }
   /* Fila 1: isotipo junto a la sesión y los iconos, al mismo nivel */
   .nav-iso-wrap{ display:flex; order:0; }
-  #ntbAccount{ order:1; margin-left:auto; }
-  .nav-icons-wrap{ display:flex; order:2; align-items:center; gap:1.2vw; margin-left:.6rem; }
+  /* Hamburguesa junto al isotipo; los enlaces y el "Iniciar sesión" pasan al menú */
+  .nav-burger{ display:flex; order:1; margin-left:.2rem; }
+  .ntb-link{ display:none; }
+  #ntbAccount{ display:none; }
+  .nav-linebreak{ display:none; }
+  .nav-icons-wrap{ display:flex; order:2; align-items:center; gap:2.5vw; margin-left:auto; }
   .ntb-icon-btn svg{width:24px;height:24px}
   #ntbUserBtn{margin-left:0}
-  /* Fila 2: enlaces Nosotros/Menú/Contacto */
-  .nav-linebreak{ display:block; order:3; flex-basis:100%; height:0; }
-  .ntb-link{ order:4; font-size:.68rem; letter-spacing:1px; }
-  /* Logo centrado, fuera del flujo, subido hasta alinear el punto de la "i"
-     con el texto de la fila 1 */
+  /* Logo centrado */
   .nav-wordmark{
     order:5;
-    position:absolute; left:50%; top:27px;
-    transform:translateX(-50%);
+    position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%);
   }
+  .nav-top{ align-items:center; }
+  /* Fila de subcategorías fija arriba para cambiar entre ellas con todo a la vista */
+  .subcat-row.open{
+    position:sticky;top:0;z-index:6;
+    background:var(--teal);
+    padding:.9rem .4rem .7rem;margin:0 -1rem;
+    box-shadow:0 6px 14px rgba(4,7,9,.18);
+    flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;
+  }
+  .subcat-row.open::-webkit-scrollbar{display:none}
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
   .footer-brand{grid-column:auto}
   .chat-garzona-picker{flex-wrap:wrap;white-space:normal;row-gap:5px}
@@ -975,8 +1029,16 @@ footer{
   .reels-grid{grid-template-columns:repeat(2,1fr)}
   .videos-left{text-align:center}
 }
-@media(max-width:600px){
-  .reels-grid{grid-template-columns:repeat(2,1fr)}
+@media(max-width:700px){
+  /* Reels en carrusel horizontal, uno al lado del otro (como la galería) */
+  .reels-grid{
+    display:flex;grid-template-columns:none;gap:.7rem;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    padding-bottom:.5rem;scrollbar-width:none;
+  }
+  .reels-grid::-webkit-scrollbar{display:none}
+  .reel-card{flex:0 0 60%;scroll-snap-align:center}
 }
 
 /* ── SECTION WRAPPER ── */
@@ -2288,7 +2350,9 @@ footer strong{color:var(--teal)}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
   #favCarousel{height:440px}
-  .fav-head{top:48px}
+  /* Sube más la sección para tapar el negro y llegar al fuego de la imagen hero */
+  .significado-sec{margin-top:-120px}
+  .fav-head{top:132px}
   .fav-info{bottom:44px;right:6vw}
   .fav-dots{bottom:92px}
   .fav-name{font-size:1rem}

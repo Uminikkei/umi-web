@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=5.0,user-scalable=yes"/>
 <title>Umi – La Real Cocina Nikkei · Coquimbo</title>
 <meta name="description" content="Restaurante Umi en Coquimbo. Cocina Nikkei japonesa-peruana. Sushi, ceviches, rolls y más."/>
 <link rel="canonical" href="https://uminikkeibar.cl/"/>
@@ -85,6 +85,9 @@
   <div class="nav-top">
     <div class="nav-side nav-side--left">
       <div class="nav-iso-wrap"><img class="ntb-iso" src="logo-umi-icon.png" alt="UMI"></div>
+      <button class="nav-burger" onclick="toggleMobileMenu()" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <a class="ntb-link" href="#nosotros">Nosotros</a>
       <a class="ntb-link" href="#menu">Menú</a>
       <a class="ntb-link" href="#contacto">Contacto</a>
@@ -108,6 +111,18 @@
     </div>
   </div>
 </nav>
+
+<!-- ═══ MENÚ MÓVIL (hamburguesa) ═══ -->
+<div class="mobile-menu" id="mobileMenu" onclick="if(event.target===this)toggleMobileMenu()">
+  <nav class="mobile-menu-list">
+    <a href="#nosotros" onclick="toggleMobileMenu()">Nosotros</a>
+    <a href="#menu" onclick="toggleMobileMenu()">Menú</a>
+    <a href="#eventos" onclick="toggleMobileMenu()">Galería</a>
+    <a href="#como" onclick="toggleMobileMenu()">¿Cómo lo hacemos?</a>
+    <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
+    <a href="#" class="mm-login" onclick="toggleMobileMenu();umiOpenAuth();return false;">Iniciar sesión</a>
+  </nav>
+</div>
 
 <!-- ═══ SECCIÓN 1: HERO — alineado a la izquierda, referencia exacta ═══ -->
 <section class="hero-sec" id="inicio">
@@ -349,7 +364,7 @@
 </div>
 
 <!-- ═══ SECCIÓN 4: VIDEOS / REELS ═══ -->
-<section class="videos-sec" id="nosotros">
+<section class="videos-sec" id="como">
   <div class="videos-inner">
     <div class="videos-left">
       <span class="videos-left-label">Instagram · @uminikkeibar</span>

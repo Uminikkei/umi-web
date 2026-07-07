@@ -264,7 +264,10 @@ function buildMenu(){
         document.querySelectorAll('.cat-block').forEach(b => b.classList.remove('show'));
         pill.classList.add('on');
         const bl = document.getElementById(catId(cat));
-        if(bl){ bl.classList.add('show'); bl.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+        if(bl){ bl.classList.add('show'); }
+        // Sube la sección dejando la fila de subcategorías arriba (sticky),
+        // así el cliente mantiene todos los botones a la vista.
+        requestAnimationFrame(() => subcatRow.scrollIntoView({behavior:'smooth',block:'start'}));
       };
       subcatRow.appendChild(pill);
     });
@@ -1226,7 +1229,7 @@ const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
     let auto = null;
     const half = () => track.scrollWidth / 2;
     function tick(){
-      wrap.scrollLeft += 0.5;
+      wrap.scrollLeft += 0.28;
       const h = half();
       if(h && wrap.scrollLeft >= h) wrap.scrollLeft -= h;
     }
@@ -1571,3 +1574,13 @@ function favAuto(){
 }
 
 buildFavCarousel();
+
+// ── MENÚ MÓVIL (hamburguesa) ──────────────────────────────────────────────────
+function toggleMobileMenu(){
+  const m = document.getElementById('mobileMenu');
+  if(!m) return;
+  const open = m.classList.toggle('open');
+  const burger = document.querySelector('.nav-burger');
+  if(burger){ burger.classList.toggle('on', open); burger.setAttribute('aria-expanded', open); }
+  document.body.style.overflow = open ? 'hidden' : '';
+}
