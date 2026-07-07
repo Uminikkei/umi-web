@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 995.163722 731.466020" width="96" height="70">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 995.163722 731.466020" width="96" height="70">
   <g transform="translate(-37.336278,733.519288) scale(0.100000,-0.100000)"
-fill="#0d1e40" stroke="#0d1e40" stroke-width="75" stroke-linejoin="round" stroke-linecap="round">
+fill="#f0e8d8" stroke="#f0e8d8" stroke-width="75" stroke-linejoin="round" stroke-linecap="round">
 <path d="M4640 7330 c-567 -47 -1083 -240 -1482 -553 -246 -192 -467 -517
 -782 -1147 -392 -785 -603 -1163 -833 -1490 -29 -41 -72 -102 -95 -135 -128
 -185 -343 -430 -658 -750 -166 -169 -314 -328 -338 -363 -130 -197 -97 -411
@@ -124,3 +124,4 @@ c13 -6 27 -19 30 -28 3 -9 15 -27 26 -41 11 -14 23 -42 26 -62 6 -37 4 -43
 74 -2 0 -19 -3 -36 -5z"/>
 </g>
 </svg>
+

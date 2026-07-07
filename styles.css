@@ -266,7 +266,7 @@ nav{
   background:url('fondo-umi.jpg') center top/cover no-repeat;
   display:flex;align-items:flex-end;justify-content:flex-start;
   text-align:left;padding:190px 5vw 12rem;
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;z-index:2;
 }
 .hero-sec::before{
   content:'';position:absolute;inset:0;
@@ -369,6 +369,10 @@ nav{
   background:#e2be94;
   position:relative;
   padding:0;
+  /* La imagen distintiva del hero se alarga sobre la franja negra plana de la
+     ola superior: subimos la sección bajo el hero (que tiene z-index mayor). */
+  margin-top:-34px;
+  z-index:1;
 }
 .sig-wave-bottom{
   display:block;line-height:0;
@@ -1031,11 +1035,28 @@ footer{
 .cat-circ-blob{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:113px;height:113px;z-index:2;pointer-events:none;
+  /* Recorta la silueta del geoglifo del disco beige -> queda un hueco
+     transparente con forma del geoglifo (efecto brocado/grabado). */
+  -webkit-mask-image: var(--gi), linear-gradient(#000,#000);
+          mask-image: var(--gi), linear-gradient(#000,#000);
+  -webkit-mask-size: var(--gs) var(--gs), 100% 100%;
+          mask-size: var(--gs) var(--gs), 100% 100%;
+  -webkit-mask-position: center, center;
+          mask-position: center, center;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+          mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
 }
 .cat-circ-blob svg{width:100%;height:100%;display:block;
   filter:drop-shadow(0 8px 10px rgba(4,7,9,.28));}
-/* Sombra suave para los geoglifos */
-.cat-circ-inner img{ filter:drop-shadow(0 3px 4px rgba(4,7,9,.35)); }
+/* Geoglifos beige: sólo se ve la parte que SOBRESALE del disco (fuera del
+   radio 56.5px); dentro del disco queda transparente para revelar el hueco. */
+.cat-circ-inner img{
+  filter:drop-shadow(0 3px 4px rgba(4,7,9,.35));
+  -webkit-mask-image: radial-gradient(circle 56.5px at 50% 50%, transparent 56.5px, #000 56.5px);
+          mask-image: radial-gradient(circle 56.5px at 50% 50%, transparent 56.5px, #000 56.5px);
+}
 /* Círculo interior */
 .cat-circ-inner{
   position:absolute;
@@ -1064,7 +1085,9 @@ footer{
   .cat-circ{flex:0 0 33.333%;max-width:33.333%}
   .cat-circ-wrap{width:120px;height:120px;margin:0 auto}
   .cat-circ-inner img{transform:translate(-50%,-50%) scale(.64)!important}
-  .cat-circ-blob{width:70px;height:70px}
+  .cat-circ-blob{width:70px;height:70px;
+    -webkit-mask-size:calc(var(--gs)*.64) calc(var(--gs)*.64),100% 100%;
+            mask-size:calc(var(--gs)*.64) calc(var(--gs)*.64),100% 100%;}
   .cat-circ-label{margin-top:-1.2rem;font-size:.56rem;letter-spacing:1px}
   /* Título de categoría más pegado a la línea inferior */
   .menu-dark-area .cat-heading{padding-bottom:0;margin-bottom:1.3rem}
@@ -1255,7 +1278,8 @@ footer{
 .reviews-badge svg{width:18px;height:18px}
 .reviews-badge span{font-size:.8rem;font-weight:600;color:var(--teal);letter-spacing:.5px}
 
-.reviews-track-wrap{overflow:hidden;position:relative;padding:.5rem 0}
+.reviews-track-wrap{overflow-x:auto;overflow-y:hidden;position:relative;padding:.5rem 0;scrollbar-width:none;-ms-overflow-style:none}
+.reviews-track-wrap::-webkit-scrollbar{display:none}
 .reviews-track-wrap::before,.reviews-track-wrap::after{
   content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none;
 }
@@ -1264,13 +1288,7 @@ footer{
 
 .reviews-track{
   display:flex;gap:1.4rem;
-  animation:scroll-rev 50s linear infinite;
   width:max-content;
-}
-.reviews-track:hover{animation-play-state:paused}
-@keyframes scroll-rev{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(-50%)}
 }
 
 .rev-card{

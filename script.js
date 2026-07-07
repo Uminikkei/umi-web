@@ -186,13 +186,13 @@ function buildMenu(){
   // Geoglifos dorados — tamaños normalizados por viewBox de cada SVG
   const IC = (f, s) => `<img src="${f}" style="width:${s}px;height:${s}px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
   const MAIN = {
-    'Sushi':     { e: IC('icon_sushi.svg',    115), cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
-    'Ceviches':  { e: IC('icon_ceviches.svg', 155), cats:['Ceviches'], ring:'Ceviches' },
-    'Tiraditos': { e: IC('icon_tiraditos.svg',150), cats:['Tiraditos'], ring:'Tiraditos' },
-    'Ensaladas': { e: IC('icon_ensaladas.svg',130), cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
-    'Del Fuego': { e: IC('icon_del_fuego.svg',130), cats:['Fuertes'], ring:'Del Fuego' },
-    'Postres':   { e: IC('icon_postres.svg',  130), cats:['Postres'], ring:'Postres' },
-    'Bebidas':   { e: IC('icon_bebidas.svg',  128), cats:['Bebidas'], ring:'Bebidas' }
+    'Sushi':     { icon:'icon_sushi.svg',    size:115, cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Ceviches':  { icon:'icon_ceviches.svg', size:155, cats:['Ceviches'], ring:'Ceviches' },
+    'Tiraditos': { icon:'icon_tiraditos.svg',size:150, cats:['Tiraditos'], ring:'Tiraditos' },
+    'Ensaladas': { icon:'icon_ensaladas.svg',size:130, cats:['Ensaladas','Entradas'], ring:'Ensaladas' },
+    'Del Fuego': { icon:'icon_del_fuego.svg',size:130, cats:['Fuertes'], ring:'Del Fuego' },
+    'Postres':   { icon:'icon_postres.svg',  size:130, cats:['Postres'], ring:'Postres' },
+    'Bebidas':   { icon:'icon_bebidas.svg',  size:128, cats:['Bebidas'], ring:'Bebidas' }
   };
 
   const mainWrap  = document.getElementById('mainCats');
@@ -274,9 +274,14 @@ function buildMenu(){
     }
   }
 
-  Object.entries(MAIN).forEach(([mainName, {e, cats, ring}], idx) => {
+  Object.entries(MAIN).forEach(([mainName, {icon, size, cats, ring}], idx) => {
+    const e = IC(icon, size);
     const circ = document.createElement('div');
     circ.className = 'cat-circ';
+    // Variables para el efecto "brocado": el geoglifo se recorta del botón beige
+    // (hueco transparente) y sólo la parte que sobresale del botón se ve en beige.
+    circ.style.setProperty('--gi', `url("${icon}")`);
+    circ.style.setProperty('--gs', size + 'px');
     const uid = 'rp' + idx;
     const R = 56.5, fontSize = 19, letterSpacing = 1;
     const word = (ring || mainName).toUpperCase();
@@ -1085,12 +1090,45 @@ function closeEventGallery(){
   document.getElementById('eventModal').classList.remove('open');
   document.body.style.overflow = '';
 }
+// Desplaza el carrusel de categorías de eventos una tarjeta a izq/der.
+function evRowStep(dir){
+  const row = document.getElementById('eventosGrid');
+  if(!row) return;
+  const card = row.querySelector('.evento-card');
+  const gap = parseFloat(getComputedStyle(row).columnGap || getComputedStyle(row).gap) || 22;
+  const w = card ? card.getBoundingClientRect().width + gap : 260;
+  row.scrollBy({ left: dir * w, behavior: 'smooth' });
+}
 document.addEventListener('keydown', (e) => {
+  if(e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Escape') return;
+  // Con la galería de eventos abierta, las flechas cambian de imagen
   const md = document.getElementById('eventModal');
-  if(!md || !md.classList.contains('open')) return;
-  if(e.key === 'Escape') closeEventGallery();
-  else if(e.key === 'ArrowLeft') eventGoRel(-1);
-  else if(e.key === 'ArrowRight') eventGoRel(1);
+  if(md && md.classList.contains('open')){
+    if(e.key === 'Escape') closeEventGallery();
+    else if(e.key === 'ArrowLeft') eventGoRel(-1);
+    else if(e.key === 'ArrowRight') eventGoRel(1);
+    return;
+  }
+  if(e.key === 'Escape') return;
+  // No secuestrar las flechas mientras se escribe en un campo
+  const tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+  const dir = e.key === 'ArrowLeft' ? -1 : 1;
+  // Enruta la flecha al carrusel más visible en pantalla
+  const secs = [
+    { el: document.getElementById('favCarousel'),           act: () => favGo(favIdx + dir, true) },
+    { el: document.getElementById('eventosGrid'),           act: () => evRowStep(dir) },
+    { el: document.querySelector('.reviews-track-wrap'),    act: () => window._revStep && window._revStep(dir) },
+  ];
+  const vh = window.innerHeight;
+  let best = null, bestVis = 0;
+  secs.forEach(s => {
+    if(!s.el) return;
+    const r = s.el.getBoundingClientRect();
+    const vis = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+    if(vis > bestVis){ bestVis = vis; best = s; }
+  });
+  if(best && bestVis > 40){ e.preventDefault(); best.act(); }
 });
 // Galería de categorías: mover el mouse de lado a lado desplaza el carrusel
 (function(){
@@ -1181,6 +1219,33 @@ const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
   track.innerHTML = clone + clone;
   // Recalcular el corte cuando la fuente termine de cargar (medidas exactas)
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(processAll); }
+
+  // ── Auto-scroll continuo + navegación con flechas del teclado ──────────────
+  const wrap = track.closest('.reviews-track-wrap');
+  if(wrap){
+    let auto = null;
+    const half = () => track.scrollWidth / 2;
+    function tick(){
+      wrap.scrollLeft += 0.5;
+      const h = half();
+      if(h && wrap.scrollLeft >= h) wrap.scrollLeft -= h;
+    }
+    function start(){ clearInterval(auto); auto = setInterval(tick, 16); }
+    function stop(){ clearInterval(auto); }
+    wrap.addEventListener('mouseenter', stop);
+    wrap.addEventListener('mouseleave', start);
+    start();
+    // Paso manual (flechas): desplaza una tarjeta y reinicia el reloj
+    window._revStep = (dir) => {
+      const card = track.querySelector('.rev-card');
+      const w = card ? card.getBoundingClientRect().width + 22 : 300;
+      const h = half();
+      if(dir < 0 && wrap.scrollLeft < w && h) wrap.scrollLeft += h; // permite ir hacia atrás sin toparse en 0
+      wrap.scrollBy({ left: dir * w, behavior: 'smooth' });
+      stop(); clearTimeout(window._revResume);
+      window._revResume = setTimeout(start, 2500);
+    };
+  }
 })();
 
 function toggleRevMore(btn){
