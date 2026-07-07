@@ -616,9 +616,9 @@ nav{
   /* "frente al mar" justo debajo del subtítulo, alineado a la izquierda */
   .hero-script-line{justify-content:flex-start!important;padding-right:0!important}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
-  /* Sello arriba a la derecha: en la esquina inferior se amontona con la
-     garzona virtual y los iconos flotantes (fijos al viewport) */
-  .hero-badge.hero-stamp{display:flex;width:76px;height:76px;top:118px;bottom:auto;right:4vw}
+  /* Sello al lado de los botones (Pedir ahora / Reservar mesa), tamaño moderado,
+     sin tocar los botones ni el borde derecho */
+  .hero-badge.hero-stamp{display:flex;width:80px;height:80px;top:auto;bottom:15.75rem;right:8vw}
 }
 
 /* ── MÓVIL: navbar en 2 filas — arriba enlaces + sesión, abajo marca ── */
@@ -1595,7 +1595,7 @@ footer strong{color:var(--teal)}
   padding:1.3rem 1.5rem;border-bottom:1px solid var(--border);
   flex-shrink:0;
 }
-.cart-header h3{font-family:var(--serif);font-size:1.4rem;color:var(--white-1);display:flex;align-items:center;gap:.55rem}
+.cart-header h3{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white-1);display:flex;align-items:center;gap:.55rem}
 .cart-title-icon{width:22px;height:22px;color:var(--teal);flex-shrink:0}
 .cart-close{
   background:var(--bg3);border:1px solid var(--border);color:var(--muted);

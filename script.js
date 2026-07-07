@@ -1066,12 +1066,13 @@ function renderEventStage(){
 function scheduleEventAuto(){
   clearTimeout(_evTimer);
   if(_evMedia.length < 2) return;
-  if(_evMedia[_evIdx] && _evMedia[_evIdx].t === 'video') return; // no auto-avanzar sobre un video
+  // Rota siempre; a los videos les damos más tiempo para que se vean antes de avanzar
+  const delay = (_evMedia[_evIdx] && _evMedia[_evIdx].t === 'video') ? 7000 : 3000;
   _evTimer = setTimeout(() => {
     _evIdx = (_evIdx + 1) % _evMedia.length;
     renderEventStage();
     scheduleEventAuto();
-  }, 3000);
+  }, delay);
 }
 function openEventGallery(id){
   const ev = EVENTOS[id]; if(!ev) return;
