@@ -952,9 +952,9 @@ const EVENTOS = {
   'dia-de-las-madres-2026': {
     title: 'Día de las Madres 2026',
     media: [
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-03.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-01.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-02.mp4' },
-      { t:'video', s:'eventos/dia-de-las-madres-2026/video-03.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-04.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-05.mp4' },
       { t:'video', s:'eventos/dia-de-las-madres-2026/video-06.mp4' },
@@ -1096,6 +1096,21 @@ document.addEventListener('keydown', (e) => {
   else if(e.key === 'ArrowLeft') eventGoRel(-1);
   else if(e.key === 'ArrowRight') eventGoRel(1);
 });
+// Galería de categorías: mover el mouse de lado a lado desplaza el carrusel
+(function(){
+  const row = document.getElementById('eventosGrid');
+  if(!row) return;
+  row.style.scrollBehavior = 'auto';
+  row.addEventListener('mousemove', (e) => {
+    const max = row.scrollWidth - row.clientWidth;
+    if(max <= 0) return;
+    const rect = row.getBoundingClientRect();
+    // zona muerta central: solo desplaza al acercarse a los bordes, mapeo 15%–85%
+    const ratio = Math.min(1, Math.max(0, ((e.clientX - rect.left) / rect.width - 0.12) / 0.76));
+    row.scrollLeft = ratio * max;
+  });
+})();
+
 // Deslizar con el dedo en móvil (o mouse-drag) para cambiar de imagen
 (function(){
   const stage = document.getElementById('eventStage');

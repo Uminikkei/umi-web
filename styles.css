@@ -795,11 +795,15 @@ footer{
   color:var(--teal);font-weight:700;margin-bottom:1.8rem;text-align:center;
 }
 .eventos-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:1.4rem;
+  display:flex;gap:1.4rem;
+  overflow-x:auto;overflow-y:hidden;
+  padding:.3rem .2rem 1rem;
+  scrollbar-width:none;-ms-overflow-style:none;
+  scroll-behavior:auto;
 }
+.eventos-grid::-webkit-scrollbar{display:none}
 .evento-card{
-  position:relative;display:block;padding:0;border:none;cursor:pointer;
+  position:relative;flex:0 0 clamp(230px,26vw,300px);padding:0;border:none;cursor:pointer;
   border-radius:12px;overflow:hidden;aspect-ratio:4/5;background:#0b1730;
   box-shadow:0 10px 30px rgba(0,0,0,.35);
   transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;
