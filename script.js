@@ -1154,9 +1154,9 @@ document.addEventListener('keydown', (e) => {
   }
   // Galería: se desliza sola en todas las pantallas
   autoLoop(document.getElementById('eventosGrid'), 0.3);
-  // Reels: sólo en móvil (en PC ya se ven las 4 en cuadrícula)
+  // Reels: sólo en móvil (en PC ya se ven las 4 en cuadrícula), un poco más rápidos
   if(window.matchMedia('(max-width:700px)').matches){
-    autoLoop(document.querySelector('.reels-grid'), 0.3);
+    autoLoop(document.querySelector('.reels-grid'), 0.6);
   }
 })();
 
@@ -1239,9 +1239,10 @@ const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
   const wrap = track.closest('.reviews-track-wrap');
   if(wrap){
     let auto = null, pos = 0;
+    const revSpeed = window.matchMedia('(max-width:700px)').matches ? 0.62 : 0.35; // más rápido en móvil
     const half = () => track.scrollWidth / 2;
     function tick(){
-      pos += 0.35;
+      pos += revSpeed;
       const h = half();
       if(h && pos >= h) pos -= h;
       wrap.scrollLeft = pos;   // acumulador flotante: permite sub-píxel continuo
