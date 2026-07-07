@@ -957,9 +957,29 @@ function toggleReelSound(e, btn) {
 (function(){
   const track = document.getElementById('revTrack');
   if(!track) return;
+  // Recortar reseñas de más de 8 líneas y mostrar "Ver más…"
+  const MAX_LINES = 8;
+  track.querySelectorAll('.rev-text').forEach(txt => {
+    if(txt.id === 'longRev') return; // esa reseña ya tiene su propio toggle
+    const lh = parseFloat(getComputedStyle(txt).lineHeight) || 22;
+    if(txt.scrollHeight > lh * MAX_LINES + 2){
+      txt.classList.add('rev-clamp');
+      const btn = document.createElement('button');
+      btn.className = 'rev-more visible';
+      btn.textContent = 'Ver más…';
+      btn.setAttribute('onclick', 'toggleRevMore(this)');
+      txt.insertAdjacentElement('afterend', btn);
+    }
+  });
   const clone = track.innerHTML;
   track.innerHTML = clone + clone;
 })();
+
+function toggleRevMore(btn){
+  const txt = btn.previousElementSibling;
+  const open = txt.classList.toggle('rev-expanded');
+  btn.textContent = open ? 'Ver menos ↑' : 'Ver más…';
+}
 
 // ── PAGO CON TARJETA EN LA WEB (Mercado Pago Brick) ───────────────────────────
 const MP_PUBLIC_KEY = 'APP_USR-4f89ddca-0f8e-4dcb-bd6b-59ecb085ee70';
