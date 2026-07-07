@@ -160,7 +160,7 @@ function toggleLongRev(){
   const txt = document.getElementById('longRev');
   const btn = document.getElementById('longRevBtn');
   const expanded = txt.classList.toggle('expanded');
-  btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más ↓';
+  btn.textContent = expanded ? 'Ver menos ↑' : 'Ver más...';
 }
 
 // ── VENTANA DE PRODUCTO (nombre + descripción) ──────────────────────────────
@@ -957,16 +957,19 @@ function toggleReelSound(e, btn) {
 (function(){
   const track = document.getElementById('revTrack');
   if(!track) return;
-  // Recortar reseñas de más de 8 líneas y mostrar "Ver más…"
+  // Recortar reseñas de más de 8 líneas y mostrar "Ver más..."
   const MAX_LINES = 8;
   track.querySelectorAll('.rev-text').forEach(txt => {
+    // Envolver cada frase del cliente entre comillas rectas
+    txt.insertAdjacentText('afterbegin', '"');
+    txt.insertAdjacentText('beforeend', '"');
     if(txt.id === 'longRev') return; // esa reseña ya tiene su propio toggle
     const lh = parseFloat(getComputedStyle(txt).lineHeight) || 22;
     if(txt.scrollHeight > lh * MAX_LINES + 2){
       txt.classList.add('rev-clamp');
       const btn = document.createElement('button');
       btn.className = 'rev-more visible';
-      btn.textContent = 'Ver más…';
+      btn.textContent = 'Ver más...';
       btn.setAttribute('onclick', 'toggleRevMore(this)');
       txt.insertAdjacentElement('afterend', btn);
     }
@@ -978,7 +981,7 @@ function toggleReelSound(e, btn) {
 function toggleRevMore(btn){
   const txt = btn.previousElementSibling;
   const open = txt.classList.toggle('rev-expanded');
-  btn.textContent = open ? 'Ver menos ↑' : 'Ver más…';
+  btn.textContent = open ? 'Ver menos ↑' : 'Ver más...';
 }
 
 // ── PAGO CON TARJETA EN LA WEB (Mercado Pago Brick) ───────────────────────────
