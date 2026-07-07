@@ -949,6 +949,16 @@ function toggleReelSound(e, btn) {
 // ── EVENTOS / GALERÍA ─────────────────────────────────────────────────────────
 // Cada evento: portada = primer elemento de media. Agregar imágenes/video aquí.
 const EVENTOS = {
+  'barco-gigante-2026': {
+    title: 'Barco Gigante 2026',
+    media: [
+      { t:'img', s:'eventos/barco-gigante-2026/01.jpg' },
+      { t:'img', s:'eventos/barco-gigante-2026/02.jpg' },
+      { t:'img', s:'eventos/barco-gigante-2026/03.jpg' },
+      { t:'img', s:'eventos/barco-gigante-2026/04.jpg' },
+      { t:'img', s:'eventos/barco-gigante-2026/05.jpg' }
+    ]
+  },
   'maridaje-7-tiempos': {
     title: 'Maridaje de 7 Tiempos',
     media: [
