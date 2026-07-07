@@ -1133,24 +1133,9 @@ document.addEventListener('keydown', (e) => {
   });
   if(best && bestVis > 40){ e.preventDefault(); best.act(); }
 });
-// Galería de categorías: mover el mouse de lado a lado desplaza el carrusel
+// Carruseles que se deslizan solos en bucle continuo (como los reviews):
+// la galería de categorías en PC y móvil; los reels sólo en móvil.
 (function(){
-  const row = document.getElementById('eventosGrid');
-  if(!row) return;
-  row.style.scrollBehavior = 'auto';
-  row.addEventListener('mousemove', (e) => {
-    const max = row.scrollWidth - row.clientWidth;
-    if(max <= 0) return;
-    const rect = row.getBoundingClientRect();
-    // zona muerta central: solo desplaza al acercarse a los bordes, mapeo 15%–85%
-    const ratio = Math.min(1, Math.max(0, ((e.clientX - rect.left) / rect.width - 0.12) / 0.76));
-    row.scrollLeft = ratio * max;
-  });
-})();
-
-// Móvil: la galería de categorías y los reels se mueven solos (como los reviews)
-(function(){
-  if(!window.matchMedia('(max-width:700px)').matches) return;
   function autoLoop(el, speed){
     if(!el || el.children.length === 0) return;
     el.innerHTML += el.innerHTML;        // duplica el contenido para un bucle continuo
@@ -1160,13 +1145,19 @@ document.addEventListener('keydown', (e) => {
     function tick(){ pos += speed; const h = half(); if(h && pos >= h) pos -= h; el.scrollLeft = pos; }
     function start(){ clearInterval(auto); pos = el.scrollLeft; auto = setInterval(tick, 16); }
     function stop(){ clearInterval(auto); }
-    // Pausa mientras el usuario desliza con el dedo; reanuda después
+    // Pausa al pasar el mouse (PC) o mientras se desliza con el dedo (móvil)
+    el.addEventListener('mouseenter', stop);
+    el.addEventListener('mouseleave', start);
     el.addEventListener('touchstart', stop, {passive:true});
     el.addEventListener('touchend', () => { clearTimeout(el._rs); el._rs = setTimeout(start, 2500); }, {passive:true});
     start();
   }
+  // Galería: se desliza sola en todas las pantallas
   autoLoop(document.getElementById('eventosGrid'), 0.3);
-  autoLoop(document.querySelector('.reels-grid'), 0.3);
+  // Reels: sólo en móvil (en PC ya se ven las 4 en cuadrícula)
+  if(window.matchMedia('(max-width:700px)').matches){
+    autoLoop(document.querySelector('.reels-grid'), 0.3);
+  }
 })();
 
 // Deslizar con el dedo en móvil (o mouse-drag) para cambiar de imagen
