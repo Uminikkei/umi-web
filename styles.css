@@ -786,18 +786,18 @@ footer{
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
   background:#2b2d31;   /* gris plomo oscuro */
-  padding:8rem 2rem 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
+  padding:8rem 0 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
   position:relative;
 }
-.eventos-inner{max-width:1200px;margin:0 auto;text-align:center}
+.eventos-inner{max-width:none;margin:0;text-align:center}
 .eventos-label{
   display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
   color:var(--teal);font-weight:700;margin-bottom:1.8rem;text-align:center;
 }
 .eventos-grid{
-  display:flex;gap:1.4rem;
+  display:flex;gap:1.4rem;justify-content:safe center;
   overflow-x:auto;overflow-y:hidden;
-  padding:.3rem .2rem 1rem;
+  padding:.3rem 1.6rem 1rem;
   scrollbar-width:none;-ms-overflow-style:none;
   scroll-behavior:auto;
 }
