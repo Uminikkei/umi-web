@@ -961,60 +961,85 @@ const EVENTOS = {
   }
 };
 
-let _elbImgs = [], _elbIdx = 0;
+let _evMedia = [], _evIdx = 0, _evTimer = null;
 
+function _evCell(m){
+  if(m && m.t === 'video') return `<video src="${m.s}" muted playsinline preload="metadata"></video>`;
+  return `<img src="${m ? m.s : ''}" alt="" loading="lazy">`;
+}
+function _evMainCell(m){
+  if(m && m.t === 'video') return `<video src="${m.s}" controls autoplay playsinline></video>`;
+  return `<img src="${m ? m.s : ''}" alt="">`;
+}
+function renderEventStage(){
+  const n = _evMedia.length; if(!n) return;
+  const cur  = _evMedia[_evIdx];
+  const prev = _evMedia[(_evIdx - 1 + n) % n];
+  const next = _evMedia[(_evIdx + 1) % n];
+  document.getElementById('eventMain').innerHTML = _evMainCell(cur);
+  const prevEl = document.getElementById('eventPrev');
+  const nextEl = document.getElementById('eventNext');
+  // con una sola imagen no mostramos miniaturas laterales
+  prevEl.innerHTML = n > 1 ? _evCell(prev) : '';
+  nextEl.innerHTML = n > 1 ? _evCell(next) : '';
+  prevEl.style.visibility = n > 1 ? '' : 'hidden';
+  nextEl.style.visibility = n > 1 ? '' : 'hidden';
+}
+function scheduleEventAuto(){
+  clearTimeout(_evTimer);
+  if(_evMedia.length < 2) return;
+  if(_evMedia[_evIdx] && _evMedia[_evIdx].t === 'video') return; // no auto-avanzar sobre un video
+  _evTimer = setTimeout(() => {
+    _evIdx = (_evIdx + 1) % _evMedia.length;
+    renderEventStage();
+    scheduleEventAuto();
+  }, 1000);
+}
 function openEventGallery(id){
   const ev = EVENTOS[id]; if(!ev) return;
-  const modal = document.getElementById('eventModal');
+  _evMedia = ev.media.slice();
+  _evIdx = 0;
   document.getElementById('eventModalTitle').textContent = ev.title;
-  const grid = document.getElementById('eventModalGrid');
-  grid.innerHTML = '';
-  _elbImgs = ev.media.filter(m => m.t === 'img').map(m => m.s);
-  ev.media.forEach(m => {
-    const cell = document.createElement('div');
-    cell.className = 'event-media';
-    if(m.t === 'img'){
-      const idx = _elbImgs.indexOf(m.s);
-      cell.innerHTML = `<img src="${m.s}" alt="${ev.title}" loading="lazy">`;
-      cell.onclick = () => openEventLightbox(idx);
-    } else {
-      cell.innerHTML = `<video src="${m.s}" controls playsinline preload="metadata"></video>`;
-    }
-    grid.appendChild(cell);
-  });
-  modal.classList.add('open');
+  renderEventStage();
+  document.getElementById('eventModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  scheduleEventAuto();
+}
+function eventGoRel(d){
+  const n = _evMedia.length; if(n < 2) return;
+  _evIdx = (_evIdx + d + n) % n;
+  renderEventStage();
+  scheduleEventAuto(); // reinicia el reloj al navegar a mano
 }
 function closeEventGallery(){
+  clearTimeout(_evTimer); _evTimer = null;
   document.getElementById('eventModal').classList.remove('open');
-  if(!document.getElementById('eventLightbox').classList.contains('open')) document.body.style.overflow = '';
-}
-function openEventLightbox(i){
-  _elbIdx = i;
-  document.getElementById('eventLightboxImg').src = _elbImgs[_elbIdx];
-  document.getElementById('eventLightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function eventLightboxNav(d){
-  if(!_elbImgs.length) return;
-  _elbIdx = (_elbIdx + d + _elbImgs.length) % _elbImgs.length;
-  document.getElementById('eventLightboxImg').src = _elbImgs[_elbIdx];
-}
-function closeEventLightbox(){
-  document.getElementById('eventLightbox').classList.remove('open');
-  if(!document.getElementById('eventModal').classList.contains('open')) document.body.style.overflow = '';
+  document.body.style.overflow = '';
 }
 document.addEventListener('keydown', (e) => {
-  const lb = document.getElementById('eventLightbox');
   const md = document.getElementById('eventModal');
-  if(lb && lb.classList.contains('open')){
-    if(e.key === 'Escape') closeEventLightbox();
-    else if(e.key === 'ArrowLeft') eventLightboxNav(-1);
-    else if(e.key === 'ArrowRight') eventLightboxNav(1);
-  } else if(md && md.classList.contains('open') && e.key === 'Escape'){
-    closeEventGallery();
-  }
+  if(!md || !md.classList.contains('open')) return;
+  if(e.key === 'Escape') closeEventGallery();
+  else if(e.key === 'ArrowLeft') eventGoRel(-1);
+  else if(e.key === 'ArrowRight') eventGoRel(1);
 });
+// Deslizar con el dedo en móvil (o mouse-drag) para cambiar de imagen
+(function(){
+  const stage = document.getElementById('eventStage');
+  if(!stage) return;
+  let x0 = 0, dx = 0, drag = false;
+  stage.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; dx = 0; drag = true; }, {passive:true});
+  stage.addEventListener('touchmove', (e) => {
+    if(!drag) return;
+    dx = e.touches[0].clientX - x0;
+    if(Math.abs(dx) > Math.abs(e.touches[0].clientY - 0)) { /* horizontal */ }
+  }, {passive:true});
+  stage.addEventListener('touchend', () => {
+    if(!drag) return; drag = false;
+    if(dx <= -40) eventGoRel(1);
+    else if(dx >= 40) eventGoRel(-1);
+  });
+})();
 
 // ── REVIEWS MARQUEE ───────────────────────────────────────────────────────────
 // Comillas azules de apertura/cierre y cierre truncado (con puntos suspensivos)
