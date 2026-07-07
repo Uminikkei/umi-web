@@ -162,18 +162,7 @@
   <!-- Puntitos de navegación -->
   <div class="fav-dots" id="favDots"></div>
 
-  <!-- Ola superior: negro recorta sobre la foto (con sombra de profundidad) -->
-  <div class="sig-wave-top" aria-hidden="true">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
-          <feGaussianBlur stdDeviation="2.5"/>
-        </filter>
-      </defs>
-      <path fill="#000" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
-      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
-    </svg>
-  </div>
+  <!-- La transición superior la hace la ola de Hero; no duplicamos ola aquí -->
 
   <!-- Ola inferior: negro recorta sobre la foto; la foto proyecta sombra sobre nuestra historia -->
   <div class="sig-wave-bottom">
