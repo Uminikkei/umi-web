@@ -149,6 +149,46 @@
   </div>
 </section>
 
+<!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
+<section class="significado-sec" id="favCarousel">
+  <!-- Fotos a pantalla completa de la sección -->
+  <div class="fav-track" id="favTrack"></div>
+
+  <!-- Encabezado superpuesto -->
+  <div class="fav-head">
+    <span class="significado-label">Los más pedidos</span>
+  </div>
+
+  <!-- Puntitos de navegación -->
+  <div class="fav-dots" id="favDots"></div>
+
+  <!-- Ola superior: negro recorta sobre la foto (con sombra de profundidad) -->
+  <div class="sig-wave-top" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
+          <feGaussianBlur stdDeviation="2.5"/>
+        </filter>
+      </defs>
+      <path fill="#000" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
+      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
+    </svg>
+  </div>
+
+  <!-- Ola inferior: negro recorta sobre la foto; la foto proyecta sombra sobre nuestra historia -->
+  <div class="sig-wave-bottom">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="favWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
+          <feGaussianBlur stdDeviation="2"/>
+        </filter>
+      </defs>
+      <path fill="#000" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
+      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(4,7,9,.4)" stroke-width="7" filter="url(#favWaveBlur)" transform="translate(0,4)"/>
+    </svg>
+  </div>
+</section>
+
 <!-- ═══ SECCIÓN 2: CREAM — Historia + Más Pedidos ═══ -->
 <section class="cream-sec" id="nosotros">
   <div class="cream-inner">
@@ -203,48 +243,21 @@
   </div>
 </section>
 
-<!-- ═══ SECCIÓN: QUÉ SIGNIFICA UMI — fondo dorado ═══ -->
-<section class="significado-sec" id="favCarousel">
-  <!-- Fotos a pantalla completa de la sección -->
-  <div class="fav-track" id="favTrack"></div>
+<!-- ═══ SECCIÓN 2: MENÚ ═══ -->
+<section class="menu-sec" id="menu">
 
-  <!-- Encabezado superpuesto -->
-  <div class="fav-head">
-    <span class="significado-label">Los más pedidos</span>
-  </div>
-
-  <!-- Puntitos de navegación -->
-  <div class="fav-dots" id="favDots"></div>
-
-  <!-- Ola superior: arena recorta sobre la foto (con sombra de profundidad) -->
-  <div class="sig-wave-top" aria-hidden="true">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ola superior: arena (etimología) por delante, entra al teal del menú -->
+  <div class="menu-wave-top" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
+        <filter id="menuWaveTopBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#e2be94" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
-      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
+      <path fill="#e2be94" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
+      <path d="M1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45" fill="none" stroke="rgba(4,7,9,.28)" stroke-width="8" filter="url(#menuWaveTopBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
-
-  <!-- Ola inferior: teal recorta sobre la foto; la foto proyecta sombra sobre el teal -->
-  <div class="sig-wave-bottom">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="favWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
-          <feGaussianBlur stdDeviation="2"/>
-        </filter>
-      </defs>
-      <path fill="var(--teal)" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
-      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(4,7,9,.4)" stroke-width="7" filter="url(#favWaveBlur)" transform="translate(0,4)"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ═══ SECCIÓN 2: MENÚ ═══ -->
-<section class="menu-sec" id="menu">
 
   <!-- ZONA TEAL: título + círculos + pills -->
   <div class="menu-sec-inner">
