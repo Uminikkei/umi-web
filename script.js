@@ -949,6 +949,16 @@ function toggleReelSound(e, btn) {
 // ── EVENTOS / GALERÍA ─────────────────────────────────────────────────────────
 // Cada evento: portada = primer elemento de media. Agregar imágenes/video aquí.
 const EVENTOS = {
+  'maridaje-7-tiempos': {
+    title: 'Maridaje de 7 Tiempos',
+    media: [
+      { t:'img', s:'eventos/maridaje-7-tiempos/04.jpg' },
+      { t:'img', s:'eventos/maridaje-7-tiempos/01.jpg' },
+      { t:'img', s:'eventos/maridaje-7-tiempos/02.jpg' },
+      { t:'img', s:'eventos/maridaje-7-tiempos/03.jpg' },
+      { t:'img', s:'eventos/maridaje-7-tiempos/05.jpg' }
+    ]
+  },
   'san-valentin-2026': {
     title: 'San Valentín 2026',
     media: [
