@@ -961,7 +961,11 @@ const EVENTOS = {
       { t:'img', s:'eventos/san-valentin-2026/06.jpg' },
       { t:'img', s:'eventos/san-valentin-2026/07.jpg' },
       { t:'img', s:'eventos/san-valentin-2026/08.jpg' },
-      { t:'img', s:'eventos/san-valentin-2026/09.jpg' }
+      { t:'img', s:'eventos/san-valentin-2026/09.jpg' },
+      { t:'video', s:'eventos/san-valentin-2026/video-01.mp4' },
+      { t:'video', s:'eventos/san-valentin-2026/video-02.mp4' },
+      { t:'video', s:'eventos/san-valentin-2026/video-03.mp4' },
+      { t:'video', s:'eventos/san-valentin-2026/video-04.mp4' }
     ]
   },
   'halloween-2025': {
