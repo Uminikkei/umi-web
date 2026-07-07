@@ -949,6 +949,16 @@ function toggleReelSound(e, btn) {
 // ── EVENTOS / GALERÍA ─────────────────────────────────────────────────────────
 // Cada evento: portada = primer elemento de media. Agregar imágenes/video aquí.
 const EVENTOS = {
+  'dia-de-las-madres-2026': {
+    title: 'Día de las Madres 2026',
+    media: [
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-01.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-02.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-03.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-04.mp4' },
+      { t:'video', s:'eventos/dia-de-las-madres-2026/video-05.mp4' }
+    ]
+  },
   'barco-gigante-2026': {
     title: 'Barco Gigante 2026',
     media: [
