@@ -1552,7 +1552,7 @@ function buildFavCarousel(){
   });
   favAuto();
   const car = document.getElementById('favCarousel');
-  car.addEventListener('mouseenter', () => clearInterval(favTimer));
+  car.addEventListener('mouseenter', () => clearTimeout(favTimer));
   car.addEventListener('mouseleave', favAuto);
 
   // Deslizar con el dedo (móvil) para cambiar de foto, además de puntitos/botones
@@ -1582,12 +1582,12 @@ function favGo(i, manual){
   favIdx = ((i % n) + n) % n;
   [...track.children].forEach((s, k) => s.classList.toggle('on', k === favIdx));
   document.querySelectorAll('.fav-dot').forEach((d, k) => d.classList.toggle('on', k === favIdx));
-  if(manual) favAuto(); // reinicia el reloj al navegar a mano
+  favAuto(); // re-arma el reloj: cada slide dura exactamente lo mismo desde que aparece
 }
 
 function favAuto(){
-  clearInterval(favTimer);
-  favTimer = setInterval(() => favGo(favIdx + 1), 4000);
+  clearTimeout(favTimer);
+  favTimer = setTimeout(() => favGo(favIdx + 1), 4000);
 }
 
 buildFavCarousel();
