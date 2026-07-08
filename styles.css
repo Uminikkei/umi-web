@@ -605,11 +605,10 @@ nav{
   .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:left;align-items:flex-start;position:relative;z-index:2}
   .cream-label{text-align:left}
   .cream-desc{margin-left:0;margin-right:0}
-  /* La parte superior de la imagen sube un poco y pasa por debajo del texto */
-  .cream-photo{flex:none;width:100%;height:320px;margin-top:-62px;position:relative;z-index:1}
-  .cream-photo img{object-position:50% 68%}
-  /* Difuminado más suave para que se vea más la imagen bajo el texto */
-  .cream-photo::before{background:linear-gradient(to bottom,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 9%)}
+  /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto) y parte superior difuminada en negro */
+  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1}
+  .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 16%)}
 }
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem}
@@ -2440,4 +2439,9 @@ footer strong{color:var(--teal)}
   .cream-etim-full .significado-label,
   .cream-etim-full .significado-title{text-align:center}
   .cream-etim-full .significado-desc{text-align:left;margin-left:0;margin-right:0}
+  /* Sección más estrecha: menos área gris (menos padding y ola superior más baja) */
+  .cream-etim-full{padding-top:0;padding-bottom:6px}
+  .etim-sec .etim-wave svg{height:55px}
+  .cream-etim-full .significado-desc{margin-bottom:.4rem}
+  .cream-etim .sig-layout{margin-top:0}
 }
