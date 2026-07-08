@@ -913,7 +913,7 @@ const PHOTO_OVERRIDES = {
   'Coca Cola 350cc': 'coca-cola-classic.jpg', 'Coca Cola Zero': 'coca-cola-zero.png',
   'Pepsi': 'pepsi.jpg', 'Pepsi zero': 'pepsi-zero.jpg', 'Sprite': 'sprite.png', 'Fanta': 'fanta.jpg',
   'Crush': 'crush.jpg', 'Limon soda': 'limon-soda.jpg', 'Kem piña': 'kem.png',
-  'Ginger ale': 'ginger-ale.jpg', 'Ginger ale zero': 'ginger-ale-zero.jpg', 'Canada dry tonica': 'canada-dry-tonica.jpg',
+  'Ginger ale': 'ginger-ale.jpg', 'Ginger ale zero': 'ginger-ale-zero.jpg', 'Canada dry tonica': 'canada-dry-tonica.jpg', 'Canada dry tonica zero': 'canada-dry-tonica-zero.jpg',
   'Redbull original': 'redbull-original.png', 'Redbull yellow': 'redbull-yellow.png',
   'Fentimans indian water tonic': 'fentimans-indian-tonic.png', 'Fentimans rose lemonade': 'fentimans-rose-lemonade.png',
   'Fentimans ginger beer': 'fentimans-ginger-beer.png', 'Fentimans water tonic ligth': 'fentimans-light-tonic.jpg'
