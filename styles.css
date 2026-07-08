@@ -515,7 +515,7 @@ nav{
   overflow:hidden;
   display:flex;
   align-items:stretch;
-  height:560px;
+  height:490px;
 }
 .cream-inner{
   flex:1 1 55%;
@@ -743,7 +743,7 @@ footer{
 }
 .menu-wave-top{line-height:0}
 .menu-wave-top svg{display:block;width:100%;height:90px;overflow:visible}
-.menu-sec-inner{max-width:1440px;margin:0 auto;text-align:center;padding:2.4rem 1rem 0}
+.menu-sec-inner{max-width:1440px;margin:0 auto;text-align:center;padding:1.3rem 1rem 0}
 
 /* ── ZONA TEAL: texto oscuro sobre fondo teal ── */
 .menu-sec .sec-label{color:rgba(4,7,9,.78)}
@@ -769,7 +769,7 @@ footer{
 /* ── ZONA OSCURA: items del menú ── */
 .menu-dark-area{
   background:var(--teal);
-  padding:.4rem 0 2.5rem;
+  padding:.4rem 0 1.2rem;
   position:relative;
 }
 .menu-dark-area > div{padding:0 2rem}
@@ -2428,11 +2428,11 @@ footer strong{color:var(--teal)}
 .foto-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
 /* ─── Etimología a lo ancho debajo de Nuestra Historia ──────────────────────── */
 .cream-etim-full{
-  max-width:1000px; margin:.2rem auto 0; padding:0 2rem 1.5rem;
+  max-width:1000px; margin:.2rem auto 0; padding:0 2rem .6rem;
   text-align:center;
 }
-/* Sección Etimología: fondo arena con ola separadora (cream por delante) */
-.etim-sec{background:#2a2a2f;position:relative}   /* tono oscuro, más claro que negro */
+/* Sección Etimología: mismo azul que la palabra MENÚ grande (coherencia de color) */
+.etim-sec{background:#0d1e40;position:relative}
 .etim-wave{line-height:0}
 .etim-wave svg{display:block;width:100%;height:90px;overflow:visible}
 @media(max-width:700px){
