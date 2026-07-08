@@ -720,7 +720,7 @@ footer{
 .footer-social a:hover{transform:scale(1.12)}
 /* Cada botón: SOLO el borde (y el ícono) del color de su app, fondo transparente */
 .footer-social a[title="Instagram"]{border-color:#E1306C;color:#E1306C}    /* fucsia rosa */
-.footer-social a[title="TikTok"]{border-color:#1f3f8c;color:#1f3f8c}       /* azul UMI */
+.footer-social a[title="TikTok"]{border-color:var(--teal);color:var(--teal)}   /* azul del fondo del menú (teal) */
 .footer-social a[title="WhatsApp"]{border-color:#25D366;color:#25D366}     /* verde */
 .footer-social a[title="TripAdvisor"]{border-color:#00AF87;color:#00AF87}  /* verde */
 .footer-social a[title="Google Maps"]{border-color:#EA4335;color:#EA4335}  /* rojo (ubicación) */
