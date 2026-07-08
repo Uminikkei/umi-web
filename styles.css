@@ -713,11 +713,17 @@ footer{
 .footer-social a{flex:0 0 auto}
 .footer-social a{
   width:36px;height:36px;border-radius:50%;
-  border:1px solid rgba(240,235,224,.2);
+  border:none;
   display:flex;align-items:center;justify-content:center;
-  color:rgba(240,235,224,.5);font-size:.8rem;transition:all .2s;
+  color:#fff;font-size:.8rem;transition:transform .2s, opacity .2s;
 }
-.footer-social a:hover{border-color:var(--teal);color:var(--teal)}
+.footer-social a:hover{transform:scale(1.12);opacity:.9}
+/* Cada botón con el color de su app */
+.footer-social a[title="Instagram"]{background:#E1306C}    /* fucsia rosa */
+.footer-social a[title="TikTok"]{background:#1f3f8c}       /* azul UMI */
+.footer-social a[title="WhatsApp"]{background:#25D366}     /* verde */
+.footer-social a[title="TripAdvisor"]{background:#00AF87}  /* verde */
+.footer-social a[title="Google Maps"]{background:#EA4335}  /* rojo (ubicación) */
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.06);
   padding:1.2rem 2rem;max-width:1240px;margin:0 auto;
