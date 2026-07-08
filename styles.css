@@ -807,9 +807,9 @@ footer{
 .menu-dark-area .item .item-img[alt="Torta Opera"]{ transform:scale(1.18); }
 .menu-dark-area .item:hover .item-img[alt="Chicken Katsu"],
 .menu-dark-area .item:hover .item-img[alt="Torta Opera"]{ transform:scale(1.24); }
-/* Tiramisú: zoom + centrar el domo (mostrar la flor completa arriba) */
-.menu-dark-area .item .item-img[alt="Tiramisú"]{ transform:scale(1.18); object-position:50% 40%; }
-.menu-dark-area .item:hover .item-img[alt="Tiramisú"]{ transform:scale(1.24); }
+/* Tiramisú: más zoom (protagonismo) + domo centrado */
+.menu-dark-area .item .item-img[alt="Tiramisú"]{ transform:scale(1.28); object-position:50% 50%; }
+.menu-dark-area .item:hover .item-img[alt="Tiramisú"]{ transform:scale(1.34); }
 /* Postre del Amor: bajar la foto para que se vea completo el postre rojo */
 .menu-dark-area .item .item-img[alt="Postre del Amor"]{ object-position:50% 30%; }
 .menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; flex:1; background:#cdeff6; position:relative; z-index:1; }
@@ -1266,8 +1266,7 @@ footer{
 .prod-img.prod-img--bebida{ object-fit:contain; background:#fff; padding:14px; }
 .prod-body{
   padding:1.1rem 1.2rem 1.3rem;margin-top:.8rem;
-  background:rgba(240,232,216,.92);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  background:#cdeff6;   /* mismo azul de las casillas del menú */
   border-radius:8px;
   box-shadow:0 10px 28px rgba(0,0,0,.3);
 }
