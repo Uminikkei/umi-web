@@ -188,7 +188,7 @@ function buildMenu(){
   const IC = (f, s, dyp=0) => `<img src="${f}" style="--dyp:${dyp}%;width:${s}px;height:${s}px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,calc(-50% - var(--dyp)));z-index:3;pointer-events:none">`;
   const MAIN = {
     'Para Compartir': { icon:'icon_compartir.svg', size:130, cats:['Entradas'], ring:'Compartir' },
-    'Sushi':     { icon:'icon_sushi.png',    size:105, cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
+    'Sushi':     { icon:'icon_sushi.png',    size:125, cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
     'Ceviches':  { icon:'icon_ceviches.svg', size:155, cats:['Ceviches'], ring:'Ceviches' },
     'Tiraditos': { icon:'icon_tiraditos.svg',size:150, cats:['Tiraditos'], ring:'Tiraditos' },
     'Ensaladas': { icon:'icon_ensaladas.svg',size:130, cats:['Ensaladas'], ring:'Ensaladas' },
