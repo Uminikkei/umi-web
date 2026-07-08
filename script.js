@@ -164,6 +164,7 @@ function openProductModal(name, price, emoji, cat){
   _prodCurrent = { name, price, emoji, cat };
   const imgEl = document.getElementById('prodImg');
   if(img){ imgEl.src = img; imgEl.style.display = ''; } else { imgEl.style.display = 'none'; }
+  imgEl.classList.toggle('prod-img--bebida', cat === 'Bebidas');   // bebidas: mostrar completa (contain), no recortada
   document.getElementById('prodName').textContent = dishName(name);
   const dEl = document.getElementById('prodDesc');
   dEl.textContent = desc; dEl.style.display = desc ? '' : 'none';
