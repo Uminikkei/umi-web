@@ -1216,16 +1216,9 @@ footer{
   background:var(--bg3);flex-shrink:0;
 }
 .item-img--bebida{
-  object-fit:contain;padding:14px 12px;
+  object-fit:contain;padding:2px 12px;   /* latas y botellas al mismo tamaño (llenan el alto) */
   background:#fff;   /* fotos de producto sobre blanco: se funden con el panel */
 }
-/* Botellas un poco más altas que las latas (menos padding vertical) */
-.item-img--bebida[alt="Agua con gas"],
-.item-img--bebida[alt="Agua sin gas"],
-.item-img--bebida[alt="Fentimans indian water tonic"],
-.item-img--bebida[alt="Fentimans water tonic ligth"],
-.item-img--bebida[alt="Fentimans rose lemonade"],
-.item-img--bebida[alt="Fentimans ginger beer"]{ padding:2px 14px; }
 .item-img-placeholder{
   width:100%;aspect-ratio:4/3;background:var(--bg3);
   display:flex;align-items:center;justify-content:center;
