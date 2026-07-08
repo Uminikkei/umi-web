@@ -833,7 +833,7 @@ footer{
 .menu-dark-area .item-cart:hover svg{ fill:#1f3f8c; }
 .item-img-placeholder svg{width:56px;height:40px}
 .menu-dark-area .item-img-placeholder{background:#eef0f2;border-bottom-color:rgba(0,0,0,.08);color:rgba(13,30,64,.35)}
-.menu-dark-area .item-img--bebida{background:#0d1e40}
+.menu-dark-area .item-img--bebida{background:#fff}
 
 /* ── OLA INFERIOR DEL MENÚ: oscuro → siguiente sección ── */
 .menu-bottom-wave{
@@ -1216,8 +1216,8 @@ footer{
   background:var(--bg3);flex-shrink:0;
 }
 .item-img--bebida{
-  object-fit:contain;padding:10px;
-  background:#060e1f;
+  object-fit:contain;padding:14px 12px;
+  background:#fff;   /* fotos de producto sobre blanco: se funden con el panel */
 }
 .item-img-placeholder{
   width:100%;aspect-ratio:4/3;background:var(--bg3);
