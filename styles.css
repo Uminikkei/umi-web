@@ -1263,12 +1263,12 @@ footer{
   border-radius:8px;
   box-shadow:0 10px 28px rgba(0,0,0,.3);
 }
-.prod-name{font-family:var(--serif);font-size:1.5rem;color:#1a2433;margin-bottom:.5rem;line-height:1.2}
-.prod-desc{font-size:.92rem;color:rgba(4,7,9,.62);line-height:1.55;margin-bottom:1.2rem}
+.prod-name{font-family:var(--serif);font-size:1.5rem;color:#0d1e40;margin-bottom:.5rem;line-height:1.2}
+.prod-desc{font-size:.92rem;color:#0d1e40;line-height:1.55;margin-bottom:1.2rem}
 .prod-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .prod-price{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:700;color:#0d1e40}
-.prod-add{background:#a8843a;color:#fdf6e3;border:none;border-radius:999px;padding:.8rem 1.4rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--sans);transition:opacity .2s;position:relative;z-index:4;display:inline-flex;align-items:center;gap:.5rem}
-.prod-add svg{fill:#fdf6e3;flex-shrink:0}
+.prod-add{background:var(--teal);color:#0d1e40;border:none;border-radius:999px;padding:.8rem 1.4rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--sans);transition:opacity .2s;position:relative;z-index:4;display:inline-flex;align-items:center;gap:.5rem}
+.prod-add svg{fill:#0d1e40;flex-shrink:0}
 .prod-add:hover{opacity:.88}
 
 /* ── ABOUT ── */
