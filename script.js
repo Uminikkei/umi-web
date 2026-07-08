@@ -1155,11 +1155,34 @@ document.addEventListener('keydown', (e) => {
     el.addEventListener('touchend', () => { clearTimeout(el._rs); el._rs = setTimeout(start, 2500); }, {passive:true});
     start();
   }
-  // Galería: se desliza sola en todas las pantallas
+  // Auto-desplazamiento "ida y vuelta" SIN duplicar contenido (para los reels): mantiene
+  // los 4 videos originales, se autodesliza y permite deslizar con el dedo.
+  function autoPingPong(el, speed){
+    if(!el || el.children.length === 0) return;
+    el.style.scrollBehavior = 'auto';
+    let auto = null, dir = 1, pos = 0;
+    function tick(){
+      const max = el.scrollWidth - el.clientWidth;
+      if(max <= 0) return;
+      pos += speed * dir;
+      if(pos >= max){ pos = max; dir = -1; }
+      else if(pos <= 0){ pos = 0; dir = 1; }
+      el.scrollLeft = pos;
+    }
+    function start(){ clearInterval(auto); pos = el.scrollLeft; auto = setInterval(tick, 16); }
+    function stop(){ clearInterval(auto); }
+    el.addEventListener('mouseenter', stop);
+    el.addEventListener('mouseleave', start);
+    // Deslizar con el dedo: pausa el auto y reanuda desde donde quedó
+    el.addEventListener('touchstart', stop, {passive:true});
+    el.addEventListener('touchend', () => { clearTimeout(el._rs); el._rs = setTimeout(start, 2500); }, {passive:true});
+    start();
+  }
+  // Galería: se desliza sola en todas las pantallas (loop continuo)
   autoLoop(document.getElementById('eventosGrid'), 0.3);
-  // Reels: sólo en móvil (en PC ya se ven las 4 en cuadrícula), un poco más rápidos
+  // Reels: sólo en móvil (en PC ya se ven las 4 en cuadrícula); sin duplicar, ida y vuelta
   if(window.matchMedia('(max-width:700px)').matches){
-    autoLoop(document.querySelector('.reels-grid'), 0.6);
+    autoPingPong(document.querySelector('.reels-grid'), 0.6);
   }
 })();
 
