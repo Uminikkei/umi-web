@@ -870,7 +870,7 @@ footer{
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
   background:#000;   /* fondo negro */
-  padding:8rem 0 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
+  padding:3.5rem 0 5rem;   /* área más estrecha; bottom deja aire para la ola divisoria */
   position:relative;
 }
 .eventos-inner{max-width:none;margin:0;text-align:center}
