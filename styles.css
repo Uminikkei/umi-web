@@ -605,10 +605,12 @@ nav{
   .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:left;align-items:flex-start;position:relative;z-index:2}
   .cream-label{text-align:left}
   .cream-desc{margin-left:0;margin-right:0}
-  /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto) y parte superior difuminada en negro */
-  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1}
+  /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto), subida casi hasta el texto, parte superior difuminada en negro */
+  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-42px}
   .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
   .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 16%)}
+  /* La ola de etimología sube y tapa el borde inferior de la imagen */
+  .etim-sec{margin-top:-34px;z-index:2}
 }
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem}
