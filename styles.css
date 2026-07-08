@@ -1152,7 +1152,7 @@ footer{
   .cat-circles{padding:0 .3rem}
   .cat-circ{flex:0 0 33.333%;max-width:33.333%}
   .cat-circ-wrap{width:120px;height:120px;margin:0 auto}
-  .cat-circ-inner img{transform:translate(-50%,-50%) scale(.64)!important}
+  .cat-circ-inner img{transform:translate(-50%,calc(-50% - var(--dyp,0%))) scale(.64)!important}
   .cat-circ-blob{width:70px;height:70px}
   .cat-circ-label{margin-top:-1.2rem;font-size:.56rem;letter-spacing:1px}
   /* Título de categoría más pegado a la línea inferior */
