@@ -186,7 +186,7 @@ function buildMenu(){
   // Geoglifos dorados — tamaños normalizados por viewBox de cada SVG
   const IC = (f, s) => `<img src="${f}" style="width:${s}px;height:${s}px;max-width:none;max-height:none;object-fit:contain;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none">`;
   const MAIN = {
-    'Para Compartir': { icon:'icon_postres.png', size:130, cats:['Entradas'], ring:'Compartir' },
+    'Para Compartir': { icon:'icon_compartir.svg', size:130, cats:['Entradas'], ring:'Compartir' },
     'Sushi':     { icon:'icon_sushi.png',    size:115, cats:['Sushi Rolls','Rolls de Autor','Nigiris & Gunkans','Sashimi 3 Cortes'], ring:'Sushi' },
     'Ceviches':  { icon:'icon_ceviches.svg', size:155, cats:['Ceviches'], ring:'Ceviches' },
     'Tiraditos': { icon:'icon_tiraditos.svg',size:150, cats:['Tiraditos'], ring:'Tiraditos' },
