@@ -658,9 +658,9 @@ nav{
     background:var(--teal);
     padding:.9rem .4rem .7rem;margin:0 -1rem;
     box-shadow:0 6px 14px rgba(4,7,9,.18);
-    flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;scrollbar-width:none;
+    /* Las que no caben pasan a una 2ª línea; todas visibles, centradas */
+    flex-wrap:wrap;justify-content:center;gap:.5rem;
   }
-  .subcat-row.open::-webkit-scrollbar{display:none}
   .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
   .footer-brand{grid-column:auto}
 }
@@ -812,14 +812,13 @@ footer{
 }
 .menu-dark-area .item-price{ color:#1f3f8c; font-size:.88rem; font-weight:600; }
 .menu-dark-area .item-cart{
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(98,202,227,.65);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  box-shadow:0 3px 8px rgba(31,63,140,.25);
+  width:32px;height:32px;border-radius:0;
+  background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:none;
 }
-.menu-dark-area .item-cart svg{ fill:#fffdf6; transition:fill .2s; }
-.menu-dark-area .item-cart:hover{ background:rgba(98,202,227,.9); transform:scale(1.1); }
-.menu-dark-area .item-cart:hover svg{ fill:#fffdf6; }
+.menu-dark-area .item-cart svg{ fill:#1f3f8c; width:24px;height:24px; transition:fill .2s,transform .15s; }
+.menu-dark-area .item-cart:hover{ background:transparent; transform:scale(1.15); }
+.menu-dark-area .item-cart:hover svg{ fill:#1f3f8c; }
 .item-img-placeholder svg{width:56px;height:40px}
 .menu-dark-area .item-img-placeholder{background:#eef0f2;border-bottom-color:rgba(0,0,0,.08);color:rgba(13,30,64,.35)}
 .menu-dark-area .item-img--bebida{background:#0d1e40}
@@ -870,7 +869,7 @@ footer{
 
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
-  background:#26456c;   /* azul UMI 2-3 tonos más oscuro (sigue por encima del navy de "cómo lo hacemos") */
+  background:#000;   /* fondo negro */
   padding:8rem 0 6.5rem;   /* top despeja la ola del menú; bottom deja aire para la ola divisoria */
   position:relative;
 }
