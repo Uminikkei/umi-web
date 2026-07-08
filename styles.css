@@ -713,17 +713,17 @@ footer{
 .footer-social a{flex:0 0 auto}
 .footer-social a{
   width:36px;height:36px;border-radius:50%;
-  border:none;
+  border:2px solid;background:transparent;
   display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:.8rem;transition:transform .2s, opacity .2s;
+  font-size:.8rem;transition:transform .2s;
 }
-.footer-social a:hover{transform:scale(1.12);opacity:.9}
-/* Cada botón con el color de su app */
-.footer-social a[title="Instagram"]{background:#E1306C}    /* fucsia rosa */
-.footer-social a[title="TikTok"]{background:#1f3f8c}       /* azul UMI */
-.footer-social a[title="WhatsApp"]{background:#25D366}     /* verde */
-.footer-social a[title="TripAdvisor"]{background:#00AF87}  /* verde */
-.footer-social a[title="Google Maps"]{background:#EA4335}  /* rojo (ubicación) */
+.footer-social a:hover{transform:scale(1.12)}
+/* Cada botón: SOLO el borde (y el ícono) del color de su app, fondo transparente */
+.footer-social a[title="Instagram"]{border-color:#E1306C;color:#E1306C}    /* fucsia rosa */
+.footer-social a[title="TikTok"]{border-color:#1f3f8c;color:#1f3f8c}       /* azul UMI */
+.footer-social a[title="WhatsApp"]{border-color:#25D366;color:#25D366}     /* verde */
+.footer-social a[title="TripAdvisor"]{border-color:#00AF87;color:#00AF87}  /* verde */
+.footer-social a[title="Google Maps"]{border-color:#EA4335;color:#EA4335}  /* rojo (ubicación) */
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.06);
   padding:1.2rem 2rem;max-width:1240px;margin:0 auto;
