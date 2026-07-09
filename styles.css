@@ -71,6 +71,8 @@ html::-webkit-scrollbar{display:none}
 .umi-scrollbar-arrow--up::before{transform:rotate(45deg);margin-top:2px}    /* ▲ */
 .umi-scrollbar-arrow--down{bottom:3px}
 .umi-scrollbar-arrow--down::before{transform:rotate(225deg);margin-bottom:2px} /* ▼ */
+/* En móvil se navega con el dedo: la barra propia sobra y se duplica con la nativa (dos barras / línea azul). Ocultarla. */
+@media(max-width:700px){.umi-scrollbar{display:none!important}}
 
 /* Botón de sonido de olas: pequeño, delicado, misma estética que los iconos usuario/bolsa del navbar */
 .sound-toggle{
