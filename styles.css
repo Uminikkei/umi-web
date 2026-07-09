@@ -1023,9 +1023,8 @@ footer{
 /* Móvil: el desenfoque SVG (feGaussianBlur) sobre olas en movimiento hace parpadear
    la GPU de muchos teléfonos; se desactiva sólo el filtro (la línea queda nítida). */
 @media(max-width:700px){
-  .wave-anim svg path[filter]{filter:none!important}
-  /* Sin el desenfoque, la línea de "espuma" de la ola del navbar se ve como un borde
-     blanco nítido: se oculta en móvil */
+  /* Las sombras de las olas van difuminadas (con desenfoque) también en móvil.
+     La línea de "espuma" blanca de la ola del navbar se oculta para que no se vea como borde. */
   .top-wave svg path[stroke]{display:none}
 }
 
