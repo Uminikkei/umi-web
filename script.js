@@ -100,7 +100,7 @@
   let userMuted = localStorage.getItem('umiMuted') === '1';
   const VOL = 0.5;
   const SRC = (audioEl && audioEl.getAttribute('src')) || 'olas-playa.mp3';
-  const EV = ['pointerdown','touchstart','keydown','scroll','mousemove','click'];
+  const EV = ['pointerdown','pointerup','touchstart','touchend','keydown','scroll','mousemove','click'];
   btn.classList.toggle('muted', userMuted);
 
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -127,8 +127,16 @@
       }).catch(() => { if(!handled) startElement(); });
 
       resume();                              // intento inmediato (visitante recurrente / permiso previo)
-      const fg = () => { EV.forEach(ev => window.removeEventListener(ev, fg, true)); resume(); };
-      EV.forEach(ev => window.addEventListener(ev, fg, {passive:true, capture:true}));
+      // Activación robusta en MÓVIL: reintenta en CADA gesto hasta que el contexto esté
+      // realmente corriendo. Un scroll en iOS no siempre desbloquea el audio (un toque sí),
+      // así que NO quitamos los listeners hasta confirmar que suena. Además, un buffer
+      // silencioso dentro del gesto desbloquea el audio en iOS.
+      const onGesture = () => {
+        if(ctx.state === 'running'){ EV.forEach(ev => window.removeEventListener(ev, onGesture, true)); return; }
+        try { const s = ctx.createBufferSource(); s.buffer = ctx.createBuffer(1, 1, 22050); s.connect(ctx.destination); s.start(0); } catch(e){}
+        ctx.resume().then(() => { if(ctx.state === 'running') EV.forEach(ev => window.removeEventListener(ev, onGesture, true)); }).catch(()=>{});
+      };
+      EV.forEach(ev => window.addEventListener(ev, onGesture, {passive:true, capture:true}));
 
       window.toggleSound = function(){
         userMuted = !userMuted;
