@@ -1772,3 +1772,77 @@ function toggleMobileMenu(){
   if(burger){ burger.classList.toggle('on', open); burger.setAttribute('aria-expanded', open); }
   document.body.style.overflow = open ? 'hidden' : '';
 }
+
+// ── GEOGLIFOS INTERACTIVOS (Etimología) ────────────────────────────────────────
+// Se inyecta el SVG inline (para poder animar cada geoglifo por separado), se agrupan
+// los trazos por posición X (viento / mar / espíritu / resultado) y se anima al pasar
+// el dedo o el mouse; la animación se DETIENE al soltar. Viento gira, Mar se balancea
+// como un barco, y en Espíritu los puntos aparecen uno por uno, desaparecen y repiten.
+(function(){
+  const NS = 'http://www.w3.org/2000/svg';
+  function init(){
+    const img = document.querySelector('img.sig-svg');
+    if(!img) return;
+    fetch(img.getAttribute('src')).then(r => r.text()).then(txt => {
+      const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+      const svg = doc.querySelector('svg');
+      const inner = svg && svg.querySelector('g');
+      if(!inner) return;
+      const mk = cls => { const g = doc.createElementNS(NS,'g'); g.setAttribute('class',cls); return g; };
+      const gV = mk('geo geo-viento'), gM = mk('geo geo-mar'), gE = mk('geo geo-espiritu'), gR = mk('geo-result');
+      const aV = mk('geo-anim'), aM = mk('geo-anim'), aE = mk('geo-anim');
+      gV.appendChild(aV); gM.appendChild(aM); gE.appendChild(aE);
+
+      // Clasificar cada trazo por su X de inicio (contando su propio translate)
+      Array.from(inner.querySelectorAll('path')).forEach(p => {
+        const d = p.getAttribute('d') || '';
+        const m = /M\s*(-?[\d.]+)[\s,]+(-?[\d.]+)/.exec(d);
+        let x = m ? parseFloat(m[1]) : 0;
+        const t = p.getAttribute('transform');
+        if(t){ const tm = /translate\(\s*(-?[\d.]+)/.exec(t); if(tm) x += parseFloat(tm[1]); }
+        if(x < 8000) aV.appendChild(p);
+        else if(x < 14000) aM.appendChild(p);
+        else if(x < 19000) aE.appendChild(p);
+        else gR.appendChild(p);
+      });
+      inner.appendChild(gV); inner.appendChild(gM); inner.appendChild(gE); inner.appendChild(gR);
+
+      svg.setAttribute('class', img.getAttribute('class') || 'sig-svg');
+      svg.setAttribute('role','img');
+      svg.setAttribute('aria-label', img.getAttribute('alt') || 'UMI');
+      img.replaceWith(svg);   // el SVG queda en el documento → getBBox disponible
+
+      // Espíritu: separar el cuenco (bbox más grande) de los 5 puntos y ordenarlos izq→der
+      const esp = Array.from(aE.children).map(p => ({ p, bb: p.getBBox() }));
+      if(esp.length){
+        let bowl = esp[0];
+        esp.forEach(o => { if(o.bb.width > bowl.bb.width) bowl = o; });
+        bowl.p.setAttribute('class','geo-bowl');
+        esp.filter(o => o !== bowl).sort((a,b) => a.bb.x - b.bb.x)
+           .forEach((o,i) => o.p.setAttribute('class','geo-dot gd'+(i+1)));
+      }
+
+      // Zona de contacto invisible (toda el área del geoglifo responde) + eventos dedo/mouse
+      document.querySelectorAll('.sig-svg .geo').forEach(g => {
+        const anim = g.querySelector('.geo-anim');
+        try {
+          const bb = anim.getBBox(), pad = 70;
+          const r = document.createElementNS(NS,'rect');
+          r.setAttribute('x', bb.x - pad); r.setAttribute('y', bb.y - pad);
+          r.setAttribute('width', bb.width + 2*pad); r.setAttribute('height', bb.height + 2*pad);
+          r.setAttribute('fill','transparent'); r.setAttribute('pointer-events','all');
+          g.insertBefore(r, g.firstChild);
+        } catch(e){}
+        const play = () => g.classList.add('playing');
+        const stop = () => g.classList.remove('playing');
+        g.addEventListener('mouseenter', play);
+        g.addEventListener('mouseleave', stop);
+        g.addEventListener('touchstart', play, { passive:true });
+        g.addEventListener('touchend', stop);
+        g.addEventListener('touchcancel', stop);
+      });
+    }).catch(()=>{});
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();

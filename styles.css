@@ -584,6 +584,30 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .sig-layout{ max-width:900px; margin:-4% auto 0; }
 .sig-img-wrap{ position:relative; }
 .sig-svg{ width:100%; height:auto; display:block; filter:drop-shadow(0 5px 5px rgba(4,7,9,.35)); }
+/* ── Geoglifos interactivos: animación al pasar el dedo/mouse, se detiene al soltar ── */
+.sig-svg .geo{ cursor:pointer; }
+.sig-svg .geo-anim{ transform-box:fill-box; transform-origin:center center; }
+/* Viento → gira */
+@keyframes geo-spin{ to{ transform:rotate(360deg); } }
+.geo-viento.playing .geo-anim{ animation:geo-spin 2.2s linear infinite; }
+/* Mar → se balancea como un barco */
+@keyframes geo-sway{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(7deg); } }
+.geo-mar.playing .geo-anim{ animation:geo-sway 1.8s ease-in-out infinite; }
+/* Espíritu → los puntos aparecen uno por uno, desaparecen todos y vuelven a aparecer */
+.geo-espiritu .geo-dot{ opacity:1; }
+@keyframes geo-dot1{ 0%{opacity:0} 5%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
+@keyframes geo-dot2{ 0%,16%{opacity:0} 21%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
+@keyframes geo-dot3{ 0%,32%{opacity:0} 37%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
+@keyframes geo-dot4{ 0%,48%{opacity:0} 53%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
+@keyframes geo-dot5{ 0%,64%{opacity:0} 69%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
+.geo-espiritu.playing .gd1{ animation:geo-dot1 2.4s linear infinite; }
+.geo-espiritu.playing .gd2{ animation:geo-dot2 2.4s linear infinite; }
+.geo-espiritu.playing .gd3{ animation:geo-dot3 2.4s linear infinite; }
+.geo-espiritu.playing .gd4{ animation:geo-dot4 2.4s linear infinite; }
+.geo-espiritu.playing .gd5{ animation:geo-dot5 2.4s linear infinite; }
+@media(prefers-reduced-motion:reduce){
+  .geo-viento.playing .geo-anim,.geo-mar.playing .geo-anim,.geo-espiritu.playing .geo-dot{ animation:none; }
+}
 .sig-op{
   position:absolute;
   transform:translate(-50%,-50%);
@@ -2573,9 +2597,9 @@ footer strong{color:var(--teal)}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
   #favCarousel{height:440px;margin-top:-95px;z-index:3}   /* sube la sección COMPLETA (ola + fotos) por encima del hero; la ola es SÓLIDA (no gradiente) así que tapa el borde de las fotos y no hay reflejos */
-  .fav-head{top:92px}
-  .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
-  .fav-dots{bottom:92px}
+  .fav-head{top:70px}                /* título Los más pedidos un poco más arriba */
+  .fav-info{bottom:54px;right:6vw;z-index:4}  /* nombre+precio+comprar más abajo; z-4 va SIEMPRE delante de la ola (z-2) */
+  .fav-dots{bottom:70px;z-index:4}   /* puntitos de cambiar foto al mismo nivel que el precio */
   .fav-name{font-size:1rem}
   .fav-price{font-size:.85rem}
   .fav-add{width:38px;height:38px}
