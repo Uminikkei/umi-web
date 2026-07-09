@@ -47,8 +47,9 @@ export default async function handler(req, res) {
     const data = await mpRes.json();
     console.log('[PAGO] status=', data.status, 'detail=', data.status_detail);
 
-    // Si el pago fue aprobado, avisar a Umi por WhatsApp (CallMeBot) y por Email
+    // Si el pago fue aprobado, avisar a Umi por Telegram (instantáneo), WhatsApp (CallMeBot) y Email
     if (data.status === 'approved') {
+      try { await avisarTelegram(req.body.order); } catch (e) { console.log('[TG] error:', e.message); }
       try { await avisarWhatsApp(req.body.order); } catch (e) { console.log('[WA] error:', e.message); }
       try { await avisarEmail(req.body.order); }    catch (e) { console.log('[EMAIL] error:', e.message); }
     }
@@ -62,6 +63,51 @@ export default async function handler(req, res) {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+}
+
+// ── Aviso automático a Umi por Telegram (instantáneo y gratis) ──────────────────
+async function avisarTelegram(order) {
+  const TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
+  const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+  console.log('[TG] token?', !!TOKEN, 'chat?', !!CHAT_ID, 'order?', !!order);
+  if (!TOKEN || !CHAT_ID || !order) return; // si no está configurado, no hace nada
+
+  const fmt = (n) => '$' + Math.round(Number(n) || 0).toLocaleString('es-CL');
+  // Escapar caracteres que rompen el HTML de Telegram (parse_mode=HTML)
+  const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const entregaLabel = order.entregaMode === 'delivery' ? '🛵 Delivery' : '🏠 Retiro en local';
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  let t = '🛎️ <b>NUEVO PEDIDO — Umi</b>\n💳 <b>PAGADO CON TARJETA</b>\n\n<b>Detalle:</b>\n';
+  items.forEach((r) => { t += `• ${esc(r.n)} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
+  if (order.entregaMode === 'delivery' && order.deliveryFee > 0) {
+    const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
+    t += `\nSubtotal: ${fmt(sub)}\nEnvío (${esc(order.deliveryKm)} km): ${fmt(order.deliveryFee)}\n<b>Total: ${fmt(order.total)}</b>\n\n`;
+  } else {
+    t += `\n<b>Total: ${fmt(order.total)}</b>\n\n`;
+  }
+  t += `👤 <b>Cliente:</b> ${esc(order.name)}\n📞 <b>Tel:</b> ${esc(order.phone)}\n📦 <b>Entrega:</b> ${entregaLabel}\n`;
+  if (order.entregaMode === 'delivery' && order.addr) {
+    const mapsLink = (order.lat && order.lng)
+      ? `https://maps.google.com/?q=${order.lat},${order.lng}`
+      : `https://maps.google.com/?q=${encodeURIComponent(order.addr + ', Coquimbo, Chile')}`;
+    t += `📍 <b>Dirección:</b> ${esc(order.addr)}\n🗺️ <a href="${mapsLink}">Ver en Google Maps</a>\n`;
+  }
+  if (order.notes) t += `📝 <b>Notas:</b> ${esc(order.notes)}\n`;
+
+  const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: t,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true
+    })
+  });
+  const body = await r.text();
+  console.log('[TG] Telegram respondió:', body.slice(0, 200));
 }
 
 // ── Aviso automático a Umi por WhatsApp (CallMeBot) ─────────────────────────────
