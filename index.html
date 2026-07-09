@@ -263,7 +263,7 @@
 <section class="menu-sec" id="menu">
 
   <!-- Ola superior: arena (etimología) por delante, entra al teal del menú -->
-  <div class="menu-wave-top wave-anim wa-slow" aria-hidden="true">
+  <div class="menu-wave-top wave-anim wa-slow wa-rev" aria-hidden="true">
     <svg viewBox="0 0 2880 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="menuWaveTopBlur" x="-10%" y="-200%" width="120%" height="500%">
@@ -301,16 +301,15 @@
   </div>
 
   <!-- Contorno INFERIOR real de la caligrafía UMI — fondo oscuro asciende desde el suelo de las letras -->
-  <div class="menu-bottom-wave" aria-hidden="true">
-    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="menu-bottom-wave wave-anim" aria-hidden="true">
+    <svg viewBox="0 0 2880 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="menuWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="var(--teal)"
-            d="M0,0 L1440,0 L1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64 Z"/>
-      <path d="M1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#menuWaveBlur)" transform="translate(0,5)"/>
+      <path fill="var(--teal)" d="M0,0 L2880,0 L2880,54 C2640,88 2400,88 2160,54 C1920,24 1680,24 1440,54 C1200,88 960,88 720,54 C480,24 240,24 0,54 Z"/>
+      <path d="M0,54 C240,24 480,24 720,54 C960,88 1200,88 1440,54 C1680,24 1920,24 2160,54 C2400,88 2640,88 2880,54" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#menuWaveBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
 
@@ -345,7 +344,7 @@
   </div>
 
   <!-- Ola divisoria hacia "¿Cómo lo hacemos?" — se desplaza como agua (animación CSS, funciona en todos los navegadores) -->
-  <div class="eventos-wave-bottom wave-anim wa-fast" aria-hidden="true">
+  <div class="eventos-wave-bottom wave-anim wa-fast wa-rev" aria-hidden="true">
     <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="eventosWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
@@ -428,7 +427,7 @@
 <!-- REVIEWS -->
 <section class="reviews-sec">
   <!-- Ola divisoria: el navy de "¿Cómo lo hacemos?" cae sobre "Lo que dicen" -->
-  <div class="reviews-wave-top wave-anim wa-rev" aria-hidden="true">
+  <div class="reviews-wave-top wave-anim" aria-hidden="true">
     <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="reviewsWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
