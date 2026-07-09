@@ -87,6 +87,68 @@
   requestAnimationFrame(loop);
 })();
 
+// ── SONIDO AMBIENTE DE OLAS DEL MAR ────────────────────────────────────────────
+// Generado con Web Audio API (ruido marrón filtrado + oleaje LFO). Sin licencia:
+// no usa ningún archivo ni recurso externo. El botón de la esquina lo silencia.
+(function(){
+  const btn = document.getElementById('soundToggle');
+  if(!btn) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC){ btn.style.display = 'none'; return; }
+  let ctx = null, master = null, built = false;
+  const TARGET = 0.32;                                   // volumen ambiente (suave)
+  let muted = localStorage.getItem('umiMuted') === '1';
+
+  function build(){
+    if(built) return; built = true;
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+    // Ruido marrón (grave, suave) en bucle
+    const N = 2 * ctx.sampleRate;
+    const buf = ctx.createBuffer(1, N, ctx.sampleRate);
+    const d = buf.getChannelData(0); let last = 0;
+    for(let i=0;i<N;i++){ const w = Math.random()*2-1; last = (last + 0.02*w)/1.02; d[i] = last*3.2; }
+    const noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
+    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=560; lp.Q.value=0.5;
+    // Oleaje: dos LFO lentos modulan el volumen (olas que entran y salen)
+    const swell = ctx.createGain(); swell.gain.value = 0.55;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.09;
+    const lg = ctx.createGain(); lg.gain.value = 0.4; lfo.connect(lg); lg.connect(swell.gain);
+    const lfo2 = ctx.createOscillator(); lfo2.frequency.value = 0.16;
+    const lg2 = ctx.createGain(); lg2.gain.value = 0.16; lfo2.connect(lg2); lg2.connect(swell.gain);
+    noise.connect(lp); lp.connect(swell); swell.connect(master);
+    noise.start(); lfo.start(); lfo2.start();
+  }
+  function fadeTo(v){
+    if(!ctx) return;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(v, t + 1.4);
+  }
+  function apply(){
+    build();
+    if(ctx.state === 'suspended') ctx.resume();
+    fadeTo(muted ? 0 : TARGET);
+    btn.classList.toggle('muted', muted);
+  }
+  // Política de autoplay: el audio arranca en el primer gesto del usuario
+  function firstGesture(){
+    ['pointerdown','keydown','scroll','touchstart'].forEach(ev => window.removeEventListener(ev, firstGesture));
+    if(!muted) apply();
+  }
+  if(!muted){
+    ['pointerdown','keydown','scroll','touchstart'].forEach(ev =>
+      window.addEventListener(ev, firstGesture, {passive:true}));
+  }
+  window.toggleSound = function(){
+    muted = !muted;
+    localStorage.setItem('umiMuted', muted ? '1' : '0');
+    apply();
+  };
+  btn.classList.toggle('muted', muted);
+})();
+
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';

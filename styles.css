@@ -72,6 +72,22 @@ html::-webkit-scrollbar{display:none}
 .umi-scrollbar-arrow--down{bottom:3px}
 .umi-scrollbar-arrow--down::before{transform:rotate(225deg);margin-bottom:2px} /* ▼ */
 
+/* Botón de sonido de olas: pequeño, delicado, misma estética que los iconos usuario/bolsa del navbar */
+.sound-toggle{
+  position:fixed;bottom:16px;left:16px;z-index:998;
+  background:transparent;border:none;cursor:pointer;padding:.3rem;
+  color:rgba(240,235,224,.72);
+  display:flex;align-items:center;justify-content:center;
+  transition:color .2s,transform .2s;
+  filter:drop-shadow(0 2px 5px rgba(4,7,9,.55));
+}
+.sound-toggle:hover{color:var(--teal);transform:translateY(-2px)}
+.sound-toggle svg{width:22px;height:22px}
+.sound-toggle .snd-off{display:none}
+.sound-toggle.muted{color:rgba(240,235,224,.5)}
+.sound-toggle.muted .snd-on{display:none}
+.sound-toggle.muted .snd-off{display:block}
+
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
@@ -384,6 +400,15 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   font-weight:900;line-height:.88;letter-spacing:-3px;
   color:var(--white-1);margin-bottom:.3rem;text-transform:uppercase;
 }
+/* "NIKKEI!" ondula como una ola suave: cada letra sube y baja con un desfase */
+.hero-title span{display:inline-block;animation:nikkei-wave 2.8s ease-in-out infinite;will-change:transform}
+.hero-title span:nth-child(2){animation-delay:.11s}
+.hero-title span:nth-child(3){animation-delay:.22s}
+.hero-title span:nth-child(4){animation-delay:.33s}
+.hero-title span:nth-child(5){animation-delay:.44s}
+.hero-title span:nth-child(6){animation-delay:.55s}
+.hero-title span:nth-child(7){animation-delay:.66s}
+@keyframes nikkei-wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-.12em)}}
 .hero-sub{
   font-size:.95rem;color:rgba(240,235,224,.70);
   max-width:400px;margin:0 0 .4rem;font-weight:300;line-height:1.65;
