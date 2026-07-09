@@ -90,9 +90,10 @@ html::-webkit-scrollbar{display:none}
 /* Tooltip del botón de sonido: "Silenciar" si está activo, "Activar" si está silenciado */
 .snd-tip{
   position:absolute;left:0;bottom:calc(100% + 8px);
-  background:rgba(4,7,9,.85);color:#fff;font-family:'Inter',sans-serif;
-  font-size:.62rem;font-weight:600;letter-spacing:.4px;white-space:nowrap;
-  padding:.34rem .7rem;border-radius:999px;
+  background:rgba(98,202,227,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(98,202,227,.5);color:#fff;font-family:'Inter',sans-serif;
+  font-size:.62rem;font-weight:700;letter-spacing:.4px;white-space:nowrap;
+  padding:.3rem .6rem;border-radius:10px;
   opacity:0;pointer-events:none;transition:opacity .2s;
 }
 .snd-tip::after{content:'Silenciar'}
@@ -103,8 +104,8 @@ html::-webkit-scrollbar{display:none}
 .back-to-top{
   position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(10px);
   z-index:997;width:42px;height:42px;border-radius:50%;padding:0;cursor:pointer;
-  background:rgba(4,7,9,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  border:1px solid rgba(240,235,224,.3);color:rgba(240,235,224,.85);
+  background:rgba(98,202,227,.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(98,202,227,.5);color:#fff;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity .3s,transform .3s,background .2s,color .2s,border-color .2s;
@@ -114,9 +115,10 @@ html::-webkit-scrollbar{display:none}
 .back-to-top svg{width:20px;height:20px}
 .btt-tip{
   position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
-  background:rgba(4,7,9,.85);color:#fff;font-family:'Inter',sans-serif;
-  font-size:.62rem;font-weight:600;letter-spacing:.4px;white-space:nowrap;
-  padding:.34rem .7rem;border-radius:999px;
+  background:rgba(98,202,227,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(98,202,227,.5);color:#fff;font-family:'Inter',sans-serif;
+  font-size:.62rem;font-weight:700;letter-spacing:.4px;white-space:nowrap;
+  padding:.3rem .6rem;border-radius:10px;
   opacity:0;pointer-events:none;transition:opacity .2s;
 }
 .back-to-top:hover .btt-tip{opacity:1}
@@ -718,8 +720,10 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* Móvil: menos espacio entre la galería y "¿Cómo lo hacemos?" (se ve más estrecho).
    !important porque las reglas base de estas secciones van después en el archivo. */
 @media(max-width:700px){
-  .eventos-sec{padding-bottom:1rem!important}
+  .eventos-sec{padding-top:1rem!important;padding-bottom:1rem!important}
   .videos-sec{padding-top:1.4rem!important}
+  /* menos espacio negro entre las reseñas y el logo del footer */
+  .reviews-sec{padding-bottom:1.5rem!important}
 }
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem}
@@ -841,7 +845,7 @@ footer{
 .footer-tyc:hover{color:var(--teal)}
 /* Móvil/tablet (≤900px): footer en 2 columnas iguales, centrado (va después de la base para que gane) */
 @media(max-width:900px){
-  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem 1.2rem;padding:2.5rem 1.2rem;justify-items:center}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem 1.2rem;padding:1.5rem 1.2rem 2.5rem;justify-items:center}
   .footer-brand{grid-column:1/-1}
   .footer-info{overflow-wrap:anywhere}
   /* El email completo en una sola línea (sin dividirse) */
@@ -2560,7 +2564,7 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px;margin-top:-80px;z-index:3}   /* sube la sección (más cerca del hero) y va POR ENCIMA del hero para que su ola animada se vea */
+  #favCarousel{height:440px}   /* va debajo del hero (sin solaparse): sin reflejos de las fotos sobre la imagen del hero */
   .fav-head{top:92px}
   .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}
