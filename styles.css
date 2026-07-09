@@ -958,8 +958,8 @@ footer{
 
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
-  background:#000;   /* fondo negro */
-  /* Sin olas de sección: las únicas olas son los bordes de las tarjetas */
+  /* Sin negro: arriba el aqua de UMI (empata con el menú), abajo el azul de "¿cómo lo hacemos?" */
+  background:linear-gradient(to bottom,#62CAE3 0%,#62CAE3 34%,#142751 66%,#142751 100%);
   padding:2.5rem 0 3rem;
   position:relative;
 }
@@ -969,8 +969,8 @@ footer{
 .eventos-inner{max-width:none;margin:0;text-align:center;position:relative}
 .eventos-label{
   display:block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
-  color:#fff;font-weight:700;margin-bottom:1rem;text-align:center;
-  position:relative;z-index:3;top:16px;   /* blanco: se lee aunque la ola teal (animada) pase por encima */
+  color:#0d1e40;font-weight:700;margin-bottom:1rem;text-align:center;
+  position:relative;z-index:3;top:16px;   /* azul marino: se lee sobre el aqua */
 }
 .eventos-grid{
   display:flex;gap:.2rem;justify-content:safe center;   /* tarjetas muy pegadas entre sí */
