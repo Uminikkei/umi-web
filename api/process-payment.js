@@ -49,6 +49,7 @@ export default async function handler(req, res) {
 
     // Si el pago fue aprobado, avisar a Umi por Telegram (instantáneo), WhatsApp (CallMeBot) y Email
     if (data.status === 'approved') {
+      console.log('[ORDER] recibido:', JSON.stringify(req.body.order || {}).slice(0, 500));
       try { await avisarTelegram(req.body.order); } catch (e) { console.log('[TG] error:', e.message); }
       try { await avisarWhatsApp(req.body.order); } catch (e) { console.log('[WA] error:', e.message); }
       try { await avisarEmail(req.body.order); }    catch (e) { console.log('[EMAIL] error:', e.message); }
@@ -80,9 +81,14 @@ async function avisarTelegram(order) {
 
   const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
   const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
-  const desc = Number(order.descuento) || 0;
   const pts  = Number(order.puntosCanjeados) || 0;
   const cuponPct = Number(order.cuponPct) || 0;
+  // Descuento: usar el que manda la web; si no vino (script viejo en cache),
+  // deducirlo de la diferencia entre subtotal+envio y el total cobrado
+  const esperado = sub + (hasDelivery ? (Number(order.deliveryFee) || 0) : 0);
+  const desc = (Number(order.descuento) || 0) > 0
+    ? Number(order.descuento)
+    : Math.max(0, esperado - (Number(order.total) || 0) - pts);
 
   let t = '🛎️ <b>NUEVO PEDIDO — Umi</b>\n💳 <b>PAGADO CON TARJETA</b>\n\n<b>Detalle:</b>\n';
   items.forEach((r) => { t += `• ${esc(r.n)} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
@@ -133,9 +139,14 @@ async function avisarWhatsApp(order) {
 
   const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
   const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
-  const desc = Number(order.descuento) || 0;
   const pts  = Number(order.puntosCanjeados) || 0;
   const cuponPct = Number(order.cuponPct) || 0;
+  // Descuento: usar el que manda la web; si no vino (script viejo en cache),
+  // deducirlo de la diferencia entre subtotal+envio y el total cobrado
+  const esperado = sub + (hasDelivery ? (Number(order.deliveryFee) || 0) : 0);
+  const desc = (Number(order.descuento) || 0) > 0
+    ? Number(order.descuento)
+    : Math.max(0, esperado - (Number(order.total) || 0) - pts);
 
   let t = '*NUEVO PEDIDO - Umi*\n\n*PAGADO CON TARJETA*\n\n*Detalle:*\n';
   items.forEach((r) => { t += `- ${r.n} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
@@ -177,9 +188,14 @@ async function avisarEmail(order) {
   const items = Array.isArray(order.items) ? order.items : [];
   const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
   const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
-  const desc = Number(order.descuento) || 0;
   const pts  = Number(order.puntosCanjeados) || 0;
   const cuponPct = Number(order.cuponPct) || 0;
+  // Descuento: usar el que manda la web; si no vino (script viejo en cache),
+  // deducirlo de la diferencia entre subtotal+envio y el total cobrado
+  const esperado = sub + (hasDelivery ? (Number(order.deliveryFee) || 0) : 0);
+  const desc = (Number(order.descuento) || 0) > 0
+    ? Number(order.descuento)
+    : Math.max(0, esperado - (Number(order.total) || 0) - pts);
 
   // Filas de la tabla de productos
   const filasProductos = items.map(r => `
