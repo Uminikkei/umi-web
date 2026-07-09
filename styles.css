@@ -53,6 +53,24 @@ html::-webkit-scrollbar{display:none}
 }
 .umi-scrollbar-thumb:hover,
 .umi-scrollbar-thumb.dragging{background:rgba(240,235,224,.5)}
+/* Flechas del scrollbar: chevrons finos, misma estética delicada que la barra */
+.umi-scrollbar-arrow{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:14px;height:12px;margin:0;padding:0;border:none;background:none;
+  pointer-events:auto;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.umi-scrollbar-arrow::before{
+  content:'';display:block;width:6px;height:6px;
+  border-top:1.6px solid rgba(240,235,224,.32);
+  border-left:1.6px solid rgba(240,235,224,.32);
+  transition:border-color .15s;
+}
+.umi-scrollbar-arrow:hover::before{border-color:rgba(240,235,224,.62)}
+.umi-scrollbar-arrow--up{top:3px}
+.umi-scrollbar-arrow--up::before{transform:rotate(45deg);margin-top:2px}    /* ▲ */
+.umi-scrollbar-arrow--down{bottom:3px}
+.umi-scrollbar-arrow--down::before{transform:rotate(225deg);margin-bottom:2px} /* ▼ */
 
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
@@ -643,7 +661,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello al lado de los botones (Pedir ahora / Reservar mesa), tamaño moderado,
      sin tocar los botones ni el borde derecho */
-  .hero-badge.hero-stamp{display:flex;width:94px;height:94px;top:auto;bottom:15.4rem;right:7vw}
+  .hero-badge.hero-stamp{display:flex;width:116px;height:116px;top:auto;bottom:15.4rem;right:7vw}
 }
 
 /* ── MÓVIL: navbar en 2 filas — arriba enlaces + sesión, abajo marca ── */
@@ -1853,7 +1871,9 @@ footer strong{color:var(--teal)}
   object-fit: contain;
   pointer-events: none;
   filter: drop-shadow(0 6px 8px rgba(4, 7, 9, 0.35));
+  animation: umi-float 3.4s ease-in-out infinite;   /* levita un poco (la sombra del suelo queda fija) */
 }
+@keyframes umi-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
 /* Sombra elíptica en el suelo, bajo la garzona */
 .chat-toggle-btn::after {
@@ -2459,9 +2479,9 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px}
+  #favCarousel{height:440px;margin-top:-80px}   /* sube la sección: más cerca de la imagen inicial (hero) */
   .fav-head{top:92px}
-  .fav-info{bottom:44px;right:6vw}
+  .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}
   .fav-name{font-size:1rem}
   .fav-price{font-size:.85rem}

@@ -6,8 +6,24 @@
   const thumb = document.createElement('div');
   thumb.className = 'umi-scrollbar-thumb';
   track.appendChild(thumb);
+  // Flechas arriba/abajo: para subir/bajar con clic si el cliente no alcanza la barra
+  const up = document.createElement('button');
+  up.className = 'umi-scrollbar-arrow umi-scrollbar-arrow--up';
+  up.setAttribute('aria-label', 'Subir');
+  const down = document.createElement('button');
+  down.className = 'umi-scrollbar-arrow umi-scrollbar-arrow--down';
+  down.setAttribute('aria-label', 'Bajar');
+  track.appendChild(up);
+  track.appendChild(down);
   document.body.appendChild(track);
 
+  function pageScroll(dir){
+    window.scrollBy({ top: window.innerHeight * 0.85 * dir, left: 0, behavior: 'smooth' });
+  }
+  up.addEventListener('click', () => pageScroll(-1));
+  down.addEventListener('click', () => pageScroll(1));
+
+  const PAD = 20;          // espacio reservado arriba/abajo para las flechas
   const MIN_THUMB = 30;
   let dragging = false, dragStartY = 0, dragStartScroll = 0;
   let lastScrollTop = -1, lastFullH = -1, lastViewH = -1;
@@ -21,10 +37,11 @@
     lastScrollTop = scrollTop; lastFullH = fullH; lastViewH = viewH;
     if (fullH <= viewH + 2){ track.style.display = 'none'; return; }
     track.style.display = 'block';
-    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * viewH);
-    const maxThumbTop = viewH - thumbH;
+    const travel = Math.max(1, viewH - 2 * PAD);
+    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * travel);
+    const maxThumbTop = travel - thumbH;
     const maxScroll = fullH - viewH;
-    const thumbTop = maxScroll > 0 ? scrollTop / maxScroll * maxThumbTop : 0;
+    const thumbTop = PAD + (maxScroll > 0 ? scrollTop / maxScroll * maxThumbTop : 0);
     thumb.style.height = thumbH + 'px';
     thumb.style.top = thumbTop + 'px';
   }
@@ -48,8 +65,9 @@
     const doc = document.scrollingElement || document.documentElement;
     const viewH = window.innerHeight;
     const fullH = doc.scrollHeight;
-    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * viewH);
-    const maxThumbTop = viewH - thumbH;
+    const travel = Math.max(1, viewH - 2 * PAD);
+    const thumbH = Math.max(MIN_THUMB, (viewH / fullH) * travel);
+    const maxThumbTop = travel - thumbH;
     const maxScroll = fullH - viewH;
     const deltaY = e.clientY - dragStartY;
     const deltaScroll = maxThumbTop > 0 ? (deltaY / maxThumbTop) * maxScroll : 0;
