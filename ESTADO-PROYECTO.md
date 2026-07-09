@@ -66,9 +66,10 @@ y el encargado de compras lo vea consolidado por día en la misma app.
   Cocina `1111` · Sushi `2222` · Barra `3333` · Administración `4444` · **Compras `9999`** (ve todo por día).
 - **Datos en Firestore** (mismo proyecto `umi-clientes`): colecciones `pedidosCatalogo` (productos)
   y `pedidosCompras` (pedidos, uno por envío, con `dia` AAAA-MM-DD e items con flag `comprado`).
-- El catálogo base (243 productos en 9 categorías) sale de los pedidos REALES del grupo de
-  WhatsApp "Pedidos Umi" (oct 2025 - jul 2026) y se auto-carga la primera vez que alguien entra.
-  Falta agregar los productos de la barra de tragos (el usuario los va a conseguir).
+- El catálogo base (387 productos en 13 categorías) sale de los pedidos REALES de los grupos
+  de WhatsApp "Pedidos Umi" (cocina) y "Barra Umi" (oct 2025 - jul 2026): incluye destilados,
+  cervezas, vinos, bebidas, hielo, pulpas e insumos de coctelería. Se auto-carga la primera
+  vez que alguien entra.
 - Se instala como app: abrir el link en el celular → "Agregar a pantalla de inicio".
 - ⚠️ Requiere reglas de Firestore para `pedidosCatalogo` y `pedidosCompras` (lectura/escritura abierta,
   el control de acceso es el PIN de la app).

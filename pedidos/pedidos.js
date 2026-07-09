@@ -31,12 +31,16 @@ const CATEGORIAS = [
   '🥩 Carnes y Aves',
   '🍚 Abarrotes',
   '🍰 Pastelería',
-  '🍹 Bebidas y Licores',
+  '🍸 Destilados y Licores',
+  '🍺 Cervezas',
+  '🍷 Vinos y Espumantes',
+  '🥤 Bebidas y Aguas',
+  '🧊 Coctelería e Insumos',
   '📦 Papelería y Envases',
   '🍳 Utensilios',
   '🧴 Limpieza',
 ];
-const UNIDADES = ['kg','gr','un','caja','bandeja','saco','malla','atado','paquete','bolsa','rollo','frasco','galón','litro','botella','lata','barra','pote','pieza','par'];
+const UNIDADES = ['kg','gr','un','caja','bandeja','saco','malla','atado','paquete','bolsa','rollo','frasco','galón','litro','botella','lata','barra','pote','pieza','par','ramo'];
 
 // Catálogo base: sacado de los pedidos reales del grupo de WhatsApp "Pedidos Umi"
 // (oct 2025 - jul 2026). Se carga a Firestore la primera vez; después se edita desde la app.
@@ -89,7 +93,8 @@ const BASE = {
     ['Choclo bebé','lata'],['Choclo dulce congelado','bolsa'],['Palmito','un'],
     ['Papa congelada (cuña)','caja'],['Edamame','caja'],['Alcaparras','frasco'],['Pan árabe','paquete'],
     ['Galleta soda','paquete'],['Levadura','kg'],['Frutos rojos congelados','caja'],
-    ['Chicken powder','un'],['Colorantes vegetales','un'],
+    ['Chicken powder','un'],['Colorantes vegetales','un'],['Vino blanco (cocina)','litro'],
+    ['Vino tinto (cocina)','litro'],['Bidón de agua','un'],
   ],
   '🍰 Pastelería': [
     ['Harina de almendras','kg'],['Azúcar impalpable','kg'],['Galleta vainilla','paquete'],
@@ -97,8 +102,69 @@ const BASE = {
     ['Canela en polvo','gr'],['Manjar','un'],['Mermelada de fresa','kg'],['Colapez','paquete'],
     ['Café','un'],['Tapioca perla','paquete'],
   ],
-  '🍹 Bebidas y Licores': [
-    ['Vino blanco','litro'],['Vino tinto','litro'],['Bidón de agua','un'],
+  '🍸 Destilados y Licores': [
+    // Whisky
+    ['Johnnie Walker Red','botella'],['Johnnie Walker Black','botella'],['Jack Daniels N7','botella'],
+    ['Jack Daniels Apple','botella'],['Jack Daniels Honey','botella'],['Jack Daniels Fire','botella'],
+    ['Jack Daniels Blackberry','botella'],['Buchanans','botella'],['Chivas 12','botella'],
+    ['Old Parr 12','botella'],['Monkey Shoulder','botella'],['Glenfiddich 12','botella'],
+    ['Woodford Reserve','botella'],['Jameson','botella'],
+    // Gin
+    ['Gin Beefeater','botella'],['Gin Beefeater Pink','botella'],['Gin Tanqueray','botella'],
+    ['Gin Tanqueray Ten','botella'],['Gin Hendricks','botella'],['Gin Monkey 47','botella'],
+    ['Gin Bombay','botella'],['Gin Bulldog','botella'],['Gin Mare','botella'],
+    // Vodka
+    ['Vodka Stolichnaya','botella'],['Vodka Absolut','botella'],['Vodka Grey Goose','botella'],
+    ['Vodka Puklaro','botella'],
+    // Ron y cachaça
+    ['Bacardí Carta Blanca','botella'],['Havana Club blanco','botella'],['Havana 7','botella'],
+    ['Malibú','botella'],['Cachaça 51','botella'],['Diplomático Reserva','botella'],
+    // Tequila
+    ['Tequila Herradura Ultra','botella'],['Tequila Olmeca','botella'],['Don Julio blanco','botella'],
+    ['Don Julio reposado','botella'],
+    // Pisco y destilados de uva
+    ['Alto del Carmen 40','botella'],['Mistral Nobel','botella'],['Mistral Apple','botella'],
+    ['Tololo Blue','botella'],['Tololo transparente 40','botella'],['Norterra 40','botella'],
+    ['Pisco Waqar','botella'],['Viñas de Oro acholado','botella'],['El Gobernador','botella'],
+    // Licores y aperitivos
+    ['Aperol','botella'],['Campari','botella'],['Ramazzotti','botella'],['Cointreau','botella'],
+    ['Triple sec','botella'],['St Germain','botella'],['Chambord','botella'],['Disaronno','botella'],
+    ['Frangelico','botella'],['Kahlúa','botella'],['Baileys','botella'],['Drambuie','botella'],
+    ['Fernet Branca','botella'],['Jägermeister 1,75 L','botella'],['Cinzano Rosso','botella'],
+    ['Cinzano Bianco','botella'],['Vermouth 1757','botella'],['Martini Dry','botella'],
+    ['Amargo de Angostura','botella'],
+  ],
+  '🍺 Cervezas': [
+    ['Austral Lager','un'],['Austral Calafate','un'],['Kunstmann Torobayo','un'],
+    ['Kunstmann Lager','un'],['Peroni','un'],['Peroni 0.0','un'],['Asahi','un'],['Heineken 0.0','un'],
+  ],
+  '🍷 Vinos y Espumantes': [
+    ['TH Chardonnay Limarí','botella'],['TH Sauvignon Blanc Limarí','botella'],
+    ['TH Syrah Limarí','botella'],['TH Carmenere Peumo','botella'],
+    ['TH Cabernet Sauvignon Alto Maipo','botella'],['TH Pinot Noir Malleco','botella'],
+    ['Tabalí Cabernet Sauvignon','botella'],['Tabalí Carmenere','botella'],
+    ['Las Mulas Sauvignon Blanc','botella'],['Casa Marín Riesling','botella'],
+    ['Espumante Undurraga Brut','botella'],['Riccadonna','botella'],['Vino sin alcohol','botella'],
+  ],
+  '🥤 Bebidas y Aguas': [
+    ['Coca-Cola normal','un'],['Coca-Cola Zero','un'],['Pepsi','un'],['Pepsi Zero','un'],
+    ['Sprite','un'],['Sprite Zero','un'],['Fanta','un'],['Kem Piña','un'],['Limón soda','un'],
+    ['Canada Dry Ginger Ale','un'],['Ginger Ale Zero','un'],['Schweppes Tónica','un'],
+    ['Schweppes Tónica Zero','un'],['Schweppes Tónica Pink','un'],['Fentimans Ginger Beer','un'],
+    ['Fentimans Rose Lemonade','un'],['Fentimans Tonic Light','un'],['Fentimans Indian Tonic','un'],
+    ['Red Bull tradicional','un'],['Red Bull sin azúcar','un'],['Red Bull maracuyá','un'],
+    ['Agua Puyehue con gas','un'],['Agua Puyehue sin gas','un'],['Agua gasificada 1,5 L','un'],
+  ],
+  '🧊 Coctelería e Insumos': [
+    ['Hielo cubo','kg'],['Hielo frappé','kg'],['Hielo premium','bolsa'],['Hielo bolita','paquete'],
+    ['Pulpa de maracuyá sin pepas','caja'],['Pulpa de mango','caja'],['Pulpa de frambuesa','caja'],
+    ['Moras congeladas','kg'],['Jugo cranberry','botella'],['Limón amarillo','malla'],
+    ['Limón sutil suelto','kg'],['Naranja','kg'],['Pomelo','kg'],['Manzana verde','kg'],
+    ['Piña','un'],['Guindas (cherry)','kg'],['Menta','kg'],['Pepino','un'],['Albúmina','kg'],
+    ['Café Kimbo','kg'],['Té Earl Grey','caja'],['Té Twinings Breakfast','caja'],['Tabasco','un'],
+    ['Tajín','un'],['Sal de mar','kg'],['Aceto balsámico','litro'],['Coco laminado','bolsa'],
+    ['Lecitina de soya','gr'],['Goma xantana','gr'],['Metilcelulosa','gr'],['Ácido cítrico','bolsa'],
+    ['Endulzante en gotas','un'],['Flores de decoración','ramo'],['Bombillas','paquete'],
   ],
   '📦 Papelería y Envases': [
     ['Bolsas de arranque','rollo'],['Bolsas al vacío 1 kg','paquete'],['Bolsas al vacío 2 kg','paquete'],
