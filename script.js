@@ -972,8 +972,15 @@ async function sendOrder(){
   let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n*Detalle:*\n`;
   cart.forEach(r => { lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`; });
   const sub = cartSubtotal();
-  if(entregaMode === 'delivery' && deliveryFee > 0){ lines += `\nSubtotal: ${fmt(sub)}\nEnvío (${deliveryKm} km): ${fmt(deliveryFee)}\n*Total: ${fmt(cartTotal())}*\n\n`; }
-  else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  const hasDelivery = entregaMode === 'delivery' && deliveryFee > 0;
+  const descCupon = cuponDescuento > 0 ? ((sub + (hasDelivery ? deliveryFee : 0)) - billAfterCoupon()) : 0;
+  if(hasDelivery || descCupon > 0 || puntosCanjeados > 0){
+    lines += `\nSubtotal: ${fmt(sub)}\n`;
+    if(hasDelivery) lines += `Envío (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
+    if(descCupon > 0) lines += `Descuento${cuponDescuento ? ` (${cuponDescuento}%)` : ''}: -${fmt(descCupon)}\n`;
+    if(puntosCanjeados > 0) lines += `Puntos canjeados: -${fmt(puntosCanjeados)}\n`;
+    lines += `*Total: ${fmt(cartTotal())}*\n\n`;
+  } else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
   lines += `*Cliente:* ${name}\n*Tel:* ${phone}\n*Entrega:* ${entregaLabel}\n`;
   if(entregaMode === 'delivery'){ lines += `*Dirección:* ${addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent(addr+', Coquimbo, Chile')}\n`; }
   lines += `*Pago:* ${pagoLabel}\n`;
@@ -1506,6 +1513,10 @@ async function renderCardBrick(amount){
                   deliveryFee: deliveryFee,
                   deliveryKm: deliveryKm,
                   items: cart.map(function(r){ return { n:r.n, qty:r.qty, p:r.p }; }),
+                  subtotal: cartSubtotal(),
+                  cuponPct: cuponDescuento,
+                  descuento: cuponDescuento > 0 ? ((cartSubtotal() + (entregaMode === 'delivery' ? deliveryFee : 0)) - billAfterCoupon()) : 0,
+                  puntosCanjeados: puntosCanjeados,
                   total: Math.round(amount)
                 }
               })
@@ -1542,8 +1553,15 @@ async function onCardApproved(){
   let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n✅ *PAGADO CON TARJETA*\n\n*Detalle:*\n`;
   cart.forEach(r => { lines += `  \u{25B8} ${r.n} x${r.qty} = ${fmt(r.p*r.qty)}\n`; });
   const sub = cartSubtotal();
-  if(entregaMode === 'delivery' && deliveryFee > 0){ lines += `\nSubtotal: ${fmt(sub)}\nEnvío (${deliveryKm} km): ${fmt(deliveryFee)}\n*Total: ${fmt(cartTotal())}*\n\n`; }
-  else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
+  const hasDelivery = entregaMode === 'delivery' && deliveryFee > 0;
+  const descCupon = cuponDescuento > 0 ? ((sub + (hasDelivery ? deliveryFee : 0)) - billAfterCoupon()) : 0;
+  if(hasDelivery || descCupon > 0 || puntosCanjeados > 0){
+    lines += `\nSubtotal: ${fmt(sub)}\n`;
+    if(hasDelivery) lines += `Envío (${deliveryKm} km): ${fmt(deliveryFee)}\n`;
+    if(descCupon > 0) lines += `Descuento${cuponDescuento ? ` (${cuponDescuento}%)` : ''}: -${fmt(descCupon)}\n`;
+    if(puntosCanjeados > 0) lines += `Puntos canjeados: -${fmt(puntosCanjeados)}\n`;
+    lines += `*Total: ${fmt(cartTotal())}*\n\n`;
+  } else { lines += `\n*Total: ${fmt(cartTotal())}*\n\n`; }
   lines += `*Cliente:* ${p.name}\n*Tel:* ${p.phone}\n*Entrega:* ${entregaLabel}\n`;
   if(entregaMode === 'delivery'){ lines += `*Dirección:* ${p.addr}\n*Maps:* https://maps.google.com/?q=${encodeURIComponent((p.addr||'')+', Coquimbo, Chile')}\n`; }
   lines += `*Pago:* Tarjeta (pagado online) ✅\n`;

@@ -78,11 +78,20 @@ async function avisarTelegram(order) {
   const entregaLabel = order.entregaMode === 'delivery' ? '🛵 Delivery' : '🏠 Retiro en local';
   const items = Array.isArray(order.items) ? order.items : [];
 
+  const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
+  const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
+  const desc = Number(order.descuento) || 0;
+  const pts  = Number(order.puntosCanjeados) || 0;
+  const cuponPct = Number(order.cuponPct) || 0;
+
   let t = '🛎️ <b>NUEVO PEDIDO — Umi</b>\n💳 <b>PAGADO CON TARJETA</b>\n\n<b>Detalle:</b>\n';
   items.forEach((r) => { t += `• ${esc(r.n)} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
-  if (order.entregaMode === 'delivery' && order.deliveryFee > 0) {
-    const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
-    t += `\nSubtotal: ${fmt(sub)}\nEnvío (${esc(order.deliveryKm)} km): ${fmt(order.deliveryFee)}\n<b>Total: ${fmt(order.total)}</b>\n\n`;
+  if (hasDelivery || desc > 0 || pts > 0) {
+    t += `\nSubtotal: ${fmt(sub)}\n`;
+    if (hasDelivery) t += `Envío (${esc(order.deliveryKm)} km): ${fmt(order.deliveryFee)}\n`;
+    if (desc > 0)    t += `🏷️ Descuento${cuponPct ? ` (${cuponPct}%)` : ''}: -${fmt(desc)}\n`;
+    if (pts > 0)     t += `★ Puntos canjeados: -${fmt(pts)}\n`;
+    t += `<b>Total: ${fmt(order.total)}</b>\n\n`;
   } else {
     t += `\n<b>Total: ${fmt(order.total)}</b>\n\n`;
   }
@@ -122,11 +131,20 @@ async function avisarWhatsApp(order) {
   const entregaLabel = order.entregaMode === 'delivery' ? 'Delivery' : 'Retiro en local';
   const items = Array.isArray(order.items) ? order.items : [];
 
+  const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
+  const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
+  const desc = Number(order.descuento) || 0;
+  const pts  = Number(order.puntosCanjeados) || 0;
+  const cuponPct = Number(order.cuponPct) || 0;
+
   let t = '*NUEVO PEDIDO - Umi*\n\n*PAGADO CON TARJETA*\n\n*Detalle:*\n';
   items.forEach((r) => { t += `- ${r.n} x${r.qty} = ${fmt(r.p * r.qty)}\n`; });
-  if (order.entregaMode === 'delivery' && order.deliveryFee > 0) {
-    const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
-    t += `\nSubtotal: ${fmt(sub)}\nEnvio (${order.deliveryKm} km): ${fmt(order.deliveryFee)}\n*Total: ${fmt(order.total)}*\n\n`;
+  if (hasDelivery || desc > 0 || pts > 0) {
+    t += `\nSubtotal: ${fmt(sub)}\n`;
+    if (hasDelivery) t += `Envio (${order.deliveryKm} km): ${fmt(order.deliveryFee)}\n`;
+    if (desc > 0)    t += `Descuento${cuponPct ? ` (${cuponPct}%)` : ''}: -${fmt(desc)}\n`;
+    if (pts > 0)     t += `Puntos canjeados: -${fmt(pts)}\n`;
+    t += `*Total: ${fmt(order.total)}*\n\n`;
   } else {
     t += `\n*Total: ${fmt(order.total)}*\n\n`;
   }
@@ -158,6 +176,10 @@ async function avisarEmail(order) {
   const entregaLabel = order.entregaMode === 'delivery' ? '🛵 Delivery' : '🏠 Retiro en local';
   const items = Array.isArray(order.items) ? order.items : [];
   const sub = items.reduce((s, r) => s + r.p * r.qty, 0);
+  const hasDelivery = order.entregaMode === 'delivery' && order.deliveryFee > 0;
+  const desc = Number(order.descuento) || 0;
+  const pts  = Number(order.puntosCanjeados) || 0;
+  const cuponPct = Number(order.cuponPct) || 0;
 
   // Filas de la tabla de productos
   const filasProductos = items.map(r => `
@@ -246,14 +268,25 @@ async function avisarEmail(order) {
 
       <!-- Totales -->
       <table style="width:100%;border-collapse:collapse;margin-top:12px;font-size:14px">
-        ${order.entregaMode === 'delivery' && order.deliveryFee > 0 ? `
+        ${(hasDelivery || desc > 0 || pts > 0) ? `
         <tr>
           <td style="padding:6px 12px;color:#64748b">Subtotal</td>
           <td style="padding:6px 12px;text-align:right">${fmt(sub)}</td>
-        </tr>
+        </tr>` : ''}
+        ${hasDelivery ? `
         <tr>
           <td style="padding:6px 12px;color:#64748b">Envío (${order.deliveryKm} km)</td>
           <td style="padding:6px 12px;text-align:right">${fmt(order.deliveryFee)}</td>
+        </tr>` : ''}
+        ${desc > 0 ? `
+        <tr>
+          <td style="padding:6px 12px;color:#16a34a">🏷️ Descuento${cuponPct ? ` (${cuponPct}%)` : ''}</td>
+          <td style="padding:6px 12px;text-align:right;color:#16a34a">-${fmt(desc)}</td>
+        </tr>` : ''}
+        ${pts > 0 ? `
+        <tr>
+          <td style="padding:6px 12px;color:#16a34a">★ Puntos canjeados</td>
+          <td style="padding:6px 12px;text-align:right;color:#16a34a">-${fmt(pts)}</td>
         </tr>` : ''}
         <tr style="background:#0d1b3e;color:#62CAE3">
           <td style="padding:10px 12px;font-weight:bold;font-size:16px;border-radius:6px 0 0 6px">TOTAL PAGADO</td>
