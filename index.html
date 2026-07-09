@@ -74,10 +74,6 @@
     <clipPath id="heroWaveClip" clipPathUnits="objectBoundingBox">
       <path d="M0,0 H1 V0.96 C0.84,1 0.68,0.95 0.5,0.972 C0.32,0.994 0.16,0.95 0,0.968 Z"/>
     </clipPath>
-    <!-- Ola en el borde SUPERIOR e INFERIOR de cada tarjeta de la galería (los extremos son la ola) -->
-    <clipPath id="cardWaveClip" clipPathUnits="objectBoundingBox">
-      <path d="M0,0.055 C0.17,0.11 0.33,0 0.5,0.055 C0.67,0.11 0.83,0 1,0.055 L1,0.945 C0.83,1 0.67,0.89 0.5,0.945 C0.33,1 0.17,0.89 0,0.945 Z"/>
-    </clipPath>
   </defs>
 </svg>
 
@@ -336,6 +332,7 @@
 <section class="eventos-sec" id="eventos">
   <div class="eventos-inner">
     <span class="eventos-label">Galería</span>
+    <div class="eventos-cards-wrap">
     <div class="eventos-grid" id="eventosGrid">
       <button class="evento-card" type="button" onclick="openEventGallery('dia-de-las-madres-2026')">
         <img src="eventos/dia-de-las-madres-2026/cover.jpg" alt="Día de las Madres 2026" loading="lazy">
@@ -357,6 +354,18 @@
         <img src="eventos/halloween-2025/01.jpg" alt="Halloween 2025" loading="lazy">
         <div class="evento-overlay"><span class="evento-title">Halloween 2025</span></div>
       </button>
+    </div>
+    <!-- Los BORDES superior e inferior de las tarjetas SON olas extensas que se mueven (mismo estilo que las olas de sección) -->
+    <div class="cards-wave cards-wave--top wave-anim wa-slow" aria-hidden="true">
+      <svg viewBox="0 0 2880 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#000" d="M0,0 L2880,0 L2880,34 C2640,54 2400,54 2160,34 C1920,14 1680,14 1440,34 C1200,54 960,54 720,34 C480,14 240,14 0,34 Z"/>
+      </svg>
+    </div>
+    <div class="cards-wave cards-wave--bottom wave-anim wa-slow wa-rev" aria-hidden="true">
+      <svg viewBox="0 0 2880 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#000" d="M0,30 C240,50 480,50 720,30 C960,10 1200,10 1440,30 C1680,50 1920,50 2160,30 C2400,10 2640,10 2880,30 L2880,64 L0,64 Z"/>
+      </svg>
+    </div>
     </div>
   </div>
 

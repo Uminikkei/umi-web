@@ -967,7 +967,7 @@ footer{
 .eventos-grid{
   display:flex;gap:.7rem;justify-content:safe center;
   overflow-x:auto;overflow-y:hidden;
-  padding:.3rem 1.6rem 1rem;
+  padding:.4rem 1.6rem;   /* simétrico: las olas de borde quedan alineadas arriba y abajo */
   scrollbar-width:none;-ms-overflow-style:none;
   scroll-behavior:auto;
 }
@@ -975,17 +975,23 @@ footer{
 .evento-card{
   position:relative;flex:0 0 clamp(230px,26vw,300px);padding:0;border:none;cursor:pointer;
   overflow:hidden;aspect-ratio:4/5;background:#0b1730;
-  /* Los bordes superior e inferior de la tarjeta SON la ola (recorte con forma de ola) */
-  clip-path:url(#cardWaveClip);
-  filter:drop-shadow(0 10px 16px rgba(0,0,0,.42));
-  transition:transform .35s cubic-bezier(.22,1,.36,1),filter .35s;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;
 }
-.evento-card:hover{transform:translateY(-6px);filter:drop-shadow(0 18px 26px rgba(0,0,0,.55))}
+.evento-card:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+/* Wrapper: contexto para las olas que forman los bordes (no se desplaza con el scroll de tarjetas) */
+.eventos-cards-wrap{position:relative}
+/* Los bordes de las tarjetas SON olas extensas y en movimiento (negras = fondo de la sección) */
+.cards-wave{position:absolute;left:0;right:0;height:54px;z-index:2;line-height:0;pointer-events:none}
+.cards-wave svg{display:block;height:100%}
+.cards-wave--top{top:0}
+.cards-wave--bottom{bottom:0}
 .evento-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
 .evento-card:hover img{transform:scale(1.06)}
 .evento-overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;
-  display:flex;align-items:flex-end;justify-content:center;padding:1.4rem;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:1.4rem 1.4rem 3.4rem;   /* título más arriba: la ola inferior de la tarjeta no lo tapa */
   background:linear-gradient(to top,rgba(4,7,9,.82) 0%,rgba(4,7,9,.15) 45%,transparent 70%);
 }
 .evento-title{
