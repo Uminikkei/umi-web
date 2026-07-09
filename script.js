@@ -1773,11 +1773,11 @@ function toggleMobileMenu(){
   document.body.style.overflow = open ? 'hidden' : '';
 }
 
-// ── GEOGLIFOS INTERACTIVOS (Etimología) ────────────────────────────────────────
-// Se inyecta el SVG inline (para poder animar cada geoglifo por separado), se agrupan
-// los trazos por posición X (viento / mar / espíritu / resultado) y se anima al pasar
-// el dedo o el mouse; la animación se DETIENE al soltar. Viento gira, Mar se balancea
-// como un barco, y en Espíritu los puntos aparecen uno por uno, desaparecen y repiten.
+// ── GEOGLIFOS ANIMADOS (Etimología) ─────────────────────────────────────────────
+// Se inyecta el SVG inline (para poder animar cada geoglifo por separado) y se agrupan
+// los trazos por posición X (viento / mar / espíritu / resultado). Las animaciones
+// corren SOLAS en bucle continuo (CSS, sin necesidad de tocar): Viento gira, Mar se
+// balancea como un barco, y en Espíritu los puntos aparecen uno por uno y se repiten.
 (function(){
   const NS = 'http://www.w3.org/2000/svg';
   function init(){
@@ -1822,25 +1822,7 @@ function toggleMobileMenu(){
            .forEach((o,i) => o.p.setAttribute('class','geo-dot gd'+(i+1)));
       }
 
-      // Zona de contacto invisible (toda el área del geoglifo responde) + eventos dedo/mouse
-      document.querySelectorAll('.sig-svg .geo').forEach(g => {
-        const anim = g.querySelector('.geo-anim');
-        try {
-          const bb = anim.getBBox(), pad = 70;
-          const r = document.createElementNS(NS,'rect');
-          r.setAttribute('x', bb.x - pad); r.setAttribute('y', bb.y - pad);
-          r.setAttribute('width', bb.width + 2*pad); r.setAttribute('height', bb.height + 2*pad);
-          r.setAttribute('fill','transparent'); r.setAttribute('pointer-events','all');
-          g.insertBefore(r, g.firstChild);
-        } catch(e){}
-        const play = () => g.classList.add('playing');
-        const stop = () => g.classList.remove('playing');
-        g.addEventListener('mouseenter', play);
-        g.addEventListener('mouseleave', stop);
-        g.addEventListener('touchstart', play, { passive:true });
-        g.addEventListener('touchend', stop);
-        g.addEventListener('touchcancel', stop);
-      });
+      // Las animaciones corren solas vía CSS (bucle continuo); no hay interacción.
     }).catch(()=>{});
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

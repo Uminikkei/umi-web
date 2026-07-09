@@ -584,16 +584,15 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .sig-layout{ max-width:900px; margin:-4% auto 0; }
 .sig-img-wrap{ position:relative; }
 .sig-svg{ width:100%; height:auto; display:block; filter:drop-shadow(0 5px 5px rgba(4,7,9,.35)); }
-/* ── Geoglifos interactivos: animación al pasar el dedo/mouse, se detiene al soltar ── */
-.sig-svg .geo{ cursor:pointer; }
+/* ── Geoglifos animados en BUCLE CONTINUO (solos, sin necesidad de tocar/hover) ── */
 .sig-svg .geo-anim{ transform-box:fill-box; transform-origin:center center; }
-/* Viento → gira hacia la derecha (horario). El grupo padre tiene scale(-y), así que
+/* Viento → gira solo hacia la derecha (horario). El grupo padre tiene scale(-y), así que
    en pantalla rotate(-360deg) se ve como giro horario (a la derecha). */
 @keyframes geo-spin{ to{ transform:rotate(-360deg); } }
-.geo-viento.playing .geo-anim{ animation:geo-spin 2.2s linear infinite; }
-/* Mar → se balancea como un barco */
+.geo-viento .geo-anim{ animation:geo-spin 2.6s linear infinite; }
+/* Mar → se balancea solo como un barco */
 @keyframes geo-sway{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(7deg); } }
-.geo-mar.playing .geo-anim{ animation:geo-sway 1.8s ease-in-out infinite; }
+.geo-mar .geo-anim{ animation:geo-sway 2s ease-in-out infinite; }
 /* Espíritu → los puntos aparecen uno por uno, desaparecen todos y vuelven a aparecer */
 .geo-espiritu .geo-dot{ opacity:1; }
 @keyframes geo-dot1{ 0%{opacity:0} 5%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
@@ -601,13 +600,13 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 @keyframes geo-dot3{ 0%,32%{opacity:0} 37%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
 @keyframes geo-dot4{ 0%,48%{opacity:0} 53%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
 @keyframes geo-dot5{ 0%,64%{opacity:0} 69%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
-.geo-espiritu.playing .gd1{ animation:geo-dot1 2.4s linear infinite; }
-.geo-espiritu.playing .gd2{ animation:geo-dot2 2.4s linear infinite; }
-.geo-espiritu.playing .gd3{ animation:geo-dot3 2.4s linear infinite; }
-.geo-espiritu.playing .gd4{ animation:geo-dot4 2.4s linear infinite; }
-.geo-espiritu.playing .gd5{ animation:geo-dot5 2.4s linear infinite; }
+.geo-espiritu .gd1{ animation:geo-dot1 2.4s linear infinite; }
+.geo-espiritu .gd2{ animation:geo-dot2 2.4s linear infinite; }
+.geo-espiritu .gd3{ animation:geo-dot3 2.4s linear infinite; }
+.geo-espiritu .gd4{ animation:geo-dot4 2.4s linear infinite; }
+.geo-espiritu .gd5{ animation:geo-dot5 2.4s linear infinite; }
 @media(prefers-reduced-motion:reduce){
-  .geo-viento.playing .geo-anim,.geo-mar.playing .geo-anim,.geo-espiritu.playing .geo-dot{ animation:none; }
+  .geo-viento .geo-anim,.geo-mar .geo-anim,.geo-espiritu .geo-dot{ animation:none; }
 }
 .sig-op{
   position:absolute;
