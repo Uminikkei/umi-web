@@ -56,6 +56,23 @@
 
 ---
 
+## 📱 APP DE PEDIDOS INTERNOS (uminikkeibar.cl/pedidos) — 2026-07-09
+
+App PWA para que chefs y encargados pidan lo que hay que comprar (verduras, proteínas, papelería…)
+y el encargado de compras lo vea consolidado por día en la misma app.
+
+- **Archivos:** carpeta `pedidos/` (index.html, pedidos.css, pedidos.js, manifest.json, íconos).
+- **Acceso por PIN** (definidos en `pedidos/pedidos.js`, constante `USUARIOS`):
+  Cocina `1111` · Sushi `2222` · Barra `3333` · Administración `4444` · **Compras `9999`** (ve todo por día).
+- **Datos en Firestore** (mismo proyecto `umi-clientes`): colecciones `pedidosCatalogo` (productos)
+  y `pedidosCompras` (pedidos, uno por envío, con `dia` AAAA-MM-DD e items con flag `comprado`).
+- El catálogo base (~97 productos nikkei) se auto-carga la primera vez que alguien entra.
+- Se instala como app: abrir el link en el celular → "Agregar a pantalla de inicio".
+- ⚠️ Requiere reglas de Firestore para `pedidosCatalogo` y `pedidosCompras` (lectura/escritura abierta,
+  el control de acceso es el PIN de la app).
+
+---
+
 ## ⏳ PENDIENTES / PRÓXIMOS PASOS
 
 1. **WhatsApp instantáneo y confiable** ⚠️ (lo más importante)

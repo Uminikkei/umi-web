@@ -11,6 +11,7 @@ while ($listener.IsListening) {
         $path = $req.Url.LocalPath
         if ($path -eq "/") { $path = "/index.html" }
         $file = Join-Path $root $path.TrimStart("/")
+        if (Test-Path $file -PathType Container) { $file = Join-Path $file "index.html" }
         if (Test-Path $file -PathType Leaf) {
             $ext = [System.IO.Path]::GetExtension($file)
             $mime = switch ($ext) {
@@ -21,6 +22,7 @@ while ($listener.IsListening) {
                 ".jpg"  { "image/jpeg" }
                 ".svg"  { "image/svg+xml" }
                 ".ico"  { "image/x-icon" }
+                ".json" { "application/json" }
                 default { "application/octet-stream" }
             }
             $bytes = [System.IO.File]::ReadAllBytes($file)

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UMI Pedidos</title>
+<meta name="description" content="Pedidos internos de compras — UMI Nikkei Bar">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0d1b3e">
+<link rel="manifest" href="/pedidos/manifest.json">
+<link rel="icon" type="image/png" href="/pedidos/icon-192.png">
+<link rel="apple-touch-icon" href="/pedidos/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UMI Pedidos">
+<link rel="stylesheet" href="/pedidos/pedidos.css?v=1">
+</head>
+<body>
+
+<!-- ══════════ GATE: ingreso con PIN ══════════ -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <img src="/pedidos/icon-192.png" alt="UMI" class="gate-logo">
+    <h1>UMI Pedidos</h1>
+    <p class="gate-sub">Ingresa tu PIN de área</p>
+    <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="• • • •">
+    <button class="btn-primary" id="pinBtn">Entrar</button>
+    <div class="gate-err" id="pinErr"></div>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div class="app" id="app" style="display:none">
+
+  <header class="topbar">
+    <div class="tb-left">
+      <img src="/pedidos/icon-192.png" alt="" class="tb-logo">
+      <div>
+        <div class="tb-area" id="tbArea">—</div>
+        <div class="tb-fecha" id="tbFecha">—</div>
+      </div>
+    </div>
+    <button class="tb-salir" id="btnSalir">Salir</button>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs" id="tabs"></nav>
+
+  <!-- ── VISTA PEDIDOR: armar pedido ── -->
+  <section class="vista" id="vistaPedir" style="display:none">
+    <div class="buscador-wrap">
+      <input type="search" id="buscador" placeholder="Buscar producto…" autocomplete="off">
+    </div>
+    <div id="listaCatalogo" class="catalogo"></div>
+    <button class="btn-agregar-prod" id="btnNuevoProd">＋ Agregar producto que no está en la lista</button>
+    <div class="carrito-espacio"></div>
+  </section>
+
+  <!-- Barra flotante del carrito -->
+  <div class="carrito-bar" id="carritoBar" style="display:none">
+    <div class="cb-info" id="cbInfo">0 productos</div>
+    <button class="btn-primary cb-btn" id="btnEnviar">Enviar pedido</button>
+  </div>
+
+  <!-- ── VISTA PEDIDOR: mis pedidos enviados ── -->
+  <section class="vista" id="vistaEnviados" style="display:none">
+    <div id="listaEnviados"></div>
+  </section>
+
+  <!-- ── VISTA COMPRADOR: pedidos por día ── -->
+  <section class="vista" id="vistaCompras" style="display:none">
+    <div id="listaCompras"></div>
+  </section>
+
+  <!-- ── VISTA COMPRADOR: catálogo ── -->
+  <section class="vista" id="vistaCatalogo" style="display:none">
+    <button class="btn-agregar-prod" id="btnNuevoProd2" style="margin-top:1rem">＋ Agregar producto</button>
+    <div id="listaCatalogoAdmin"></div>
+  </section>
+
+</div>
+
+<!-- ── MODAL: confirmar envío ── -->
+<div class="modal" id="modalEnviar">
+  <div class="modal-bg" data-cerrar></div>
+  <div class="modal-box">
+    <h3>Confirmar pedido</h3>
+    <div class="modal-lista" id="resumenPedido"></div>
+    <textarea id="notaPedido" placeholder="Nota para el comprador (opcional)…" rows="2"></textarea>
+    <div class="modal-acciones">
+      <button class="btn-sec" data-cerrar>Seguir editando</button>
+      <button class="btn-primary" id="btnConfirmarEnvio">Enviar ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: nuevo producto ── -->
+<div class="modal" id="modalProducto">
+  <div class="modal-bg" data-cerrar></div>
+  <div class="modal-box">
+    <h3>Nuevo producto</h3>
+    <label class="campo"><span>Nombre</span><input type="text" id="npNombre" placeholder="Ej: Palta" autocomplete="off"></label>
+    <label class="campo"><span>Categoría</span><select id="npCategoria"></select></label>
+    <label class="campo"><span>Unidad</span><select id="npUnidad"></select></label>
+    <div class="gate-err" id="npErr"></div>
+    <div class="modal-acciones">
+      <button class="btn-sec" data-cerrar>Cancelar</button>
+      <button class="btn-primary" id="btnGuardarProd">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="/pedidos/pedidos.js?v=1"></script>
+</body>
+</html>
