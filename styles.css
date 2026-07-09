@@ -600,11 +600,11 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 @keyframes geo-dot3{ 0%,32%{opacity:0} 37%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
 @keyframes geo-dot4{ 0%,48%{opacity:0} 53%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
 @keyframes geo-dot5{ 0%,64%{opacity:0} 69%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
-.geo-espiritu .gd1{ animation:geo-dot1 2.4s linear infinite; }
-.geo-espiritu .gd2{ animation:geo-dot2 2.4s linear infinite; }
-.geo-espiritu .gd3{ animation:geo-dot3 2.4s linear infinite; }
-.geo-espiritu .gd4{ animation:geo-dot4 2.4s linear infinite; }
-.geo-espiritu .gd5{ animation:geo-dot5 2.4s linear infinite; }
+.geo-espiritu .gd1{ animation:geo-dot1 5s ease-in-out infinite; }
+.geo-espiritu .gd2{ animation:geo-dot2 5s ease-in-out infinite; }
+.geo-espiritu .gd3{ animation:geo-dot3 5s ease-in-out infinite; }
+.geo-espiritu .gd4{ animation:geo-dot4 5s ease-in-out infinite; }
+.geo-espiritu .gd5{ animation:geo-dot5 5s ease-in-out infinite; }
 @media(prefers-reduced-motion:reduce){
   .geo-viento .geo-anim,.geo-mar .geo-anim,.geo-espiritu .geo-dot{ animation:none; }
 }
