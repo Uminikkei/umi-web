@@ -846,10 +846,11 @@ footer{
 /* Móvil/tablet (≤900px): footer en 2 columnas iguales, centrado (va después de la base para que gane) */
 @media(max-width:900px){
   .footer-inner{grid-template-columns:1fr 1fr;gap:2rem 1.2rem;padding:1.5rem 1.2rem 2.5rem;justify-items:center}
+  .footer-inner > div{justify-self:stretch;min-width:0}   /* las columnas llenan su ancho para que el email quepa en una línea a tamaño normal */
   .footer-brand{grid-column:1/-1}
   .footer-info{overflow-wrap:anywhere}
-  /* El email completo en una sola línea (sin dividirse) */
-  .footer-info a[href^="mailto"]{white-space:nowrap;font-size:.56rem;letter-spacing:0}
+  /* Email (última línea de Contacto, debajo del @): una sola línea, tamaño normal */
+  .footer-info a[href^="mailto"]{white-space:nowrap}
   /* Síguenos: ancho justo para 3 botones por fila → 3 arriba y 2 abajo (centrados) */
   .footer-social{width:126px;max-width:126px;gap:.5rem}
 }
