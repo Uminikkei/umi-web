@@ -320,12 +320,41 @@ function renderTodo(){
 }
 
 // ── Vista PEDIR ─────────────────────────────────────────────────────────────
+let catSeleccionada = null;
+
 function renderCatalogo(){
   // Se busca sin acentos (slug), para que "camaron" encuentre "Camarón"
   const filtro = slug($('buscador').value || '');
   const cont = $('listaCatalogo');
-  let html = '';
-  categoriasCon(catalogo.map(p => p.categoria)).forEach(cat => {
+
+  // Sin búsqueda ni categoría elegida: menú de categorías
+  if (!filtro && !catSeleccionada){
+    const tarjetas = categoriasCon(catalogo.map(p => p.categoria)).map(cat => {
+      const n = catalogo.filter(p => p.categoria === cat).length;
+      if (!n) return '';
+      const enCarro = Object.values(carrito).filter(i => i.categoria === cat).length;
+      const partes = cat.split(' ');
+      const emoji = partes.shift();
+      return `<button class="cat-card" data-cat="${esc(cat)}">
+        <span class="emoji">${emoji}</span>
+        <span>${esc(partes.join(' '))}</span>
+        <span class="cuenta">${n} productos</span>
+        ${enCarro ? `<span class="encarro">${enCarro}</span>` : ''}
+      </button>`;
+    }).join('');
+    cont.innerHTML = `<div class="cat-grid">${tarjetas}</div>`;
+    cont.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
+      catSeleccionada = b.dataset.cat;
+      renderCatalogo();
+      window.scrollTo({ top: 0 });
+    }));
+    return;
+  }
+
+  // Con búsqueda: se busca en TODAS las categorías; con categoría elegida: solo esa
+  const catsAMostrar = filtro ? categoriasCon(catalogo.map(p => p.categoria)) : [catSeleccionada];
+  let html = filtro ? '' : `<button class="cat-volver" id="btnVolverCats">‹ Todas las categorías</button>`;
+  catsAMostrar.forEach(cat => {
     const prods = catalogo.filter(p => p.categoria === cat &&
       (!filtro || slug(p.nombre).includes(filtro)));
     if (!prods.length) return;
@@ -347,6 +376,8 @@ function renderCatalogo(){
   });
   cont.innerHTML = html || '<div class="vacio">No hay productos que coincidan.</div>';
 
+  const volver = $('btnVolverCats');
+  if (volver) volver.addEventListener('click', () => { catSeleccionada = null; renderCatalogo(); });
   cont.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => {
     carrito[b.dataset.add] = { nombre: b.dataset.n, categoria: b.dataset.c, unidad: b.dataset.u, cantidad: 1 };
     guardarCarrito(); renderCatalogo(); renderCarritoBar();

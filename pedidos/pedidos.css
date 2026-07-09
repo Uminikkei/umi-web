@@ -76,6 +76,25 @@ input,select,textarea{font-family:inherit}
 }
 #buscador:focus{border-color:var(--teal)}
 
+/* ── Menú de categorías (pedidor) ── */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.cat-card{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:.25rem;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.9rem .8rem;color:var(--txt);font-size:.92rem;font-weight:600;text-align:left;
+}
+.cat-card:active{border-color:var(--teal);background:var(--bg4)}
+.cat-card .emoji{font-size:1.7rem;line-height:1}
+.cat-card .cuenta{font-size:.72rem;color:var(--muted);font-weight:400}
+.cat-card .encarro{
+  position:absolute;top:.55rem;right:.55rem;background:var(--teal);color:#06263a;
+  border-radius:999px;font-size:.72rem;font-weight:800;padding:.15rem .5rem;
+}
+.cat-volver{
+  display:block;background:transparent;border:none;color:var(--teal);
+  font-size:.98rem;font-weight:700;padding:1rem 0 .2rem;
+}
+
 /* ── Catálogo (pedidor) ── */
 .cat-titulo{
   display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;color:var(--teal);
