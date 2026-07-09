@@ -88,90 +88,38 @@
 })();
 
 // ── SONIDO AMBIENTE: OLAS QUE ROMPEN EN LA COSTA ───────────────────────────────
-// Generado con Web Audio API (sin licencia ni archivos externos): un fondo grave de
-// mar + olas que se acercan, ROMPEN (espuma brillante) y se retiran, a intervalos
-// irregulares. El botón de la esquina lo silencia.
+// Grabación real de playa (CC0, dominio público): olas rompiendo + aves. Arranque
+// inmediato con autoplay silenciado (permitido) y suena al primer gesto del usuario;
+// el botón de la esquina lo silencia y recuerda la elección.
 (function(){
   const btn = document.getElementById('soundToggle');
-  if(!btn) return;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if(!AC){ btn.style.display = 'none'; return; }
-  let ctx = null, master = null, built = false, noiseBuf = null, waveTimer = null;
-  const TARGET = 0.55;
-  let muted = localStorage.getItem('umiMuted') === '1';
+  const audio = document.getElementById('oceanAudio');
+  if(!btn || !audio){ if(btn) btn.style.display = 'none'; return; }
+  audio.volume = 0.5;
+  let userMuted = localStorage.getItem('umiMuted') === '1';
 
-  function makeNoise(sec){
-    const N = Math.floor(sec * ctx.sampleRate);
-    const b = ctx.createBuffer(1, N, ctx.sampleRate);
-    const d = b.getChannelData(0);
-    for(let i=0;i<N;i++) d[i] = Math.random()*2 - 1;      // ruido blanco
-    return b;
-  }
-  function build(){
-    if(built) return; built = true;
-    ctx = new AC();
-    master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-    noiseBuf = makeNoise(4);
-    // Fondo del mar: rumor grave y bajo, continuo
-    const bed = ctx.createBufferSource(); bed.buffer = noiseBuf; bed.loop = true;
-    const bedLP = ctx.createBiquadFilter(); bedLP.type='lowpass'; bedLP.frequency.value=340; bedLP.Q.value=0.3;
-    const bedG = ctx.createGain(); bedG.gain.value = 0.09;
-    bed.connect(bedLP); bedLP.connect(bedG); bedG.connect(master);
-    bed.start();
-    scheduleWave();
-  }
-  // Cada ola: se acerca (sube), ROMPE (el filtro se abre = espuma brillante) y se
-  // retira (siseo que baja). Tiempos irregulares y solapados, como en la costa.
-  function scheduleWave(){
-    if(!ctx) return;
-    const t0 = ctx.currentTime;
-    const approach = 1.3 + Math.random()*1.1;
-    const recede   = 2.4 + Math.random()*1.8;
-    const peak = t0 + approach;
-    const end  = peak + recede;
-    const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
-    src.playbackRate.value = 0.8 + Math.random()*0.4;
-    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.Q.value = 0.7;
-    lp.frequency.setValueAtTime(340, t0);
-    lp.frequency.linearRampToValueAtTime(2600, peak);           // se abre al romper (espuma)
-    lp.frequency.exponentialRampToValueAtTime(300, end);        // se oscurece al retirarse
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(0.55, peak);            // hincha hasta romper
-    g.gain.exponentialRampToValueAtTime(0.0001, end);          // se retira
-    src.connect(lp); lp.connect(g); g.connect(master);
-    src.start(t0); src.stop(end + 0.15);
-    const nextIn = approach + recede*0.5 + Math.random()*2;    // la siguiente empieza mientras esta se retira
-    waveTimer = setTimeout(scheduleWave, nextIn * 1000);
-  }
-  function fadeTo(v){
-    if(!ctx) return;
-    const t = ctx.currentTime;
-    master.gain.cancelScheduledValues(t);
-    master.gain.setValueAtTime(master.gain.value, t);
-    master.gain.linearRampToValueAtTime(v, t + 1.4);
-  }
-  function apply(){
-    build();
-    if(ctx.state === 'suspended') ctx.resume();
-    fadeTo(muted ? 0 : TARGET);
-    btn.classList.toggle('muted', muted);
-  }
-  // Política de autoplay: el audio arranca en el primer gesto del usuario
+  function tryPlay(){ const p = audio.play(); if(p && p.catch) p.catch(()=>{}); }
+
+  // Empieza de inmediato en silencio (el autoplay silenciado está permitido); el sonido
+  // se activa en cuanto el usuario interactúa (política de autoplay de los navegadores).
+  audio.muted = true;
+  tryPlay();
+  const EV = ['pointerdown','touchstart','keydown','scroll','mousemove','click'];
   function firstGesture(){
-    ['pointerdown','keydown','scroll','touchstart'].forEach(ev => window.removeEventListener(ev, firstGesture));
-    if(!muted) apply();
+    EV.forEach(ev => window.removeEventListener(ev, firstGesture, true));
+    if(!userMuted) audio.muted = false;
+    tryPlay();
   }
-  if(!muted){
-    ['pointerdown','keydown','scroll','touchstart'].forEach(ev =>
-      window.addEventListener(ev, firstGesture, {passive:true}));
-  }
+  EV.forEach(ev => window.addEventListener(ev, firstGesture, {passive:true, capture:true}));
+
+  btn.classList.toggle('muted', userMuted);
   window.toggleSound = function(){
-    muted = !muted;
-    localStorage.setItem('umiMuted', muted ? '1' : '0');
-    apply();
+    userMuted = !userMuted;
+    localStorage.setItem('umiMuted', userMuted ? '1' : '0');
+    audio.muted = userMuted;
+    if(!userMuted) tryPlay();
+    btn.classList.toggle('muted', userMuted);
   };
-  btn.classList.toggle('muted', muted);
 })();
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
