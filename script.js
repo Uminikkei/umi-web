@@ -1846,6 +1846,7 @@ function toggleMobileMenu(){
   if(!vv) return;
   const root = document.documentElement;
   const update = () => {
+    if(vv.scale > 1.05){ root.style.removeProperty('--chat-bottom'); return; }  // con zoom no es teclado
     const kb = Math.round(window.innerHeight - vv.height - vv.offsetTop);
     if(kb > 40) root.style.setProperty('--chat-bottom', (kb + 8) + 'px');  // teclado abierto → sube
     else root.style.removeProperty('--chat-bottom');                       // teclado cerrado → posición normal
@@ -1854,4 +1855,24 @@ function toggleMobileMenu(){
   vv.addEventListener('resize', update);
   vv.addEventListener('scroll', update);
   update();
+})();
+
+// ── ZOOM-LOCK MÓVIL: permitir zoom-IN, pero NO zoom-OUT por debajo del 100% ─────
+// El meta minimum-scale=1 ya lo evita, pero algunos navegadores dejan un "rebote":
+// dejan encoger un instante y regresan. Aquí, si la escala baja de 1, la devolvemos a
+// 1 al instante; luego restauramos el meta para que se pueda volver a hacer zoom-in.
+(function(){
+  const vv = window.visualViewport;
+  const vp = document.querySelector('meta[name="viewport"]');
+  if(!vv || !vp) return;
+  const base = vp.getAttribute('content');
+  const LOCK = 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no';
+  let t = null;
+  vv.addEventListener('resize', () => {
+    if(vv.scale < 0.98){
+      vp.setAttribute('content', LOCK);        // fuerza la escala de vuelta a 1
+      clearTimeout(t);
+      t = setTimeout(() => vp.setAttribute('content', base), 350);  // restaura (permite zoom-in de nuevo)
+    }
+  });
 })();
