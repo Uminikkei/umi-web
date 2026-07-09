@@ -411,8 +411,9 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .hero-title span:nth-child(7){animation-delay:.66s}
 @keyframes nikkei-wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-.12em)}}
 .hero-sub{
-  font-size:.95rem;color:rgba(240,235,224,.70);
-  max-width:400px;margin:0 0 .4rem;font-weight:300;line-height:1.65;
+  font-size:.8rem;color:rgba(240,235,224,.70);
+  max-width:400px;margin:0 0 .4rem;font-weight:400;line-height:1.7;
+  text-transform:uppercase;letter-spacing:3px;   /* mismo estilo/fuente que "La real cocina" */
 }
 .hero-script-line{
   display:flex;align-items:baseline;gap:.6rem;
