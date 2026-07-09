@@ -122,6 +122,17 @@
   };
 })();
 
+// ── BOTÓN VOLVER AL INICIO ─────────────────────────────────────────────────────
+window.scrollToTop = function(){ window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); };
+(function(){
+  const btt = document.getElementById('backToTop');
+  if(!btt) return;
+  const upd = () => btt.classList.toggle('show', (window.scrollY || document.documentElement.scrollTop || 0) > 320);
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd);
+  upd();
+})();
+
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';

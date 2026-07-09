@@ -138,10 +138,12 @@
 <!-- ═══ MENÚ MÓVIL (hamburguesa) ═══ -->
 <div class="mobile-menu" id="mobileMenu" onclick="if(event.target===this)toggleMobileMenu()">
   <nav class="mobile-menu-list">
+    <a href="#favCarousel" onclick="toggleMobileMenu()">Lo más pedido</a>
     <a href="#nosotros" onclick="toggleMobileMenu()">Nosotros</a>
     <a href="#menu" onclick="toggleMobileMenu()">Menú</a>
     <a href="#eventos" onclick="toggleMobileMenu()">Galería</a>
     <a href="#como" onclick="toggleMobileMenu()">¿Cómo lo hacemos?</a>
+    <a href="#resenas" onclick="toggleMobileMenu()">Reseñas</a>
     <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
     <a href="#" class="mm-login" onclick="toggleMobileMenu();umiOpenAuth();return false;">Iniciar sesión</a>
   </nav>
@@ -456,7 +458,7 @@
 <!-- CONTACTO + INFO ── integrado antes del footer -->
 
 <!-- REVIEWS -->
-<section class="reviews-sec">
+<section class="reviews-sec" id="resenas">
   <!-- Ola divisoria: el navy de "¿Cómo lo hacemos?" cae sobre "Lo que dicen" -->
   <div class="reviews-wave-top wave-anim" aria-hidden="true">
     <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -1110,9 +1112,16 @@
 <audio id="oceanAudio" src="olas-playa.mp3" loop preload="auto" playsinline></audio>
 
 <!-- Botón de sonido ambiente de olas (esquina inferior izquierda) -->
-<button id="soundToggle" class="sound-toggle" onclick="toggleSound()" aria-label="Silenciar sonido de olas" title="Sonido de olas del mar">
+<button id="soundToggle" class="sound-toggle" onclick="toggleSound()" aria-label="Silenciar sonido de olas">
   <svg class="snd-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.8 5.7a9 9 0 0 1 0 12.6"/></svg>
   <svg class="snd-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+  <span class="snd-tip"></span>
+</button>
+
+<!-- Botón volver al inicio (centro inferior) -->
+<button id="backToTop" class="back-to-top" onclick="scrollToTop()" aria-label="Volver al inicio">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  <span class="btt-tip">Volver al inicio</span>
 </button>
 
 <!-- VENTANA DE PRODUCTO (nombre + descripción) -->
@@ -1178,7 +1187,7 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260709c"></script>
+<script src="script.js?v=20260709d"></script>
 <script src="chat.js?v=20260706a"></script>
 <script type="module" src="auth.js?v=20260706i"></script>
 </body>
