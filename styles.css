@@ -144,7 +144,7 @@ nav .ntb-link{color:#fff;text-shadow:0 2px 4px rgba(4,7,9,.5)}
 nav .ntb-link:hover{color:#fff;text-shadow:0 2px 7px rgba(4,7,9,.7)}
 nav .ntb-icon-btn{color:#fff;filter:drop-shadow(0 2px 3px rgba(4,7,9,.5))}
 nav .ntb-icon-btn:hover{color:#fff}
-nav .ntb-user-pts{color:#fff;text-shadow:0 2px 4px rgba(4,7,9,.5)}
+nav .ntb-user-pts{color:#ffd633;text-shadow:0 2px 4px rgba(4,7,9,.5)}   /* puntos SIEMPRE en amarillo */
 nav .nav-burger{filter:drop-shadow(0 2px 3px rgba(4,7,9,.5))}
 nav .nav-burger span{background:#fff}
 /* Wordmark blanco con sombra abajo, a juego con los botones; levita un poco */
@@ -222,7 +222,8 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* Isotipo izquierda */
 .ntb-iso{
   height:clamp(40px,6vw,78px);width:auto;
-  filter:brightness(0) invert(1) opacity(0.55);
+  /* blanco con sombra abajo, a juego con los botones del navbar */
+  filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2px 4px rgba(4,7,9,.5));
   flex-shrink:0;
 }
 /* Links izquierda */

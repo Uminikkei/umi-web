@@ -87,37 +87,62 @@
   requestAnimationFrame(loop);
 })();
 
-// ── SONIDO AMBIENTE DE OLAS DEL MAR ────────────────────────────────────────────
-// Generado con Web Audio API (ruido marrón filtrado + oleaje LFO). Sin licencia:
-// no usa ningún archivo ni recurso externo. El botón de la esquina lo silencia.
+// ── SONIDO AMBIENTE: OLAS QUE ROMPEN EN LA COSTA ───────────────────────────────
+// Generado con Web Audio API (sin licencia ni archivos externos): un fondo grave de
+// mar + olas que se acercan, ROMPEN (espuma brillante) y se retiran, a intervalos
+// irregulares. El botón de la esquina lo silencia.
 (function(){
   const btn = document.getElementById('soundToggle');
   if(!btn) return;
   const AC = window.AudioContext || window.webkitAudioContext;
   if(!AC){ btn.style.display = 'none'; return; }
-  let ctx = null, master = null, built = false;
-  const TARGET = 0.32;                                   // volumen ambiente (suave)
+  let ctx = null, master = null, built = false, noiseBuf = null, waveTimer = null;
+  const TARGET = 0.55;
   let muted = localStorage.getItem('umiMuted') === '1';
 
+  function makeNoise(sec){
+    const N = Math.floor(sec * ctx.sampleRate);
+    const b = ctx.createBuffer(1, N, ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for(let i=0;i<N;i++) d[i] = Math.random()*2 - 1;      // ruido blanco
+    return b;
+  }
   function build(){
     if(built) return; built = true;
     ctx = new AC();
     master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-    // Ruido marrón (grave, suave) en bucle
-    const N = 2 * ctx.sampleRate;
-    const buf = ctx.createBuffer(1, N, ctx.sampleRate);
-    const d = buf.getChannelData(0); let last = 0;
-    for(let i=0;i<N;i++){ const w = Math.random()*2-1; last = (last + 0.02*w)/1.02; d[i] = last*3.2; }
-    const noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
-    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=560; lp.Q.value=0.5;
-    // Oleaje: dos LFO lentos modulan el volumen (olas que entran y salen)
-    const swell = ctx.createGain(); swell.gain.value = 0.55;
-    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.09;
-    const lg = ctx.createGain(); lg.gain.value = 0.4; lfo.connect(lg); lg.connect(swell.gain);
-    const lfo2 = ctx.createOscillator(); lfo2.frequency.value = 0.16;
-    const lg2 = ctx.createGain(); lg2.gain.value = 0.16; lfo2.connect(lg2); lg2.connect(swell.gain);
-    noise.connect(lp); lp.connect(swell); swell.connect(master);
-    noise.start(); lfo.start(); lfo2.start();
+    noiseBuf = makeNoise(4);
+    // Fondo del mar: rumor grave y bajo, continuo
+    const bed = ctx.createBufferSource(); bed.buffer = noiseBuf; bed.loop = true;
+    const bedLP = ctx.createBiquadFilter(); bedLP.type='lowpass'; bedLP.frequency.value=340; bedLP.Q.value=0.3;
+    const bedG = ctx.createGain(); bedG.gain.value = 0.09;
+    bed.connect(bedLP); bedLP.connect(bedG); bedG.connect(master);
+    bed.start();
+    scheduleWave();
+  }
+  // Cada ola: se acerca (sube), ROMPE (el filtro se abre = espuma brillante) y se
+  // retira (siseo que baja). Tiempos irregulares y solapados, como en la costa.
+  function scheduleWave(){
+    if(!ctx) return;
+    const t0 = ctx.currentTime;
+    const approach = 1.3 + Math.random()*1.1;
+    const recede   = 2.4 + Math.random()*1.8;
+    const peak = t0 + approach;
+    const end  = peak + recede;
+    const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+    src.playbackRate.value = 0.8 + Math.random()*0.4;
+    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.Q.value = 0.7;
+    lp.frequency.setValueAtTime(340, t0);
+    lp.frequency.linearRampToValueAtTime(2600, peak);           // se abre al romper (espuma)
+    lp.frequency.exponentialRampToValueAtTime(300, end);        // se oscurece al retirarse
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.55, peak);            // hincha hasta romper
+    g.gain.exponentialRampToValueAtTime(0.0001, end);          // se retira
+    src.connect(lp); lp.connect(g); g.connect(master);
+    src.start(t0); src.stop(end + 0.15);
+    const nextIn = approach + recede*0.5 + Math.random()*2;    // la siguiente empieza mientras esta se retira
+    waveTimer = setTimeout(scheduleWave, nextIn * 1000);
   }
   function fadeTo(v){
     if(!ctx) return;
