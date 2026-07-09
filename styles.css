@@ -2568,7 +2568,7 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px;margin-top:-40px}   /* sube un poco (más estrecho); SIN z-index, el hero opaco cubre el solape = sin reflejos */
+  #favCarousel{height:440px;margin-top:-40px;z-index:3}   /* sube la sección COMPLETA (ola + fotos) por encima del hero; la ola es SÓLIDA (no gradiente) así que tapa el borde de las fotos y no hay reflejos */
   .fav-head{top:92px}
   .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}
