@@ -589,10 +589,10 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* Viento → gira solo hacia la derecha (horario). El grupo padre tiene scale(-y), así que
    en pantalla rotate(-360deg) se ve como giro horario (a la derecha). */
 @keyframes geo-spin{ to{ transform:rotate(-360deg); } }
-.geo-viento .geo-anim{ animation:geo-spin 2.6s linear infinite; }
-/* Mar → se balancea solo como un barco */
-@keyframes geo-sway{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(7deg); } }
-.geo-mar .geo-anim{ animation:geo-sway 2s ease-in-out infinite; }
+.geo-viento .geo-anim{ animation:geo-spin 6.5s linear infinite; }   /* giro lento y sutil */
+/* Mar → se balancea solo como un barco, muy suave */
+@keyframes geo-sway{ 0%,100%{ transform:rotate(-3.2deg); } 50%{ transform:rotate(3.2deg); } }
+.geo-mar .geo-anim{ animation:geo-sway 3s ease-in-out infinite; }
 /* Espíritu → los puntos aparecen uno por uno, desaparecen todos y vuelven a aparecer */
 .geo-espiritu .geo-dot{ opacity:1; }
 @keyframes geo-dot1{ 0%{opacity:0} 5%{opacity:1} 80%{opacity:1} 85%{opacity:0} 100%{opacity:0} }
@@ -2050,7 +2050,7 @@ footer strong{color:var(--teal)}
 
 .chat-widget {
   position: fixed;
-  bottom: 100px;
+  bottom: var(--chat-bottom, 100px);   /* sube sobre el teclado en móvil (JS setea --chat-bottom) */
   right: 24px;
   width: 420px;
   max-width: calc(100vw - 32px);
@@ -2355,8 +2355,9 @@ footer strong{color:var(--teal)}
   .chat-widget {
     width: calc(100vw - 36px);
     height: min(350px, 56vh);
-    max-height: 56vh;
-    bottom: 76px;
+    /* con el teclado abierto, el chat cabe en el área visible (visualViewport) */
+    max-height: min(56vh, calc(var(--chat-vvh, 100vh) - 24px));
+    bottom: var(--chat-bottom, 76px);
     right: 18px;
   }
 

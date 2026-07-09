@@ -1836,3 +1836,22 @@ function toggleMobileMenu(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+// ── CHAT SOBRE EL TECLADO EN MÓVIL ─────────────────────────────────────────────
+// Al enfocar el input, el teclado tapa el chat (position:fixed queda anclado al fondo,
+// debajo del teclado). Con visualViewport medimos el alto del teclado y subimos el chat
+// justo encima, además de limitar su alto para que quepa entero (sin cubrir ningún lado).
+(function(){
+  const vv = window.visualViewport;
+  if(!vv) return;
+  const root = document.documentElement;
+  const update = () => {
+    const kb = Math.round(window.innerHeight - vv.height - vv.offsetTop);
+    if(kb > 40) root.style.setProperty('--chat-bottom', (kb + 8) + 'px');  // teclado abierto → sube
+    else root.style.removeProperty('--chat-bottom');                       // teclado cerrado → posición normal
+    root.style.setProperty('--chat-vvh', Math.round(vv.height) + 'px');
+  };
+  vv.addEventListener('resize', update);
+  vv.addEventListener('scroll', update);
+  update();
+})();
