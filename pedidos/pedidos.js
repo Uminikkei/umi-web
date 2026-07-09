@@ -370,6 +370,8 @@ function cambiarCant(k, delta){
 function guardarCarrito(){ localStorage.setItem('umiCarrito_' + usuario.area, JSON.stringify(carrito)); }
 
 $('buscador').addEventListener('input', renderCatalogo);
+$('buscadorCompras').addEventListener('input', renderCompras);
+$('buscadorCatalogo').addEventListener('input', renderCatalogoAdmin);
 
 function renderCarritoBar(){
   const items = Object.values(carrito);
@@ -469,17 +471,20 @@ function consolidarDia(pedidosDia){
 function renderCompras(){
   const cont = $('listaCompras');
   if (!pedidos.length) { cont.innerHTML = '<div class="vacio">No hay pedidos todavía.<br>Cuando cocina, sushi o barra envíen su pedido, aparecerá aquí.</div>'; return; }
+  const filtro = slug($('buscadorCompras').value || '');
   const porDia = agruparPorDia(pedidos);
   cont.innerHTML = Object.keys(porDia).sort().reverse().map(dia => {
     const cons = consolidarDia(porDia[dia]);
     const items = Object.entries(cons);
+    const visibles = items.filter(([,v]) => !filtro || slug(v.nombre).includes(filtro));
+    if (filtro && !visibles.length) return '';
     const listos = items.filter(([,v]) => v.comprado).length;
     const completo = listos === items.length;
-    const notas = porDia[dia].filter(p => p.nota)
+    const notas = filtro ? '' : porDia[dia].filter(p => p.nota)
       .map(p => `<div class="pedido-nota">📌 ${esc(p.area)}: “${esc(p.nota)}”</div>`).join('');
     let cuerpo = '';
-    categoriasCon(items.map(([,v]) => v.categoria)).forEach(cat => {
-      const deCat = items.filter(([,v]) => v.categoria === cat);
+    categoriasCon(visibles.map(([,v]) => v.categoria)).forEach(cat => {
+      const deCat = visibles.filter(([,v]) => v.categoria === cat);
       if (!deCat.length) return;
       cuerpo += `<div class="cat-titulo">${esc(cat)}</div>`;
       deCat.forEach(([k, v]) => {
@@ -490,6 +495,7 @@ function renderCompras(){
             <span class="comp-nombre">${esc(v.nombre)}</span> · <span class="comp-total">${fmtCant(v.total)} ${esc(v.unidad)}</span>
             ${v.fuentes.length > 1 ? `<div class="comp-detalle">${detalle}</div>` : `<div class="comp-detalle">${esc(v.fuentes[0].area)}</div>`}
           </div>
+          <button class="comp-borrar" data-bdia="${dia}" data-bkey="${k}" data-bnombre="${esc(v.nombre)}" title="Eliminar de los pedidos">🗑</button>
         </div>`;
       });
     });
@@ -505,6 +511,23 @@ function renderCompras(){
 
   cont.querySelectorAll('.comp-check').forEach(ch => ch.addEventListener('change', () =>
     marcarComprado(ch.dataset.dia, ch.dataset.key, ch.checked)));
+  cont.querySelectorAll('.comp-borrar').forEach(b => b.addEventListener('click', () => {
+    if (!confirm('¿Eliminar "' + b.dataset.bnombre + '" de los pedidos de ese día?')) return;
+    eliminarItem(b.dataset.bdia, b.dataset.bkey);
+  }));
+}
+async function eliminarItem(dia, key){
+  try {
+    const batch = writeBatch(db);
+    pedidos.filter(p => p.dia === dia).forEach(p => {
+      if (!p.items.some(it => keyDe(it.nombre, it.unidad) === key)) return;
+      const items = p.items.filter(it => keyDe(it.nombre, it.unidad) !== key);
+      if (items.length) batch.update(doc(db, 'pedidosCompras', p._id), { items });
+      else batch.delete(doc(db, 'pedidosCompras', p._id));
+    });
+    await batch.commit();
+    toast('Producto eliminado');
+  } catch(e){ console.error('[PEDIDOS] eliminar:', e); toast('No se pudo eliminar'); }
 }
 async function marcarComprado(dia, key, comprado){
   try {
@@ -521,9 +544,11 @@ async function marcarComprado(dia, key, comprado){
 // ── Vista CATÁLOGO (comprador) ──────────────────────────────────────────────
 function renderCatalogoAdmin(){
   const cont = $('listaCatalogoAdmin');
+  const filtro = slug($('buscadorCatalogo').value || '');
   let html = '';
   categoriasCon(catalogo.map(p => p.categoria)).forEach(cat => {
-    const prods = catalogo.filter(p => p.categoria === cat);
+    const prods = catalogo.filter(p => p.categoria === cat &&
+      (!filtro || slug(p.nombre).includes(filtro)));
     if (!prods.length) return;
     html += `<div class="cat-titulo">${esc(cat)}</div>`;
     prods.forEach(p => {

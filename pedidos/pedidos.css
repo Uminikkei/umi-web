@@ -150,6 +150,14 @@ input,select,textarea{font-family:inherit}
   margin-top:.5rem;background:transparent;border:none;color:var(--rojo);font-size:.8rem;padding:.2rem 0;
 }
 
+/* Buscador de las vistas del comprador */
+.buscador-simple{padding:.9rem 0 .2rem}
+.buscador-simple input{
+  width:100%;padding:.7rem 1rem;font-size:1rem;background:var(--bg3);
+  border:1px solid var(--border);border-radius:var(--radius);color:var(--txt);outline:none;
+}
+.buscador-simple input:focus{border-color:var(--teal)}
+
 /* ── Vista comprador: ítem consolidado ── */
 .comp-item{
   display:flex;align-items:flex-start;gap:.7rem;
@@ -170,6 +178,10 @@ input,select,textarea{font-family:inherit}
 .comp-total{color:var(--teal);font-weight:700;font-size:.92rem;white-space:nowrap}
 .comp-detalle{font-size:.76rem;color:var(--muted);margin-top:.15rem}
 .comp-nota{font-size:.76rem;color:var(--warn);margin-top:.15rem;font-style:italic}
+.comp-borrar{
+  background:transparent;border:none;color:var(--muted);font-size:1rem;
+  padding:.15rem .3rem;flex-shrink:0;align-self:center;
+}
 
 /* ── Catálogo admin ── */
 .cata-item{
