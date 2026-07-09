@@ -69,7 +69,8 @@ nav{
   position:absolute;top:0;left:0;right:0;z-index:300;
   height:26px;overflow:hidden;
   display:flex;align-items:center;
-  background:transparent;   /* la ola aqua sólida (top-wave) es el fondo */
+  background:#0d1e40;   /* azul marino UMI */
+  box-shadow:0 3px 10px rgba(4,7,9,.4);
 }
 .promo-track{
   display:flex;flex-shrink:0;white-space:nowrap;will-change:transform;
@@ -77,8 +78,9 @@ nav{
 }
 .promo-track span{
   padding-right:3rem;
-  font-family:'Inter',sans-serif;font-size:.65rem;font-weight:600;
-  letter-spacing:1px;color:#eafcff;text-shadow:0 1px 2px rgba(4,7,9,.35);
+  /* Misma fuente que los títulos (Los más pedidos, Galería…): Inter 700 MAYÚSCULAS espaciada, pero más pequeña */
+  font-family:'Inter',sans-serif;font-size:.56rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
 }
 .promo-track strong{color:#fff;font-weight:700}
 .promo-track span.promo-dot{
@@ -98,19 +100,21 @@ nav{
   .top-wave{height:88px}
   .top-wave svg{height:88px}
 }
-/* Como la ola superior ahora es aqua SÓLIDA, el texto del banner/navbar pasa a
-   azul marino UMI para que se lea (antes era claro sobre fondo oscuro translúcido) */
-.promo-track span,.promo-track strong,.promo-tyc{color:#0d1e40;text-shadow:none}
-.promo-track span.promo-dot{background:#0d1e40}
-.promo-tyc:hover{color:rgba(13,30,64,.65)}
-nav .ntb-link{color:rgba(13,30,64,.85)}
-nav .ntb-link:hover{color:#0d1e40}
-nav .ntb-icon-btn{color:rgba(13,30,64,.85)}
-nav .ntb-icon-btn:hover{color:#0d1e40}
-nav .ntb-user-pts{color:#0d1e40}
-nav .nav-burger span{background:rgba(13,30,64,.85)}
-/* El wordmark sigue blanco (cruza el borde de la ola hacia la foto): sombra sutil para leerse sobre el aqua */
-nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(.95) drop-shadow(0 1px 3px rgba(4,7,9,.45))}
+/* Banner azul marino → letras en aqua UMI */
+.promo-track span,.promo-tyc{color:#62CAE3;text-shadow:none}
+.promo-track strong{color:#a8e7f5}   /* aqua más claro para destacar "puntos UMI" */
+.promo-track span.promo-dot{background:#62CAE3}
+.promo-tyc:hover{color:#a8e7f5}
+/* Enlaces/botones del navbar en BLANCO con sombra abajo, para que resalten sobre el aqua */
+nav .ntb-link{color:#fff;text-shadow:0 2px 4px rgba(4,7,9,.5)}
+nav .ntb-link:hover{color:#fff;text-shadow:0 2px 7px rgba(4,7,9,.7)}
+nav .ntb-icon-btn{color:#fff;filter:drop-shadow(0 2px 3px rgba(4,7,9,.5))}
+nav .ntb-icon-btn:hover{color:#fff}
+nav .ntb-user-pts{color:#fff;text-shadow:0 2px 4px rgba(4,7,9,.5)}
+nav .nav-burger{filter:drop-shadow(0 2px 3px rgba(4,7,9,.5))}
+nav .nav-burger span{background:#fff}
+/* Wordmark blanco con sombra abajo, a juego con los botones */
+nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2px 4px rgba(4,7,9,.5))}
 .promo-tyc{
   background:none;border:none;padding:0;cursor:pointer;
   font:inherit;color:inherit;letter-spacing:inherit;
