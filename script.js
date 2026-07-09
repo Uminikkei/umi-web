@@ -88,48 +88,86 @@
 })();
 
 // ── SONIDO AMBIENTE: OLAS QUE ROMPEN EN LA COSTA ───────────────────────────────
-// Grabación real de playa (CC0, dominio público): olas rompiendo + aves. Arranque
-// inmediato con autoplay silenciado (permitido) y suena al primer gesto del usuario;
-// el botón de la esquina lo silencia y recuerda la elección.
+// Grabación real de playa (CC0). Se reproduce en BUCLE CONTINUO (sin pausa entre
+// repeticiones) con Web Audio API — el loop es exacto a nivel de muestra. Intenta
+// sonar apenas se entra; si el navegador bloquea el autoplay con sonido, se activa
+// SOLO en cuanto el usuario hace cualquier cosa (mover el mouse, tocar, hacer scroll),
+// sin que tenga que pulsar ningún botón ni saber que existe.
 (function(){
   const btn = document.getElementById('soundToggle');
-  const audio = document.getElementById('oceanAudio');
-  if(!btn || !audio){ if(btn) btn.style.display = 'none'; return; }
-  audio.volume = 0.5;
+  const audioEl = document.getElementById('oceanAudio');
+  if(!btn){ return; }
   let userMuted = localStorage.getItem('umiMuted') === '1';
-
-  function play(){ const p = audio.play(); if(p && p.catch) p.catch(()=>{}); return p; }
-
+  const VOL = 0.5;
+  const SRC = (audioEl && audioEl.getAttribute('src')) || 'olas-playa.mp3';
   const EV = ['pointerdown','touchstart','keydown','scroll','mousemove','click'];
-  function firstGesture(){
-    EV.forEach(ev => window.removeEventListener(ev, firstGesture, true));
-    if(!userMuted){ audio.muted = false; play(); }
-  }
-  function armFirstGesture(){ EV.forEach(ev => window.addEventListener(ev, firstGesture, {passive:true, capture:true})); }
-
-  // Intentar sonar CON audio apenas se entra. Los navegadores solo lo permiten si el visitante
-  // ya interactuó antes con el sitio (índice de interacción alto); si lo bloquean, arrancamos
-  // en silencio y el sonido se activa en el primer gesto (mover el mouse, tocar o hacer scroll).
-  if(userMuted){
-    audio.muted = true;
-  } else {
-    audio.muted = false;
-    const p = audio.play();
-    if(p && p.catch){
-      p.catch(() => { audio.muted = true; play(); armFirstGesture(); });
-    } else {
-      armFirstGesture();
-    }
-  }
-
   btn.classList.toggle('muted', userMuted);
-  window.toggleSound = function(){
-    userMuted = !userMuted;
-    localStorage.setItem('umiMuted', userMuted ? '1' : '0');
-    audio.muted = userMuted;
-    if(!userMuted) play();
-    btn.classList.toggle('muted', userMuted);
-  };
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let handled = false;
+
+  // ── Camino principal: Web Audio API → bucle 100% continuo, sin cortes ──
+  if(AudioCtx){
+    try {
+      const ctx = new AudioCtx();
+      const gain = ctx.createGain();
+      gain.gain.value = userMuted ? 0 : VOL;
+      gain.connect(ctx.destination);
+      const resume = () => { if(ctx.state === 'suspended') ctx.resume().catch(()=>{}); };
+
+      fetch(SRC).then(r => r.arrayBuffer()).then(ab => ctx.decodeAudioData(ab)).then(buf => {
+        const node = ctx.createBufferSource();
+        node.buffer = buf;
+        node.loop = true;                    // ← vuelve a empezar sin pausa
+        node.connect(gain);
+        node.start(0);
+        handled = true;
+        if(audioEl) audioEl.pause();
+        resume();
+      }).catch(() => { if(!handled) startElement(); });
+
+      resume();                              // intento inmediato (visitante recurrente / permiso previo)
+      const fg = () => { EV.forEach(ev => window.removeEventListener(ev, fg, true)); resume(); };
+      EV.forEach(ev => window.addEventListener(ev, fg, {passive:true, capture:true}));
+
+      window.toggleSound = function(){
+        userMuted = !userMuted;
+        localStorage.setItem('umiMuted', userMuted ? '1' : '0');
+        resume();
+        gain.gain.value = userMuted ? 0 : VOL;
+        btn.classList.toggle('muted', userMuted);
+      };
+      return;
+    } catch(e){ /* sin Web Audio → usar <audio> */ }
+  }
+
+  startElement();
+
+  // ── Fallback (navegadores sin Web Audio): elemento <audio> con loop nativo ──
+  function startElement(){
+    if(handled) return;
+    handled = true;
+    const audio = audioEl;
+    if(!audio){ btn.style.display = 'none'; return; }
+    audio.volume = VOL; audio.loop = true;
+    const play = () => { const p = audio.play(); if(p && p.catch) p.catch(()=>{}); };
+    const fg = () => { EV.forEach(ev => window.removeEventListener(ev, fg, true)); if(!userMuted){ audio.muted = false; play(); } };
+    const arm = () => EV.forEach(ev => window.addEventListener(ev, fg, {passive:true, capture:true}));
+    if(userMuted){ audio.muted = true; }
+    else {
+      audio.muted = false;
+      const p = audio.play();
+      if(p && p.catch) p.catch(() => { audio.muted = true; play(); arm(); });
+      else arm();
+    }
+    window.toggleSound = function(){
+      userMuted = !userMuted;
+      localStorage.setItem('umiMuted', userMuted ? '1' : '0');
+      audio.muted = userMuted;
+      if(!userMuted) play();
+      btn.classList.toggle('muted', userMuted);
+    };
+  }
 })();
 
 // ── BOTÓN VOLVER AL INICIO ─────────────────────────────────────────────────────
@@ -1634,6 +1672,11 @@ const FAV_IMGS = {
   'Lomo saltado':    'fav-lomo.jpg',
   'Tartare Nikkei':  'fav-tartare.jpg?v=2'
 };
+// Variante SOLO para móvil (≤640px): si un plato tiene foto móvil propia, se usa un <picture>.
+// Se activará cuando exista el archivo fav-tartare-movil.jpg (evita imagen rota mientras tanto).
+const FAV_IMGS_MOBILE = {
+  // 'Tartare Nikkei':  'fav-tartare-movil.jpg?v=1'
+};
 let favIdx = 0, favTimer = null;
 
 function favFind(name){
@@ -1650,12 +1693,17 @@ function buildFavCarousel(){
   FAVORITOS.forEach((name, i) => {
     const f = favFind(name); if(!f) return;
     const img = FAV_IMGS[name] || dishPhoto(name) || '';
+    const imgMob = FAV_IMGS_MOBILE[name];
+    const load = i === 0 ? 'eager' : 'lazy';
+    const picHTML = imgMob
+      ? `<picture><source media="(max-width:640px)" srcset="${imgMob}"><img src="${img}" alt="${name}" loading="${load}" decoding="async"/></picture>`
+      : `<img src="${img}" alt="${name}" loading="${load}" decoding="async"/>`;
     const nEsc = name.replace(/'/g, "\\'");
     const cEsc = f.cat.replace(/'/g, "\\'");
     const slide = document.createElement('div');
     slide.className = 'fav-slide' + (i === 0 ? ' on' : '');
     slide.innerHTML = `
-      <img src="${img}" alt="${name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"/>
+      ${picHTML}
       <div class="fav-info">
         <span class="fav-name">${dishName(name)}</span>
         <div class="fav-row">

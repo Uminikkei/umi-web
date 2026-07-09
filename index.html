@@ -1109,7 +1109,7 @@
 </button>
 
 <!-- Sonido ambiente real de playa (olas + aves), CC0 -->
-<audio id="oceanAudio" src="olas-playa.mp3" loop preload="auto" playsinline></audio>
+<!-- Fallback para navegadores sin Web Audio API; normalmente el sonido va por Web Audio (bucle continuo). preload=none evita doble descarga. --><audio id="oceanAudio" src="olas-playa.mp3" loop preload="none" playsinline></audio>
 
 <!-- Botón de sonido ambiente de olas (esquina inferior izquierda) -->
 <button id="soundToggle" class="sound-toggle" onclick="toggleSound()" aria-label="Silenciar sonido de olas">
@@ -1187,7 +1187,7 @@
 </div>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260709e"></script>
+<script src="script.js?v=20260709f"></script>
 <script src="chat.js?v=20260706a"></script>
 <script type="module" src="auth.js?v=20260706i"></script>
 </body>
