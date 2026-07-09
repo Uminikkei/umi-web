@@ -932,12 +932,21 @@ footer{
 .eventos-wave-bottom{position:absolute;left:0;right:0;bottom:0;height:80px;line-height:0;pointer-events:none;z-index:1}
 .eventos-wave-bottom svg{display:block;width:100%;height:100%;overflow:visible}
 /* Olas animadas: se desplazan de lado como agua (CSS transform — funciona en todos los navegadores) */
-.wave-anim{overflow:hidden}
-.wave-anim > svg{width:200%!important;animation:umi-wave-travel 10s linear infinite}
+.wave-anim{overflow:hidden;isolation:isolate}
+.wave-anim > svg{
+  width:200%!important;animation:umi-wave-travel 10s linear infinite;
+  /* Capa GPU estable: evita el parpadeo del transform animado en móvil */
+  will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
 .wave-anim.wa-rev > svg{animation-direction:reverse}
 .wave-anim.wa-slow > svg{animation-duration:14s}
 .wave-anim.wa-fast > svg{animation-duration:8s}
-@keyframes umi-wave-travel{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes umi-wave-travel{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+/* Móvil: el desenfoque SVG (feGaussianBlur) sobre olas en movimiento hace parpadear
+   la GPU de muchos teléfonos; se desactiva sólo el filtro (la línea queda nítida). */
+@media(max-width:700px){
+  .wave-anim svg path[filter]{filter:none!important}
+}
 
 /* Modal catálogo del evento — carrusel coverflow sobre la web borrosa */
 .event-modal{
@@ -1376,7 +1385,7 @@ footer{
 .reviews-badge svg{width:18px;height:18px}
 .reviews-badge span{font-size:.8rem;font-weight:600;color:var(--teal);letter-spacing:.5px}
 
-.reviews-track-wrap{overflow-x:auto;overflow-y:hidden;position:relative;padding:.5rem 0;scrollbar-width:none;-ms-overflow-style:none;touch-action:pan-x;-webkit-overflow-scrolling:touch}
+.reviews-track-wrap{overflow-x:auto;overflow-y:hidden;position:relative;padding:.5rem 0;scrollbar-width:none;-ms-overflow-style:none;touch-action:pan-x}
 .reviews-track-wrap::-webkit-scrollbar{display:none}
 .reviews-track-wrap::before,.reviews-track-wrap::after{
   content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none;
