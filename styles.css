@@ -439,9 +439,12 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* "NIKKEI!" ondula como una ola suave: cada letra sube y baja con un desfase */
 .hero-title span{display:inline-block}   /* NIKKEI ya NO ondea */
 .hero-sub{
-  font-size:.8rem;color:rgba(240,235,224,.70);
-  max-width:400px;margin:0 0 .4rem;font-weight:400;line-height:1.7;
-  text-transform:uppercase;letter-spacing:3px;   /* mismo estilo/fuente que "La real cocina" */
+  font-size:.72rem;color:rgba(240,235,224,.70);
+  max-width:none;margin:0 0 .4rem;font-weight:400;line-height:1.7;
+  text-transform:uppercase;letter-spacing:2px;white-space:nowrap;   /* una sola línea; mismo estilo que "La real cocina" */
+}
+@media(max-width:700px){
+  .hero-sub{font-size:.56rem;letter-spacing:1px}   /* más pequeña en móvil para que quepa en una línea */
 }
 .hero-script-line{
   display:flex;align-items:baseline;gap:.6rem;
@@ -711,7 +714,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   .cream-desc{margin-left:0;margin-right:0}
   /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto), subida casi hasta el texto, parte superior difuminada en negro */
   /* Imagen subida más: la flama sube y toca el texto (llega hasta "combinación"); va detrás del texto (z-index 1) */
-  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-235px}
+  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-210px}
   .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
   .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 10%)}
   /* La ola de etimología sube y tapa el borde inferior de la imagen */
@@ -2565,7 +2568,7 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px}   /* va debajo del hero (sin solaparse): sin reflejos de las fotos sobre la imagen del hero */
+  #favCarousel{height:440px;margin-top:-40px}   /* sube un poco (más estrecho); SIN z-index, el hero opaco cubre el solape = sin reflejos */
   .fav-head{top:92px}
   .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}
