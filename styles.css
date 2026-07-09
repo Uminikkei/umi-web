@@ -113,8 +113,9 @@ nav .ntb-icon-btn:hover{color:#fff}
 nav .ntb-user-pts{color:#fff;text-shadow:0 2px 4px rgba(4,7,9,.5)}
 nav .nav-burger{filter:drop-shadow(0 2px 3px rgba(4,7,9,.5))}
 nav .nav-burger span{background:#fff}
-/* Wordmark blanco con sombra abajo, a juego con los botones */
-nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2px 4px rgba(4,7,9,.5))}
+/* Wordmark blanco con sombra abajo, a juego con los botones; levita un poco */
+nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2px 4px rgba(4,7,9,.5));animation:umi-levitate 3.2s ease-in-out infinite}
+@keyframes umi-levitate{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 .promo-tyc{
   background:none;border:none;padding:0;cursor:pointer;
   font:inherit;color:inherit;letter-spacing:inherit;
@@ -950,13 +951,13 @@ footer{
 /* Olas animadas: se desplazan de lado como agua (CSS transform — funciona en todos los navegadores) */
 .wave-anim{overflow:hidden;isolation:isolate}
 .wave-anim > svg{
-  width:200%!important;animation:umi-wave-travel 10s linear infinite;
+  width:200%!important;animation:umi-wave-travel 6.5s linear infinite;
   /* Capa GPU estable: evita el parpadeo del transform animado en móvil */
   will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;
 }
 .wave-anim.wa-rev > svg{animation-direction:reverse}
-.wave-anim.wa-slow > svg{animation-duration:14s}
-.wave-anim.wa-fast > svg{animation-duration:8s}
+.wave-anim.wa-slow > svg{animation-duration:9s}
+.wave-anim.wa-fast > svg{animation-duration:5s}
 @keyframes umi-wave-travel{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 /* Móvil: el desenfoque SVG (feGaussianBlur) sobre olas en movimiento hace parpadear
    la GPU de muchos teléfonos; se desactiva sólo el filtro (la línea queda nítida). */
