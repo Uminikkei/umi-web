@@ -196,8 +196,13 @@
         <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="4"/>
         </filter>
+        <!-- El negro se difumina: transparente arriba → negro en la cresta de la ola -->
+        <linearGradient id="favTopFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#000" stop-opacity="0"/>
+          <stop offset="0.62" stop-color="#000" stop-opacity="1"/>
+        </linearGradient>
       </defs>
-      <path fill="#000" d="M0,0 L2880,0 L2880,40 C2640,74 2400,74 2160,40 C1920,10 1680,10 1440,40 C1200,74 960,74 720,40 C480,10 240,10 0,40 Z"/>
+      <path fill="url(#favTopFade)" d="M0,0 L2880,0 L2880,40 C2640,74 2400,74 2160,40 C1920,10 1680,10 1440,40 C1200,74 960,74 720,40 C480,10 240,10 0,40 Z"/>
       <path d="M0,40 C240,10 480,10 720,40 C960,74 1200,74 1440,40 C1680,10 1920,10 2160,40 C2400,74 2640,74 2880,40" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
