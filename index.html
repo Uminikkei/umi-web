@@ -77,6 +77,23 @@
   </defs>
 </svg>
 
+<!-- ═══ OLA AQUA SUPERIOR (animada) — telón del banner + navbar, baja hasta el logo ═══ -->
+<div class="top-wave wave-anim wa-rev" aria-hidden="true">
+  <svg viewBox="0 0 2880 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="topWaveGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#62CAE3" stop-opacity="0.44"/>
+        <stop offset="1" stop-color="#62CAE3" stop-opacity="0.14"/>
+      </linearGradient>
+      <filter id="topWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
+        <feGaussianBlur stdDeviation="2"/>
+      </filter>
+    </defs>
+    <path fill="url(#topWaveGrad)" d="M0,0 L2880,0 L2880,70 C2640,96 2400,96 2160,70 C1920,44 1680,44 1440,70 C1200,96 960,96 720,70 C480,44 240,44 0,70 Z"/>
+    <path d="M0,70 C240,44 480,44 720,70 C960,96 1200,96 1440,70 C1680,44 1920,44 2160,70 C2400,96 2640,96 2880,70" fill="none" stroke="rgba(234,252,255,.5)" stroke-width="3" filter="url(#topWaveBlur)"/>
+  </svg>
+</div>
+
 <!-- ═══ BANNER PROMO PUNTOS (marquesina) ═══ -->
 <div class="promo-banner" role="region" aria-label="Programa de puntos UMI">
   <div class="promo-track">

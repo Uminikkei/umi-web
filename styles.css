@@ -89,6 +89,17 @@ nav{
   vertical-align:middle;
 }
 .promo-banner:hover .promo-track{animation-play-state:paused}
+
+/* ── OLA AQUA SUPERIOR ANIMADA — telón del banner + navbar, baja hasta el logo ── */
+.top-wave{
+  position:absolute;top:0;left:0;right:0;z-index:150;
+  height:100px;line-height:0;pointer-events:none;
+}
+.top-wave svg{display:block;width:100%;height:100px}
+@media(max-width:900px){
+  .top-wave{height:88px}
+  .top-wave svg{height:88px}
+}
 .promo-tyc{
   background:none;border:none;padding:0;cursor:pointer;
   font:inherit;color:inherit;letter-spacing:inherit;
@@ -313,14 +324,12 @@ nav{
 /* ── HERO SECTION — alineado a la izquierda como en la referencia ── */
 .hero-sec{
   min-height:100vh;
-  background:url('fondo-umi.jpg') center top/cover no-repeat;
+  /* El borde inferior de la imagen se funde a negro para empatar sin costura con la
+     ola OSCURA ANIMADA que hace de transición hacia "Los más pedidos" (ver #favCarousel .sig-wave-top) */
+  background:linear-gradient(to bottom,transparent 88%,rgba(0,0,0,.6) 95%,#000 100%),url('fondo-umi.jpg') center top/cover no-repeat;
   display:flex;align-items:flex-end;justify-content:flex-start;
   text-align:left;padding:190px 5vw 12rem;
   position:relative;overflow:hidden;z-index:2;
-  /* Borde inferior en ola: la propia imagen distintiva hace de ola sobre "Los más pedidos" */
-  clip-path:url(#heroWaveClip);
-  /* Sombra bajo la ola: da profundidad sobre la sección siguiente */
-  filter:drop-shadow(0 7px 8px rgba(4,7,9,.55));
 }
 .hero-sec::before{
   content:'';position:absolute;inset:0;
@@ -423,9 +432,8 @@ nav{
   background:#e2be94;
   position:relative;
   padding:0;
-  /* La imagen distintiva del hero se alarga sobre la franja negra plana de la
-     ola superior: subimos la sección bajo el hero (que tiene z-index mayor). */
-  margin-top:-72px;
+  /* El hero ahora tiene borde inferior recto (fundido a negro); esta sección va
+     justo debajo y su ola oscura ANIMADA hace la transición hacia "Los más pedidos". */
   z-index:1;
 }
 .sig-wave-bottom{
@@ -1368,7 +1376,7 @@ footer{
 .reviews-badge svg{width:18px;height:18px}
 .reviews-badge span{font-size:.8rem;font-weight:600;color:var(--teal);letter-spacing:.5px}
 
-.reviews-track-wrap{overflow-x:auto;overflow-y:hidden;position:relative;padding:.5rem 0;scrollbar-width:none;-ms-overflow-style:none}
+.reviews-track-wrap{overflow-x:auto;overflow-y:hidden;position:relative;padding:.5rem 0;scrollbar-width:none;-ms-overflow-style:none;touch-action:pan-x;-webkit-overflow-scrolling:touch}
 .reviews-track-wrap::-webkit-scrollbar{display:none}
 .reviews-track-wrap::before,.reviews-track-wrap::after{
   content:'';position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none;
@@ -2404,7 +2412,7 @@ footer strong{color:var(--teal)}
 .fav-dot.on{background:#fdf8ec;transform:scale(1.25)}
 /* olas que recortan sobre la foto */
 #favCarousel .sig-wave-top{
-  display:none; /* la ola ahora la da el borde recortado del hero */
+  display:block; /* ola oscura ANIMADA: transición en movimiento hacia "Los más pedidos" */
   position:absolute;top:-1px;left:0;right:0;z-index:2;line-height:0;pointer-events:none;
 }
 #favCarousel .sig-wave-top svg{display:block;width:100%;height:80px;overflow:visible}

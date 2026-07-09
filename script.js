@@ -1295,6 +1295,14 @@ const REV_QT = '...<span class="rev-q">"</span>';     // cierre truncado ..."
     function stop(){ clearInterval(auto); }
     wrap.addEventListener('mouseenter', stop);
     wrap.addEventListener('mouseleave', start);
+    // Móvil: al tocar/deslizar con el dedo se pausa el auto-scroll para que el usuario
+    // pueda arrastrar libremente de un lado a otro; reanuda desde donde quedó al soltar.
+    wrap.addEventListener('touchstart', stop, {passive:true});
+    wrap.addEventListener('touchmove', stop, {passive:true});
+    wrap.addEventListener('touchend', () => {
+      clearTimeout(window._revResume);
+      window._revResume = setTimeout(start, 3500);
+    }, {passive:true});
     start();
     // Paso manual (flechas): desplaza una tarjeta y reinicia el reloj
     window._revStep = (dir) => {
