@@ -708,11 +708,18 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   .cream-label{text-align:left}
   .cream-desc{margin-left:0;margin-right:0}
   /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto), subida casi hasta el texto, parte superior difuminada en negro */
-  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-42px}
+  /* Imagen subida más: la flama sube y toca el texto (llega hasta "combinación"); va detrás del texto (z-index 1) */
+  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-235px}
   .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 16%)}
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 10%)}
   /* La ola de etimología sube y tapa el borde inferior de la imagen */
   .etim-sec{margin-top:-34px;z-index:2}
+}
+/* Móvil: menos espacio entre la galería y "¿Cómo lo hacemos?" (se ve más estrecho).
+   !important porque las reglas base de estas secciones van después en el archivo. */
+@media(max-width:700px){
+  .eventos-sec{padding-bottom:1rem!important}
+  .videos-sec{padding-top:1.4rem!important}
 }
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem}
@@ -837,6 +844,8 @@ footer{
   .footer-inner{grid-template-columns:1fr 1fr;gap:2rem 1.2rem;padding:2.5rem 1.2rem;justify-items:center}
   .footer-brand{grid-column:1/-1}
   .footer-info{overflow-wrap:anywhere}
+  /* El email completo en una sola línea (sin dividirse) */
+  .footer-info a[href^="mailto"]{white-space:nowrap;font-size:.56rem;letter-spacing:0}
   /* Síguenos: ancho justo para 3 botones por fila → 3 arriba y 2 abajo (centrados) */
   .footer-social{width:126px;max-width:126px;gap:.5rem}
 }
