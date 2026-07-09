@@ -730,14 +730,12 @@ footer{
   text-decoration:underline;text-underline-offset:3px;
 }
 .footer-tyc:hover{color:var(--teal)}
-@media(min-width:701px) and (max-width:900px){
-  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
+/* Móvil/tablet (≤900px): footer en 2 columnas iguales, centrado (va después de la base para que gane) */
+@media(max-width:900px){
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem 1.2rem;padding:2.5rem 1.2rem;justify-items:center}
   .footer-brand{grid-column:1/-1}
-}
-/* Móvil (≤700px): footer en una sola columna y centrado — va después de la base para que no la sobreescriba */
-@media(max-width:700px){
-  .footer-inner{grid-template-columns:1fr;gap:2.2rem;padding:2.5rem 1.5rem}
-  .footer-brand{grid-column:auto}
+  .footer-info{overflow-wrap:anywhere}
+  .footer-social{width:100%;max-width:160px}   /* no forzar 150px fijo: columnas parejas */
 }
 
 /* ── MENU SECTION ── */
