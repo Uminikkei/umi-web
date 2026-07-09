@@ -309,12 +309,8 @@
         </filter>
       </defs>
       <path fill="var(--teal)"
-            d="M0,0 L1440,0 L1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64 Z">
-        <animate attributeName="d" dur="8.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="M0,0 L1440,0 L1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64 Z;M0,0 L1440,0 L1440,64 C1360,71 1280,63 1160,67 C1030,71 900,58 720,54 C540,58 410,83 280,84 C160,81 80,59 0,64 Z;M0,0 L1440,0 L1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64 Z"/>
-      </path>
-      <path d="M1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#menuWaveBlur)" transform="translate(0,5)">
-        <animate attributeName="d" dur="8.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="M1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64;M1440,64 C1360,71 1280,63 1160,67 C1030,71 900,58 720,54 C540,58 410,83 280,84 C160,81 80,59 0,64;M1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64"/>
-      </path>
+            d="M0,0 L1440,0 L1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64 Z"/>
+      <path d="M1440,64 C1360,63 1280,74 1160,75 C1030,76 900,58 720,54 C540,58 410,76 280,75 C160,74 80,66 0,64" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#menuWaveBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
 
@@ -348,20 +344,16 @@
     </div>
   </div>
 
-  <!-- Ola divisoria hacia "¿Cómo lo hacemos?" (pliegue con sombra sobre el navy) -->
-  <div class="eventos-wave-bottom" aria-hidden="true">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ola divisoria hacia "¿Cómo lo hacemos?" — se desplaza como agua (animación CSS, funciona en todos los navegadores) -->
+  <div class="eventos-wave-bottom eventos-wave-anim" aria-hidden="true">
+    <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="eventosWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#142751" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z">
-        <animate attributeName="d" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z;M0,56 C200,32 400,70 600,55 C800,35 1000,72 1200,52 C1320,46 1400,58 1440,50 L1440,80 L0,80 Z;M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
-      </path>
-      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(2,5,12,.55)" stroke-width="9" filter="url(#eventosWaveBlur)" transform="translate(0,6)">
-        <animate attributeName="d" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35;M0,56 C200,32 400,70 600,55 C800,35 1000,72 1200,52 C1320,46 1400,58 1440,50;M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35"/>
-      </path>
+      <path d="M0,40 C240,74 480,74 720,40 C960,10 1200,10 1440,40 C1680,74 1920,74 2160,40 C2400,10 2640,10 2880,40" fill="none" stroke="rgba(2,5,12,.55)" stroke-width="9" filter="url(#eventosWaveBlur)" transform="translate(0,6)"/>
+      <path fill="#142751" d="M0,40 C240,74 480,74 720,40 C960,10 1200,10 1440,40 C1680,74 1920,74 2160,40 C2400,10 2640,10 2880,40 L2880,80 L0,80 Z"/>
     </svg>
   </div>
 </section>
