@@ -416,9 +416,15 @@ function renderCarritoBar(){
 $('btnEnviar').addEventListener('click', () => {
   const items = Object.values(carrito);
   if (!items.length) return;
-  $('resumenPedido').innerHTML = items.map(i =>
-    `<div class="pedido-item"><span class="cant">${fmtCant(i.cantidad)} ${esc(i.unidad)}</span><span class="nombre">${esc(i.nombre)}</span></div>`
-  ).join('');
+  $('resumenPedido').innerHTML = items.map(i => {
+    const k = keyDe(i.nombre, i.unidad);
+    return `<div class="pedido-item"><span class="cant">${fmtCant(i.cantidad)} ${esc(i.unidad)}</span><span class="nombre">${esc(i.nombre)}</span></div>
+      <input class="obs-input" data-obs="${k}" value="${esc(i.nota || '')}" placeholder="Observación (opcional), ej: 2 ramos, bien maduras…" autocomplete="off">`;
+  }).join('');
+  // La observación se guarda en el carrito al escribirla (sobrevive si cierran el modal)
+  $('resumenPedido').querySelectorAll('[data-obs]').forEach(inp => inp.addEventListener('input', () => {
+    if (carrito[inp.dataset.obs]) { carrito[inp.dataset.obs].nota = inp.value.trim(); guardarCarrito(); }
+  }));
   $('notaPedido').value = '';
   abrirModal('modalEnviar');
 });
@@ -432,7 +438,7 @@ $('btnConfirmarEnvio').addEventListener('click', async () => {
       area: usuario.area,
       nota: $('notaPedido').value.trim(),
       createdAt: serverTimestamp(),
-      items: items.map(i => ({ nombre: i.nombre, categoria: i.categoria, cantidad: i.cantidad, unidad: i.unidad, comprado: false })),
+      items: items.map(i => ({ nombre: i.nombre, categoria: i.categoria, cantidad: i.cantidad, unidad: i.unidad, nota: i.nota || '', comprado: false })),
     });
     carrito = {}; guardarCarrito();
     cerrarModales();
@@ -473,6 +479,7 @@ function cardPedido(p, esHoy){
       `<div class="pedido-item ${i.comprado ? 'comprado' : ''}">
          <span class="cant">${fmtCant(i.cantidad)} ${esc(i.unidad)}</span>
          <span class="nombre">${esc(i.nombre)}</span>
+         ${i.nota ? `<span class="obs">· ${esc(i.nota)}</span>` : ''}
          ${i.comprado ? '<span style="margin-left:auto">✅</span>' : ''}
        </div>`).join('')}
     ${esHoy && nadaComprado ? `<button class="pedido-borrar" data-borrar="${p._id}">Eliminar pedido</button>` : ''}
@@ -493,7 +500,7 @@ function consolidarDia(pedidosDia){
       const k = keyDe(it.nombre, it.unidad);
       if (!map[k]) map[k] = { nombre: it.nombre, categoria: it.categoria, unidad: it.unidad, total: 0, fuentes: [], comprado: true };
       map[k].total = Math.round((map[k].total + it.cantidad) * 100) / 100;
-      map[k].fuentes.push({ area: p.area, cantidad: it.cantidad });
+      map[k].fuentes.push({ area: p.area, cantidad: it.cantidad, nota: it.nota || '' });
       if (!it.comprado) map[k].comprado = false;
     });
   });
@@ -519,12 +526,14 @@ function renderCompras(){
       if (!deCat.length) return;
       cuerpo += `<div class="cat-titulo">${esc(cat)}</div>`;
       deCat.forEach(([k, v]) => {
-        const detalle = v.fuentes.map(f => `${esc(f.area)} ${fmtCant(f.cantidad)}`).join(' + ');
+        const detalle = v.fuentes.length > 1
+          ? v.fuentes.map(f => `${esc(f.area)} ${fmtCant(f.cantidad)}${f.nota ? ' («' + esc(f.nota) + '»)' : ''}`).join(' + ')
+          : esc(v.fuentes[0].area) + (v.fuentes[0].nota ? ' · «' + esc(v.fuentes[0].nota) + '»' : '');
         cuerpo += `<div class="comp-item ${v.comprado ? 'comprado' : ''}">
           <input type="checkbox" class="comp-check" data-dia="${dia}" data-key="${k}" ${v.comprado ? 'checked' : ''}>
           <div class="comp-info">
             <span class="comp-nombre">${esc(v.nombre)}</span> · <span class="comp-total">${fmtCant(v.total)} ${esc(v.unidad)}</span>
-            ${v.fuentes.length > 1 ? `<div class="comp-detalle">${detalle}</div>` : `<div class="comp-detalle">${esc(v.fuentes[0].area)}</div>`}
+            <div class="comp-detalle">${detalle}</div>
           </div>
           <button class="comp-borrar" data-bdia="${dia}" data-bkey="${k}" data-bnombre="${esc(v.nombre)}" title="Eliminar de los pedidos">🗑</button>
         </div>`;

@@ -164,6 +164,7 @@ input,select,textarea{font-family:inherit}
   display:flex;align-items:center;gap:.55rem;padding:.32rem 0;font-size:.92rem;
 }
 .pedido-item .cant{color:var(--teal);font-weight:700;white-space:nowrap}
+.pedido-item .obs{font-size:.78rem;color:var(--warn);font-style:italic;min-width:0}
 .pedido-item.comprado .nombre{text-decoration:line-through;color:var(--muted)}
 .pedido-borrar{
   margin-top:.5rem;background:transparent;border:none;color:var(--rojo);font-size:.8rem;padding:.2rem 0;
@@ -228,7 +229,13 @@ input,select,textarea{font-family:inherit}
 }
 .modal-box h3{margin-bottom:.9rem;font-size:1.15rem}
 .modal-lista{margin-bottom:.9rem}
-.modal-lista .pedido-item{border-bottom:1px solid var(--border)}
+.modal-lista .pedido-item{padding-bottom:.15rem}
+.obs-input{
+  width:100%;margin:0 0 .7rem;padding:.5rem .75rem;font-size:.85rem;
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  color:var(--txt);outline:none;
+}
+.obs-input:focus{border-color:var(--teal)}
 #notaPedido{
   width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:12px;
   color:var(--txt);padding:.7rem .9rem;font-size:.92rem;resize:none;outline:none;
