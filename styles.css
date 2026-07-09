@@ -587,8 +587,9 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* ── Geoglifos interactivos: animación al pasar el dedo/mouse, se detiene al soltar ── */
 .sig-svg .geo{ cursor:pointer; }
 .sig-svg .geo-anim{ transform-box:fill-box; transform-origin:center center; }
-/* Viento → gira */
-@keyframes geo-spin{ to{ transform:rotate(360deg); } }
+/* Viento → gira hacia la derecha (horario). El grupo padre tiene scale(-y), así que
+   en pantalla rotate(-360deg) se ve como giro horario (a la derecha). */
+@keyframes geo-spin{ to{ transform:rotate(-360deg); } }
 .geo-viento.playing .geo-anim{ animation:geo-spin 2.2s linear infinite; }
 /* Mar → se balancea como un barco */
 @keyframes geo-sway{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(7deg); } }
