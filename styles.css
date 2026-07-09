@@ -468,7 +468,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .hero-script .hs-w{display:inline-block;animation:frente-wave 2.4s ease-in-out infinite}
 .hero-script .hs-w:nth-child(2){animation-delay:.32s}
 .hero-script .hs-w:nth-child(3){animation-delay:.64s}
-.hero-script .hs-dot{animation-delay:.9s;margin-left:-.12em}   /* punto más pegado a la frase */
+.hero-script .hs-dot{animation-delay:.9s;margin-left:.05em}   /* punto ligeramente separado de la frase para que se note */
 @keyframes frente-wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-.22em)}}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
 .btn-hero-primary{
@@ -733,7 +733,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 @media(max-width:640px){
   .hero-sec{padding:130px 1.5rem 15rem;
     /* borde inferior más difuminado: la imagen se funde a negro gradualmente (suaviza la línea) */
-    background:linear-gradient(to bottom,transparent 80%,rgba(0,0,0,.4) 87%,#000 91%),url('fondo-umi.jpg') center top/cover no-repeat}
+    background:linear-gradient(to bottom,transparent 78%,rgba(0,0,0,.5) 84%,#000 88%),url('fondo-umi.jpg') center top/cover no-repeat}
   /* "frente al mar" justo debajo del subtítulo, alineado a la izquierda */
   .hero-script-line{justify-content:flex-start!important;padding-right:0!important}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
@@ -2572,7 +2572,7 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px;margin-top:-75px;z-index:3}   /* sube la sección COMPLETA (ola + fotos) por encima del hero; la ola es SÓLIDA (no gradiente) así que tapa el borde de las fotos y no hay reflejos */
+  #favCarousel{height:440px;margin-top:-95px;z-index:3}   /* sube la sección COMPLETA (ola + fotos) por encima del hero; la ola es SÓLIDA (no gradiente) así que tapa el borde de las fotos y no hay reflejos */
   .fav-head{top:92px}
   .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}

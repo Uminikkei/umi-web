@@ -98,26 +98,36 @@
   audio.volume = 0.5;
   let userMuted = localStorage.getItem('umiMuted') === '1';
 
-  function tryPlay(){ const p = audio.play(); if(p && p.catch) p.catch(()=>{}); }
+  function play(){ const p = audio.play(); if(p && p.catch) p.catch(()=>{}); return p; }
 
-  // Empieza de inmediato en silencio (el autoplay silenciado está permitido); el sonido
-  // se activa en cuanto el usuario interactúa (política de autoplay de los navegadores).
-  audio.muted = true;
-  tryPlay();
   const EV = ['pointerdown','touchstart','keydown','scroll','mousemove','click'];
   function firstGesture(){
     EV.forEach(ev => window.removeEventListener(ev, firstGesture, true));
-    if(!userMuted) audio.muted = false;
-    tryPlay();
+    if(!userMuted){ audio.muted = false; play(); }
   }
-  EV.forEach(ev => window.addEventListener(ev, firstGesture, {passive:true, capture:true}));
+  function armFirstGesture(){ EV.forEach(ev => window.addEventListener(ev, firstGesture, {passive:true, capture:true})); }
+
+  // Intentar sonar CON audio apenas se entra. Los navegadores solo lo permiten si el visitante
+  // ya interactuó antes con el sitio (índice de interacción alto); si lo bloquean, arrancamos
+  // en silencio y el sonido se activa en el primer gesto (mover el mouse, tocar o hacer scroll).
+  if(userMuted){
+    audio.muted = true;
+  } else {
+    audio.muted = false;
+    const p = audio.play();
+    if(p && p.catch){
+      p.catch(() => { audio.muted = true; play(); armFirstGesture(); });
+    } else {
+      armFirstGesture();
+    }
+  }
 
   btn.classList.toggle('muted', userMuted);
   window.toggleSound = function(){
     userMuted = !userMuted;
     localStorage.setItem('umiMuted', userMuted ? '1' : '0');
     audio.muted = userMuted;
-    if(!userMuted) tryPlay();
+    if(!userMuted) play();
     btn.classList.toggle('muted', userMuted);
   };
 })();
