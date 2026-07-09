@@ -973,7 +973,7 @@ footer{
   position:relative;z-index:3;top:16px;   /* blanco: se lee aunque la ola teal (animada) pase por encima */
 }
 .eventos-grid{
-  display:flex;gap:.7rem;justify-content:safe center;
+  display:flex;gap:.2rem;justify-content:safe center;   /* tarjetas muy pegadas entre sí */
   overflow-x:auto;overflow-y:hidden;
   padding:.4rem 1.6rem;   /* simétrico: las olas de borde quedan alineadas arriba y abajo */
   scrollbar-width:none;-ms-overflow-style:none;
@@ -1024,6 +1024,9 @@ footer{
    la GPU de muchos teléfonos; se desactiva sólo el filtro (la línea queda nítida). */
 @media(max-width:700px){
   .wave-anim svg path[filter]{filter:none!important}
+  /* Sin el desenfoque, la línea de "espuma" de la ola del navbar se ve como un borde
+     blanco nítido: se oculta en móvil */
+  .top-wave svg path[stroke]{display:none}
 }
 
 /* Modal catálogo del evento — carrusel coverflow sobre la web borrosa */
@@ -2518,7 +2521,7 @@ footer strong{color:var(--teal)}
 #favCarousel .sig-wave-bottom svg{display:block;width:100%;height:80px;overflow:visible}
 @media(max-width:640px){
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
-  #favCarousel{height:440px;margin-top:-80px}   /* sube la sección: más cerca de la imagen inicial (hero) */
+  #favCarousel{height:440px;margin-top:-80px;z-index:3}   /* sube la sección (más cerca del hero) y va POR ENCIMA del hero para que su ola animada se vea */
   .fav-head{top:92px}
   .fav-info{bottom:84px;right:6vw}   /* botón comprar más arriba: la ola inferior nunca lo cubre */
   .fav-dots{bottom:92px}
