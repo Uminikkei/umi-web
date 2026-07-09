@@ -177,28 +177,28 @@
   <div class="fav-dots" id="favDots"></div>
 
   <!-- Ola superior: negro recorta sobre la foto (la imagen distintiva de Hero la toca por arriba) -->
-  <div class="sig-wave-top" aria-hidden="true">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="sig-wave-top wave-anim wa-slow" aria-hidden="true">
+    <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="favTopBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#000" d="M0,0 L1440,0 L1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42 Z"/>
-      <path d="M1440,38 C1300,62 1150,18 980,40 C800,64 620,14 440,38 C280,58 120,22 0,42" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
+      <path fill="#000" d="M0,0 L2880,0 L2880,40 C2640,74 2400,74 2160,40 C1920,10 1680,10 1440,40 C1200,74 960,74 720,40 C480,10 240,10 0,40 Z"/>
+      <path d="M0,40 C240,10 480,10 720,40 C960,74 1200,74 1440,40 C1680,10 1920,10 2160,40 C2400,74 2640,74 2880,40" fill="none" stroke="rgba(4,7,9,.36)" stroke-width="8" filter="url(#favTopBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
 
   <!-- Ola inferior: negro recorta sobre la foto; la foto proyecta sombra sobre nuestra historia -->
-  <div class="sig-wave-bottom">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="sig-wave-bottom wave-anim wa-rev">
+    <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="favWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2"/>
         </filter>
       </defs>
-      <path fill="#000" d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35 L1440,80 L0,80 Z"/>
-      <path d="M0,40 C200,80 400,10 600,45 C800,80 1000,15 1200,40 C1320,55 1400,30 1440,35" fill="none" stroke="rgba(4,7,9,.4)" stroke-width="7" filter="url(#favWaveBlur)" transform="translate(0,4)"/>
+      <path fill="#000" d="M0,40 C240,74 480,74 720,40 C960,10 1200,10 1440,40 C1680,74 1920,74 2160,40 C2400,10 2640,10 2880,40 L2880,80 L0,80 Z"/>
+      <path d="M0,40 C240,74 480,74 720,40 C960,10 1200,10 1440,40 C1680,74 1920,74 2160,40 C2400,10 2640,10 2880,40" fill="none" stroke="rgba(4,7,9,.4)" stroke-width="7" filter="url(#favWaveBlur)" transform="translate(0,4)"/>
     </svg>
   </div>
 </section>
@@ -227,15 +227,15 @@
 <!-- ═══ SECCIÓN: ETIMOLOGÍA — fondo arena, separada por ola ═══ -->
 <section class="etim-sec">
   <!-- Ola: cream (historia) por delante, proyecta sombra sobre la arena -->
-  <div class="etim-wave" aria-hidden="true">
-    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="etim-wave wave-anim" aria-hidden="true">
+    <svg viewBox="0 0 2880 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="etimWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#000" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
-      <path d="M1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45" fill="none" stroke="rgba(4,7,9,.28)" stroke-width="8" filter="url(#etimWaveBlur)" transform="translate(0,5)"/>
+      <path fill="#000" d="M0,0 L2880,0 L2880,45 C2640,83 2400,83 2160,45 C1920,11 1680,11 1440,45 C1200,83 960,83 720,45 C480,11 240,11 0,45 Z"/>
+      <path d="M0,45 C240,11 480,11 720,45 C960,83 1200,83 1440,45 C1680,11 1920,11 2160,45 C2400,83 2640,83 2880,45" fill="none" stroke="rgba(4,7,9,.28)" stroke-width="8" filter="url(#etimWaveBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
 
@@ -263,15 +263,15 @@
 <section class="menu-sec" id="menu">
 
   <!-- Ola superior: arena (etimología) por delante, entra al teal del menú -->
-  <div class="menu-wave-top" aria-hidden="true">
-    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="menu-wave-top wave-anim wa-slow" aria-hidden="true">
+    <svg viewBox="0 0 2880 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="menuWaveTopBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#0d1e40" d="M0,0 L1440,0 L1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45 Z"/>
-      <path d="M1440,50 C1380,45 1260,72 1080,52 C900,30 720,68 540,48 C360,28 180,60 0,45" fill="none" stroke="rgba(4,7,9,.28)" stroke-width="8" filter="url(#menuWaveTopBlur)" transform="translate(0,5)"/>
+      <path fill="#0d1e40" d="M0,0 L2880,0 L2880,45 C2640,83 2400,83 2160,45 C1920,11 1680,11 1440,45 C1200,83 960,83 720,45 C480,11 240,11 0,45 Z"/>
+      <path d="M0,45 C240,11 480,11 720,45 C960,83 1200,83 1440,45 C1680,11 1920,11 2160,45 C2400,83 2640,83 2880,45" fill="none" stroke="rgba(4,7,9,.28)" stroke-width="8" filter="url(#menuWaveTopBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
 
@@ -345,7 +345,7 @@
   </div>
 
   <!-- Ola divisoria hacia "¿Cómo lo hacemos?" — se desplaza como agua (animación CSS, funciona en todos los navegadores) -->
-  <div class="eventos-wave-bottom eventos-wave-anim" aria-hidden="true">
+  <div class="eventos-wave-bottom wave-anim wa-fast" aria-hidden="true">
     <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="eventosWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
@@ -428,15 +428,15 @@
 <!-- REVIEWS -->
 <section class="reviews-sec">
   <!-- Ola divisoria: el navy de "¿Cómo lo hacemos?" cae sobre "Lo que dicen" -->
-  <div class="reviews-wave-top" aria-hidden="true">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="reviews-wave-top wave-anim wa-rev" aria-hidden="true">
+    <svg viewBox="0 0 2880 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="reviewsWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
           <feGaussianBlur stdDeviation="2.5"/>
         </filter>
       </defs>
-      <path fill="#142751" d="M0,0 L1440,0 L1440,45 C1260,70 1080,22 900,46 C720,68 540,20 360,44 C200,64 90,30 0,48 Z"/>
-      <path d="M1440,45 C1260,70 1080,22 900,46 C720,68 540,20 360,44 C200,64 90,30 0,48" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#reviewsWaveBlur)" transform="translate(0,5)"/>
+      <path fill="#142751" d="M0,0 L2880,0 L2880,40 C2640,74 2400,74 2160,40 C1920,10 1680,10 1440,40 C1200,74 960,74 720,40 C480,10 240,10 0,40 Z"/>
+      <path d="M0,40 C240,10 480,10 720,40 C960,74 1200,74 1440,40 C1680,10 1920,10 2160,40 C2400,74 2640,74 2880,40" fill="none" stroke="rgba(4,7,9,.32)" stroke-width="8" filter="url(#reviewsWaveBlur)" transform="translate(0,5)"/>
     </svg>
   </div>
   <div class="reviews-head">

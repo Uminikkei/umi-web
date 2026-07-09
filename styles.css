@@ -925,9 +925,12 @@ footer{
 /* Ola divisoria Eventos → ¿Cómo lo hacemos? */
 .eventos-wave-bottom{position:absolute;left:0;right:0;bottom:0;height:80px;line-height:0;pointer-events:none;z-index:1}
 .eventos-wave-bottom svg{display:block;width:100%;height:100%;overflow:visible}
-/* Ola que se desplaza de lado como agua (animación CSS transform — funciona en todos los navegadores) */
-.eventos-wave-anim{overflow:hidden}
-.eventos-wave-anim svg{width:200%;animation:umi-wave-travel 8s linear infinite}
+/* Olas animadas: se desplazan de lado como agua (CSS transform — funciona en todos los navegadores) */
+.wave-anim{overflow:hidden}
+.wave-anim > svg{width:200%!important;animation:umi-wave-travel 10s linear infinite}
+.wave-anim.wa-rev > svg{animation-direction:reverse}
+.wave-anim.wa-slow > svg{animation-duration:14s}
+.wave-anim.wa-fast > svg{animation-duration:8s}
 @keyframes umi-wave-travel{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Modal catálogo del evento — carrusel coverflow sobre la web borrosa */
