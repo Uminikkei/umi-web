@@ -27,52 +27,109 @@ const USUARIOS = {
 
 const CATEGORIAS = [
   '🥑 Verduras y Frutas',
-  '🐟 Proteínas',
+  '🐟 Pescados y Mariscos',
+  '🥩 Carnes y Aves',
   '🍚 Abarrotes',
+  '🍰 Pastelería',
   '🍹 Bebidas y Licores',
   '📦 Papelería y Envases',
+  '🍳 Utensilios',
   '🧴 Limpieza',
 ];
-const UNIDADES = ['kg','g','un','caja','pack','bandeja','botella','litro','saco','rollo','bolsa','paquete'];
+const UNIDADES = ['kg','gr','un','caja','bandeja','saco','malla','atado','paquete','bolsa','rollo','frasco','galón','litro','botella','lata','barra','pote','pieza','par'];
 
-// Catálogo base: se carga a Firestore la primera vez (después se edita desde la app)
-const CATALOGO_BASE = [
-  // Verduras y Frutas
-  ['Palta','kg'],['Limón','kg'],['Limón de pica','kg'],['Cebolla morada','kg'],['Cebollín','paquete'],
-  ['Ciboulette','paquete'],['Cilantro','paquete'],['Jengibre','kg'],['Pepino','kg'],['Lechuga','un'],
-  ['Tomate','kg'],['Zanahoria','kg'],['Champiñón','kg'],['Choclo','kg'],['Camote','kg'],['Papa','kg'],
-  ['Ají verde','kg'],['Mango','un'],['Maracuyá','kg'],['Naranja','kg'],['Frutilla','kg'],
-  ['Menta','paquete'],['Albahaca','paquete'],
-  // Proteínas
-  ['Salmón','kg'],['Atún','kg'],['Reineta','kg'],['Congrio','kg'],['Camarón','kg'],['Pulpo','kg'],
-  ['Calamar','kg'],['Ostión','kg'],['Kanikama','caja'],['Pollo','kg'],['Lomo de res','kg'],
-  ['Tocino','kg'],['Huevos','bandeja'],
-  // Abarrotes
-  ['Arroz de sushi','saco'],['Alga nori','caja'],['Sésamo','kg'],['Panko','kg'],['Salsa de soya','litro'],
-  ['Mirin','litro'],['Vinagre de arroz','litro'],['Wasabi','un'],['Pasta ají amarillo','kg'],
-  ['Queso crema','kg'],['Mayonesa','kg'],['Leche condensada','un'],['Harina','kg'],['Harina tempura','kg'],
-  ['Aceite','litro'],['Aceite de sésamo','botella'],['Salsa anguila','botella'],['Salsa teriyaki','botella'],
-  ['Sal','kg'],['Azúcar','kg'],['Merkén','kg'],
-  // Bebidas y Licores
-  ['Pisco','botella'],['Ron','botella'],['Vodka','botella'],['Gin','botella'],['Sake','botella'],
-  ['Vino blanco','botella'],['Espumante','botella'],['Cerveza','caja'],['Coca-Cola','caja'],
-  ['Bebidas variadas','caja'],['Agua con gas','caja'],['Agua sin gas','caja'],['Tónica','caja'],
-  ['Ginger ale','caja'],['Red Bull','caja'],['Jugo de piña','litro'],['Jugo de arándano','litro'],
-  ['Granadina','botella'],['Hielo','bolsa'],
-  // Papelería y Envases
-  ['Cajas delivery','pack'],['Bolsas kraft','pack'],['Bolsas plásticas','pack'],['Palitos chinos','pack'],
-  ['Servilletas','pack'],['Rollos de boleta','pack'],['Papel film','rollo'],['Papel aluminio','rollo'],
-  ['Guantes nitrilo','caja'],['Papel absorbente','pack'],['Vasos desechables','pack'],
-  ['Contenedor de salsas','pack'],
-  // Limpieza
-  ['Cloro','litro'],['Lavalozas','litro'],['Desengrasante','litro'],['Esponjas','pack'],['Paños','pack'],
-  ['Bolsas de basura','pack'],['Jabón de manos','litro'],['Alcohol','litro'],['Toalla de papel','pack'],
-].map((p, i) => {
-  // La categoría se deduce por posición según los bloques de arriba
-  const cortes = [23, 36, 57, 76, 88, 97];
-  const cat = CATEGORIAS[cortes.findIndex(c => i < c)];
-  return { nombre: p[0], unidad: p[1], categoria: cat };
-});
+// Catálogo base: sacado de los pedidos reales del grupo de WhatsApp "Pedidos Umi"
+// (oct 2025 - jul 2026). Se carga a Firestore la primera vez; después se edita desde la app.
+const BASE = {
+  '🥑 Verduras y Frutas': [
+    ['Palta','kg'],['Limón sutil','caja'],['Limón de pica','caja'],['Nabo','un'],['Betarraga','un'],
+    ['Lechuga morada','un'],['Lechuga verde','un'],['Pepinillo (kiuri)','un'],['Cebolla roja','kg'],
+    ['Cebolla blanca','kg'],['Cebolla morada','malla'],['Cebolla perla','kg'],['Cebollín','atado'],
+    ['Ciboulette','kg'],['Cilantro','kg'],['Perejil','kg'],['Espinaca','kg'],['Albahaca','kg'],
+    ['Apio','un'],['Poro (puerro)','un'],['Brócoli','un'],['Repollo blanco','un'],['Repollo morado','un'],
+    ['Mix de hojas','bandeja'],['Champiñones','kg'],['Zanahoria','kg'],['Tomate','kg'],
+    ['Tomate cherry','kg'],['Pimentón rojo','un'],['Ají amarillo','kg'],['Ají limo','kg'],
+    ['Ají panca','kg'],['Rocoto','kg'],['Jengibre','kg'],['Ajo','kg'],['Camote','kg'],['Papa','saco'],
+    ['Choclo peruano','kg'],['Choclo amarillo','kg'],['Maíz cancha (chulpi)','kg'],['Espárragos','kg'],
+    ['Zapallo','kg'],['Zapallo italiano','un'],['Rabanito','kg'],['Alcachofa','un'],
+    ['Aceituna morada','kg'],['Huacatay','kg'],['Hierba luisa','kg'],['Plátano amarillo','un'],
+    ['Fresas','bandeja'],['Arándanos','bandeja'],['Flores comestibles','bandeja'],
+  ],
+  '🐟 Pescados y Mariscos': [
+    ['Salmón fresco','kg'],['Atún','pieza'],['Corvina','kg'],['Reineta','kg'],['Merluza','kg'],
+    ['Palometa','kg'],['Camarón premium','kg'],['Camarón sea','caja'],['Camarón con piel','kg'],
+    ['Camarón jumbo 16/20','kg'],['Langostino','kg'],['Pulpo','kg'],['Calamar','caja'],['Ostión','kg'],
+    ['Machas','bandeja'],['Jaiba','kg'],['Pulpa de cangrejo','kg'],['Locos','pote'],['Almejas','un'],
+  ],
+  '🥩 Carnes y Aves': [
+    ['Filete de lomo','caja'],['Lomo vetado','kg'],['Asado de tira','caja'],['Entraña','caja'],
+    ['Carne molida','kg'],['Chuleta de cerdo','un'],['Panceta','kg'],['Manitas de cerdo','un'],
+    ['Pechuga de pollo','caja'],['Trutro entero','caja'],['Encuentro de pollo','caja'],
+    ['Hígado de pollo','kg'],['Hueso carnudo','kg'],
+  ],
+  '🍚 Abarrotes': [
+    ['Arroz de sushi','kg'],['Arroz normal','malla'],['Alga nori','paquete'],['Alga kombu','paquete'],
+    ['Panko blanco','saco'],['Harina','kg'],['Harina tempura','kg'],['Azúcar blanca','kg'],
+    ['Sal','kg'],['Sal gruesa','kg'],['Sal de cáhuil','kg'],['Vinagre blanco','litro'],
+    ['Vinagre tinto','galón'],['Vinagre de manzana','litro'],['Sillao Kiko','galón'],
+    ['Soya oscura (dark soy)','un'],['Soya en balde Kikkoman','un'],['Ajinomoto','kg'],
+    ['Hondashi','kg'],['Katsuobushi','gr'],['Togarashi','paquete'],['Furikake','kg'],
+    ['Gari (jengibre encurtido)','un'],['Masa wantán','caja'],['Masa gyoza','caja'],['Masa philo','un'],
+    ['Fideos udon','caja'],['Fideos ramen','caja'],['Fideos de arroz','paquete'],['Espagueti','kg'],
+    ['Quinoa','kg'],['Chuño','kg'],['Lentejas','kg'],['Garbanzos','kg'],['Porotos negros','kg'],
+    ['Arveja partida','kg'],['Huevos','caja'],['Sésamo blanco','kg'],['Sésamo negro','kg'],
+    ['Mayonesa Kraft','un'],['Mayonesa Alacena','kg'],['Queso crema','caja'],['Queso mozzarella','barra'],
+    ['Queso grana padano','gr'],['Queso parmesano','un'],['Mantequilla','caja'],['Mantequilla sin sal','kg'],
+    ['Crema de leche','caja'],['Leche entera','caja'],['Leche evaporada','un'],['Leche condensada','un'],
+    ['Leche en polvo','kg'],['Aceite vegetal','caja'],['Aceite de fritura','caja'],
+    ['Aceite de sésamo','galón'],['Aceite de trufa','botella'],['Ketchup','kg'],['Mostaza','kg'],
+    ['Salsa inglesa','un'],['Salsa de ostras','lata'],['Salsa tonkatsu','un'],['Sriracha','un'],
+    ['Salsa española (demiglace)','un'],['Pasta de tomate','kg'],['Picante de ajos','frasco'],
+    ['Miel','kg'],['Pimienta negra','gr'],['Comino','gr'],['Laurel','gr'],['Achiote','gr'],
+    ['Choclo bebé','lata'],['Choclo dulce congelado','bolsa'],['Palmito','un'],
+    ['Papa congelada (cuña)','caja'],['Edamame','caja'],['Alcaparras','frasco'],['Pan árabe','paquete'],
+    ['Galleta soda','paquete'],['Levadura','kg'],['Frutos rojos congelados','caja'],
+    ['Chicken powder','un'],['Colorantes vegetales','un'],
+  ],
+  '🍰 Pastelería': [
+    ['Harina de almendras','kg'],['Azúcar impalpable','kg'],['Galleta vainilla','paquete'],
+    ['Galleta para cheesecake','paquete'],['Galleta de champaña','paquete'],['Cacao semiamargo','gr'],
+    ['Canela en polvo','gr'],['Manjar','un'],['Mermelada de fresa','kg'],['Colapez','paquete'],
+    ['Café','un'],['Tapioca perla','paquete'],
+  ],
+  '🍹 Bebidas y Licores': [
+    ['Vino blanco','litro'],['Vino tinto','litro'],['Bidón de agua','un'],
+  ],
+  '📦 Papelería y Envases': [
+    ['Bolsas de arranque','rollo'],['Bolsas al vacío 1 kg','paquete'],['Bolsas al vacío 2 kg','paquete'],
+    ['Bolsas al vacío 150x300','paquete'],['Bolsas al vacío 200x300','paquete'],
+    ['Bolsas de basura grandes','rollo'],['Bolsas de basura medianas','rollo'],['Papel film','un'],
+    ['Papel aluminio','rollo'],['Papel mantequilla','rollo'],['Willpall','rollo'],
+    ['Papel toalla Nova','paquete'],['Guantes talla S','caja'],['Guantes talla M','caja'],
+    ['Guantes talla L','caja'],['Cofias blancas','caja'],['Tocas blancas','paquete'],
+    ['Cubre calzado','paquete'],['Pechera / mandil','un'],['Palitos de sushi','caja'],
+    ['Palos de brocheta','paquete'],['Pinchos de bambú','paquete'],['Taper (indicar litros)','un'],
+    ['Mamilas','un'],['Cambro','un'],['Cinta para rotular','un'],['Plumones / marcadores','un'],
+    ['Pilas AAA','par'],['Encendedores','un'],['Gas para soplete','un'],['Mangas pasteleras','paquete'],
+  ],
+  '🍳 Utensilios': [
+    ['Espátula de goma','un'],['Espátula de acero (emplatar)','un'],['Colador','un'],
+    ['Exprimidor de limón','un'],['Pelador','un'],['Batidor','un'],['Temporizador','un'],
+    ['Gramera','un'],['Tabla blanca','un'],['Escobilla de fierro (parrilla)','un'],
+    ['Abridor de latas','un'],['Rallador','un'],['Condimentero','un'],
+    ['Barra magnética cuchillos','un'],['Moldes para postres','un'],
+  ],
+  '🧴 Limpieza': [
+    ['Lavalozas','un'],['Cloro','galón'],['Desengrasante','un'],['Limpia pisos','un'],
+    ['Limpia vidrios','un'],['Cif crema','un'],['Esponjas amarillas','un'],['Esponjas de colores','un'],
+    ['Virutilla (esponja de fierro)','un'],['Paños microfibra','un'],['Trapeadores','un'],
+    ['Escoba','un'],['Recogedor','un'],['Jalador de piso','un'],['Alcohol líquido','litro'],
+    ['Atomizador','un'],
+  ],
+};
+const CATALOGO_BASE = [];
+Object.entries(BASE).forEach(([categoria, prods]) =>
+  prods.forEach(([nombre, unidad]) => CATALOGO_BASE.push({ nombre, unidad, categoria })));
 
 // ── Estado ──────────────────────────────────────────────────────────────────
 let usuario  = null;   // { area, rol }
@@ -99,6 +156,11 @@ function etiquetaDia(diaStr){
   return new Date(y, m-1, d).toLocaleDateString('es-CL', { weekday:'long', day:'numeric', month:'long' });
 }
 function fmtCant(n){ return Number.isInteger(n) ? String(n) : String(n).replace('.', ','); }
+// Categorías fijas + cualquier otra que venga en los datos (por si se agregan después)
+function categoriasCon(lista){
+  const extras = new Set(lista.filter(c => c && !CATEGORIAS.includes(c)));
+  return CATEGORIAS.concat([...extras]);
+}
 function esc(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML.replace(/"/g,'&quot;'); }
 
 let toastTimer = null;
@@ -193,12 +255,13 @@ function renderTodo(){
 
 // ── Vista PEDIR ─────────────────────────────────────────────────────────────
 function renderCatalogo(){
-  const filtro = ($('buscador').value || '').toLowerCase();
+  // Se busca sin acentos (slug), para que "camaron" encuentre "Camarón"
+  const filtro = slug($('buscador').value || '');
   const cont = $('listaCatalogo');
   let html = '';
-  CATEGORIAS.forEach(cat => {
+  categoriasCon(catalogo.map(p => p.categoria)).forEach(cat => {
     const prods = catalogo.filter(p => p.categoria === cat &&
-      (!filtro || p.nombre.toLowerCase().includes(filtro)));
+      (!filtro || slug(p.nombre).includes(filtro)));
     if (!prods.length) return;
     html += `<div class="cat-titulo">${esc(cat)}</div>`;
     prods.forEach(p => {
@@ -349,7 +412,7 @@ function renderCompras(){
     const notas = porDia[dia].filter(p => p.nota)
       .map(p => `<div class="pedido-nota">📌 ${esc(p.area)}: “${esc(p.nota)}”</div>`).join('');
     let cuerpo = '';
-    CATEGORIAS.forEach(cat => {
+    categoriasCon(items.map(([,v]) => v.categoria)).forEach(cat => {
       const deCat = items.filter(([,v]) => v.categoria === cat);
       if (!deCat.length) return;
       cuerpo += `<div class="cat-titulo">${esc(cat)}</div>`;
@@ -393,7 +456,7 @@ async function marcarComprado(dia, key, comprado){
 function renderCatalogoAdmin(){
   const cont = $('listaCatalogoAdmin');
   let html = '';
-  CATEGORIAS.forEach(cat => {
+  categoriasCon(catalogo.map(p => p.categoria)).forEach(cat => {
     const prods = catalogo.filter(p => p.categoria === cat);
     if (!prods.length) return;
     html += `<div class="cat-titulo">${esc(cat)}</div>`;
