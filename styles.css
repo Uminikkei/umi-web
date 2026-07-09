@@ -69,9 +69,7 @@ nav{
   position:absolute;top:0;left:0;right:0;z-index:300;
   height:26px;overflow:hidden;
   display:flex;align-items:center;
-  background:rgba(98,202,227,.20);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  border-bottom:1px solid rgba(98,202,227,.38);
+  background:transparent;   /* la ola aqua sólida (top-wave) es el fondo */
 }
 .promo-track{
   display:flex;flex-shrink:0;white-space:nowrap;will-change:transform;
@@ -100,6 +98,19 @@ nav{
   .top-wave{height:88px}
   .top-wave svg{height:88px}
 }
+/* Como la ola superior ahora es aqua SÓLIDA, el texto del banner/navbar pasa a
+   azul marino UMI para que se lea (antes era claro sobre fondo oscuro translúcido) */
+.promo-track span,.promo-track strong,.promo-tyc{color:#0d1e40;text-shadow:none}
+.promo-track span.promo-dot{background:#0d1e40}
+.promo-tyc:hover{color:rgba(13,30,64,.65)}
+nav .ntb-link{color:rgba(13,30,64,.85)}
+nav .ntb-link:hover{color:#0d1e40}
+nav .ntb-icon-btn{color:rgba(13,30,64,.85)}
+nav .ntb-icon-btn:hover{color:#0d1e40}
+nav .ntb-user-pts{color:#0d1e40}
+nav .nav-burger span{background:rgba(13,30,64,.85)}
+/* El wordmark sigue blanco (cruza el borde de la ola hacia la foto): sombra sutil para leerse sobre el aqua */
+nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(.95) drop-shadow(0 1px 3px rgba(4,7,9,.45))}
 .promo-tyc{
   background:none;border:none;padding:0;cursor:pointer;
   font:inherit;color:inherit;letter-spacing:inherit;
@@ -894,7 +905,7 @@ footer{
 /* ── SECCIÓN EVENTOS / GALERÍA ── */
 .eventos-sec{
   background:#000;   /* fondo negro */
-  padding:3.5rem 0 1.25rem;   /* sección más estrecha; la ola inferior sobrepasa un poco las tarjetas */
+  padding:1.5rem 0 1.25rem;   /* menos espacio arriba: la ola teal superior baja y cubre un poco el tope de las tarjetas (igual que la inferior) */
   position:relative;
 }
 .eventos-inner{max-width:none;margin:0;text-align:center;position:relative}
@@ -1370,7 +1381,7 @@ footer{
   backdrop-filter:blur(8px);
   border-bottom:1px solid rgba(98,202,227,.13);
 }
-.reviews-wave-top{line-height:0;margin-bottom:2.5rem}
+.reviews-wave-top{line-height:0;margin-bottom:.4rem}
 .reviews-wave-top svg{display:block;width:100%;height:80px;overflow:visible}
 .reviews-head{text-align:center;padding:0 2rem 2.8rem}
 .reviews-head .sec-label{display:inline-block;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;font-weight:700;color:var(--teal);margin-bottom:.6rem}

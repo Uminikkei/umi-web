@@ -81,16 +81,12 @@
 <div class="top-wave wave-anim wa-rev" aria-hidden="true">
   <svg viewBox="0 0 2880 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="topWaveGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#62CAE3" stop-opacity="0.44"/>
-        <stop offset="1" stop-color="#62CAE3" stop-opacity="0.14"/>
-      </linearGradient>
       <filter id="topWaveBlur" x="-10%" y="-200%" width="120%" height="500%">
         <feGaussianBlur stdDeviation="2"/>
       </filter>
     </defs>
-    <path fill="url(#topWaveGrad)" d="M0,0 L2880,0 L2880,70 C2640,96 2400,96 2160,70 C1920,44 1680,44 1440,70 C1200,96 960,96 720,70 C480,44 240,44 0,70 Z"/>
-    <path d="M0,70 C240,44 480,44 720,70 C960,96 1200,96 1440,70 C1680,44 1920,44 2160,70 C2400,96 2640,96 2880,70" fill="none" stroke="rgba(234,252,255,.5)" stroke-width="3" filter="url(#topWaveBlur)"/>
+    <path fill="#62CAE3" d="M0,0 L2880,0 L2880,85 C2640,98 2400,98 2160,85 C1920,72 1680,72 1440,85 C1200,98 960,98 720,85 C480,72 240,72 0,85 Z"/>
+    <path d="M0,85 C240,72 480,72 720,85 C960,98 1200,98 1440,85 C1680,72 1920,72 2160,85 C2400,98 2640,98 2880,85" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5" filter="url(#topWaveBlur)"/>
   </svg>
 </div>
 
