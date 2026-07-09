@@ -1421,6 +1421,12 @@ footer{
   transition:border-color .3s;
 }
 .rev-card:hover{border-color:rgba(98,202,227,.35)}
+/* Móvil: quitar los degradados de borde (140px, tapaban casi toda la tarjeta en
+   pantallas angostas) y el desenfoque de fondo — creaban sombreados raros en algunas reseñas */
+@media(max-width:700px){
+  .reviews-track-wrap::before,.reviews-track-wrap::after{display:none}
+  .rev-card{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
 .rev-stars{display:flex;gap:.18rem;margin-bottom:.9rem}
 .rev-stars svg{width:.95rem;height:.95rem;fill:#c9a84c;flex-shrink:0}
 .rev-text{font-size:.86rem;color:var(--text);line-height:1.65;margin-bottom:1.1rem;font-style:italic;opacity:.92}
