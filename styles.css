@@ -1080,8 +1080,9 @@ footer{
   background:linear-gradient(to top,rgba(4,7,9,.82) 0%,rgba(4,7,9,.15) 45%,transparent 70%);
 }
 .evento-title{
-  font-family:var(--serif);font-size:1.7rem;font-weight:700;color:#fdf8ec;
-  letter-spacing:.3px;text-shadow:0 2px 12px rgba(4,7,9,.6);
+  font-family:var(--serif);font-size:clamp(.9rem,2.3vw,1.2rem);font-weight:700;color:#fdf8ec;
+  letter-spacing:.2px;text-shadow:0 2px 12px rgba(4,7,9,.6);
+  white-space:nowrap;   /* título en una sola línea (tamaño reducido para que entre) */
 }
 /* Ola divisoria Eventos → ¿Cómo lo hacemos? */
 .eventos-wave-bottom{position:absolute;left:0;right:0;bottom:0;height:80px;line-height:0;pointer-events:none;z-index:1}
