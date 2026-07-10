@@ -695,9 +695,9 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to right, #000 0%, rgba(0,0,0,0) 7%);
 }
-/* PC: el texto se corre más a la derecha; las olas de las secciones
-   vecinas (Los más pedidos arriba, Etimología abajo) ya dividen la costura */
-@media(min-width:1001px){
+/* PC (incluye ventanas de PC angostas ≥901px): texto a la izquierda, foto a la
+   derecha ocupando todo el alto entre las olas superior e inferior (no full-bleed) */
+@media(min-width:901px){
   .cream-inner{flex:0 0 52%;width:52%;padding-left:13vw}
 }
 /* Más Pedidos — columna derecha */
@@ -729,7 +729,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 /* Transición cream → oscuro */
 .cream-wave-bottom{position:relative;line-height:0;background:var(--cream)}
 .cream-wave-bottom svg{display:block;width:100%;height:70px}
-@media(max-width:1000px){
+@media(max-width:900px){
   .cream-sec{flex-direction:column;height:auto}
   /* Textos alineados a la izquierda en móvil; por encima de la imagen */
   .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:left;align-items:flex-start;position:relative;z-index:2}
