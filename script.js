@@ -761,7 +761,7 @@ function puntosGanaPedido(){
 function earnLineHtml(){
   if(!(window.umiIsRegistered && window.umiIsRegistered())) return '';
   const g = puntosGanaPedido();
-  return g > 0 ? `🎁 Con esta compra acumulas <b>${g.toLocaleString('es-CL')} puntos</b>` : '';
+  return g > 0 ? `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8"/><rect x="2.5" y="7.5" width="19" height="4.5" rx="1"/><path d="M12 7.5V21"/><path d="M12 7.5S11 3.5 8.3 3.5a2.1 2.1 0 0 0 0 4H12z"/><path d="M12 7.5S13 3.5 15.7 3.5a2.1 2.1 0 0 1 0 4H12z"/></svg> Con esta compra acumulas <b>${g.toLocaleString('es-CL')} puntos</b>` : '';
 }
 
 function puntosSummaryHtml(){

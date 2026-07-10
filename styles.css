@@ -740,8 +740,8 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   /* La foto llena toda la sección (detrás del texto), de ola a ola arriba y abajo */
   .cream-photo{position:absolute;inset:0;width:100%;height:100%;margin:0;z-index:1;aspect-ratio:auto;overflow:hidden}
   .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
-  /* Difuminado arriba SOLO para que se lea el texto (la foto igual llega a la ola) */
-  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 22%)}
+  /* Difuminado arriba (para el texto) y abajo: los extremos de la foto se funden a negro */
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 20%),linear-gradient(to top,#000 0%,rgba(0,0,0,0) 12%)}
   /* La ola de etimología sube y tapa el borde inferior de la imagen */
   .etim-sec{margin-top:-34px;z-index:2}
 }
@@ -1920,7 +1920,7 @@ footer strong{color:var(--teal)}
 .checkout-modal-bg{position:absolute;inset:0;background:rgba(4,7,9,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .checkout-box{
   position:relative;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
-  background:rgba(20,39,81,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(20,39,81,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);   /* transparentosa como las demás ventanas */
   border:1px solid var(--border2);border-radius:16px;
   padding:2rem;z-index:1;box-shadow:0 16px 50px rgba(0,0,0,.5);
 }
