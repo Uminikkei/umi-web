@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="UMI Pedidos">
-<link rel="stylesheet" href="/pedidos/pedidos.css?v=4">
+<link rel="stylesheet" href="/pedidos/pedidos.css?v=5">
 </head>
 <body>
 
@@ -116,8 +116,24 @@
   </div>
 </div>
 
+<!-- ── MODAL: costo y proveedor (solo Compras / Administrador) ── -->
+<div class="modal" id="modalCosto">
+  <div class="modal-bg" data-cerrar></div>
+  <div class="modal-box">
+    <h3>Costo y proveedor</h3>
+    <p class="costo-sub" id="costoProducto"></p>
+    <label class="campo"><span>Costo en pesos (con IVA dentro del monto)</span><input type="number" id="costoValor" inputmode="numeric" min="0" placeholder="Ej: 8990"></label>
+    <label class="campo"><span>Proveedor</span><input type="text" id="costoProveedor" placeholder="Ej: Bombo, Macan, Luigi…" autocomplete="off"></label>
+    <div class="gate-err" id="costoErr"></div>
+    <div class="modal-acciones">
+      <button class="btn-sec" data-cerrar>Cancelar</button>
+      <button class="btn-primary" id="btnGuardarCosto">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script type="module" src="/pedidos/pedidos.js?v=6"></script>
+<script type="module" src="/pedidos/pedidos.js?v=7"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 // UMI Pedidos — app interna de compras (chefs y encargados)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import {
-  getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDocs,
+  getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, getDocs,
   onSnapshot, query, where, writeBatch, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -18,12 +18,15 @@ const db  = getFirestore(app);
 
 // ── Usuarios y PIN por área (cambiar aquí si se necesita) ──────────────────
 const USUARIOS = {
-  '1111': { area: 'Cocina',         rol: 'pedidor' },
-  '2222': { area: 'Sushi',          rol: 'pedidor' },
+  '1111': { area: 'Chef Frío',      rol: 'pedidor' },
+  '2222': { area: 'Chef Caliente',  rol: 'pedidor' },
   '3333': { area: 'Barra',          rol: 'pedidor' },
   '4444': { area: 'Administración', rol: 'pedidor' },
   '9999': { area: 'Compras',        rol: 'comprador' },
+  '3008': { area: 'Administrador',  rol: 'admin' },   // ve lo mismo que Compras (costos incluidos)
 };
+// Compras y Administrador ven costos, proveedores y el panel de compras
+const esComprador = () => usuario && (usuario.rol === 'comprador' || usuario.rol === 'admin');
 
 const CATEGORIAS = [
   '🥑 Verduras y Frutas',
@@ -222,6 +225,7 @@ function etiquetaDia(diaStr){
   return new Date(y, m-1, d).toLocaleDateString('es-CL', { weekday:'long', day:'numeric', month:'long' });
 }
 function fmtCant(n){ return Number.isInteger(n) ? String(n) : String(n).replace('.', ','); }
+const fmtCLP = (n) => '$' + Math.round(n).toLocaleString('es-CL');
 // Categorías fijas + cualquier otra que venga en los datos (por si se agregan después)
 function categoriasCon(lista){
   const extras = new Set(lista.filter(c => c && !CATEGORIAS.includes(c)));
@@ -262,7 +266,7 @@ $('btnSalir').addEventListener('click', () => {
 
 // ── Tabs ────────────────────────────────────────────────────────────────────
 function montarTabs(){
-  const defs = usuario.rol === 'comprador'
+  const defs = esComprador()
     ? [ ['compras','🛒 Por comprar'], ['catalogo','📋 Catálogo'] ]
     : [ ['pedir','📝 Pedir'], ['enviados','📤 Enviados'] ];
   $('tabs').innerHTML = defs.map(([id, txt]) =>
@@ -510,6 +514,9 @@ function renderCompras(){
   const cont = $('listaCompras');
   if (!pedidos.length) { cont.innerHTML = '<div class="vacio">No hay pedidos todavía.<br>Cuando cocina, sushi o barra envíen su pedido, aparecerá aquí.</div>'; return; }
   const filtro = slug($('buscadorCompras').value || '');
+  // Costo y proveedor vienen del catálogo (solo Compras y Administrador ven esta vista)
+  const infoProd = {};
+  catalogo.forEach(p => { infoProd[slug(p.nombre)] = p; });
   const porDia = agruparPorDia(pedidos);
   cont.innerHTML = Object.keys(porDia).sort().reverse().map(dia => {
     const cons = consolidarDia(porDia[dia]);
@@ -518,6 +525,11 @@ function renderCompras(){
     if (filtro && !visibles.length) return '';
     const listos = items.filter(([,v]) => v.comprado).length;
     const completo = listos === items.length;
+    let totalDia = 0, sinCosto = 0;
+    items.forEach(([k, v]) => {
+      const prod = infoProd[k.split('|')[0]];
+      if (prod && prod.costo) totalDia += prod.costo * v.total; else sinCosto++;
+    });
     const notas = filtro ? '' : porDia[dia].filter(p => p.nota)
       .map(p => `<div class="pedido-nota">📌 ${esc(p.area)}: “${esc(p.nota)}”</div>`).join('');
     let cuerpo = '';
@@ -529,11 +541,16 @@ function renderCompras(){
         const detalle = v.fuentes.length > 1
           ? v.fuentes.map(f => `${esc(f.area)} ${fmtCant(f.cantidad)}${f.nota ? ' («' + esc(f.nota) + '»)' : ''}`).join(' + ')
           : esc(v.fuentes[0].area) + (v.fuentes[0].nota ? ' · «' + esc(v.fuentes[0].nota) + '»' : '');
+        const prod = infoProd[k.split('|')[0]];
+        const costoLinea = prod && (prod.costo || prod.proveedor)
+          ? `<div class="comp-costo">${prod.costo ? fmtCLP(prod.costo) + ' /' + esc(prod.unidad) + (prod.costo ? ' · ' + fmtCLP(prod.costo * v.total) : '') : ''}${prod.costo && prod.proveedor ? ' · ' : ''}${prod.proveedor ? '🏪 ' + esc(prod.proveedor) : ''}</div>`
+          : '';
         cuerpo += `<div class="comp-item ${v.comprado ? 'comprado' : ''}">
           <input type="checkbox" class="comp-check" data-dia="${dia}" data-key="${k}" ${v.comprado ? 'checked' : ''}>
           <div class="comp-info">
             <span class="comp-nombre">${esc(v.nombre)}</span> · <span class="comp-total">${fmtCant(v.total)} ${esc(v.unidad)}</span>
             <div class="comp-detalle">${detalle}</div>
+            ${costoLinea}
           </div>
           <button class="comp-borrar" data-bdia="${dia}" data-bkey="${k}" data-bnombre="${esc(v.nombre)}" title="Eliminar de los pedidos">🗑</button>
         </div>`;
@@ -545,6 +562,7 @@ function renderCompras(){
         <span class="estado ${completo ? 'completo' : 'pendiente'}">${completo ? '✓ Todo comprado' : listos + '/' + items.length + ' comprados'}</span>
       </div>
       <div class="progreso"><div style="width:${items.length ? Math.round(listos/items.length*100) : 0}%"></div></div>
+      ${totalDia ? `<div class="dia-total">💰 Compra estimada: ${fmtCLP(totalDia)}${sinCosto ? ' <span class="sin">(' + sinCosto + ' sin costo)</span>' : ''}</div>` : ''}
       ${notas}${cuerpo}
     </div>`;
   }).join('');
@@ -592,8 +610,15 @@ function renderCatalogoAdmin(){
     if (!prods.length) return;
     html += `<div class="cat-titulo">${esc(cat)}</div>`;
     prods.forEach(p => {
+      const costoTxt = p.costo || p.proveedor
+        ? `${p.costo ? fmtCLP(p.costo) + ' /' + esc(p.unidad) : ''}${p.costo && p.proveedor ? ' · ' : ''}${p.proveedor ? '🏪 ' + esc(p.proveedor) : ''}`
+        : '<span class="sin">sin costo ni proveedor</span>';
       html += `<div class="cata-item">
-        <span>${esc(p.nombre)} <span class="u">(${esc(p.unidad)})</span></span>
+        <div class="cata-info">
+          <span>${esc(p.nombre)} <span class="u">(${esc(p.unidad)})</span></span>
+          <div class="cata-costo">${costoTxt}</div>
+        </div>
+        <button class="cata-editar" data-editar="${p._id}" title="Editar costo y proveedor">✏️</button>
         <button class="cata-quitar" data-quitar="${p._id}" title="Quitar del catálogo">🗑</button>
       </div>`;
     });
@@ -604,11 +629,39 @@ function renderCatalogoAdmin(){
     try { await deleteDoc(doc(db, 'pedidosCatalogo', b.dataset.quitar)); toast('Producto quitado'); }
     catch(e){ console.error(e); toast('No se pudo quitar'); }
   }));
+  cont.querySelectorAll('[data-editar]').forEach(b => b.addEventListener('click', () => {
+    const p = catalogo.find(x => x._id === b.dataset.editar);
+    if (p) abrirModalCosto(p);
+  }));
 }
+
+// ── Costo y proveedor de un producto ────────────────────────────────────────
+let costoEditandoId = null;
+function abrirModalCosto(p){
+  costoEditandoId = p._id;
+  $('costoProducto').textContent = p.nombre + ' (' + p.unidad + ')';
+  $('costoValor').value = p.costo || '';
+  $('costoProveedor').value = p.proveedor || '';
+  $('costoErr').textContent = '';
+  abrirModal('modalCosto');
+}
+$('btnGuardarCosto').addEventListener('click', async () => {
+  if (!costoEditandoId) return;
+  const btn = $('btnGuardarCosto'); btn.disabled = true;
+  try {
+    await updateDoc(doc(db, 'pedidosCatalogo', costoEditandoId), {
+      costo: parseFloat($('costoValor').value) || 0,
+      proveedor: $('costoProveedor').value.trim(),
+    });
+    cerrarModales();
+    toast('✓ Guardado');
+  } catch(e){ console.error('[PEDIDOS] costo:', e); $('costoErr').textContent = 'No se pudo guardar, intenta de nuevo'; }
+  finally { btn.disabled = false; }
+});
 
 // ── Badges en tabs ──────────────────────────────────────────────────────────
 function renderBadges(){
-  if (usuario.rol !== 'comprador') return;
+  if (!esComprador()) return;
   const tab = $('tab-compras'); if (!tab) return;
   let pendientes = 0;
   Object.values(consolidarDia(pedidos.filter(p => p.dia === hoyStr()))).forEach(v => { if (!v.comprado) pendientes++; });

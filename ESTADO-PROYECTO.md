@@ -63,7 +63,12 @@ y el encargado de compras lo vea consolidado por día en la misma app.
 
 - **Archivos:** carpeta `pedidos/` (index.html, pedidos.css, pedidos.js, manifest.json, íconos).
 - **Acceso por PIN** (definidos en `pedidos/pedidos.js`, constante `USUARIOS`):
-  Cocina `1111` · Sushi `2222` · Barra `3333` · Administración `4444` · **Compras `9999`** (ve todo por día).
+  Chef Frío `1111` · Chef Caliente `2222` · Barra `3333` · Administración `4444` ·
+  **Compras/Rodrigo `9999`** (ve todo por día) · **Administrador/Adnan `3008`** (igual que Compras).
+- **Costos y proveedores**: cada producto puede tener costo (CLP con IVA dentro del monto) y
+  proveedor, editables con ✏️ en la pestaña Catálogo. Solo Compras y Administrador los ven:
+  aparecen bajo cada ítem en "Por comprar" ($/unidad, total de la línea, 🏪 proveedor) y arriba
+  del día como "💰 Compra estimada". Los chefs (pedidores) NO ven precios.
 - **Datos en Firestore** (mismo proyecto `umi-clientes`): colecciones `pedidosCatalogo` (productos)
   y `pedidosCompras` (pedidos, uno por envío, con `dia` AAAA-MM-DD e items con flag `comprado`).
 - El catálogo base (387 productos en 13 categorías) sale de los pedidos REALES de los grupos

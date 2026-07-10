@@ -202,6 +202,9 @@ input,select,textarea{font-family:inherit}
   background:transparent;border:none;color:var(--muted);font-size:1rem;
   padding:.15rem .3rem;flex-shrink:0;align-self:center;
 }
+.comp-costo{font-size:.76rem;color:var(--teal);margin-top:.15rem}
+.dia-total{font-size:.88rem;color:var(--teal);font-weight:700;margin:-.2rem 0 .8rem}
+.dia-total .sin{color:var(--muted);font-weight:400;font-size:.78rem}
 
 /* ── Catálogo admin ── */
 .cata-item{
@@ -210,7 +213,12 @@ input,select,textarea{font-family:inherit}
   padding:.6rem .9rem;margin-bottom:.4rem;font-size:.95rem;
 }
 .cata-item .u{font-size:.75rem;color:var(--muted)}
-.cata-quitar{background:transparent;border:none;color:var(--rojo);font-size:1.05rem;padding:.3rem .5rem}
+.cata-info{flex:1;min-width:0}
+.cata-costo{font-size:.74rem;color:var(--teal);margin-top:.1rem}
+.cata-costo .sin{color:var(--muted);font-style:italic}
+.cata-editar{background:transparent;border:none;font-size:1rem;padding:.3rem .4rem;flex-shrink:0}
+.cata-quitar{background:transparent;border:none;color:var(--rojo);font-size:1.05rem;padding:.3rem .5rem;flex-shrink:0}
+.costo-sub{color:var(--muted);font-size:.9rem;margin:-.4rem 0 .9rem}
 
 .vacio{color:var(--muted);text-align:center;padding:2.5rem 1rem;font-size:.92rem}
 
