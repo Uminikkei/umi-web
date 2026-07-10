@@ -964,7 +964,7 @@ footer{
 .menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; flex:1; background:#cdeff6; position:relative; z-index:1; }
 .menu-dark-area .item-name{
   font-family:'Inter',sans-serif;   /* misma fuente que "La real cocina Nikkei" */
-  color:#1f3f8c; letter-spacing:-.2px; font-weight:600; font-size:.95rem;
+  color:#1f3f8c; letter-spacing:-.2px; font-weight:400; font-size:.95rem;   /* delicada, sin negrita */
   min-height:2.4em; /* siempre reserva 2 líneas: todas las cajas iguales */
 }
 .menu-dark-area .item-footer{ margin-top:auto; }
