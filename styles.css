@@ -758,8 +758,9 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   .hero-sec{padding:130px 1.5rem 15rem;
     /* borde inferior más difuminado: la imagen se funde a negro gradualmente (suaviza la línea) */
     background:linear-gradient(to bottom,transparent 78%,rgba(0,0,0,.5) 84%,#000 88%),url('fondo-umi.jpg') center top/cover no-repeat}
-  /* "frente al mar" justo debajo del subtítulo, alineado a la izquierda */
-  .hero-script-line{justify-content:flex-start!important;padding-right:0!important}
+  /* "frente al mar" justo debajo del subtítulo, alineado a la izquierda.
+     padding-left da aire al bucle izquierdo de la "f" cursiva para que no se corte */
+  .hero-script-line{justify-content:flex-start!important;padding-right:0!important;padding-left:.7rem}
   .cream-pedidos-grid{grid-template-columns:repeat(2,1fr)}
   /* Sello al lado de los botones (Pedir ahora / Reservar mesa), tamaño moderado,
      sin tocar los botones ni el borde derecho */
