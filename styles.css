@@ -2331,6 +2331,18 @@ footer strong{color:var(--teal)}
   border-color: var(--teal);
 }
 
+.lang-btn:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+/* Mientras se traduce el chat al cambiar ES/EN */
+.chat-messages.translating {
+  opacity: .5;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
 .chat-typing {
   display: flex;
   gap: 4px;

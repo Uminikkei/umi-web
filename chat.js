@@ -73,7 +73,10 @@ function closeChatWidget() {
   chatWidget.classList.remove('open');
 }
 
-function switchChatLanguage(lang) {
+let isTranslating = false;
+
+async function switchChatLanguage(lang) {
+  if (lang === chatLanguage || isTranslating) return;
   chatLanguage = lang;
 
   // Update active button
@@ -82,6 +85,81 @@ function switchChatLanguage(lang) {
 
   // Update placeholder
   chatInput.placeholder = placeholders[lang];
+
+  // Traduce TODO el chat al idioma elegido
+  await translateChat(lang);
+}
+
+function setLangButtonsDisabled(disabled) {
+  const a = document.getElementById('langEs');
+  const b = document.getElementById('langEn');
+  if (a) a.disabled = disabled;
+  if (b) b.disabled = disabled;
+}
+
+// Traduce todos los mensajes visibles al idioma destino.
+// - El saludo se regenera con el texto canónico (incluye el nombre del garzón).
+// - Cada mensaje guarda su versión por idioma, así volver atrás es instantáneo y sin degradar.
+async function translateChat(target) {
+  const msgs = Array.from(chatMessages.querySelectorAll('.chat-msg'));
+  const pending = []; // { el, text }
+
+  msgs.forEach(el => {
+    // Saludo inicial: se regenera canónicamente (no se manda a traducir)
+    if (el.dataset.greeting) {
+      const g = greetings[target] && greetings[target](GARZONAS[garzonaId]);
+      if (g) {
+        renderMsgText(el, g);
+        el._i18n = el._i18n || {};
+        el._i18n[target] = g;
+        el._lang = target;
+      }
+      return;
+    }
+
+    el._i18n = el._i18n || {};
+    if (el._i18n[target] != null) {
+      // Ya tenemos esta versión cacheada
+      renderMsgText(el, el._i18n[target]);
+      el._lang = target;
+      return;
+    }
+
+    const src = el._i18n[el._lang] != null
+      ? el._i18n[el._lang]
+      : (el.querySelector('p') ? el.querySelector('p').textContent : '');
+    if (src && src.trim()) pending.push({ el, text: src });
+  });
+
+  if (!pending.length) return;
+
+  isTranslating = true;
+  setLangButtonsDisabled(true);
+  chatMessages.classList.add('translating');
+
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ texts: pending.map(p => p.text), target })
+    });
+    if (!resp.ok) throw new Error('translate failed ' + resp.status);
+    const data = await resp.json();
+    const translations = (data && data.translations) || [];
+    pending.forEach((p, i) => {
+      const t = translations[i] != null ? translations[i] : p.text;
+      renderMsgText(p.el, t);
+      p.el._i18n[target] = t;
+      p.el._lang = target;
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  } catch (e) {
+    console.error('[CHAT] translate error:', e.message);
+  } finally {
+    isTranslating = false;
+    setLangButtonsDisabled(false);
+    chatMessages.classList.remove('translating');
+  }
 }
 
 function onChatKeyPress(event) {
@@ -106,10 +184,26 @@ function addChatMessage(text, isUser = false) {
   }
 
   msgDiv.appendChild(p);
+  // Caché por idioma para traducir el chat al cambiar ES <-> EN (sin perder el original)
+  msgDiv._isUser = isUser;
+  msgDiv._lang = chatLanguage;
+  msgDiv._i18n = { [chatLanguage]: text };
   chatMessages.appendChild(msgDiv);
 
   // Auto-scroll to bottom
   chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Reemplaza el texto de un mensaje ya existente (respeta formato del bot)
+function renderMsgText(msgDiv, text) {
+  const p = msgDiv.querySelector('p');
+  if (!p) return;
+  if (msgDiv._isUser) {
+    p.textContent = text;
+  } else {
+    p.textContent = '';
+    renderFormatted(p, text);
+  }
 }
 
 // Convierte **negrita** y saltos de línea en nodos DOM reales (seguro contra XSS)
@@ -288,9 +382,17 @@ function initChat() {
   applyGarzonaUI();
 
   // Set initial greeting
-  const firstMsg = chatMessages.querySelector('.bot-msg p');
+  const greetDiv = chatMessages.querySelector('.bot-msg');
+  const firstMsg = greetDiv && greetDiv.querySelector('p');
   if (firstMsg) {
     firstMsg.textContent = greetings[chatLanguage](GARZONAS[garzonaId]);
+  }
+  // Marca el saludo para que al traducir se regenere (no se envíe a la API)
+  if (greetDiv) {
+    greetDiv.dataset.greeting = '1';
+    greetDiv._isUser = false;
+    greetDiv._lang = chatLanguage;
+    greetDiv._i18n = { [chatLanguage]: firstMsg ? firstMsg.textContent : '' };
   }
 
   // Set initial language
