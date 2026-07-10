@@ -730,16 +730,18 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .cream-wave-bottom{position:relative;line-height:0;background:var(--cream)}
 .cream-wave-bottom svg{display:block;width:100%;height:70px}
 @media(max-width:1000px){
-  .cream-sec{flex-direction:column;height:auto}
+  .cream-sec{flex-direction:column;height:auto;position:relative;min-height:82vh}
   /* Textos alineados a la izquierda en móvil; por encima de la imagen */
-  .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:left;align-items:flex-start;position:relative;z-index:2}
+  .cream-inner{padding:2.5rem 1.5rem 1.5rem;text-align:left;align-items:flex-start;justify-content:flex-start;position:relative;z-index:2}
   .cream-label{text-align:left}
   .cream-desc{margin-left:0;margin-right:0}
   /* Imagen COMPLETA sin recortar (contenedor con la misma proporción que la foto), subida casi hasta el texto, parte superior difuminada en negro */
   /* Imagen subida más: la flama sube y toca el texto (llega hasta "combinación"); va detrás del texto (z-index 1) */
-  .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-210px}
-  .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 10%)}
+  /* La foto llena toda la sección (detrás del texto), de ola a ola arriba y abajo */
+  .cream-photo{position:absolute;inset:0;width:100%;height:100%;margin:0;z-index:1;aspect-ratio:auto;overflow:hidden}
+  .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+  /* Difuminado arriba SOLO para que se lea el texto (la foto igual llega a la ola) */
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 22%)}
   /* La ola de etimología sube y tapa el borde inferior de la imagen */
   .etim-sec{margin-top:-34px;z-index:2}
 }
