@@ -429,7 +429,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 }
 .hero-content{position:relative;z-index:1;max-width:560px}
 .hero-eyebrow{
-  display:block;font-size:.72rem;letter-spacing:5px;text-transform:uppercase;
+  display:block;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
   color:rgba(240,235,224,.75);font-weight:400;margin-bottom:.5rem;
 }
 .hero-title{
@@ -673,7 +673,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 }
 .cream-title em{
   font-family:'SignHandwriting', var(--script);font-style:normal;
-  font-size:clamp(2rem,3.5vw,2.6rem);color:var(--white-1);font-weight:400;
+  font-size:clamp(2rem,3.5vw,2.6rem);color:var(--teal);font-weight:400;
 }
 .cream-desc{
   font-size:.88rem;color:rgba(240,235,224,.75);line-height:1.75;
@@ -691,12 +691,9 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;display:block}
 /* Difuminado SOLO en los bordes: funde la foto con el fondo negro sin taparla */
 .cream-photo::before{
+  /* PC: SOLO el borde izquierdo difuminado, y poco (no cubre el platillo) */
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    linear-gradient(to right,  #000 0%, rgba(0,0,0,0) 15%),
-    linear-gradient(to left,   #000 0%, rgba(0,0,0,0) 8%),
-    linear-gradient(to top,    #000 0%, rgba(0,0,0,0) 11%),
-    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0) 11%);
+  background:linear-gradient(to right, #000 0%, rgba(0,0,0,0) 7%);
 }
 /* PC: el texto se corre más a la derecha; las olas de las secciones
    vecinas (Los más pedidos arriba, Etimología abajo) ya dividen la costura */
@@ -966,7 +963,8 @@ footer{
 .menu-dark-area .item .item-img[alt="Postre del Amor"]{ object-position:50% 30%; }
 .menu-dark-area .item-body{ padding:.6rem .75rem .65rem; gap:.35rem; flex:1; background:#cdeff6; position:relative; z-index:1; }
 .menu-dark-area .item-name{
-  color:#1f3f8c; letter-spacing:.2px; font-weight:500; font-size:.98rem;
+  font-family:'Inter',sans-serif;   /* misma fuente que "La real cocina Nikkei" */
+  color:#1f3f8c; letter-spacing:-.2px; font-weight:600; font-size:.95rem;
   min-height:2.4em; /* siempre reserva 2 líneas: todas las cajas iguales */
 }
 .menu-dark-area .item-footer{ margin-top:auto; }
@@ -1076,7 +1074,7 @@ footer{
 .evento-overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   display:flex;align-items:flex-end;justify-content:center;
-  padding:1.4rem 1.4rem 3.4rem;   /* título más arriba: la ola inferior de la tarjeta no lo tapa */
+  padding:1.4rem 1.4rem 2.6rem;   /* título un poco más abajo (sin que lo tape la ola inferior) */
   background:linear-gradient(to top,rgba(4,7,9,.82) 0%,rgba(4,7,9,.15) 45%,transparent 70%);
 }
 .evento-title{
@@ -1115,7 +1113,7 @@ footer{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
   padding:1.6rem 1.8rem .4rem;z-index:2;
 }
-.event-modal-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:#fdf8ec}
+.event-modal-title{font-family:'Inter',sans-serif;font-size:clamp(1.1rem,3vw,1.35rem);font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#fdf8ec}
 .event-modal-close{
   width:42px;height:42px;flex-shrink:0;border-radius:50%;cursor:pointer;
   background:rgba(253,248,236,.12);border:1.5px solid rgba(253,248,236,.5);color:#fdf8ec;
@@ -1244,20 +1242,22 @@ footer{
 }
 @media(max-width:900px){
   .videos-inner{grid-template-columns:1fr;gap:1.6rem}
-  .reels-grid{grid-template-columns:repeat(2,1fr)}
   .videos-left{text-align:center}
 }
-@media(max-width:700px){
-  /* Reels en carrusel horizontal, uno al lado del otro (como la galería) */
+/* PC angosto / tablet: en vez de agrandar los videos, carrusel horizontal
+   con tarjetas más pequeñas, una al lado de otra, deslizándose (como en móvil) */
+@media(max-width:1000px){
   .reels-grid{
     display:flex;grid-template-columns:none;gap:.7rem;
     overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    /* Full-bleed: de extremo a extremo de la pantalla */
-    width:100vw;margin-left:calc(50% - 50vw);
-    padding:0 3vw .5rem;
+    scrollbar-width:none;padding-bottom:.5rem;
   }
   .reels-grid::-webkit-scrollbar{display:none}
+  .reel-card{flex:0 0 clamp(190px,42vw,240px)}
+}
+@media(max-width:700px){
+  /* Móvil: full-bleed de extremo a extremo y tarjetas un poco más grandes */
+  .reels-grid{width:100vw;margin-left:calc(50% - 50vw);padding:0 3vw .5rem}
   .reel-card{flex:0 0 60%}
 }
 
@@ -1696,7 +1696,7 @@ footer strong{color:var(--teal)}
   display:flex;flex-direction:column;gap:.7rem;
   box-shadow:0 16px 50px rgba(0,0,0,.5);
 }
-.feedback-box h3{font-family:var(--serif);font-size:1.4rem;color:var(--white-1)}
+.feedback-box h3{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white-1)}
 .feedback-sub{font-size:.8rem;color:var(--muted);margin-top:-.3rem}
 .feedback-close{
   position:absolute;top:.9rem;right:.9rem;
@@ -2415,7 +2415,7 @@ footer strong{color:var(--teal)}
   height:34px;width:auto;display:block;margin:0 auto .8rem;
   filter:brightness(0) invert(1) opacity(.92);
 }
-.auth-box h3{font-family:var(--serif);font-size:1.5rem;color:var(--white-1);margin:0 0 .4rem}
+.auth-box h3{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white-1);margin:0 0 .4rem}
 .auth-sub{color:var(--muted);font-size:.9rem;margin:0 0 1.4rem;line-height:1.4}
 .auth-google-btn{
   display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
