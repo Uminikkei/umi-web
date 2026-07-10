@@ -41,7 +41,7 @@ Return ONLY a valid JSON array of strings (the translations), with no explanatio
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2000,
+        max_tokens: 4096,
         system,
         messages: [{ role: 'user', content: JSON.stringify(texts) }]
       })
@@ -55,8 +55,12 @@ Return ONLY a valid JSON array of strings (the translations), with no explanatio
 
     const data = await response.json();
     let out = (data.content[0].text || '').trim();
-    // Quita posibles ``` o ```json envolventes
-    out = out.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+    // Extrae el array JSON aunque el modelo agregue texto o ``` alrededor
+    const start = out.indexOf('[');
+    const end = out.lastIndexOf(']');
+    if (start !== -1 && end !== -1 && end > start) {
+      out = out.slice(start, end + 1);
+    }
 
     let translations;
     try {
