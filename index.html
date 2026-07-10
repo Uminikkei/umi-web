@@ -984,7 +984,7 @@
 <div class="checkout-modal" id="checkoutModal">
   <div class="checkout-modal-bg" onclick="closeCheckout()"></div>
   <div class="checkout-box">
-    <h3>Confirmar Pedido</h3>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg> Confirmar Pedido</h3>
 
     <div class="checkout-summary" id="checkoutSummary"></div>
 
@@ -1000,8 +1000,8 @@
     <div class="field">
       <label>Tipo de entrega</label>
       <div class="radio-group">
-        <div class="radio-opt selected" id="opt-retiro" onclick="selectEntrega('retiro')">🏪 Retiro en local</div>
-        <div class="radio-opt" id="opt-delivery" onclick="selectEntrega('delivery')">🛵 Delivery</div>
+        <div class="radio-opt selected" id="opt-retiro" onclick="selectEntrega('retiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M4 9h16v0a2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0z"/><path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M10 20v-5h4v5"/></svg> Retiro en local</div>
+        <div class="radio-opt" id="opt-delivery" onclick="selectEntrega('delivery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16.5" r="3"/><circle cx="18" cy="16.5" r="3"/><path d="M9 16.5l2.5-6.5H15"/><path d="M13 10h4l1.6 4.2"/><path d="M8 10h5"/></svg> Delivery</div>
       </div>
     </div>
 
@@ -1009,7 +1009,7 @@
       <label>Dirección de entrega</label>
       <button type="button" id="btnGps" onclick="pedirUbicacionGPS()"
         style="width:100%;margin-bottom:.6rem;padding:.65rem;background:#16a34a;color:#fff;border:none;border-radius:.6rem;font-size:.95rem;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem">
-        📍 Compartir mi ubicación exacta (recomendado)
+<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> Compartir mi ubicación exacta (recomendado)
       </button>
       <div id="gpsStatus" style="font-size:.82rem;margin-bottom:.4rem;display:none"></div>
       <div class="addr-wrap">
@@ -1026,7 +1026,7 @@
     <div class="field">
       <label>Forma de pago</label>
       <div class="radio-group">
-        <div class="radio-opt selected" id="pay-tarjeta" onclick="selectPago('tarjeta')">💳 Tarjeta</div>
+        <div class="radio-opt selected" id="pay-tarjeta" onclick="selectPago('tarjeta')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/></svg> Tarjeta</div>
       </div>
     </div>
 

@@ -1849,6 +1849,13 @@ footer strong{color:var(--teal)}
 .cart-row-emoji{flex-shrink:0;width:2.6rem;display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .cart-row-emoji svg{width:30px;height:22px}
 .cart-row-thumb{width:2.6rem;height:2.6rem;border-radius:.5rem;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+/* Móvil: el cajón es angosto. Nombre+precio ocupan la línea 1 junto a la foto,
+   y los controles (− num + / eliminar) bajan a la línea 2 para no tapar el precio */
+@media(max-width:640px){
+  .cart-drawer .cart-row{flex-wrap:wrap;row-gap:.5rem}
+  .cart-drawer .cart-row-info{flex:1 1 calc(100% - 3.6rem);min-width:0}
+  .cart-drawer .cart-qty{margin-left:auto}
+}
 
 /* ── Address autocomplete dropdown ── */
 .addr-wrap{position:relative}
@@ -1880,9 +1887,11 @@ footer strong{color:var(--teal)}
 .qty-btn:hover{background:var(--teal);color:#000;border-color:var(--teal)}
 .qty-num{font-size:.9rem;font-weight:700;min-width:18px;text-align:center}
 .cart-row-del{
-  background:none;border:none;color:var(--subtle);font-size:1rem;
+  background:none;border:none;color:var(--subtle);
   cursor:pointer;padding:.2rem;transition:color .2s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
 }
+.cart-row-del svg{width:18px;height:18px}
 .cart-row-del:hover{color:#ef4444}
 .cart-footer{
   padding:1.2rem 1.5rem;border-top:1px solid var(--border);flex-shrink:0;
@@ -1905,13 +1914,16 @@ footer strong{color:var(--teal)}
   opacity:0;pointer-events:none;transition:opacity .3s;
 }
 .checkout-modal.open{opacity:1;pointer-events:all}
-.checkout-modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px)}
+.checkout-modal-bg{position:absolute;inset:0;background:rgba(4,7,9,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .checkout-box{
   position:relative;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
-  background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
-  padding:2rem;z-index:1;
+  background:rgba(20,39,81,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border2);border-radius:16px;
+  padding:2rem;z-index:1;box-shadow:0 16px 50px rgba(0,0,0,.5);
 }
-.checkout-box h3{font-family:var(--serif);font-size:1.6rem;color:var(--white-1);margin-bottom:1.5rem}
+/* Título con la misma letra que la ventana "Tu Pedido" (Inter, mayúsculas, espaciado) */
+.checkout-box h3{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white-1);margin-bottom:1.5rem;display:flex;align-items:center;gap:.55rem}
+.checkout-box h3 svg{width:20px;height:20px;flex-shrink:0}
 .field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
 .field label{font-size:.75rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 .field input,.field textarea,.field select{
@@ -1926,8 +1938,9 @@ footer strong{color:var(--teal)}
 .radio-opt{
   flex:1;min-width:100px;border:1px solid var(--border2);border-radius:6px;
   padding:.65rem .9rem;cursor:pointer;font-size:.83rem;color:var(--muted);
-  text-align:center;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;transition:all .2s;
 }
+.radio-opt svg{width:17px;height:17px;flex-shrink:0}
 .radio-opt.selected{border-color:var(--teal);color:var(--teal);background:rgba(98,202,227,.08)}
 .checkout-summary{
   background:var(--bg3);border:1px solid var(--border);border-radius:6px;
@@ -2566,10 +2579,11 @@ footer strong{color:var(--teal)}
 /* tooltip al pasar el mouse */
 .fav-tip{
   position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(4px);
-  background:rgba(4,7,9,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  color:#fdf8ec;font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;
-  letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;
-  padding:.4rem .8rem;border-radius:999px;
+  background:rgba(98,202,227,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(98,202,227,.5);
+  color:#fff;font-family:'Inter',sans-serif;font-size:.68rem;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;
+  padding:.4rem .8rem;border-radius:999px;z-index:6;
   opacity:0;pointer-events:none;
   transition:opacity .25s ease,transform .25s ease;
 }
@@ -2600,7 +2614,7 @@ footer strong{color:var(--teal)}
   /* Menos alto = fotos menos recortadas/zoomeadas y sección más rectangular */
   #favCarousel{height:440px;margin-top:-95px;z-index:3}   /* sube la sección COMPLETA (ola + fotos) por encima del hero; la ola es SÓLIDA (no gradiente) así que tapa el borde de las fotos y no hay reflejos */
   .fav-head{top:70px}                /* título Los más pedidos un poco más arriba */
-  .fav-info{bottom:54px;right:6vw;z-index:4}  /* nombre+precio+comprar más abajo; z-4 va SIEMPRE delante de la ola (z-2) */
+  .fav-info{bottom:54px;right:6vw;z-index:5}  /* nombre+precio+comprar más abajo; z-5 va delante de la ola (z-2) y de los puntos (z-4) para que el globo "agregar a tu orden" no se tape */
   .fav-dots{bottom:70px;z-index:4}   /* puntitos de cambiar foto al mismo nivel que el precio */
   .fav-name{font-size:1rem}
   .fav-price{font-size:.85rem}

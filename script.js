@@ -881,7 +881,7 @@ function renderCart(){
         <span class="qty-num">${item.qty}</span>
         <button class="qty-btn" onclick="changeQty('${item.n.replace(/'/g,"\\'")}', 1)">+</button>
       </div>
-      <button class="cart-row-del" onclick="removeFromCart('${item.n.replace(/'/g,"\\'")}')">🗑</button>`;
+      <button class="cart-row-del" aria-label="Eliminar" onclick="removeFromCart('${item.n.replace(/'/g,"\\'")}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6.5 7l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.8-12"/><path d="M10 11v6M14 11v6"/></svg></button>`;
     el.appendChild(row);
   });
 }
