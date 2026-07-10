@@ -2579,9 +2579,9 @@ footer strong{color:var(--teal)}
 }
 .fav-add:hover{transform:translateY(-2px);background:rgba(253,248,236,.32)}
 .fav-add svg{width:19px;height:19px}
-/* tooltip al pasar el mouse */
+/* tooltip al pasar el mouse: DEBAJO del botón (sobre la foto, nunca sobre el precio/nombre) */
 .fav-tip{
-  position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(4px);
+  position:absolute;top:calc(100% + 8px);right:0;transform:translateY(4px);
   background:rgba(98,202,227,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border:1px solid rgba(98,202,227,.5);
   color:#fff;font-family:'Inter',sans-serif;font-size:.68rem;font-weight:700;
@@ -2590,7 +2590,7 @@ footer strong{color:var(--teal)}
   opacity:0;pointer-events:none;
   transition:opacity .25s ease,transform .25s ease;
 }
-.fav-add:hover .fav-tip{opacity:1;transform:translateY(-50%) translateX(0)}
+.fav-add:hover .fav-tip{opacity:1;transform:translateY(0)}
 /* puntitos */
 .fav-dots{
   position:absolute;left:0;right:0;bottom:120px;z-index:3;
