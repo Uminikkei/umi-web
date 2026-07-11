@@ -22,7 +22,7 @@ const USUARIOS = {
   '2222': { area: 'Chef Caliente',  rol: 'pedidor' },
   '3333': { area: 'Barra',          rol: 'pedidor' },
   '4444': { area: 'Administración', rol: 'pedidor' },
-  '9999': { area: 'Compras',        rol: 'comprador' },
+  '2505': { area: 'Compras',        rol: 'comprador' },
   '3008': { area: 'Administrador',  rol: 'admin' },   // ve lo mismo que Compras (costos incluidos)
 };
 // Compras y Administrador ven costos, proveedores y el panel de compras
