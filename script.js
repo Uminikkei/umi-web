@@ -100,7 +100,7 @@
   let userMuted = localStorage.getItem('umiMuted') === '1';
   const VOL = 0.5;
   const SRC = (audioEl && audioEl.getAttribute('src')) || 'olas-playa.mp3';
-  const EV = ['pointerdown','pointerup','touchstart','touchend','keydown','scroll','mousemove','click'];
+  const EV = ['pointerdown','pointerup','touchstart','touchend','keydown','scroll','wheel','mousemove','click'];
   btn.classList.toggle('muted', userMuted);
 
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
