@@ -687,13 +687,13 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
 }
 .cream-link:hover{color:var(--teal);border-color:var(--teal)}
 /* Foto: pegada al borde derecho, a todo el alto de la sección */
-.cream-photo{flex:1 1 48%;min-width:0;position:relative;overflow:hidden}
-.cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;display:block}
-/* Difuminado SOLO en los bordes: funde la foto con el fondo negro sin taparla */
+.cream-photo{flex:1 1 48%;min-width:0;position:relative;overflow:hidden;background:#000}
+/* Imagen COMPLETA (retrato), sin recortar: se ajusta a lo alto de la sección */
+.cream-photo img{width:100%;height:100%;object-fit:contain;object-position:50% 50%;display:block}
+/* Difuminado del borde superior e inferior: funde la foto con el fondo negro */
 .cream-photo::before{
-  /* PC: SOLO el borde izquierdo difuminado, y poco (no cubre el platillo) */
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(to right, #000 0%, rgba(0,0,0,0) 7%);
+  background:linear-gradient(to bottom, #000 0%, rgba(0,0,0,0) 14%),linear-gradient(to top, #000 0%, rgba(0,0,0,0) 14%);
 }
 /* PC (incluye ventanas de PC angostas ≥901px): texto a la izquierda, foto a la
    derecha ocupando todo el alto entre las olas superior e inferior (no full-bleed) */
@@ -739,7 +739,7 @@ nav .nav-wordmark img{filter:brightness(0) invert(1) opacity(1) drop-shadow(0 2p
   /* Imagen subida más: la flama sube y toca el texto (llega hasta "combinación"); va detrás del texto (z-index 1) */
   .cream-photo{flex:none;width:100%;height:auto;aspect-ratio:1305/2000;position:relative;z-index:1;margin-top:-210px}
   .cream-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 10%)}
+  .cream-photo::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 12%),linear-gradient(to top,#000 0%,rgba(0,0,0,0) 12%)}
   /* La ola de etimología sube y tapa el borde inferior de la imagen */
   .etim-sec{margin-top:-34px;z-index:2}
 }

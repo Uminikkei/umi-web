@@ -109,7 +109,7 @@ fill="#62CAE3" stroke="none">
 -68 99 -6 4 -21 25 -31 45 -10 20 -33 55 -50 76 -17 21 -38 61 -46 88 -8 27
 -23 60 -34 74 -11 14 -23 42 -27 63 -4 20 -20 69 -35 109 -40 100 -37 179 8
 197 26 10 307 34 543 45 113 6 324 17 470 25 146 9 351 20 455 25 105 5 231
-14 280 19 50 6 179 13 289 15 109 3 201 8 204 11 9 9 55 5 101 -8z"><animateTransform attributeName="transform" attributeType="XML" type="translate" values="0,0;0,-70;0,0" dur="2.8s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/></path>
+14 280 19 50 6 179 13 289 15 109 3 201 8 204 11 9 9 55 5 101 -8z"><animateTransform attributeName="transform" attributeType="XML" type="translate" values="0,0;0,-140;0,0" dur="2.8s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/></path>
 <path d="M17450 5642 c-85 -38 -125 -153 -86 -246 26 -61 148 -126 238 -126
 44 0 107 50 128 100 31 74 -7 193 -78 247 -40 30 -49 33 -115 32 -40 0 -79 -3
 -87 -7z"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.25;0.292;0.583;0.625;1" dur="6s" repeatCount="indefinite"/></path>
