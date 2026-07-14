@@ -205,8 +205,11 @@ let usuario  = null;   // { area, rol }
 let catalogo = [];     // productos de Firestore
 let pedidos  = [];     // pedidos de los últimos 14 días (en vivo)
 let carrito  = {};     // key -> { nombre, categoria, cantidad, unidad }
+let inventarios = {};  // slug(area) -> { area, items: { key: {nombre, unidad, cantidad, f} } }
 let tabActiva = '';
 let seedIntentado = false;
+
+const AREAS_INVENTARIO = ['Chef Frío', 'Chef Caliente', 'Barra', 'Administración'];
 
 const $ = (id) => document.getElementById(id);
 const slug = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -267,8 +270,8 @@ $('btnSalir').addEventListener('click', () => {
 // ── Tabs ────────────────────────────────────────────────────────────────────
 function montarTabs(){
   const defs = esComprador()
-    ? [ ['compras','🛒 Por comprar'], ['catalogo','📋 Catálogo'] ]
-    : [ ['pedir','📝 Pedir'], ['enviados','📤 Enviados'] ];
+    ? [ ['compras','🛒 Por comprar'], ['inventario','📦 Inventario'], ['catalogo','📋 Catálogo'] ]
+    : [ ['pedir','📝 Pedir'], ['enviados','📤 Enviados'], ['inventario','📦 Inventario'] ];
   $('tabs').innerHTML = defs.map(([id, txt]) =>
     `<button class="tab" data-tab="${id}" id="tab-${id}">${txt}</button>`).join('');
   defs.forEach(([id]) => $('tab-' + id).addEventListener('click', () => activarTab(id)));
@@ -277,7 +280,7 @@ function montarTabs(){
 function activarTab(id){
   tabActiva = id;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('activa', t.dataset.tab === id));
-  const vistas = { pedir:'vistaPedir', enviados:'vistaEnviados', compras:'vistaCompras', catalogo:'vistaCatalogo' };
+  const vistas = { pedir:'vistaPedir', enviados:'vistaEnviados', compras:'vistaCompras', catalogo:'vistaCatalogo', inventario:'vistaInventario' };
   Object.entries(vistas).forEach(([k, vid]) => $(vid).style.display = (k === id) ? 'block' : 'none');
   $('carritoBar').style.display = 'none';
   renderTodo();
@@ -299,6 +302,12 @@ function conectarFirestore(){
     pedidos.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     renderTodo();
   }, (e) => console.error('[PEDIDOS] pedidos:', e));
+
+  onSnapshot(collection(db, 'pedidosInventario'), (snap) => {
+    inventarios = {};
+    snap.docs.forEach(d => { inventarios[d.id] = d.data(); });
+    renderTodo();
+  }, (e) => console.error('[PEDIDOS] inventario:', e));
 }
 
 async function cargarCatalogoBase(){
@@ -320,6 +329,7 @@ function renderTodo(){
   if (tabActiva === 'enviados')   renderEnviados();
   if (tabActiva === 'compras')    renderCompras();
   if (tabActiva === 'catalogo')   renderCatalogoAdmin();
+  if (tabActiva === 'inventario') renderInventario();
   renderBadges();
 }
 
@@ -407,6 +417,7 @@ function guardarCarrito(){ localStorage.setItem('umiCarrito_' + usuario.area, JS
 $('buscador').addEventListener('input', renderCatalogo);
 $('buscadorCompras').addEventListener('input', renderCompras);
 $('buscadorCatalogo').addEventListener('input', renderCatalogoAdmin);
+$('buscadorInv').addEventListener('input', () => renderInventario());
 
 function renderCarritoBar(){
   const items = Object.values(carrito);
@@ -471,6 +482,17 @@ function renderEnviados(){
     try { await deleteDoc(doc(db, 'pedidosCompras', b.dataset.borrar)); toast('Pedido eliminado'); }
     catch(e){ console.error(e); toast('No se pudo eliminar'); }
   }));
+  cont.querySelectorAll('[data-recibir]').forEach(b => b.addEventListener('click', () => {
+    const [id, idx] = b.dataset.recibir.split('|');
+    marcarRecibido(id, parseInt(idx, 10));
+  }));
+}
+async function marcarRecibido(pedidoId, idx){
+  const p = pedidos.find(x => x._id === pedidoId);
+  if (!p) return;
+  const items = p.items.map((it, i) => i === idx ? Object.assign({}, it, { recibido: !it.recibido }) : it);
+  try { await updateDoc(doc(db, 'pedidosCompras', pedidoId), { items }); }
+  catch(e){ console.error('[PEDIDOS] recibir:', e); toast('No se pudo guardar'); }
 }
 function cardPedido(p, esHoy){
   const hora = p.createdAt?.seconds
@@ -479,12 +501,12 @@ function cardPedido(p, esHoy){
   return `<div class="pedido-card">
     <div class="pedido-head"><span class="pedido-area">${esc(p.area)}</span><span class="pedido-hora">${hora}</span></div>
     ${p.nota ? `<div class="pedido-nota">“${esc(p.nota)}”</div>` : ''}
-    ${p.items.map(i =>
+    ${p.items.map((i, idx) =>
       `<div class="pedido-item ${i.comprado ? 'comprado' : ''}">
          <span class="cant">${fmtCant(i.cantidad)} ${esc(i.unidad)}</span>
          <span class="nombre">${esc(i.nombre)}</span>
          ${i.nota ? `<span class="obs">· ${esc(i.nota)}</span>` : ''}
-         ${i.comprado ? '<span style="margin-left:auto">✅</span>' : ''}
+         ${i.comprado ? `<button class="btn-recibir ${i.recibido ? 'ok' : ''}" data-recibir="${p._id}|${idx}" title="Marcar como recibido en el local">${i.recibido ? '📦 recibido' : '📦 ¿llegó?'}</button>` : ''}
        </div>`).join('')}
     ${esHoy && nadaComprado ? `<button class="pedido-borrar" data-borrar="${p._id}">Eliminar pedido</button>` : ''}
   </div>`;
@@ -504,7 +526,7 @@ function consolidarDia(pedidosDia){
       const k = keyDe(it.nombre, it.unidad);
       if (!map[k]) map[k] = { nombre: it.nombre, categoria: it.categoria, unidad: it.unidad, total: 0, fuentes: [], comprado: true };
       map[k].total = Math.round((map[k].total + it.cantidad) * 100) / 100;
-      map[k].fuentes.push({ area: p.area, cantidad: it.cantidad, nota: it.nota || '' });
+      map[k].fuentes.push({ area: p.area, cantidad: it.cantidad, nota: it.nota || '', recibido: !!it.recibido });
       if (!it.comprado) map[k].comprado = false;
     });
   });
@@ -539,8 +561,8 @@ function renderCompras(){
       cuerpo += `<div class="cat-titulo">${esc(cat)}</div>`;
       deCat.forEach(([k, v]) => {
         const detalle = v.fuentes.length > 1
-          ? v.fuentes.map(f => `${esc(f.area)} ${fmtCant(f.cantidad)}${f.nota ? ' («' + esc(f.nota) + '»)' : ''}`).join(' + ')
-          : esc(v.fuentes[0].area) + (v.fuentes[0].nota ? ' · «' + esc(v.fuentes[0].nota) + '»' : '');
+          ? v.fuentes.map(f => `${esc(f.area)} ${fmtCant(f.cantidad)}${f.nota ? ' («' + esc(f.nota) + '»)' : ''}${f.recibido ? ' 📦' : ''}`).join(' + ')
+          : esc(v.fuentes[0].area) + (v.fuentes[0].nota ? ' · «' + esc(v.fuentes[0].nota) + '»' : '') + (v.fuentes[0].recibido ? ' 📦' : '');
         const prod = infoProd[k.split('|')[0]];
         const costoLinea = prod && (prod.costo || prod.proveedor)
           ? `<div class="comp-costo">${prod.costo ? fmtCLP(prod.costo) + ' /' + esc(prod.unidad) + (prod.costo ? ' · ' + fmtCLP(prod.costo * v.total) : '') : ''}${prod.costo && prod.proveedor ? ' · ' : ''}${prod.proveedor ? '🏪 ' + esc(prod.proveedor) : ''}</div>`
@@ -656,6 +678,7 @@ function abrirModalCosto(p){
   $('costoProducto').textContent = p.nombre + ' (' + p.unidad + ')';
   $('costoValor').value = p.costo || '';
   $('costoProveedor').value = p.proveedor || '';
+  $('costoMinimo').value = p.minimo || '';
   $('costoErr').textContent = '';
   abrirModal('modalCosto');
 }
@@ -666,12 +689,184 @@ $('btnGuardarCosto').addEventListener('click', async () => {
     await updateDoc(doc(db, 'pedidosCatalogo', costoEditandoId), {
       costo: parseFloat($('costoValor').value) || 0,
       proveedor: $('costoProveedor').value.trim(),
+      minimo: parseFloat($('costoMinimo').value) || 0,
     });
     cerrarModales();
     toast('✓ Guardado');
   } catch(e){ console.error('[PEDIDOS] costo:', e); $('costoErr').textContent = 'No se pudo guardar, intenta de nuevo'; }
   finally { btn.disabled = false; }
 });
+
+// ── Vista INVENTARIO ────────────────────────────────────────────────────────
+let invCatSel = null;    // categoría elegida (pedidor)
+let invAreaSel = '';     // área elegida (comprador/admin); '' = resumen
+
+function fechaRelativa(ms){
+  if (!ms) return 'sin contar';
+  const dias = Math.floor((Date.now() - ms) / 864e5);
+  if (dias === 0) return 'hoy';
+  if (dias === 1) return 'ayer';
+  return 'hace ' + dias + ' días';
+}
+function invDe(area){ return (inventarios[slug(area)] && inventarios[slug(area)].items) || {}; }
+
+// Productos bajo mínimo para un área: [{key, nombre, unidad, hay, minimo, pedir}]
+function bajoMinimo(area){
+  const items = invDe(area);
+  const lista = [];
+  catalogo.forEach(p => {
+    if (!p.minimo) return;
+    const k = keyDe(p.nombre, p.unidad);
+    const reg = items[k];
+    if (!reg) return;                       // sin conteo no se sugiere
+    if (reg.cantidad < p.minimo) {
+      lista.push({ key: k, nombre: p.nombre, categoria: p.categoria, unidad: p.unidad,
+        hay: reg.cantidad, minimo: p.minimo, pedir: Math.round((p.minimo - reg.cantidad) * 100) / 100 });
+    }
+  });
+  return lista;
+}
+
+function renderInventario(){
+  if (esComprador()) { renderInventarioComprador(); return; }
+  const cont = $('listaInventario');
+  const sug = $('invSugerido');
+  const items = invDe(usuario.area);
+  const filtro = slug($('buscadorInv').value || '');
+
+  // Sugerido para pedir (bajo mínimo)
+  const faltan = bajoMinimo(usuario.area);
+  sug.innerHTML = faltan.length ? `
+    <div class="sug-box">
+      <div class="sug-titulo">⚠️ Bajo el mínimo (${faltan.length})</div>
+      ${faltan.map(f => `<div class="sug-item"><span>${esc(f.nombre)}</span><span class="sug-det">hay ${fmtCant(f.hay)}, mín ${fmtCant(f.minimo)} → pedir ${fmtCant(f.pedir)} ${esc(f.unidad)}</span></div>`).join('')}
+      <button class="btn-primary sug-btn" id="btnSugeridos">➕ Agregar todo al pedido</button>
+    </div>` : '';
+  const btnSug = $('btnSugeridos');
+  if (btnSug) btnSug.addEventListener('click', () => {
+    faltan.forEach(f => { carrito[f.key] = { nombre: f.nombre, categoria: f.categoria, unidad: f.unidad, cantidad: f.pedir }; });
+    guardarCarrito();
+    toast('✓ ' + faltan.length + ' productos al pedido');
+    activarTab('pedir');
+  });
+
+  // Menú de categorías o lista de conteo
+  if (!filtro && !invCatSel){
+    const tarjetas = categoriasCon(catalogo.map(p => p.categoria)).map(cat => {
+      const prods = catalogo.filter(p => p.categoria === cat);
+      if (!prods.length) return '';
+      const contados = prods.filter(p => items[keyDe(p.nombre, p.unidad)]).length;
+      const partes = cat.split(' '); const emoji = partes.shift();
+      return `<button class="cat-card" data-invcat="${esc(cat)}">
+        <span class="emoji">${emoji}</span><span>${esc(partes.join(' '))}</span>
+        <span class="cuenta">${contados}/${prods.length} contados</span>
+      </button>`;
+    }).join('');
+    cont.innerHTML = `<div class="cat-grid">${tarjetas}</div>`;
+    cont.querySelectorAll('[data-invcat]').forEach(b => b.addEventListener('click', () => {
+      invCatSel = b.dataset.invcat; renderInventario(); window.scrollTo({ top: 0 });
+    }));
+    return;
+  }
+
+  const cats = filtro ? categoriasCon(catalogo.map(p => p.categoria)) : [invCatSel];
+  let html = filtro ? '' : `<button class="cat-volver" id="btnVolverInv">‹ Todas las categorías</button>`;
+  cats.forEach(cat => {
+    const prods = catalogo.filter(p => p.categoria === cat && (!filtro || slug(p.nombre).includes(filtro)));
+    if (!prods.length) return;
+    html += `<div class="cat-titulo">${esc(cat)}</div>`;
+    prods.forEach(p => {
+      const k = keyDe(p.nombre, p.unidad);
+      const reg = items[k];
+      html += `<div class="prod ${reg ? 'contado' : ''}">
+        <div class="prod-nombre">${esc(p.nombre)} <span class="prod-unidad">(${esc(p.unidad)})</span>
+          <div class="inv-fecha">${reg ? '✓ ' + fechaRelativa(reg.f) : 'sin contar'}</div>
+        </div>
+        <input type="number" class="inv-input" inputmode="decimal" step="0.5" min="0"
+          placeholder="¿hay?" value="${reg ? reg.cantidad : ''}" data-inv="${k}">
+      </div>`;
+    });
+  });
+  cont.innerHTML = html || '<div class="vacio">No hay productos que coincidan.</div>';
+  const volver = $('btnVolverInv');
+  if (volver) volver.addEventListener('click', () => { invCatSel = null; renderInventario(); });
+  cont.querySelectorAll('[data-inv]').forEach(inp => inp.addEventListener('change', () =>
+    guardarInventario(inp.dataset.inv, inp.value)));
+}
+
+async function guardarInventario(key, valor){
+  const areaId = slug(usuario.area);
+  const inv = inventarios[areaId] || { area: usuario.area, items: {} };
+  if (!inv.items) inv.items = {};
+  const p = catalogo.find(x => keyDe(x.nombre, x.unidad) === key);
+  if (!p) return;
+  const n = parseFloat(valor);
+  if (valor === '' || isNaN(n)) delete inv.items[key];
+  else inv.items[key] = { nombre: p.nombre, categoria: p.categoria, unidad: p.unidad, cantidad: n, f: Date.now() };
+  inventarios[areaId] = inv;
+  try {
+    await setDoc(doc(db, 'pedidosInventario', areaId), { area: usuario.area, items: inv.items });
+  } catch(e){ console.error('[PEDIDOS] inv guardar:', e); toast('No se pudo guardar'); }
+}
+
+// Vista del comprador/admin: todas las áreas + valorización
+function renderInventarioComprador(){
+  const cont = $('listaInventario');
+  const sug = $('invSugerido');
+  const filtro = slug($('buscadorInv').value || '');
+  const costoDe = {};
+  catalogo.forEach(p => { costoDe[keyDe(p.nombre, p.unidad)] = p.costo || 0; });
+  const valorArea = (area) => {
+    let v = 0; Object.entries(invDe(area)).forEach(([k, it]) => { v += (costoDe[k] || 0) * it.cantidad; });
+    return v;
+  };
+
+  // Chips de áreas
+  const chips = ['', ...AREAS_INVENTARIO].map(a =>
+    `<button class="chip ${invAreaSel === a ? 'activo' : ''}" data-area="${esc(a)}">${a === '' ? '📊 Resumen' : esc(a)}</button>`).join('');
+  let html = `<div class="chips">${chips}</div>`;
+
+  if (!invAreaSel){
+    // Resumen: valor por área + bajo mínimo global
+    let total = 0;
+    html += AREAS_INVENTARIO.map(a => {
+      const v = valorArea(a); total += v;
+      const n = Object.keys(invDe(a)).length;
+      return `<div class="comp-item"><div class="comp-info">
+        <span class="comp-nombre">${esc(a)}</span> · <span class="comp-total">${n} productos contados</span>
+        <div class="comp-detalle">Valor: ${fmtCLP(v)}</div>
+      </div></div>`;
+    }).join('');
+    html += `<div class="dia-total" style="margin-top:.6rem">💰 Valor total del inventario: ${fmtCLP(total)}</div>`;
+    const faltanTodo = AREAS_INVENTARIO.flatMap(a => bajoMinimo(a).map(f => Object.assign({ area: a }, f)));
+    if (faltanTodo.length){
+      html += `<div class="sug-box"><div class="sug-titulo">⚠️ Bajo el mínimo en el local (${faltanTodo.length})</div>` +
+        faltanTodo.map(f => `<div class="sug-item"><span>${esc(f.nombre)} <span class="prod-unidad">(${esc(f.area)})</span></span><span class="sug-det">hay ${fmtCant(f.hay)}, mín ${fmtCant(f.minimo)}</span></div>`).join('') + '</div>';
+    }
+  } else {
+    const items = invDe(invAreaSel);
+    const entradas = Object.entries(items).filter(([k, it]) => !filtro || slug(it.nombre).includes(filtro));
+    html += `<div class="dia-total">Valor del área: ${fmtCLP(valorArea(invAreaSel))}</div>`;
+    if (!entradas.length) html += '<div class="vacio">Esta área aún no cuenta nada.</div>';
+    else categoriasCon(entradas.map(([,it]) => it.categoria)).forEach(cat => {
+      const deCat = entradas.filter(([,it]) => it.categoria === cat);
+      if (!deCat.length) return;
+      html += `<div class="cat-titulo">${esc(cat)}</div>`;
+      deCat.forEach(([k, it]) => {
+        const val = (costoDe[k] || 0) * it.cantidad;
+        html += `<div class="comp-item"><div class="comp-info">
+          <span class="comp-nombre">${esc(it.nombre)}</span> · <span class="comp-total">${fmtCant(it.cantidad)} ${esc(it.unidad)}</span>
+          <div class="comp-detalle">${fechaRelativa(it.f)}${val ? ' · ' + fmtCLP(val) : ''}</div>
+        </div></div>`;
+      });
+    });
+  }
+  sug.innerHTML = '';
+  cont.innerHTML = html;
+  cont.querySelectorAll('[data-area]').forEach(b => b.addEventListener('click', () => {
+    invAreaSel = b.dataset.area; renderInventario();
+  }));
+}
 
 // ── Badges en tabs ──────────────────────────────────────────────────────────
 function renderBadges(){

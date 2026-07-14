@@ -76,8 +76,13 @@ y el encargado de compras lo vea consolidado por día en la misma app.
   cervezas, vinos, bebidas, hielo, pulpas e insumos de coctelería. Se auto-carga la primera
   vez que alguien entra.
 - Se instala como app: abrir el link en el celular → "Agregar a pantalla de inicio".
-- ⚠️ Requiere reglas de Firestore para `pedidosCatalogo` y `pedidosCompras` (lectura/escritura abierta,
-  el control de acceso es el PIN de la app).
+- **Inventario** (2026-07-14): pestaña 📦 para todos. Chefs/barra cuentan su área ("¿cuánto hay?",
+  guardado automático en colección `pedidosInventario`, doc por área); con stock mínimo definido
+  (✏️ del catálogo) la app sugiere el pedido (mín - hay) con botón "Agregar todo al pedido".
+  Compras/Admin ven todas las áreas, bajo mínimo global y valorización (cantidad × costo).
+  Recepción: en Enviados el chef marca 📦 recibido por ítem cuando llega la mercadería.
+- ⚠️ Requiere reglas de Firestore para `pedidosCatalogo`, `pedidosCompras` y `pedidosInventario`
+  (lectura/escritura abierta, el control de acceso es el PIN de la app).
 
 ---
 
