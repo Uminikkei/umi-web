@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="UMI Pedidos">
-<link rel="stylesheet" href="/pedidos/pedidos.css?v=5">
+<link rel="stylesheet" href="/pedidos/pedidos.css?v=6">
 </head>
 <body>
 
@@ -80,7 +80,8 @@
     <div class="buscador-simple">
       <input type="search" id="buscadorCatalogo" placeholder="Buscar producto…" autocomplete="off">
     </div>
-    <button class="btn-agregar-prod" id="btnNuevoProd2" style="margin-top:0">＋ Agregar producto</button>
+    <button class="filtro-chip" id="btnSinCosto">⚠️ Solo sin costo</button>
+    <button class="btn-agregar-prod" id="btnNuevoProd2" style="margin-top:.6rem">＋ Agregar producto</button>
     <div id="listaCatalogoAdmin"></div>
   </section>
 
@@ -134,6 +135,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module" src="/pedidos/pedidos.js?v=8"></script>
+<script type="module" src="/pedidos/pedidos.js?v=9"></script>
 </body>
 </html>

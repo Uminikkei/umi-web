@@ -600,13 +600,27 @@ async function marcarComprado(dia, key, comprado){
 }
 
 // ── Vista CATÁLOGO (comprador) ──────────────────────────────────────────────
+let soloSinCosto = false;
+$('btnSinCosto').addEventListener('click', () => {
+  soloSinCosto = !soloSinCosto;
+  renderCatalogoAdmin();
+});
+
 function renderCatalogoAdmin(){
   const cont = $('listaCatalogoAdmin');
   const filtro = slug($('buscadorCatalogo').value || '');
+  // Checklist: contador en vivo de productos sin costo o sin proveedor
+  const faltantes = catalogo.filter(p => !p.costo || !p.proveedor).length;
+  const btnF = $('btnSinCosto');
+  btnF.textContent = soloSinCosto
+    ? '✓ Mostrando solo sin costo (' + faltantes + ') — tocar para ver todo'
+    : '⚠️ Solo sin costo (' + faltantes + ')';
+  btnF.classList.toggle('activo', soloSinCosto);
   let html = '';
   categoriasCon(catalogo.map(p => p.categoria)).forEach(cat => {
     const prods = catalogo.filter(p => p.categoria === cat &&
-      (!filtro || slug(p.nombre).includes(filtro)));
+      (!filtro || slug(p.nombre).includes(filtro)) &&
+      (!soloSinCosto || !p.costo || !p.proveedor));
     if (!prods.length) return;
     html += `<div class="cat-titulo">${esc(cat)}</div>`;
     prods.forEach(p => {

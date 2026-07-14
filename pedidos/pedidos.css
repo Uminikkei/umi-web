@@ -219,6 +219,11 @@ input,select,textarea{font-family:inherit}
 .cata-editar{background:transparent;border:none;font-size:1rem;padding:.3rem .4rem;flex-shrink:0}
 .cata-quitar{background:transparent;border:none;color:var(--rojo);font-size:1.05rem;padding:.3rem .5rem;flex-shrink:0}
 .costo-sub{color:var(--muted);font-size:.9rem;margin:-.4rem 0 .9rem}
+.filtro-chip{
+  width:100%;background:rgba(255,184,77,.12);border:1px solid rgba(255,184,77,.4);
+  color:var(--warn);border-radius:var(--radius);padding:.7rem 1rem;font-size:.9rem;font-weight:600;
+}
+.filtro-chip.activo{background:var(--warn);color:#3a2600;border-color:var(--warn)}
 
 .vacio{color:var(--muted);text-align:center;padding:2.5rem 1rem;font-size:.92rem}
 
