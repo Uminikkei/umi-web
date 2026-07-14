@@ -237,6 +237,16 @@ input,select,textarea{font-family:inherit}
 }
 .btn-recibir.ok{background:rgba(76,217,123,.15);border-color:var(--ok);color:var(--ok)}
 
+/* ── Registro (auditoría, solo admin) ── */
+.log-item{
+  display:flex;align-items:flex-start;gap:.55rem;
+  padding:.45rem .2rem;border-bottom:1px solid var(--border);font-size:.85rem;
+}
+.log-hora{color:var(--muted);font-size:.75rem;white-space:nowrap;padding-top:.1rem}
+.log-icono{flex-shrink:0}
+.log-texto{min-width:0;line-height:1.35}
+.log-texto b{color:var(--teal)}
+
 /* ── Catálogo admin ── */
 .cata-item{
   display:flex;align-items:center;justify-content:space-between;gap:.6rem;

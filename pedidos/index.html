@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="UMI Pedidos">
-<link rel="stylesheet" href="/pedidos/pedidos.css?v=7">
+<link rel="stylesheet" href="/pedidos/pedidos.css?v=8">
 </head>
 <body>
 
@@ -84,6 +84,14 @@
     <div id="listaInventario"></div>
   </section>
 
+  <!-- ── VISTA ADMIN: registro de movimientos ── -->
+  <section class="vista" id="vistaRegistro" style="display:none">
+    <div class="buscador-simple">
+      <input type="search" id="buscadorReg" placeholder="Buscar en el registro… (área o producto)" autocomplete="off">
+    </div>
+    <div id="listaRegistro"></div>
+  </section>
+
   <!-- ── VISTA COMPRADOR: catálogo ── -->
   <section class="vista" id="vistaCatalogo" style="display:none">
     <div class="buscador-simple">
@@ -135,6 +143,7 @@
     <label class="campo"><span>Costo en pesos (con IVA dentro del monto)</span><input type="number" id="costoValor" inputmode="numeric" min="0" placeholder="Ej: 8990"></label>
     <label class="campo"><span>Proveedor</span><input type="text" id="costoProveedor" placeholder="Ej: Bombo, Macan, Luigi…" autocomplete="off"></label>
     <label class="campo"><span>Stock mínimo (para el pedido sugerido; 0 = sin mínimo)</span><input type="number" id="costoMinimo" inputmode="decimal" min="0" step="0.5" placeholder="Ej: 10"></label>
+    <label class="campo"><span>Unidad de conteo del inventario (si difiere de la de compra, ej: se compra en kg pero se cuenta en porciones)</span><select id="costoUnidadInv"></select></label>
     <div class="gate-err" id="costoErr"></div>
     <div class="modal-acciones">
       <button class="btn-sec" data-cerrar>Cancelar</button>
@@ -145,6 +154,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module" src="/pedidos/pedidos.js?v=10"></script>
+<script type="module" src="/pedidos/pedidos.js?v=11"></script>
 </body>
 </html>
