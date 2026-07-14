@@ -774,10 +774,7 @@ function bajoMinimo(area){
 
 function renderInventario(){
   if (esComprador()) { renderInventarioComprador(); return; }
-  const cont = $('listaInventario');
   const sug = $('invSugerido');
-  const items = invDe(usuario.area);
-  const filtro = slug($('buscadorInv').value || '');
 
   // Sugerido para pedir (bajo mínimo)
   const faltan = bajoMinimo(usuario.area);
@@ -795,7 +792,13 @@ function renderInventario(){
     activarTab('pedir');
   });
 
-  // Menú de categorías o lista de conteo
+  renderConteoEn($('listaInventario'), usuario.area);
+}
+
+// Conteo editable de un área: los pedidores cuentan la suya; el administrador corrige cualquiera
+function renderConteoEn(cont, area){
+  const items = invDe(area);
+  const filtro = slug($('buscadorInv').value || '');
   if (!filtro && !invCatSel){
     const tarjetas = categoriasCon(catalogo.map(p => p.categoria)).map(cat => {
       const prods = catalogo.filter(p => p.categoria === cat);
@@ -837,12 +840,13 @@ function renderInventario(){
   const volver = $('btnVolverInv');
   if (volver) volver.addEventListener('click', () => { invCatSel = null; renderInventario(); });
   cont.querySelectorAll('[data-inv]').forEach(inp => inp.addEventListener('change', () =>
-    guardarInventario(inp.dataset.inv, inp.value)));
+    guardarInventario(inp.dataset.inv, inp.value, area)));
 }
 
-async function guardarInventario(key, valor){
-  const areaId = slug(usuario.area);
-  const inv = inventarios[areaId] || { area: usuario.area, items: {} };
+async function guardarInventario(key, valor, area){
+  area = area || usuario.area;
+  const areaId = slug(area);
+  const inv = inventarios[areaId] || { area, items: {} };
   if (!inv.items) inv.items = {};
   const p = catalogo.find(x => keyDe(x.nombre, x.unidad) === key);
   if (!p) return;
@@ -852,9 +856,12 @@ async function guardarInventario(key, valor){
   if (valor === '' || isNaN(n)) delete inv.items[key];
   else inv.items[key] = { nombre: p.nombre, categoria: p.categoria, unidad: uCuenta, cantidad: n, f: Date.now() };
   inventarios[areaId] = inv;
+  const cambio = antes + ' → ' + (valor === '' || isNaN(n) ? 'borrado' : fmtCant(n)) + ' ' + uCuenta;
   try {
-    await setDoc(doc(db, 'pedidosInventario', areaId), { area: usuario.area, items: inv.items });
-    log('inventario', 'contó "' + p.nombre + '": ' + antes + ' → ' + (valor === '' || isNaN(n) ? 'borrado' : fmtCant(n)) + ' ' + uCuenta);
+    await setDoc(doc(db, 'pedidosInventario', areaId), { area, items: inv.items });
+    log('inventario', area === usuario.area
+      ? 'contó "' + p.nombre + '": ' + cambio
+      : 'corrigió "' + p.nombre + '" del inventario de ' + area + ': ' + cambio);
   } catch(e){ console.error('[PEDIDOS] inv guardar:', e); toast('No se pudo guardar'); }
 }
 
@@ -893,6 +900,10 @@ function renderInventarioComprador(){
       html += `<div class="sug-box"><div class="sug-titulo">⚠️ Bajo el mínimo en el local (${faltanTodo.length})</div>` +
         faltanTodo.map(f => `<div class="sug-item"><span>${esc(f.nombre)} <span class="prod-unidad">(${esc(f.area)})</span></span><span class="sug-det">hay ${fmtCant(f.hay)}, mín ${fmtCant(f.minimo)}</span></div>`).join('') + '</div>';
     }
+  } else if (usuario.rol === 'admin'){
+    // El administrador puede corregir, agregar y borrar conteos de cualquier área
+    html += `<div class="dia-total">Valor del área: ${fmtCLP(valorArea(invAreaSel))} <span class="sin">· puedes corregir los conteos</span></div>
+      <div id="conteoAdmin"></div>`;
   } else {
     const items = invDe(invAreaSel);
     const entradas = Object.entries(items).filter(([k, it]) => !filtro || slug(it.nombre).includes(filtro));
@@ -913,8 +924,11 @@ function renderInventarioComprador(){
   }
   sug.innerHTML = '';
   cont.innerHTML = html;
+  if (invAreaSel && usuario.rol === 'admin'){
+    renderConteoEn(document.getElementById('conteoAdmin'), invAreaSel);
+  }
   cont.querySelectorAll('[data-area]').forEach(b => b.addEventListener('click', () => {
-    invAreaSel = b.dataset.area; renderInventario();
+    invAreaSel = b.dataset.area; invCatSel = null; renderInventario();
   }));
 }
 
