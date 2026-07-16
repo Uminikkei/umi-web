@@ -497,22 +497,50 @@ function pintarClientes(){
   const q = norm($('buscadorClientes').value);
   const arr = clientesCache.filter(c => !q || norm(c.name).includes(q) || norm(c.email).includes(q) || norm(c.whatsapp).includes(q));
   const promos = clientesCache.filter(c => c.acceptsPromos).length;
-  const conCompra = clientesCache.filter(c => (c.numCompras||0) > 0 || (c.points||0) !== 2000).length;
-  resumen.innerHTML = `<b>${clientesCache.length}</b> clientes registrados${q?` · ${arr.length} en la búsqueda`:''} · ${promos} aceptan promos · ${conCompra} con compras`;
+  const conPedidos = clientesCache.filter(c => (c.numCompras||0) > 0).length;
+  resumen.innerHTML = `<b>${clientesCache.length}</b> clientes registrados${q?` · ${arr.length} en la búsqueda`:''} · ${promos} aceptan promos · ${conPedidos} con pedidos registrados`;
   if (!arr.length){ lista.innerHTML = '<div class="vacio">Sin resultados.</div>'; return; }
   lista.innerHTML = arr.map(c => {
     const nc = c.numCompras || 0;
-    const compraTxt = nc>0 ? `🛒 ${nc} compra${nc>1?'s':''}` : ((c.points||0)!==2000 ? '🛒 con compras' : 'sin compras aún');
+    const compraTxt = nc>0 ? `🛒 ${nc} pedido${nc>1?'s':''}` : '🕐 sin pedidos registrados aún';
     const wa = (c.whatsapp||'').replace(/\D/g,'');
     return `<div class="cliente-card">
       <div class="cli-top"><span class="cli-nombre">${esc(c.name||'(sin nombre)')}</span><span class="cli-pts">★ ${(c.points||0).toLocaleString('es-CL')}</span></div>
       <div class="cli-row"><a href="mailto:${esc(c.email||'')}">${esc(c.email||'')}</a></div>
       <div class="cli-row">📱 <a href="https://wa.me/${wa}" target="_blank">${esc(c.whatsapp||'')}</a>${c.acceptsPromos?' · ✅ promos':''}${c.birthday?` · 🎂 ${esc(c.birthday)}`:''}</div>
       <div class="cli-row cli-meta">${compraTxt}${c.totalGastado?` · $${Number(c.totalGastado).toLocaleString('es-CL')} gastado`:''}${c.ultimaCompra?` · última: ${esc(fmtFechaCli(c.ultimaCompra))}`:''}</div>
+      <button class="link-btn cli-vp" onclick="__verPedidos('${c._id}')">ver pedidos ▾</button>
+      <div class="cli-pedidos" id="ped_${c._id}" style="display:none"></div>
     </div>`;
   }).join('');
 }
 function fmtFechaCli(ts){ try{ const d = ts && ts.seconds ? new Date(ts.seconds*1000) : new Date(ts); return d.toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
+
+// Detalle de pedidos de un cliente (subcolección clientes/{uid}/pedidos).
+// Requiere publicar la regla de lectura del subcolección; si no está, avisa.
+window.__verPedidos = async function(uid){
+  const box = document.getElementById('ped_' + uid);
+  if (!box) return;
+  if (box.style.display === 'block'){ box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  if (box.dataset.loaded === '1') return;
+  box.innerHTML = '<div class="ped-vacio">Cargando pedidos…</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'clientes', uid, 'pedidos'), orderBy('createdAt', 'desc')));
+    if (snap.empty){
+      box.innerHTML = '<div class="ped-vacio">Sin pedidos guardados todavía. El historial se registra desde ahora (los pedidos anteriores están solo en Spleat).</div>';
+      box.dataset.loaded = '1'; return;
+    }
+    box.innerHTML = snap.docs.map(d => { const o = d.data();
+      const items = (o.items||[]).map(i => `${esc(i.n)} x${i.qty}`).join(', ');
+      return `<div class="ped-item"><span class="ped-head"><b>${esc(fmtFechaCli(o.createdAt))}</b> · $${Number(o.total||0).toLocaleString('es-CL')}${o.entrega?` · ${esc(o.entrega)}`:''}</span><br><span class="ped-items">${items}</span></div>`;
+    }).join('');
+    box.dataset.loaded = '1';
+  } catch(e){
+    console.error('[CLIENTES] pedidos', e);
+    box.innerHTML = '<div class="ped-vacio">No se pudo cargar el detalle. Falta publicar la regla de <code>clientes/{uid}/pedidos</code> en Firestore (te paso el texto).</div>';
+  }
+};
 
 function renderCarritoBar(){
   const items = Object.values(carrito);

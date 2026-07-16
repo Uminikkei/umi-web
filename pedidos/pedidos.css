@@ -327,3 +327,11 @@ input,select,textarea{font-family:inherit}
 .cli-row{font-size:.8rem;color:var(--muted);margin-top:.18rem;word-break:break-word}
 .cli-row a{color:var(--teal);text-decoration:none}
 .cli-meta{color:#8ea6c6;margin-top:.3rem}
+.cli-vp{margin-top:.45rem;display:inline-block}
+.cli-pedidos{margin-top:.5rem;border-top:1px solid var(--border);padding-top:.5rem}
+.ped-item{font-size:.78rem;color:var(--muted);padding:.35rem 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+.ped-item:last-child{border-bottom:none}
+.ped-head b{color:var(--txt)}
+.ped-items{color:#8ea6c6}
+.ped-vacio{font-size:.78rem;color:var(--muted);padding:.3rem 0;line-height:1.45}
+.ped-vacio code{background:rgba(255,255,255,.08);padding:.05rem .3rem;border-radius:5px}
