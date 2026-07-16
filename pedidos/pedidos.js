@@ -4,6 +4,9 @@ import {
   getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, getDocs,
   onSnapshot, query, where, orderBy, limit, writeBatch, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzwcCVQ0xPeGZbpjYT3CLsxYMqof6KyCE",
@@ -279,7 +282,7 @@ $('btnSalir').addEventListener('click', () => {
 function montarTabs(){
   let defs;
   if (usuario.rol === 'admin')
-    defs = [ ['compras','🛒 Compras'], ['inventario','📦 Inventario'], ['catalogo','📋 Catálogo'], ['registro','📜 Registro'] ];
+    defs = [ ['compras','🛒 Compras'], ['inventario','📦 Inventario'], ['catalogo','📋 Catálogo'], ['registro','📜 Registro'], ['clientes','👥 Clientes'] ];
   else if (usuario.rol === 'comprador')
     defs = [ ['compras','🛒 Por comprar'], ['inventario','📦 Inventario'], ['catalogo','📋 Catálogo'] ];
   else
@@ -292,7 +295,7 @@ function montarTabs(){
 function activarTab(id){
   tabActiva = id;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('activa', t.dataset.tab === id));
-  const vistas = { pedir:'vistaPedir', enviados:'vistaEnviados', compras:'vistaCompras', catalogo:'vistaCatalogo', inventario:'vistaInventario', registro:'vistaRegistro' };
+  const vistas = { pedir:'vistaPedir', enviados:'vistaEnviados', compras:'vistaCompras', catalogo:'vistaCatalogo', inventario:'vistaInventario', registro:'vistaRegistro', clientes:'vistaClientes' };
   Object.entries(vistas).forEach(([k, vid]) => $(vid).style.display = (k === id) ? 'block' : 'none');
   $('carritoBar').style.display = 'none';
   renderTodo();
@@ -351,6 +354,7 @@ function renderTodo(){
   if (tabActiva === 'catalogo')   renderCatalogoAdmin();
   if (tabActiva === 'inventario') renderInventario();
   if (tabActiva === 'registro')   renderRegistro();
+  if (tabActiva === 'clientes')   renderClientes();
   renderBadges();
 }
 
@@ -440,6 +444,75 @@ $('buscadorCompras').addEventListener('input', renderCompras);
 $('buscadorCatalogo').addEventListener('input', renderCatalogoAdmin);
 $('buscadorInv').addEventListener('input', () => renderInventario());
 $('buscadorReg').addEventListener('input', () => renderRegistro());
+$('buscadorClientes').addEventListener('input', pintarClientes);
+
+// ══════════ CLIENTES (solo admin, con login real de Google) ══════════
+// Las reglas de Firestore ya permiten que 'adnanrisache@gmail.com' lea toda la
+// colección 'clientes'. El PIN no basta (no autentica), por eso aquí usamos Auth.
+const gauth = getAuth(app);
+const gprov = new GoogleAuthProvider();
+const ADMIN_EMAILS = ['adnanrisache@gmail.com'];
+let adminUser = null;
+let clientesCache = null;
+onAuthStateChanged(gauth, (u) => { adminUser = u; if (tabActiva === 'clientes') renderClientes(); });
+
+window.__signInAdmin  = () => signInWithPopup(gauth, gprov).catch(e => { toast('No se pudo iniciar sesión'); console.error('[CLIENTES] signin', e); });
+window.__signOutAdmin = () => signOut(gauth);
+window.__recargarClientes = async () => { clientesCache = null; await renderClientes(); };
+
+async function loadClientes(){
+  const snap = await getDocs(collection(db, 'clientes'));
+  clientesCache = snap.docs.map(d => Object.assign({ _id: d.id }, d.data()));
+  clientesCache.sort((a,b) => (b.points||0) - (a.points||0));
+}
+
+async function renderClientes(){
+  const authBox = $('clientesAuth'), buscarWrap = $('clientesBuscarWrap'),
+        resumen = $('clientesResumen'), lista = $('listaClientes');
+  const isAdmin = adminUser && ADMIN_EMAILS.includes((adminUser.email||'').toLowerCase());
+  if (!adminUser){
+    buscarWrap.style.display='none'; resumen.innerHTML=''; lista.innerHTML='';
+    authBox.innerHTML = `<div class="clientes-login"><p>Para ver los clientes registrados, inicia sesión con tu cuenta de <b>administrador</b> (Google).</p><button class="btn-primary" onclick="__signInAdmin()">Iniciar sesión con Google</button></div>`;
+    return;
+  }
+  if (!isAdmin){
+    buscarWrap.style.display='none'; resumen.innerHTML=''; lista.innerHTML='';
+    authBox.innerHTML = `<div class="clientes-login"><p>La cuenta <b>${esc(adminUser.email)}</b> no tiene permisos de administrador.</p><button class="btn-sec" onclick="__signOutAdmin()">Cerrar sesión</button></div>`;
+    return;
+  }
+  authBox.innerHTML = `<div class="clientes-adminbar">👤 <b>${esc(adminUser.email)}</b> · <button class="link-btn" onclick="__recargarClientes()">recargar</button> · <button class="link-btn" onclick="__signOutAdmin()">salir</button></div>`;
+  if (!clientesCache){
+    lista.innerHTML = '<div class="vacio">Cargando clientes…</div>';
+    try { await loadClientes(); }
+    catch(e){ console.error('[CLIENTES] load', e); lista.innerHTML = '<div class="vacio">No se pudieron cargar los clientes.<br>Verifica que iniciaste sesión con la cuenta de administrador.</div>'; return; }
+  }
+  buscarWrap.style.display='block';
+  pintarClientes();
+}
+
+function pintarClientes(){
+  if (!clientesCache) return;
+  const resumen = $('clientesResumen'), lista = $('listaClientes');
+  const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const q = norm($('buscadorClientes').value);
+  const arr = clientesCache.filter(c => !q || norm(c.name).includes(q) || norm(c.email).includes(q) || norm(c.whatsapp).includes(q));
+  const promos = clientesCache.filter(c => c.acceptsPromos).length;
+  const conCompra = clientesCache.filter(c => (c.numCompras||0) > 0 || (c.points||0) !== 2000).length;
+  resumen.innerHTML = `<b>${clientesCache.length}</b> clientes registrados${q?` · ${arr.length} en la búsqueda`:''} · ${promos} aceptan promos · ${conCompra} con compras`;
+  if (!arr.length){ lista.innerHTML = '<div class="vacio">Sin resultados.</div>'; return; }
+  lista.innerHTML = arr.map(c => {
+    const nc = c.numCompras || 0;
+    const compraTxt = nc>0 ? `🛒 ${nc} compra${nc>1?'s':''}` : ((c.points||0)!==2000 ? '🛒 con compras' : 'sin compras aún');
+    const wa = (c.whatsapp||'').replace(/\D/g,'');
+    return `<div class="cliente-card">
+      <div class="cli-top"><span class="cli-nombre">${esc(c.name||'(sin nombre)')}</span><span class="cli-pts">★ ${(c.points||0).toLocaleString('es-CL')}</span></div>
+      <div class="cli-row"><a href="mailto:${esc(c.email||'')}">${esc(c.email||'')}</a></div>
+      <div class="cli-row">📱 <a href="https://wa.me/${wa}" target="_blank">${esc(c.whatsapp||'')}</a>${c.acceptsPromos?' · ✅ promos':''}${c.birthday?` · 🎂 ${esc(c.birthday)}`:''}</div>
+      <div class="cli-row cli-meta">${compraTxt}${c.totalGastado?` · $${Number(c.totalGastado).toLocaleString('es-CL')} gastado`:''}${c.ultimaCompra?` · última: ${esc(fmtFechaCli(c.ultimaCompra))}`:''}</div>
+    </div>`;
+  }).join('');
+}
+function fmtFechaCli(ts){ try{ const d = ts && ts.seconds ? new Date(ts.seconds*1000) : new Date(ts); return d.toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return ''; } }
 
 function renderCarritoBar(){
   const items = Object.values(carrito);

@@ -4,7 +4,7 @@ import {
   getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, getDocs
+  getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, getDocs, addDoc, increment
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -149,6 +149,36 @@ window.umiAddPoints = async function (earned, redeemed) {
     console.error('[AUTH] addPoints:', e.message);
     return null;
   }
+};
+
+// Registra una compra en el historial del cliente.
+// - Rollup (numCompras/totalGastado/ultimaCompra) en el doc del cliente: lo permiten
+//   las reglas actuales (cada uid escribe su propio doc) → funciona de inmediato.
+// - Detalle del pedido en la subcolección clientes/{uid}/pedidos: requiere publicar
+//   la regla del subcolección (ver instrucciones). Si aún no está, solo falla el
+//   detalle, el rollup igual queda guardado.
+window.umiSaveOrder = async function (order) {
+  if (!currentUser || !currentProfile) return;
+  order = order || {};
+  const total = Math.max(0, Math.round(order.total || 0));
+  try {
+    await updateDoc(doc(db, 'clientes', currentUser.uid), {
+      numCompras: increment(1),
+      totalGastado: increment(total),
+      ultimaCompra: serverTimestamp()
+    });
+    currentProfile.numCompras = (currentProfile.numCompras || 0) + 1;
+  } catch (e) { console.error('[AUTH] saveOrder rollup:', e.message); }
+  try {
+    await addDoc(collection(db, 'clientes', currentUser.uid, 'pedidos'), {
+      items: Array.isArray(order.items) ? order.items : [],
+      total: total,
+      entrega: order.entrega || '',
+      puntosGanados: Math.max(0, Math.round(order.puntosGanados || 0)),
+      puntosCanjeados: Math.max(0, Math.round(order.puntosCanjeados || 0)),
+      createdAt: serverTimestamp()
+    });
+  } catch (e) { console.error('[AUTH] saveOrder detalle:', e.message); }
 };
 
 function showDone(justRegistered) {

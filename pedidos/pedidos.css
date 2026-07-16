@@ -311,3 +311,19 @@ input,select,textarea{font-family:inherit}
   transition:opacity .25s,transform .25s;z-index:60;white-space:nowrap;
 }
 .toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Clientes (admin) ── */
+.clientes-login{padding:1.6rem 1rem;text-align:center;color:var(--muted)}
+.clientes-login p{margin-bottom:1.1rem;line-height:1.55;font-size:.92rem}
+.clientes-adminbar{font-size:.78rem;color:var(--muted);padding:.5rem .2rem .2rem}
+.clientes-adminbar b{color:var(--txt)}
+.link-btn{background:none;border:none;color:var(--teal);cursor:pointer;font-size:.78rem;text-decoration:underline;padding:0}
+.clientes-resumen{font-size:.82rem;color:var(--muted);padding:.4rem .2rem .7rem}
+.clientes-resumen b{color:var(--txt)}
+.cliente-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem .9rem;margin-bottom:.55rem}
+.cli-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.3rem}
+.cli-nombre{font-weight:700;color:var(--txt);font-size:.98rem}
+.cli-pts{color:var(--warn);font-weight:700;white-space:nowrap;font-size:.85rem}
+.cli-row{font-size:.8rem;color:var(--muted);margin-top:.18rem;word-break:break-word}
+.cli-row a{color:var(--teal);text-decoration:none}
+.cli-meta{color:#8ea6c6;margin-top:.3rem}

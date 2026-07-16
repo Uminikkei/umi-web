@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="UMI Pedidos">
-<link rel="stylesheet" href="/pedidos/pedidos.css?v=8">
+<link rel="stylesheet" href="/pedidos/pedidos.css?v=9">
 </head>
 <body>
 
@@ -102,6 +102,16 @@
     <div id="listaCatalogoAdmin"></div>
   </section>
 
+  <!-- ── VISTA ADMIN: clientes registrados (requiere login Google admin) ── -->
+  <section class="vista" id="vistaClientes" style="display:none">
+    <div id="clientesAuth"></div>
+    <div class="buscador-simple" id="clientesBuscarWrap" style="display:none">
+      <input type="search" id="buscadorClientes" placeholder="Buscar cliente (nombre, correo, teléfono)…" autocomplete="off">
+    </div>
+    <div id="clientesResumen" class="clientes-resumen"></div>
+    <div id="listaClientes"></div>
+  </section>
+
 </div>
 
 <!-- ── MODAL: confirmar envío ── -->
@@ -154,6 +164,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module" src="/pedidos/pedidos.js?v=12"></script>
+<script type="module" src="/pedidos/pedidos.js?v=13"></script>
 </body>
 </html>

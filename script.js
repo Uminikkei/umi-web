@@ -1570,6 +1570,18 @@ async function onCardApproved(){
   const waLink = 'https://wa.me/'+WA+'?text='+encodeURIComponent(lines);
   // Puntos ganados con esta compra (capturar antes de limpiar el carrito)
   const ganadosPuntos = (window.umiIsRegistered && window.umiIsRegistered()) ? puntosGanaPedido() : 0;
+  // Guardar el pedido en el historial del cliente (solo si está registrado)
+  try {
+    if (window.umiSaveOrder && window.umiIsRegistered && window.umiIsRegistered()){
+      window.umiSaveOrder({
+        items: cart.map(r => ({ n:r.n, qty:r.qty, p:r.p })),
+        total: cartTotal(),
+        entrega: entregaMode,
+        puntosGanados: ganadosPuntos,
+        puntosCanjeados: puntosCanjeados
+      });
+    }
+  } catch(e){ console.error('[UMI] saveOrder', e); }
   // Cerrar modal y limpiar carrito
   closeCardModal();
   aplicarPuntosTrasPedido();
