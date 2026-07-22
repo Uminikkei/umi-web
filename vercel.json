@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/catalog/umi-feed.csv", "destination": "/api/catalog-feed" }
+  ]
+}

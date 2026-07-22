@@ -255,6 +255,18 @@ function umiServerEvent(evento, eventId, customData){
     }
   }catch(e){}
 }
+// Deep link del catálogo Meta: uminikkeibar.cl/?plato=<slug> abre la ficha
+// del plato (los anuncios dinámicos del catálogo llegan con este parámetro)
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    const slugBuscado = new URLSearchParams(location.search).get('plato');
+    if(!slugBuscado) return;
+    for(const [cat, items] of Object.entries(MENU)){
+      const it = items.find(i => umiSlug(i.n) === slugBuscado);
+      if(it){ setTimeout(() => openProductModal(it.n, it.p, it.e, cat), 700); break; }
+    }
+  }catch(e){}
+});
 // Clicks a WhatsApp: "reservar" → Lead, el resto → Contact
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(a){
