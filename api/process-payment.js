@@ -2,6 +2,8 @@
 // El formulario tokeniza la tarjeta en el navegador; aquí solo recibimos el token
 // (nunca el número real) y creamos el pago con el Access Token de producción.
 
+import { construirUserData, enviarEventoMeta, slugProducto } from './_meta.js';
+
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
 export default async function handler(req, res) {
@@ -53,6 +55,9 @@ export default async function handler(req, res) {
       try { await avisarTelegram(req.body.order); } catch (e) { console.log('[TG] error:', e.message); }
       try { await avisarWhatsApp(req.body.order); } catch (e) { console.log('[WA] error:', e.message); }
       try { await avisarEmail(req.body.order); }    catch (e) { console.log('[EMAIL] error:', e.message); }
+      // Meta Conversions API: la compra se reporta DESDE EL SERVIDOR (no depende
+      // del navegador del cliente). Deduplica con el pixel vía meta.event_id.
+      try { await avisarMetaPurchase(req, data); } catch (e) { console.log('[META] error:', e.message); }
     }
 
     return res.status(200).json({
@@ -64,6 +69,43 @@ export default async function handler(req, res) {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+}
+
+// ── Meta Conversions API: evento Purchase server-side ───────────────────────────
+// Se dispara SOLO cuando Mercado Pago aprueba el pago. El valor reportado es el
+// TOTAL REAL COBRADO (neto: después de cupones y puntos, incluye envío), porque
+// es la plata que efectivamente entra — así el ROAS de Meta refleja ingresos reales.
+async function avisarMetaPurchase(req, mpData) {
+  const order = req.body.order || {};
+  const meta = req.body.meta || {}; // atribución que manda el navegador (event_id, fbp, fbc, email, uid)
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  const evento = {
+    event_name: 'Purchase',
+    event_time: Math.floor(Date.now() / 1000),
+    // Mismo event_id que usa el pixel en el navegador → Meta deduplica.
+    // Respaldo: si el front no mandó uno (caché vieja), usamos el id del pago.
+    event_id: String(meta.event_id || ('mp-' + mpData.id)),
+    action_source: 'website',
+    event_source_url: String(meta.event_source_url || 'https://uminikkeibar.cl/'),
+    user_data: construirUserData({
+      email: meta.email || (req.body.payer && req.body.payer.email),
+      phone: order.phone,
+      name: order.name,
+      external_id: meta.uid,
+      fbp: meta.fbp,
+      fbc: meta.fbc
+    }, req),
+    custom_data: {
+      value: Math.max(0, Math.round(Number(order.total) || 0)),
+      currency: 'CLP',
+      order_id: String(mpData.id || ''),
+      content_type: 'product',
+      contents: items.map(i => ({ id: slugProducto(i.n), quantity: Number(i.qty) || 1, item_price: Number(i.p) || 0 })),
+      num_items: items.reduce((s, i) => s + (Number(i.qty) || 0), 0)
+    }
+  };
+  await enviarEventoMeta(evento);
 }
 
 // ── Aviso automático a Umi por Telegram (instantáneo y gratis) ──────────────────

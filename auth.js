@@ -125,6 +125,10 @@ window.umiCompleteProfile = async function () {
 
     currentProfile = { uid: currentUser.uid, name: currentUser.displayName, email: currentUser.email, whatsapp: whats, birthday: bday, acceptsPromos: promos, points: points };
     updateAccountBtn();
+    // Meta Pixel: registro UMI completado (solo la primera vez)
+    if (isNew) {
+      try { if (typeof fbq === 'function') fbq('track', 'CompleteRegistration', { status: true, content_name: 'umi_rewards' }); } catch (e) {}
+    }
     showDone(isNew);
   } catch (e) {
     console.error('[AUTH] save error:', e.code, e.message);

@@ -193,6 +193,83 @@ window.scrollToTop = function(){ window.scrollTo({ top: 0, left: 0, behavior: 's
 const WA = '56961551728';
 const BASE = 'https://firebasestorage.googleapis.com/v0/b/rest-app-chile.appspot.com/o/';
 
+// ── MEDICIÓN META (Pixel + Conversions API) ──────────────────────────────────
+// El pixel base se carga en index.html. Aquí van los eventos de e-commerce.
+// Documentación completa del sistema: docs/TRACKING.md
+
+// ID de producto estable a partir del nombre. DEBE ser idéntico a
+// slugProducto() en api/_meta.js y a los ids del catálogo (Fase 2).
+function umiSlug(n){
+  return String(n||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+// Wrapper seguro de fbq: si el pixel no cargó (bloqueadores), no rompe nada
+function umiFbq(evento, params, eventId){
+  try{
+    if(typeof fbq !== 'function') return;
+    if(eventId) fbq('track', evento, params||{}, { eventID: eventId });
+    else fbq('track', evento, params||{});
+  }catch(e){}
+}
+// UUID para deduplicar pixel ↔ Conversions API (mismo event_id en ambos)
+function umiUUID(){
+  try { return crypto.randomUUID(); }
+  catch(e){ return 'ev-'+Date.now()+'-'+Math.random().toString(36).slice(2,10); }
+}
+function umiCookie(nombre){
+  const m = document.cookie.match('(^|; )'+nombre+'=([^;]*)');
+  return m ? decodeURIComponent(m[2]) : '';
+}
+function umiAttribGuardada(){
+  try { return JSON.parse(sessionStorage.getItem('umiAttrib') || localStorage.getItem('umiAttrib') || '{}'); }
+  catch(e){ return {}; }
+}
+function umiCartContents(){
+  return cart.map(r => ({ id: umiSlug(r.n), quantity: r.qty, item_price: r.p }));
+}
+// Arma el payload que espera /api/meta-capi (la PII se hashea EN EL SERVIDOR,
+// aquí viaja por HTTPS igual que en el propio checkout)
+function umiServerPayload(evento, eventId, customData){
+  const prof = (window.umiGetProfile && window.umiGetProfile()) || null;
+  return {
+    event_name: evento,
+    event_id: eventId,
+    event_source_url: location.href,
+    fbp: umiCookie('_fbp'),
+    fbc: umiCookie('_fbc'),
+    user_data: prof ? { email: prof.email||'', phone: prof.whatsapp||'', name: prof.name||'', external_id: prof.uid||'' } : {},
+    custom_data: customData || {}
+  };
+}
+// Espejo server-side para eventos importantes (Lead/Contact). Respeta el
+// banner de cookies: solo se envía si el visitante aceptó.
+function umiServerEvent(evento, eventId, customData){
+  try{
+    if(localStorage.getItem('umiConsent') !== 'ok') return;
+    const body = JSON.stringify(umiServerPayload(evento, eventId, customData));
+    if(navigator.sendBeacon){
+      navigator.sendBeacon('/api/meta-capi', new Blob([body], { type:'application/json' }));
+    } else {
+      fetch('/api/meta-capi', { method:'POST', headers:{'Content-Type':'application/json'}, body, keepalive:true });
+    }
+  }catch(e){}
+}
+// Clicks a WhatsApp: "reservar" → Lead, el resto → Contact
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('a[href*="wa.me"]').forEach(function(a){
+    a.addEventListener('click', function(){
+      const href = (a.getAttribute('href')||'').toLowerCase();
+      const esReserva = href.indexOf('reservar') !== -1;
+      const evento = esReserva ? 'Lead' : 'Contact';
+      const nombre = esReserva ? 'reserva_whatsapp' : 'pedido_whatsapp';
+      const eventId = umiUUID();
+      umiFbq(evento, { content_name: nombre }, eventId);
+      umiServerEvent(evento, eventId, { content_name: nombre });
+    });
+  });
+});
+
 // Ícono 2D de plato para productos sin foto
 const PLATE_SVG = '<svg viewBox="0 0 36 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="13" r="9"/><circle cx="18" cy="13" r="4"/><path d="M4 3v5a2 2 0 0 0 4 0V3"/><path d="M6 10v13"/><path d="M31 3c-1.6 1.2-2 3.2-2 5.5V13h3v10"/></svg>';
 window.__plateSpan = `<span class="cart-row-emoji">${PLATE_SVG}</span>`;
@@ -291,6 +368,11 @@ function openProductModal(name, price, emoji, cat){
   document.getElementById('prodPrice').textContent = fmt(price);
   document.getElementById('prodModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Meta: el cliente vio la ficha de un plato
+  umiFbq('ViewContent', {
+    content_ids: [umiSlug(name)], content_name: name, content_type: 'product',
+    content_category: cat || '', value: price, currency: 'CLP'
+  });
 }
 function closeProductModal(){
   document.getElementById('prodModal').classList.remove('open');
@@ -708,6 +790,12 @@ function addToCart(name, price, emoji, category){
   if(existing){ existing.qty++; }
   else { cart.push({n:name, p:price, e:emoji, qty:1, cat:category||'Fuertes'}); }
   renderCart(); updateBadge();
+  // Meta: producto agregado al carrito
+  umiFbq('AddToCart', {
+    content_ids: [umiSlug(name)], content_name: name, content_type: 'product',
+    value: price, currency: 'CLP',
+    contents: [{ id: umiSlug(name), quantity: 1, item_price: price }]
+  });
   const fab = document.querySelector('.side-tab--cart');
   if(fab){ fab.style.transform = 'scale(1.12)'; setTimeout(()=>{ fab.style.transform = ''; }, 200); }
 }
@@ -923,6 +1011,12 @@ function openCheckout(){
   sumEl.innerHTML = html;
   document.getElementById('checkoutModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Meta: el cliente abrió el checkout
+  umiFbq('InitiateCheckout', {
+    value: cartTotal(), currency: 'CLP', content_type: 'product',
+    num_items: cart.reduce((s,r) => s + r.qty, 0),
+    contents: umiCartContents()
+  });
 }
 
 function closeCheckout(){ document.getElementById('checkoutModal').classList.remove('open'); document.body.style.overflow=''; }
@@ -967,6 +1061,14 @@ async function sendOrder(){
     openCardPayment({ name, phone, addr, notes, total: Math.round(cartTotal()), lat: gpsLat, lng: gpsLng });
     return;
   }
+
+  // Meta: pedido por WhatsApp (efectivo/transferencia) — es un pedido real
+  const contactId = umiUUID();
+  umiFbq('Contact', {
+    content_name: 'pedido_whatsapp', value: cartTotal(), currency: 'CLP',
+    content_type: 'product', contents: umiCartContents()
+  }, contactId);
+  umiServerEvent('Contact', contactId, { content_name: 'pedido_whatsapp', value: cartTotal(), currency: 'CLP' });
 
   await sendToSpleat(name, phone, addr, notes);
   let lines = `\u{1F363} *NUEVO PEDIDO - Umi*\n\n*Detalle:*\n`;
@@ -1487,9 +1589,17 @@ async function renderCardBrick(amount){
       initialization: { amount: Math.round(amount) },
       customization: { visual: { style: { theme: 'dark' } } },
       callbacks: {
-        onReady: () => {},
+        onReady: () => {
+          // Meta: formulario de tarjeta cargado y listo
+          umiFbq('AddPaymentInfo', { value: Math.round(amount), currency: 'CLP' });
+        },
         onError: (error) => { console.error('Brick error:', error); },
         onSubmit: (formData) => {
+          // Un solo event_id para el Purchase: lo usa el pixel (navegador) y la
+          // Conversions API (servidor) → Meta deduplica y cuenta UNA sola compra
+          const metaEventId = umiUUID();
+          if(pendingCardOrder) pendingCardOrder._metaEventId = metaEventId;
+          const perfil = (window.umiGetProfile && window.umiGetProfile()) || {};
           return new Promise((resolve, reject) => {
             fetch('/api/process-payment', {
               method: 'POST',
@@ -1502,6 +1612,16 @@ async function renderCardBrick(amount){
                 payer: formData.payer,
                 monto: Math.round(amount),
                 descripcion: 'Pedido Umi - ' + ((pendingCardOrder && pendingCardOrder.name) || ''),
+                // Atribución para el Purchase server-side (la PII se hashea en el servidor)
+                meta: {
+                  event_id: metaEventId,
+                  event_source_url: location.href,
+                  fbp: umiCookie('_fbp'),
+                  fbc: umiCookie('_fbc'),
+                  email: perfil.email || '',
+                  uid: perfil.uid || '',
+                  attrib: umiAttribGuardada()
+                },
                 order: {
                   name: (pendingCardOrder && pendingCardOrder.name) || '',
                   phone: (pendingCardOrder && pendingCardOrder.phone) || '',
@@ -1525,7 +1645,7 @@ async function renderCardBrick(amount){
             .then(res => {
               if(res.status === 'approved'){
                 resolve();
-                onCardApproved();
+                onCardApproved(res.id);
               } else if(res.status === 'in_process' || res.status === 'pending'){
                 resolve();
                 alert('Tu pago está siendo procesado. Te confirmaremos apenas se acredite.');
@@ -1543,8 +1663,20 @@ async function renderCardBrick(amount){
   } catch(e){ console.error(e); alert('No se pudo cargar el formulario de pago.'); }
 }
 
-async function onCardApproved(){
+async function onCardApproved(paymentId){
   const p = pendingCardOrder || {};
+  // 0) Meta Pixel: Purchase con el MISMO event_id que ya envió el servidor por
+  //    Conversions API → Meta deduplica. Valor = total real cobrado (neto).
+  //    Se dispara ANTES de limpiar el carrito para tener los contents completos.
+  try {
+    const purchaseParams = {
+      value: cartTotal(), currency: 'CLP', content_type: 'product',
+      contents: umiCartContents(),
+      num_items: cart.reduce((s,r) => s + r.qty, 0)
+    };
+    if(paymentId) purchaseParams.order_id = String(paymentId);
+    umiFbq('Purchase', purchaseParams, p._metaEventId);
+  } catch(e){}
   // 1) Registrar el pedido PAGADO en el sistema (SPLEAT/POS)
   try { await sendToSpleat(p.name, p.phone, p.addr, p.notes); } catch(e){}
   // 2) Armar mensaje de WhatsApp con aviso de pago con tarjeta

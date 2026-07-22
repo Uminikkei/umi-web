@@ -65,6 +65,47 @@
   gtag('js', new Date());
   gtag('config', 'G-PS7JT1F1NV');
 </script>
+<!-- Atribución: guarda UTM + fbclid por 90 días para que la compra se atribuya
+     a la campaña correcta aunque el cliente vuelva días después -->
+<script>
+(function(){
+  try{
+    var P = new URLSearchParams(location.search);
+    var CLAVES = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+    var datos = {};
+    try { datos = JSON.parse(localStorage.getItem('umiAttrib') || '{}'); } catch(e){}
+    var hayNuevo = false;
+    CLAVES.forEach(function(k){ var v = P.get(k); if(v){ datos[k] = v.slice(0,200); hayNuevo = true; } });
+    var fbclid = P.get('fbclid');
+    if(fbclid){
+      datos.fbclid = fbclid.slice(0,300); hayNuevo = true;
+      // Crear la cookie _fbc en el formato oficial de Meta si el pixel aún no la puso
+      if(!/(^|; )_fbc=/.test(document.cookie)){
+        document.cookie = '_fbc=fb.1.' + Date.now() + '.' + fbclid + ';path=/;max-age=7776000;SameSite=Lax';
+      }
+    }
+    if(hayNuevo){
+      datos.ts = Date.now();
+      localStorage.setItem('umiAttrib', JSON.stringify(datos));
+      sessionStorage.setItem('umiAttrib', JSON.stringify(datos));
+    }
+  }catch(e){}
+})();
+</script>
+<!-- Meta Pixel — carga async, no bloquea el render. Parte con consentimiento
+     REVOCADO (Ley 19.628): los eventos quedan en cola y solo se envían si el
+     visitante acepta el banner de cookies. -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('consent', (function(){ try { return localStorage.getItem('umiConsent') === 'ok' ? 'grant' : 'revoke'; } catch(e){ return 'revoke'; } })());
+fbq('init', '1824016048566069');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1824016048566069&ev=PageView&noscript=1"/></noscript>
 </head>
 <body>
 
@@ -1189,9 +1230,30 @@
   </div>
 </div>
 
+<!-- Banner de consentimiento de cookies (Ley 19.628) -->
+<div id="cookieBar" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:99990;background:#0d1520;border-top:1px solid #1e2d3d;padding:.9rem 1.2rem;font-family:'Inter',sans-serif;color:#e8edf2;font-size:.85rem;line-height:1.45;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+  <span style="max-width:560px">Usamos cookies para medir nuestras campañas y mejorar tu experiencia. Puedes aceptarlas o seguir navegando solo con las esenciales.</span>
+  <span style="display:flex;gap:.6rem;flex-shrink:0">
+    <button onclick="umiConsentir(true)" style="background:#62CAE3;color:#000;font-weight:700;border:none;border-radius:999px;padding:.55rem 1.3rem;cursor:pointer;font-size:.85rem">Aceptar</button>
+    <button onclick="umiConsentir(false)" style="background:transparent;color:#6b7d8f;border:1px solid #2a3b4d;border-radius:999px;padding:.55rem 1.1rem;cursor:pointer;font-size:.85rem">Solo esenciales</button>
+  </span>
+</div>
+<script>
+// Mostrar el banner solo si el visitante aún no ha decidido
+(function(){
+  try { if(!localStorage.getItem('umiConsent')) document.getElementById('cookieBar').style.display = 'flex'; } catch(e){}
+})();
+function umiConsentir(acepta){
+  try { localStorage.setItem('umiConsent', acepta ? 'ok' : 'no'); } catch(e){}
+  var b = document.getElementById('cookieBar'); if(b) b.style.display = 'none';
+  // Al aceptar, se liberan los eventos del pixel que estaban en cola
+  if(acepta && typeof fbq === 'function') fbq('consent', 'grant');
+}
+</script>
+
 <script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="script.js?v=20260710c"></script>
+<script src="script.js?v=20260722a"></script>
 <script src="chat.js?v=20260710a"></script>
-<script type="module" src="auth.js?v=20260710a"></script>
+<script type="module" src="auth.js?v=20260722a"></script>
 </body>
 </html>
