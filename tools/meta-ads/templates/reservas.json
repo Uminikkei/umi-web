@@ -1,0 +1,23 @@
+{
+  "clave": "reservas",
+  "nombre_base": "UMI_Reservas_WhatsApp_Coquimbo5km",
+  "descripcion": "Campaña 4 — Tráfico al local / reservas por WhatsApp. Radio corto y horarios valle de semana para llenar mesas en baja ocupación.",
+  "objetivo": "OUTCOME_ENGAGEMENT",
+  "destino": "WHATSAPP",
+  "presupuesto_diario_clp": 3000,
+  "adsets": [
+    {
+      "nombre": "Reservas_5km_HorarioValle",
+      "optimization_goal": "CONVERSATIONS",
+      "billing_event": "IMPRESSIONS",
+      "segmentacion": {
+        "radio_km": 5,
+        "edad_min": 22,
+        "edad_max": 60,
+        "generos": "todos",
+        "horario": { "dias": "lunes-jueves", "horas": "12:00-18:00", "nota": "day-parting: requiere presupuesto de por vida o campaña con horario; se configura al activar" }
+      }
+    }
+  ],
+  "creativos": "Video corto del local con la vista al mar + CTA 'Reserva tu mesa por WhatsApp'. Número: +56 9 6155 1728"
+}

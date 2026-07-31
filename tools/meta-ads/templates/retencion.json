@@ -1,0 +1,24 @@
+{
+  "clave": "retencion",
+  "nombre_base": "UMI_Ventas_Retencion_BaseClientes",
+  "descripcion": "Campaña 3 — Retención / base propia. Requiere audiencias creadas con `umi-ads audiences sync` (lista de clientes hasheada + lookalikes).",
+  "objetivo": "OUTCOME_SALES",
+  "presupuesto_diario_clp": 3000,
+  "adsets": [
+    {
+      "nombre": "Retencion_ClientesRegistrados",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "audiencia_nombre": "UMI Clientes Registrados (optin)"
+    },
+    {
+      "nombre": "Prospeccion_Lookalike1",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "audiencia_nombre": "UMI Lookalike 1% Compradores"
+    }
+  ],
+  "creativos": "Campaña de cumpleaños: segmento aparte cuando la base crezca (dato birthday ya capturado en el registro). Copy con puntos UMI y novedades de carta."
+}

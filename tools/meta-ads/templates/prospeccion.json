@@ -1,0 +1,24 @@
+{
+  "clave": "prospeccion",
+  "nombre_base": "UMI_Ventas_Prospeccion_CoquimboLaSerena",
+  "descripcion": "Campaña 1 — Ventas / Prospección. Optimiza a Purchase con Advantage+ Audience.",
+  "objetivo": "OUTCOME_SALES",
+  "presupuesto_diario_clp": 5000,
+  "adsets": [
+    {
+      "nombre": "Prospeccion_Advantage_12km",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "segmentacion": {
+        "radio_km": 12,
+        "edad_min": 22,
+        "edad_max": 55,
+        "generos": "todos",
+        "advantage_audience": true,
+        "excluir_compradores_dias": 14
+      }
+    }
+  ],
+  "creativos": "Subir a mano en el Administrador: reels de comida, video de atardecer, carrusel de platos estrella (Saito Roll, Pulpo Nikkei, Ceviche Carretillero, Udon Huancaína)"
+}

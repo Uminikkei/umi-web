@@ -1,0 +1,32 @@
+{
+  "clave": "retargeting",
+  "nombre_base": "UMI_Ventas_RetargetingCatalogo_CoquimboLaSerena",
+  "descripcion": "Campaña 2 — Retargeting dinámico con el catálogo Umi menu. Muestra el plato exacto que la persona vio/agregó y no compró.",
+  "objetivo": "OUTCOME_SALES",
+  "usa_catalogo": true,
+  "presupuesto_diario_clp": 4000,
+  "adsets": [
+    {
+      "nombre": "Retarget_Carrito14d_sinCompra",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "audiencia_dinamica": { "evento": "AddToCart", "dias": 14, "excluir_evento": "Purchase", "excluir_dias": 14 }
+    },
+    {
+      "nombre": "Retarget_Checkout7d_sinCompra",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "audiencia_dinamica": { "evento": "InitiateCheckout", "dias": 7, "excluir_evento": "Purchase", "excluir_dias": 7 }
+    },
+    {
+      "nombre": "Retarget_Vistos30d_sinCompra",
+      "optimization_goal": "OFFSITE_CONVERSIONS",
+      "billing_event": "IMPRESSIONS",
+      "evento_pixel": "PURCHASE",
+      "audiencia_dinamica": { "evento": "ViewContent", "dias": 30, "excluir_evento": "Purchase", "excluir_dias": 30 }
+    }
+  ],
+  "creativos": "Formato automático del catálogo. Copy con urgencia + recordatorio de puntos UMI (ver docs/CREATIVE-PLAYBOOK.md)"
+}

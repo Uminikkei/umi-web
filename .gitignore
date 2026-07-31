@@ -1,1 +1,5 @@
 umi-significado.backup.svg
+
+# Herramienta de Meta Ads: credenciales y logs NUNCA al repo
+tools/meta-ads/.env
+tools/meta-ads/logs/
