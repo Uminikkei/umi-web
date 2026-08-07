@@ -828,8 +828,10 @@ const PUNTOS_PORCENTAJE = 0.10;     // se gana 10% del subtotal en puntos
 const PUNTOS_TOPE_CANJE = 0.50;     // máximo 50% de la cuenta se puede pagar con puntos
 
 function billAfterCoupon(){
-  const base = cart.reduce((s,r) => s + r.p * r.qty, 0) + (entregaMode === 'delivery' ? deliveryFee : 0);
-  return cuponDescuento > 0 ? Math.round(base * (1 - cuponDescuento / 100)) : base;
+  // El descuento del cupón se aplica SOLO a los productos; el costo de envío
+  // (delivery) siempre se cobra completo, nunca se descuenta.
+  const envio = entregaMode === 'delivery' ? deliveryFee : 0;
+  return productsAfterCoupon() + envio;
 }
 function cartTotal(){
   return Math.max(0, billAfterCoupon() - puntosCanjeados);
