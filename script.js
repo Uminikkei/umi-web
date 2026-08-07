@@ -97,7 +97,9 @@
   const btn = document.getElementById('soundToggle');
   const audioEl = document.getElementById('oceanAudio');
   if(!btn){ return; }
-  let userMuted = localStorage.getItem('umiMuted') === '1';
+  // Siempre arranca en silencio: el sonido de olas solo suena si el visitante
+  // lo activa con el botón. Nunca se reproduce solo al abrir la página.
+  let userMuted = true;
   const VOL = 0.5;
   const SRC = (audioEl && audioEl.getAttribute('src')) || 'olas-playa.mp3';
   const EV = ['pointerdown','pointerup','touchstart','touchend','keydown','scroll','wheel','mousemove','click'];
@@ -140,7 +142,6 @@
 
       window.toggleSound = function(){
         userMuted = !userMuted;
-        localStorage.setItem('umiMuted', userMuted ? '1' : '0');
         resume();
         gain.gain.value = userMuted ? 0 : VOL;
         btn.classList.toggle('muted', userMuted);
@@ -170,7 +171,6 @@
     }
     window.toggleSound = function(){
       userMuted = !userMuted;
-      localStorage.setItem('umiMuted', userMuted ? '1' : '0');
       audio.muted = userMuted;
       if(!userMuted) play();
       btn.classList.toggle('muted', userMuted);
