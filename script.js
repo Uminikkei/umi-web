@@ -178,8 +178,21 @@
   }
 })();
 
-// ── BOTÓN VOLVER AL INICIO ─────────────────────────────────────────────────────
-window.scrollToTop = function(){ window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); };
+// ── BOTÓN VOLVER AL MENÚ ───────────────────────────────────────────────────────
+// Lleva al inicio de la sección Menú (no al tope de la página), dejando espacio
+// para que la barra de navegación fija no tape el título.
+window.scrollToTop = function(){
+  const sec = document.getElementById('menu');
+  if(!sec){ window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); return; }
+  const navH = (document.querySelector('nav')?.offsetHeight || 0) + 14;
+  const y = sec.getBoundingClientRect().top + window.scrollY - navH;
+  window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
+};
+// Cierra el modal de cuenta y baja directo al menú
+window.irAlMenu = function(){
+  if(typeof umiCloseAuth === 'function') umiCloseAuth();
+  setTimeout(window.scrollToTop, 120);
+};
 (function(){
   const btt = document.getElementById('backToTop');
   if(!btt) return;

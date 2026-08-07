@@ -1164,9 +1164,9 @@ fbq('track', 'PageView');
 </button>
 
 <!-- Botón volver al inicio (centro inferior) -->
-<button id="backToTop" class="back-to-top" onclick="scrollToTop()" aria-label="Volver al inicio">
+<button id="backToTop" class="back-to-top" onclick="scrollToTop()" aria-label="Volver al menú">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
-  <span class="btt-tip">Volver al inicio</span>
+  <span class="btt-tip">Volver al menú</span>
 </button>
 
 <!-- VENTANA DE PRODUCTO (nombre + descripción) -->
@@ -1226,7 +1226,7 @@ fbq('track', 'PageView');
       <h3 id="authDoneTitle">¡Hola!</h3>
       <p class="auth-sub" id="authDoneSub">Tu cuenta UMI está activa.</p>
       <div class="auth-points" id="authPoints">0 puntos UMI</div>
-      <button class="auth-logout" onclick="umiLogout()">Cerrar sesión</button>
+      <button class="auth-submit" onclick="irAlMenu()">Ir al menú</button>
     </div>
   </div>
 </div>
